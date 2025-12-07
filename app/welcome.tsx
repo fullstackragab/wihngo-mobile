@@ -4,6 +4,7 @@ import { Button } from "@react-navigation/elements";
 import { Link } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Welcome() {
   const [email, setEmail] = useState("");
@@ -28,7 +29,9 @@ export default function Welcome() {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <SafeAreaView
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+    >
       <Text
         style={{
           textAlign: "center",
@@ -74,6 +77,9 @@ export default function Welcome() {
           marginTop: 20,
         }}
       >
+        <Link href="/home">
+          <Text style={{ marginTop: 20, color: "blue" }}>Profile</Text>
+        </Link>
         <Button style={styles.roundedButton} onPressIn={login}>
           Login
         </Button>
@@ -86,10 +92,10 @@ export default function Welcome() {
           </Link>
         </Pressable>
       </View>
-      <Link href="/(tabs)">
+      <Link href="/(tabs)/home">
         <Text style={{ marginTop: 20, color: "blue" }}>Start</Text>
       </Link>
-    </View>
+    </SafeAreaView>
   );
 }
 

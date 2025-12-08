@@ -1,0 +1,254 @@
+import { theme } from "@/constants/theme";
+import { highlightStory, unhighlightStory } from "@/services/premium.service";
+import { Story } from "@/types/story";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  Alert,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
+type StoryHighlightsProps = {
+  birdId: string;
+  stories: Story[];
+  onUpdate?: () => void;
+};
+
+const MAX_HIGHLIGHTS = 3;
+
+export function StoryHighlights({
+  birdId,
+  stories,
+  onUpdate,
+}: StoryHighlightsProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const highlightedStories = stories
+    .filter((s) => s.isHighlighted)
+    .sort((a, b) => (a.highlightOrder || 0) - (b.highlightOrder || 0))
+    .slice(0, MAX_HIGHLIGHTS);
+
+  const handleToggleHighlight = async (story: Story) => {
+    const currentHighlightCount = highlightedStories.length;
+
+    if (story.isHighlighted) {
+      // Remove highlight
+      setIsLoading(true);
+      try {
+        await unhighlightStory(birdId, story.storyId);
+        Alert.alert("Success", "Story removed from highlights");
+        onUpdate?.();
+      } catch (error) {
+        console.error("Failed to remove highlight:", error);
+        Alert.alert("Error", "Failed to remove highlight");
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      // Add highlight
+      if (currentHighlightCount >= MAX_HIGHLIGHTS) {
+        Alert.alert(
+          "Limit Reached",
+          `You can only highlight up to ${MAX_HIGHLIGHTS} stories`
+        );
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const nextOrder = currentHighlightCount + 1;
+        await highlightStory(birdId, story.storyId, nextOrder);
+        Alert.alert("Success", "Story added to highlights");
+        onUpdate?.();
+      } catch (error) {
+        console.error("Failed to add highlight:", error);
+        Alert.alert("Error", "Failed to add highlight");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  if (highlightedStories.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Ionicons
+          name="bookmark-outline"
+          size={48}
+          color={theme.colors.textSecondary}
+        />
+        <Text style={styles.emptyText}>No highlighted stories yet</Text>
+        <Text style={styles.emptySubtext}>
+          Pin up to {MAX_HIGHLIGHTS} stories to showcase them
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Ionicons name="bookmark" size={24} color={theme.colors.primary} />
+        <Text style={styles.title}>Story Highlights</Text>
+        <Text style={styles.count}>
+          {highlightedStories.length}/{MAX_HIGHLIGHTS}
+        </Text>
+      </View>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.scrollView}
+      >
+        {highlightedStories.map((story) => (
+          <HighlightedStoryCard
+            key={story.storyId}
+            story={story}
+            onRemove={() => handleToggleHighlight(story)}
+            disabled={isLoading}
+          />
+        ))}
+      </ScrollView>
+    </View>
+  );
+}
+
+type HighlightedStoryCardProps = {
+  story: Story;
+  onRemove: () => void;
+  disabled: boolean;
+};
+
+function HighlightedStoryCard({
+  story,
+  onRemove,
+  disabled,
+}: HighlightedStoryCardProps) {
+  return (
+    <View style={styles.card}>
+      {story.imageUrl ? (
+        <Image source={{ uri: story.imageUrl }} style={styles.cardImage} />
+      ) : (
+        <View style={[styles.cardImage, styles.cardImagePlaceholder]}>
+          <Ionicons
+            name="image-outline"
+            size={32}
+            color={theme.colors.textSecondary}
+          />
+        </View>
+      )}
+
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle} numberOfLines={2}>
+          {story.title}
+        </Text>
+        <Text style={styles.cardDate}>
+          {new Date(story.createdAt).toLocaleDateString()}
+        </Text>
+      </View>
+
+      <Pressable
+        style={styles.removeButton}
+        onPress={onRemove}
+        disabled={disabled}
+      >
+        <Ionicons
+          name="close-circle"
+          size={24}
+          color={theme.colors.error || "#f44336"}
+        />
+      </Pressable>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 16,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 12,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: theme.colors.text,
+    flex: 1,
+  },
+  count: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+  },
+  scrollView: {
+    flexDirection: "row",
+  },
+  card: {
+    width: 200,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    marginRight: 12,
+    overflow: "hidden",
+    borderWidth: 2,
+    borderColor: theme.colors.accent,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  cardImage: {
+    width: "100%",
+    height: 120,
+    backgroundColor: "#f5f5f5",
+  },
+  cardImagePlaceholder: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardContent: {
+    padding: 12,
+  },
+  cardTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: theme.colors.text,
+    marginBottom: 4,
+  },
+  cardDate: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+  },
+  removeButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    backgroundColor: "#fff",
+    borderRadius: 12,
+  },
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: theme.colors.text,
+    marginTop: 12,
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+    textAlign: "center",
+    marginTop: 4,
+  },
+});

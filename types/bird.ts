@@ -1,9 +1,70 @@
+export type PremiumStyle = {
+  frameId?: string;
+  badgeId?: string;
+  highlightColor?: string;
+};
+
 export type Bird = {
   birdId: string;
   name: string;
   species: string;
+  commonName?: string;
+  scientificName?: string;
   tagline: string;
+  description?: string;
   imageUrl?: string;
-  lovedCount: number;
-  supportedCount: number;
+  coverImageUrl?: string;
+  lovedBy: number;
+  supportedBy: number;
+  ownerId: string;
+  ownerName?: string;
+  age?: string;
+  location?: string;
+  isLoved?: boolean;
+  isSupported?: boolean;
+  totalSupport?: number;
+  isMemorial?: boolean; // For deceased birds
+  isPremium?: boolean;
+  premiumStyle?: PremiumStyle;
+};
+
+export type BirdSupport = {
+  supportId: string;
+  birdId: string;
+  userId: string;
+  amount: number;
+  message?: string;
+  createdAt: string;
+};
+
+export type BirdHealthLog = {
+  logId: string;
+  birdId: string;
+  logType: "vet" | "food" | "medicine" | "other";
+  title: string;
+  description: string;
+  cost?: number;
+  imageUrl?: string;
+  createdAt: string;
+};
+
+export type CreateBirdDto = {
+  name: string;
+  species: string;
+  commonName?: string;
+  scientificName?: string;
+  tagline: string;
+  description?: string;
+  imageUrl?: string;
+  coverImageUrl?: string;
+  age?: string;
+  location?: string;
+};
+
+export type UpdateBirdDto = Partial<CreateBirdDto>;
+
+export type SupportBirdDto = {
+  birdId: string;
+  amount: number;
+  message?: string;
 };

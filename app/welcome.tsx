@@ -1,31 +1,43 @@
 import RoundedTextInput from "@/components/ui/rounded-text-input";
-import { loginService } from "@/services/login.service";
+import { useAuth } from "@/contexts/auth-context";
+import { loginService } from "@/services/auth.service";
 import { Button } from "@react-navigation/elements";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Welcome() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { login: authLogin } = useAuth();
+  const router = useRouter();
 
-  function login() {
-    loginService(email, password)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Login failed with status ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Login successful:", data);
-        // Handle successful login, e.g., navigate to the main app screen
-      })
-      .catch((error) => {
-        console.error("Login error:", error);
-        // Handle login error, e.g., show an error message to the user
-      });
+  async function login() {
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter both email and password");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const authData = await loginService({ email, password });
+      await authLogin(authData);
+
+      console.log("Login successful:", authData);
+      Alert.alert("Success", "Login successful!");
+
+      // Navigate to main app
+      router.replace("/(tabs)/home" as any);
+    } catch (error) {
+      console.error("Login error:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Login failed";
+      Alert.alert("Login Failed", errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -62,12 +74,16 @@ export default function Welcome() {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        editable={!isLoading}
       />
       <RoundedTextInput
         placeholder="Password"
         secureTextEntry={true}
         value={password}
         onChangeText={setPassword}
+        editable={!isLoading}
       />
       <View
         style={{
@@ -80,8 +96,12 @@ export default function Welcome() {
         <Link href="/home">
           <Text style={{ marginTop: 20, color: "blue" }}>Profile</Text>
         </Link>
-        <Button style={styles.roundedButton} onPressIn={login}>
-          Login
+        <Button
+          style={styles.roundedButton}
+          onPressIn={login}
+          disabled={isLoading}
+        >
+          {isLoading ? "Loading..." : "Login"}
         </Button>
       </View>
       <View style={{ alignItems: "center", marginTop: 20 }}>

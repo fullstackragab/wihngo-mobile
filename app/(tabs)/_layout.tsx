@@ -6,6 +6,7 @@ import { Image } from "react-native";
 import { HapticTab } from "@/components/haptic-tab";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -39,6 +40,16 @@ export default function TabLayout() {
       /> */}
 
       <Tabs.Screen
+        name="stories"
+        options={{
+          title: "Stories",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="post" size={24} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="birds"
         options={{
           title: "Birds",
@@ -47,16 +58,6 @@ export default function TabLayout() {
               source={require("@/assets/images/birds.png")}
               style={{ width: 30, height: 30 }}
             />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="notifications"
-        options={{
-          title: "Notifications",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="bell" size={20} color={color} />
           ),
         }}
       />

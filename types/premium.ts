@@ -4,7 +4,7 @@ export type PremiumSubscriptionStatus =
   | "past_due"
   | "expired";
 export type PremiumPlan = "monthly" | "yearly" | "lifetime";
-export type PremiumProvider = "stripe" | "apple" | "google";
+export type PremiumProvider = "stripe" | "apple" | "google" | "crypto";
 
 export type BirdPremiumSubscription = {
   id: string;
@@ -74,6 +74,8 @@ export type SubscribeDto = {
   paymentMethodId?: string;
   provider: PremiumProvider;
   plan: PremiumPlan;
+  cryptoCurrency?: string; // For crypto payments
+  cryptoNetwork?: string; // For crypto payments
 };
 
 export type PremiumPlanDetails = {

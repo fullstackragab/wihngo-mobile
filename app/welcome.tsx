@@ -1,6 +1,6 @@
 import RoundedTextInput from "@/components/ui/rounded-text-input";
 import { useAuth } from "@/contexts/auth-context";
-import { loginService } from "@/services/auth.service";
+import { loginService } from "@/lib/api";
 import { Button } from "@react-navigation/elements";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";

@@ -144,23 +144,25 @@ export default function Profile() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Quick Actions</Text>
 
-        {ownedBirds.length > 0 && (
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => router.push("/add-bird")}
-          >
-            <View style={styles.menuItemIcon}>
-              <FontAwesome6 name="plus" size={20} color="#4ECDC4" />
-            </View>
-            <View style={styles.menuItemContent}>
-              <Text style={styles.menuItemTitle}>Add New Bird</Text>
-              <Text style={styles.menuItemSubtitle}>
-                List a bird you care for
-              </Text>
-            </View>
-            <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/add-bird")}
+        >
+          <View style={styles.menuItemIcon}>
+            <FontAwesome6 name="plus" size={20} color="#4ECDC4" />
+          </View>
+          <View style={styles.menuItemContent}>
+            <Text style={styles.menuItemTitle}>
+              {ownedBirds.length > 0 ? "Add New Bird" : "Add Your First Bird"}
+            </Text>
+            <Text style={styles.menuItemSubtitle}>
+              {ownedBirds.length > 0
+                ? "List another bird you care for"
+                : "Start your bird collection"}
+            </Text>
+          </View>
+          <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.menuItem}

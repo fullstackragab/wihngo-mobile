@@ -1,3 +1,5 @@
+import { useAuth } from "@/contexts/auth-context";
+import { birdService } from "@/services/bird.service";
 import { CreateBirdDto } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
@@ -17,6 +19,7 @@ import {
 
 export default function AddBird() {
   const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
   const [name, setName] = useState("");
   const [species, setSpecies] = useState("");
   const [commonName, setCommonName] = useState("");
@@ -30,6 +33,14 @@ export default function AddBird() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
+    // Check if user is authenticated
+    if (!isAuthenticated || !user) {
+      Alert.alert("Error", "You must be logged in to add a bird");
+      router.push("/welcome");
+      return;
+    }
+
+    // Validate required fields
     if (!name.trim() || !species.trim() || !tagline.trim()) {
       Alert.alert("Error", "Please fill in all required fields");
       return;
@@ -50,18 +61,55 @@ export default function AddBird() {
         location: location.trim() || undefined,
       };
 
-      // TODO: Replace with actual API call
-      // await birdService.createBird(birdData);
+      // Create bird through API (automatically associates with authenticated user)
+      const createdBird = await birdService.createBird(birdData);
+      console.log("Bird created successfully:", createdBird);
 
-      Alert.alert("Success", "Bird added successfully!", [
+      Alert.alert("Success", `${name} has been added to your profile!`, [
         {
-          text: "OK",
-          onPress: () => router.back(),
+          text: "View Bird",
+          onPress: () => {
+            router.back();
+            // Optionally navigate to the bird's profile
+            // router.push(`/bird/${createdBird.birdId}`);
+          },
+        },
+        {
+          text: "Add Another",
+          onPress: () => {
+            // Reset form
+            setName("");
+            setSpecies("");
+            setCommonName("");
+            setScientificName("");
+            setTagline("");
+            setDescription("");
+            setImageUrl("");
+            setCoverImageUrl("");
+            setAge("");
+            setLocation("");
+          },
         },
       ]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error adding bird:", error);
-      Alert.alert("Error", "Failed to add bird");
+
+      // Provide user-friendly error messages
+      let errorMessage = "Failed to add bird. Please try again.";
+
+      if (error.message?.includes("Session expired")) {
+        errorMessage = "Your session has expired. Please log in again.";
+        router.push("/welcome");
+      } else if (error.status === 400) {
+        errorMessage = "Invalid bird information. Please check your input.";
+      } else if (error.status === 401) {
+        errorMessage = "You must be logged in to add a bird.";
+        router.push("/welcome");
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      Alert.alert("Error", errorMessage);
     } finally {
       setLoading(false);
     }

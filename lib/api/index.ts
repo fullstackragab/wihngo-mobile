@@ -3,15 +3,17 @@
  * Import all services from a single entry point
  *
  * @example
- * import { authService, birdService } from '@/lib/services';
+ * import { authService, birdService } from '@/lib/api';
  */
 
 export * from "./api-client";
-export { authService } from "./auth.service";
-export { birdService } from "./bird.service";
-export { loginService } from "./login.service";
-export { premiumService } from "./premium.service";
-export { searchService } from "./search.service";
-export { storyService } from "./story.service";
-export { supportService } from "./support.service";
-export { userService } from "./user.service";
+export * from "./auth.service";
+
+// Legacy service exports (still in /services folder)
+// These will be migrated to /lib/api gradually
+export { birdService } from "@/services/bird.service";
+export { premiumService } from "@/services/premium.service";
+export { searchService } from "@/services/search.service";
+export { storyService } from "@/services/story.service";
+export { supportService } from "@/services/support.service";
+export { userService } from "@/services/user.service";

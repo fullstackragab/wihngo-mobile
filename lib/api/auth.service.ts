@@ -1,20 +1,15 @@
-/**
- * @deprecated This file is deprecated. Use @/lib/api/auth.service instead
- * This file is kept for backward compatibility and will be removed in future versions.
- *
- * New usage:
- * import { authService, loginService, registerService } from '@/lib/api';
- */
-
+import { API_CONFIG } from "@/lib/constants";
 import { AuthResponseDto, LoginDto, UserCreateDto } from "@/types/user";
-import Constants from "expo-constants";
 import { Platform } from "react-native";
+
+/**
+ * Authentication Service
+ * Handles user registration, login, and authentication
+ */
 
 // Helper to replace localhost with appropriate IP for Android emulator
 const getApiUrl = () => {
-  let apiUrl =
-    Constants.expoConfig?.extra?.apiUrl ||
-    "https://wihngo-api.onrender.com/api/";
+  let apiUrl = API_CONFIG.baseUrl;
 
   // Replace localhost with 10.0.2.2 for Android emulator
   if (Platform.OS === "android" && apiUrl.includes("localhost")) {
@@ -24,16 +19,15 @@ const getApiUrl = () => {
   return apiUrl;
 };
 
-const API_URL = getApiUrl();
-
 /**
  * Register a new user
  */
-export async function registerService(
+export async function register(
   userData: UserCreateDto
 ): Promise<AuthResponseDto> {
   try {
-    const endpoint = `${API_URL}auth/register`;
+    const apiUrl = getApiUrl();
+    const endpoint = `${apiUrl}auth/register`;
     console.log("Registering user at:", endpoint);
 
     const response = await fetch(endpoint, {
@@ -73,11 +67,10 @@ export async function registerService(
 /**
  * Login an existing user
  */
-export async function loginService(
-  credentials: LoginDto
-): Promise<AuthResponseDto> {
+export async function login(credentials: LoginDto): Promise<AuthResponseDto> {
   try {
-    const endpoint = `${API_URL}auth/login`;
+    const apiUrl = getApiUrl();
+    const endpoint = `${apiUrl}auth/login`;
     console.log("Logging in at:", endpoint);
 
     const response = await fetch(endpoint, {
@@ -117,9 +110,10 @@ export async function loginService(
 /**
  * Test connection to auth endpoint
  */
-export async function testAuthConnection(): Promise<string> {
+export async function testConnection(): Promise<string> {
   try {
-    const endpoint = `${API_URL}auth`;
+    const apiUrl = getApiUrl();
+    const endpoint = `${apiUrl}auth`;
     const response = await fetch(endpoint, {
       method: "GET",
       headers: {
@@ -137,3 +131,15 @@ export async function testAuthConnection(): Promise<string> {
     throw error;
   }
 }
+
+/**
+ * Auth service object for cleaner imports
+ */
+export const authService = {
+  register,
+  login,
+  testConnection,
+};
+
+// Legacy exports for backward compatibility
+export { login as loginService, register as registerService };

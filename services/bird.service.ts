@@ -120,10 +120,12 @@ export const birdService = {
     }
   },
 
-  // Create bird
+  // Create bird (automatically associates with authenticated user)
   async createBird(data: CreateBirdDto): Promise<Bird> {
     try {
-      const response = await apiHelper.post<Bird>(`${API_URL}birds`, data);
+      console.log("Creating bird with data:", data);
+      const response = await apiHelper.post<Bird>(`/api/birds`, data);
+      console.log("Bird created successfully:", response);
       return response;
     } catch (error) {
       console.error("Error creating bird:", error);

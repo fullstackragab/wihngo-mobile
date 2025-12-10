@@ -70,10 +70,7 @@ function RootLayoutNav() {
         <Stack.Screen
           name="add-bird"
           options={{
-            title: "Add Bird",
-            headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
+            headerShown: false,
           }}
         />
         <Stack.Screen

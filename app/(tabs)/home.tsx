@@ -163,7 +163,6 @@ export default function Home() {
 
       {/* Featured Birds - Primary Focus */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Featured</Text>
         {featuredBirds.length > 0 ? (
           <FlatList
             horizontal

@@ -94,7 +94,8 @@ export default function BirdDetails() {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "flex-start",
+              justifyContent: "center",
+              paddingTop: 6,
             }}
           >
             <View style={styles.statCard}>
@@ -109,9 +110,11 @@ export default function BirdDetails() {
           <View
             style={{
               flexDirection: "row",
-              alignItems: "center",
+              alignItems: "flex-start",
               justifyContent: "flex-end",
               paddingHorizontal: 20,
+              marginTop: -10,
+              paddingTop: 0,
             }}
           >
             <ShareButton
@@ -119,6 +122,7 @@ export default function BirdDetails() {
               title={`${bird.name} - ${bird.species}`}
               message={`Check out this amazing bird: ${bird.name} (${bird.species})!\n\n"${bird.tagline}"\n\n❤️ ${loveCount} loved | 🐦 ${bird.supportedBy} supported`}
               iconSize={24}
+              style={{ marginTop: 0, paddingTop: 0 }}
             />
           </View>
         </View>
@@ -188,6 +192,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     paddingTop: 0,
+    marginTop: 0,
   },
   name: {
     fontSize: 22,
@@ -215,18 +220,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 22,
+    paddingVertical: 0,
+    top: -10,
   },
   statCard: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     borderRadius: 12,
     padding: 20,
     minWidth: 50,
     paddingTop: 0,
   },
   statHeart: {
-    fontSize: 17,
+    fontSize: 16,
     marginBottom: 8,
   },
   statIcon: {
@@ -234,7 +242,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   statNumber: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 4,

@@ -64,10 +64,7 @@ function RootLayoutNav() {
         <Stack.Screen
           name="create-story"
           options={{
-            title: "Create Story",
-            headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
+            headerShown: false,
           }}
         />
         <Stack.Screen

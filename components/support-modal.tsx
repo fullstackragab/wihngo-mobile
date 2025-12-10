@@ -12,6 +12,7 @@ import {
 import { SupportAmount } from "@/types/support";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
@@ -59,7 +60,8 @@ export default function SupportModal({
   const [showCryptoSelector, setShowCryptoSelector] = useState(false);
   const [showPlatformSupport, setShowPlatformSupport] = useState(false);
   const [customAmount, setCustomAmount] = useState<string>("");
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const router = useRouter();
 
   const supportAmounts = [
     { value: SupportAmount.Small, label: "$5", emoji: "☕" },
@@ -107,6 +109,25 @@ export default function SupportModal({
       startPaymentPolling(response.paymentRequest.id);
     } catch (error) {
       console.error("Error creating crypto payment:", error);
+
+      // Handle session expiry
+      if (error instanceof Error && error.message.includes("Session expired")) {
+        Alert.alert(
+          "Session Expired",
+          "Your session has expired. Please login again.",
+          [
+            {
+              text: "OK",
+              onPress: async () => {
+                await logout();
+                router.replace("/welcome");
+              },
+            },
+          ]
+        );
+        return;
+      }
+
       Alert.alert("Error", "Failed to create crypto payment request");
       resetPaymentState();
     } finally {
@@ -238,6 +259,28 @@ export default function SupportModal({
             onClose();
           } catch (error) {
             console.error("Error recording transaction:", error);
+
+            // Handle session expiry
+            if (
+              error instanceof Error &&
+              error.message.includes("Session expired")
+            ) {
+              Alert.alert(
+                "Session Expired",
+                "Your session has expired. Please login again.",
+                [
+                  {
+                    text: "OK",
+                    onPress: async () => {
+                      await logout();
+                      router.replace("/welcome");
+                    },
+                  },
+                ]
+              );
+              return;
+            }
+
             Alert.alert("Error", "Failed to record transaction");
           } finally {
             setIsProcessing(false);

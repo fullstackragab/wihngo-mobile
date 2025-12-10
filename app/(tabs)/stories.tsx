@@ -152,7 +152,7 @@ export default function Stories() {
           <Text style={styles.emptyText}>No stories yet</Text>
           <TouchableOpacity
             style={styles.createFirstButton}
-            onPress={() => router.push("./create-story")}
+            onPress={() => router.push("/create-story")}
           >
             <Text style={styles.createFirstButtonText}>Create Story</Text>
           </TouchableOpacity>
@@ -162,7 +162,7 @@ export default function Stories() {
       {/* Floating Action Button */}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => router.push("./create-story")}
+        onPress={() => router.push("/create-story")}
       >
         <FontAwesome6 name="plus" size={20} color="#FFFFFF" />
       </TouchableOpacity>

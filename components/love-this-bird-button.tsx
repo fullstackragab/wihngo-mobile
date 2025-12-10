@@ -3,10 +3,12 @@
  * Reusable button for loving/unloving birds with automatic state management
  */
 
+import { useAuth } from "@/contexts/auth-context";
 import { birdService } from "@/services/bird.service";
 import { Ionicons } from "@expo/vector-icons";
 import Feather from "@expo/vector-icons/Feather";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -39,6 +41,8 @@ export default function LoveThisBirdButton({
   const [isLoved, setIsLoved] = useState(initialIsLoved);
   const [loveCount, setLoveCount] = useState(initialLoveCount);
   const [isLoading, setIsLoading] = useState(false);
+  const { logout } = useAuth();
+  const router = useRouter();
 
   // Update state when props change
   useEffect(() => {
@@ -81,6 +85,25 @@ export default function LoveThisBirdButton({
       setLoveCount(previousCount);
 
       console.error("Error toggling love:", error);
+
+      // Handle session expiry
+      if (error instanceof Error && error.message.includes("Session expired")) {
+        Alert.alert(
+          "Session Expired",
+          "Your session has expired. Please login again.",
+          [
+            {
+              text: "OK",
+              onPress: async () => {
+                await logout();
+                router.replace("/welcome");
+              },
+            },
+          ]
+        );
+        return;
+      }
+
       Alert.alert("Error", "Failed to update love status. Please try again.");
     } finally {
       setIsLoading(false);

@@ -5,10 +5,12 @@ import {
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { AuthProvider } from "@/contexts/auth-context";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { pushNotificationService } from "@/services/push-notification.service";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -16,6 +18,11 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
+  useEffect(() => {
+    // Initialize push notifications
+    pushNotificationService.initialize();
+  }, []);
 
   return (
     <AuthProvider>

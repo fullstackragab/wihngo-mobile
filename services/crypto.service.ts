@@ -183,8 +183,8 @@ export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
       iconName: "dollar-sign",
       networks: ["ethereum", "tron", "binance-smart-chain"],
       minAmount: 5,
-      confirmationsRequired: 12,
-      estimatedTime: "2-5 minutes",
+      confirmationsRequired: 12, // Note: TRON uses 19 confirmations but is faster (~57 seconds)
+      estimatedTime: "1-5 minutes", // TRON: 1-2 min, Ethereum: 2-5 min, BSC: 1-3 min
     },
     {
       code: "USDC",
@@ -266,6 +266,8 @@ export function formatCryptoAmount(
 
 /**
  * Generate payment URI for QR code scanning
+ * Note: For USDT, this needs to be network-aware on the backend.
+ * TRON uses a different URI format than Ethereum.
  */
 export function generatePaymentUri(
   currency: CryptoCurrency,
@@ -282,9 +284,15 @@ export function generatePaymentUri(
         label ? `&label=${encodeURIComponent(label)}` : ""
       }`;
     case "ETH":
+    case "BNB":
+      return `ethereum:${address}?value=${amount * 1e18}${
+        label ? `&label=${encodeURIComponent(label)}` : ""
+      }`;
     case "USDT":
     case "USDC":
-    case "BNB":
+      // For multi-network tokens, the backend should generate the proper URI
+      // based on the selected network (Ethereum, TRON, BSC, etc.)
+      // This is a fallback for Ethereum network
       return `ethereum:${address}?value=${amount * 1e18}${
         label ? `&label=${encodeURIComponent(label)}` : ""
       }`;
@@ -319,22 +327,50 @@ export function calculateUsdAmount(
 
 /**
  * Validate wallet address format (basic validation)
+ * For currencies that support multiple networks (USDT, USDC),
+ * you should also pass the network parameter for accurate validation
  */
 export function validateWalletAddress(
   address: string,
-  currency: CryptoCurrency
+  currency: CryptoCurrency,
+  network?: CryptoNetwork
 ): boolean {
   if (!address || address.trim().length === 0) return false;
 
-  // Basic format validation (you should implement proper validation)
+  // For currencies with multiple networks, validate based on network
+  if (network) {
+    switch (network) {
+      case "tron":
+        // TRON addresses start with 'T' and are 34 characters
+        return /^T[a-zA-Z0-9]{33}$/.test(address);
+      case "ethereum":
+      case "polygon":
+      case "binance-smart-chain":
+        // EVM-compatible addresses (0x + 40 hex chars)
+        return /^0x[a-fA-F0-9]{40}$/.test(address);
+      case "bitcoin":
+        // Bitcoin addresses (legacy, SegWit, native SegWit)
+        return /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/.test(address);
+      case "solana":
+        // Solana addresses (base58, 32-44 chars)
+        return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
+    }
+  }
+
+  // Fallback to currency-based validation
   switch (currency) {
     case "BTC":
       return /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/.test(address);
     case "ETH":
-    case "USDT":
-    case "USDC":
     case "BNB":
       return /^0x[a-fA-F0-9]{40}$/.test(address);
+    case "USDT":
+    case "USDC":
+      // For USDT/USDC, check if it matches any supported format
+      return (
+        /^0x[a-fA-F0-9]{40}$/.test(address) || // EVM (Ethereum, BSC, Polygon)
+        /^T[a-zA-Z0-9]{33}$/.test(address) // TRON
+      );
     case "SOL":
       return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
     case "DOGE":

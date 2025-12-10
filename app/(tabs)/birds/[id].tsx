@@ -1,21 +1,19 @@
-import SupportModal from "@/components/support-modal";
+import LoveThisBirdButton from "@/components/love-this-bird-button";
+import ShareButton from "@/components/share-button";
+import SupportButton from "@/components/support-button";
+import ErrorView from "@/components/ui/error-view";
+import LoadingScreen from "@/components/ui/loading-screen";
 import { getBirdByIdService } from "@/services/bird.service";
 import { Bird } from "@/types/bird";
-import Feather from "@expo/vector-icons/Feather";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { LinearGradient } from "expo-linear-gradient";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Alert,
   Dimensions,
   Image,
   ScrollView,
-  Share,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -25,10 +23,8 @@ export default function BirdDetails() {
   const [bird, setBird] = useState<Bird | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showSupportModal, setShowSupportModal] = useState(false);
-  const router = useRouter();
+  const [loveCount, setLoveCount] = useState(0);
   const { id } = useLocalSearchParams<{ id: string }>();
-  const metTitle = bird ? `${bird.name} (${bird.species})` : "Bird Details";
 
   const loadBirdDetails = useCallback(async () => {
     if (!id) return;
@@ -44,6 +40,7 @@ export default function BirdDetails() {
       console.log("Bird name:", data.name);
       console.log("Bird species:", data.species);
       setBird(data);
+      setLoveCount(data.lovedBy || 0);
     } catch (err) {
       setError("Failed to load bird details. Please try again.");
       console.error("Error loading bird details:", err);
@@ -56,38 +53,15 @@ export default function BirdDetails() {
     loadBirdDetails();
   }, [loadBirdDetails]);
 
-  const handleShare = async () => {
-    if (!bird) return;
-
-    try {
-      const result = await Share.share({
-        message: `Check out this amazing bird: ${bird.name} (${bird.species})!\n\n"${bird.tagline}"\n\n❤️ ${bird.lovedBy} loved | 🐦 ${bird.supportedBy} supported`,
-        title: `${bird.name} - ${bird.species}`,
-      });
-
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          console.log("Shared with activity type:", result.activityType);
-        } else {
-          console.log("Shared successfully");
-        }
-      } else if (result.action === Share.dismissedAction) {
-        console.log("Share dismissed");
-      }
-    } catch (error) {
-      Alert.alert("Error", "Failed to share bird");
-      console.error("Error sharing:", error);
-    }
+  const handleLoveChange = (isLoved: boolean, newCount: number) => {
+    setLoveCount(newCount);
   };
 
   if (loading) {
     return (
       <>
         <Stack.Screen options={{ title: "Bird Details" }} />
-        <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-          <Text style={styles.loadingText}>Loading bird details...</Text>
-        </View>
+        <LoadingScreen message="Loading bird details..." />
       </>
     );
   }
@@ -96,15 +70,11 @@ export default function BirdDetails() {
     return (
       <>
         <Stack.Screen options={{ title: "Bird Details" }} />
-        <View style={styles.centerContainer}>
-          <Text style={styles.errorText}>{error || "Bird not found"}</Text>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Text style={styles.backButtonText}>Go Back</Text>
-          </TouchableOpacity>
-        </View>
+        <ErrorView
+          message={error || "Bird not found"}
+          onRetry={loadBirdDetails}
+          retryButtonText="Reload"
+        />
       </>
     );
   }
@@ -129,7 +99,7 @@ export default function BirdDetails() {
           >
             <View style={styles.statCard}>
               <Text style={styles.statHeart}>❤️</Text>
-              <Text style={styles.statNumber}>{bird.lovedBy}</Text>
+              <Text style={styles.statNumber}>{loveCount}</Text>
             </View>
             <View style={styles.statCard}>
               <MaterialCommunityIcons name="corn" size={20} color="#10b981" />
@@ -144,12 +114,12 @@ export default function BirdDetails() {
               paddingHorizontal: 20,
             }}
           >
-            <TouchableOpacity onPress={handleShare}>
-              <Text style={styles.statIcon}>
-                {/* <Feather name="share-2" size={24} color="black" /> */}
-                <Feather name="share" size={24} color="black" />
-              </Text>
-            </TouchableOpacity>
+            <ShareButton
+              variant="icon"
+              title={`${bird.name} - ${bird.species}`}
+              message={`Check out this amazing bird: ${bird.name} (${bird.species})!\n\n"${bird.tagline}"\n\n❤️ ${loveCount} loved | 🐦 ${bird.supportedBy} supported`}
+              iconSize={24}
+            />
           </View>
         </View>
         <View style={styles.content}>
@@ -163,61 +133,24 @@ export default function BirdDetails() {
               <Text style={styles.tagline}>{bird.tagline}</Text>
             </View>
           )}
-          {/* 
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>About</Text>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Bird ID:</Text>
-              <Text style={styles.infoValue}>{bird.birdId}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Species:</Text>
-              <Text style={styles.infoValue}>{bird.species}</Text>
-            </View>
-          </View> */}
-
           <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              style={(styles.buttonWrapper, { width: "auto" })}
-              onPress={() => console.log("Love bird:", bird.birdId)}
-              activeOpacity={0.8}
-            >
-              <LinearGradient
-                colors={["#f43f5e", "#ec4899"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.gradientButton}
-              >
-                <Feather name="heart" size={20} color="white" />
-                <Text style={styles.gradientButtonText}>Love This Bird</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+            <LoveThisBirdButton
+              birdId={bird.birdId}
+              initialIsLoved={bird.isLoved || false}
+              initialLoveCount={loveCount}
+              onLoveChange={handleLoveChange}
+              variant="gradient"
+            />
 
-            <TouchableOpacity
-              style={(styles.buttonWrapper, { width: "auto" })}
-              onPress={() => setShowSupportModal(true)}
-              activeOpacity={0.8}
-            >
-              <LinearGradient
-                colors={["#10b981", "#14b8a6"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={styles.gradientButton}
-              >
-                <MaterialCommunityIcons name="corn" size={20} color="white" />
-                <Text style={styles.gradientButtonText}>Support</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+            <SupportButton
+              birdId={bird.birdId}
+              birdName={bird.name}
+              isMemorial={bird.isMemorial}
+              variant="gradient"
+            />
           </View>
         </View>
       </ScrollView>
-
-      <SupportModal
-        visible={showSupportModal}
-        onClose={() => setShowSupportModal(false)}
-        birdId={bird?.birdId}
-        birdName={bird?.name}
-      />
     </>
   );
 }

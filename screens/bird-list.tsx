@@ -1,10 +1,12 @@
 import BirdThumb from "@/components/bird-thumb";
+import ErrorView from "@/components/ui/error-view";
+import ListEmptyState from "@/components/ui/list-empty-state";
+import LoadingScreen from "@/components/ui/loading-screen";
 import { getBirdsService } from "@/services/bird.service";
 import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   Modal,
   RefreshControl,
@@ -128,10 +130,7 @@ export default function BirdList({
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Birds</Text>
         </View>
-        <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#4ECDC4" />
-          <Text style={styles.loadingText}>Loading birds...</Text>
-        </View>
+        <LoadingScreen message="Loading birds..." />
       </View>
     );
   }
@@ -142,13 +141,7 @@ export default function BirdList({
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Birds</Text>
         </View>
-        <View style={styles.centerContainer}>
-          <FontAwesome6 name="exclamation-circle" size={48} color="#E74C3C" />
-          <Text style={styles.errorText}>{error}</Text>
-          <TouchableOpacity style={styles.retryButton} onPress={loadBirds}>
-            <Text style={styles.retryButtonText}>Retry</Text>
-          </TouchableOpacity>
-        </View>
+        <ErrorView message={error} onRetry={loadBirds} />
       </View>
     );
   }
@@ -317,22 +310,29 @@ export default function BirdList({
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <FontAwesome6 name="dove" size={60} color="#BDC3C7" />
-            <Text style={styles.emptyText}>
-              {searchQuery || Object.keys(filters).length > 0
+          <ListEmptyState
+            icon="dove"
+            title={
+              searchQuery || Object.keys(filters).length > 0
                 ? "No birds match your search"
-                : "No birds found"}
-            </Text>
-            {(searchQuery || Object.keys(filters).length > 0) && (
-              <TouchableOpacity
-                style={styles.clearButton}
-                onPress={clearFilters}
-              >
-                <Text style={styles.clearButtonText}>Clear Filters</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+                : "No birds found"
+            }
+            message={
+              searchQuery || Object.keys(filters).length > 0
+                ? "Try adjusting your filters or search terms"
+                : "Start adding birds to your collection"
+            }
+            actionLabel={
+              searchQuery || Object.keys(filters).length > 0
+                ? "Clear Filters"
+                : undefined
+            }
+            onAction={
+              searchQuery || Object.keys(filters).length > 0
+                ? clearFilters
+                : undefined
+            }
+          />
         }
       />
 

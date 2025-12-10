@@ -1,4 +1,7 @@
+import ImagePickerButton from "@/components/ui/image-picker-button";
+import ValidatedTextInput from "@/components/ui/validated-text-input";
 import { useAuth } from "@/contexts/auth-context";
+import { useFormValidation } from "@/hooks/useFormValidation";
 import { birdService } from "@/services/bird.service";
 import { CreateBirdDto } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -6,13 +9,11 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -32,6 +33,17 @@ export default function AddBird() {
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { validateForm, getFieldError, setFieldTouched, isFieldTouched } =
+    useFormValidation({
+      name: { required: true, message: "Bird name is required" },
+      species: { required: true, message: "Species is required" },
+      tagline: {
+        required: true,
+        maxLength: 100,
+        message: "Tagline is required (max 100 characters)",
+      },
+    });
+
   const handleSubmit = async () => {
     // Check if user is authenticated
     if (!isAuthenticated || !user) {
@@ -40,9 +52,10 @@ export default function AddBird() {
       return;
     }
 
-    // Validate required fields
-    if (!name.trim() || !species.trim() || !tagline.trim()) {
-      Alert.alert("Error", "Please fill in all required fields");
+    // Validate form
+    const isValid = validateForm({ name, species, tagline });
+    if (!isValid) {
+      Alert.alert("Validation Error", "Please fill in all required fields");
       return;
     }
 
@@ -143,160 +156,110 @@ export default function AddBird() {
           </Text>
         </TouchableOpacity>
       </View>
-
       <ScrollView style={styles.content}>
         {/* Required Fields */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Basic Information</Text>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>
-              Bird Name <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g., Charlie"
-              placeholderTextColor="#95A5A6"
-              value={name}
-              onChangeText={setName}
-            />
-          </View>
+          <ValidatedTextInput
+            label="Bird Name"
+            value={name}
+            onChangeText={setName}
+            onBlur={() => setFieldTouched("name")}
+            error={getFieldError("name")}
+            touched={isFieldTouched("name")}
+            required
+            placeholder="e.g., Charlie"
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>
-              Species <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g., Hummingbird"
-              placeholderTextColor="#95A5A6"
-              value={species}
-              onChangeText={setSpecies}
-            />
-          </View>
+          <ValidatedTextInput
+            label="Species"
+            value={species}
+            onChangeText={setSpecies}
+            onBlur={() => setFieldTouched("species")}
+            error={getFieldError("species")}
+            touched={isFieldTouched("species")}
+            required
+            placeholder="e.g., Hummingbird"
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Common Name</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g., Anna's Hummingbird"
-              placeholderTextColor="#95A5A6"
-              value={commonName}
-              onChangeText={setCommonName}
-            />
-          </View>
+          <ValidatedTextInput
+            label="Common Name"
+            value={commonName}
+            onChangeText={setCommonName}
+            placeholder="e.g., Anna's Hummingbird"
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Scientific Name</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g., Calypte anna"
-              placeholderTextColor="#95A5A6"
-              value={scientificName}
-              onChangeText={setScientificName}
-            />
-          </View>
+          <ValidatedTextInput
+            label="Scientific Name"
+            value={scientificName}
+            onChangeText={setScientificName}
+            placeholder="e.g., Calypte anna"
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>
-              Tagline <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="A short, catchy description"
-              placeholderTextColor="#95A5A6"
-              value={tagline}
-              onChangeText={setTagline}
-              maxLength={100}
-            />
-            <Text style={styles.charCount}>{tagline.length}/100</Text>
-          </View>
+          <ValidatedTextInput
+            label="Tagline"
+            value={tagline}
+            onChangeText={setTagline}
+            onBlur={() => setFieldTouched("tagline")}
+            error={getFieldError("tagline")}
+            touched={isFieldTouched("tagline")}
+            required
+            placeholder="A short, catchy description"
+            maxLength={100}
+          />
+          <Text style={styles.charCount}>{tagline.length}/100</Text>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Description</Text>
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              placeholder="Tell us more about this bird..."
-              placeholderTextColor="#95A5A6"
-              value={description}
-              onChangeText={setDescription}
-              multiline
-              numberOfLines={6}
-              textAlignVertical="top"
-            />
-          </View>
+          <ValidatedTextInput
+            label="Description"
+            value={description}
+            onChangeText={setDescription}
+            placeholder="Tell us more about this bird..."
+            multiline
+            numberOfLines={6}
+            style={styles.textArea}
+          />
         </View>
 
         {/* Additional Info */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Additional Details</Text>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Age</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g., 2 years"
-              placeholderTextColor="#95A5A6"
-              value={age}
-              onChangeText={setAge}
-            />
-          </View>
+          <ValidatedTextInput
+            label="Age"
+            value={age}
+            onChangeText={setAge}
+            placeholder="e.g., 2 years"
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Location</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g., California"
-              placeholderTextColor="#95A5A6"
-              value={location}
-              onChangeText={setLocation}
-            />
-          </View>
+          <ValidatedTextInput
+            label="Location"
+            value={location}
+            onChangeText={setLocation}
+            placeholder="e.g., California"
+          />
         </View>
 
         {/* Images */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Images</Text>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Profile Image URL</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="https://example.com/image.jpg"
-              placeholderTextColor="#95A5A6"
-              value={imageUrl}
-              onChangeText={setImageUrl}
-              autoCapitalize="none"
-              keyboardType="url"
-            />
-            {imageUrl.trim() && (
-              <Image
-                source={{ uri: imageUrl }}
-                style={styles.previewImage}
-                resizeMode="cover"
-              />
-            )}
-          </View>
+          <ImagePickerButton
+            label="Profile Image"
+            placeholder="Tap to select a profile image"
+            initialUri={imageUrl}
+            onImageSelected={setImageUrl}
+            maxSizeMB={5}
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Cover Image URL</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="https://example.com/cover.jpg"
-              placeholderTextColor="#95A5A6"
-              value={coverImageUrl}
-              onChangeText={setCoverImageUrl}
-              autoCapitalize="none"
-              keyboardType="url"
-            />
-            {coverImageUrl.trim() && (
-              <Image
-                source={{ uri: coverImageUrl }}
-                style={styles.previewImage}
-                resizeMode="cover"
-              />
-            )}
-          </View>
+          <ImagePickerButton
+            label="Cover Image"
+            placeholder="Tap to select a cover image"
+            initialUri={coverImageUrl}
+            onImageSelected={setCoverImageUrl}
+            maxSizeMB={5}
+            aspectRatio={[16, 9]}
+          />
         </View>
 
         {/* Tips */}

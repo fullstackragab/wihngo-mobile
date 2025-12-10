@@ -1,4 +1,6 @@
+import LoveThisBirdButton from "@/components/love-this-bird-button";
 import { PremiumBadge } from "@/components/premium-badge";
+import SupportButton from "@/components/support-button";
 import AnimatedCard from "@/components/ui/animated-card";
 import { useAuth } from "@/contexts/auth-context";
 import { hasPremium } from "@/services/premium.service";
@@ -26,7 +28,6 @@ interface BirdProfileProps {
 export default function BirdProfile({ bird }: BirdProfileProps) {
   const router = useRouter();
   const { user } = useAuth();
-  const [isLoved, setIsLoved] = useState(bird?.isLoved || false);
   const [loveCount, setLoveCount] = useState(bird?.lovedBy || 2847);
   const [stories, setStories] = useState<Story[]>([]);
   const [healthLogs, setHealthLogs] = useState<BirdHealthLog[]>([]);
@@ -52,25 +53,8 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
     console.log("Premium status updated, refresh bird data");
   };
 
-  const handleLove = async () => {
-    try {
-      // TODO: API call
-      setIsLoved(!isLoved);
-      setLoveCount(isLoved ? loveCount - 1 : loveCount + 1);
-    } catch (error) {
-      console.error("Error loving bird:", error);
-    }
-  };
-
-  const handleSupport = () => {
-    if (bird?.isMemorial) {
-      Alert.alert(
-        "Memorial Bird",
-        "This bird is remembered with love. Support is no longer available."
-      );
-      return;
-    }
-    router.push(`/support/${bird?.birdId || "demo"}`);
+  const handleLoveChange = (isLoved: boolean, newCount: number) => {
+    setLoveCount(newCount);
   };
 
   const displayedStories = showAllStories ? stories : stories.slice(0, 3);
@@ -170,45 +154,38 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
         {/* Actions */}
         <View style={styles.content}>
           <View style={styles.actions}>
-            <TouchableOpacity
-              style={[styles.loveButton, isLoved && styles.loveButtonActive]}
-              onPress={handleLove}
-            >
-              <Ionicons
-                name={isLoved ? "heart" : "heart-outline"}
-                size={20}
-                color="#fff"
+            {bird?.birdId && (
+              <LoveThisBirdButton
+                birdId={bird.birdId}
+                initialIsLoved={bird.isLoved || false}
+                initialLoveCount={loveCount}
+                onLoveChange={handleLoveChange}
+                variant="pill"
+                style={{ flex: 1 }}
               />
-              <Text style={styles.actionText}>
-                {isLoved ? "Loved" : "Love This Bird"}
-              </Text>
-            </TouchableOpacity>
+            )}
             {!bird?.isMemorial && (
               <TouchableOpacity
                 style={styles.supportButton}
                 onPress={handleSupport}
-              >
-                <FontAwesome6
-                  name="hand-holding-heart"
-                  size={18}
-                  color="#fff"
-                />
-                <Text style={styles.actionText}>Support</Text>
-              </TouchableOpacity>
+                initialIsLoved={bird.isLoved || false}
+                initialLoveCount={loveCount}
+                onLoveChange={handleLoveChange}
+                variant="pill"
+                style={{ flex: 1 }}
+              />
+            )}
+            {!bird?.isMemorial && (
+              <SupportButton
+                birdId={bird?.birdId}
+                birdName={bird?.name}
+                isMemorial={bird?.isMemorial}
+                variant="solid"
+                style={{ flex: 1 }}
+              />
             )}
           </View>
-        </View>
-
-        {/* Premium Features Section */}
-        {isOwner && (
-          <View style={styles.content}>
-            {!isPremiumBird ? (
-              <PremiumUpgradeCard onUpgrade={handlePremiumUpgrade} />
-            ) : (
-              <>
-                <PremiumSubscriptionManager
-                  birdId={bird?.birdId || ""}
-                  ownerId={bird?.ownerId || ""}
+        </View>   ownerId={bird?.ownerId || ""}
                   onStatusChange={handlePremiumUpdate}
                 />
                 <PremiumFrameSelector

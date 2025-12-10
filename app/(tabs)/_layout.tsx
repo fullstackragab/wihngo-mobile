@@ -4,6 +4,7 @@ import React from "react";
 import { Image } from "react-native";
 
 import { HapticTab } from "@/components/haptic-tab";
+import { NotificationBell } from "@/components/notification-bell";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -15,8 +16,9 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: false,
+        headerShown: true,
         tabBarButton: HapticTab,
+        headerRight: () => <NotificationBell />,
       }}
     >
       <Tabs.Screen

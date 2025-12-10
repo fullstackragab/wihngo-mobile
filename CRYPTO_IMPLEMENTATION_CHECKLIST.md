@@ -75,6 +75,18 @@ yarn install
 - [ ] `DELETE /payments/crypto/wallets/:id` - Remove wallet
 - [ ] `PATCH /payments/crypto/wallets/:id/default` - Set default
 
+#### Platform Wallet Configuration:
+
+- [ ] **Configure TRON USDT Wallet** (See `CRYPTO_WALLET_UPDATE.md`)
+  - [ ] Add wallet to `platform_wallets` table
+  - [ ] Address: `TGRzhw2kwBW5PzncWfKCnqsvkrBezfsgiA`
+  - [ ] Network: `tron`
+  - [ ] Currency: `USDT`
+  - [ ] Securely encrypt and store private key
+  - [ ] Set up TronGrid API key
+  - [ ] Test TRON transaction verification
+  - [ ] Verify wallet on TronScan
+
 #### Database Setup:
 
 - [ ] Create `crypto_payment_requests` table
@@ -89,6 +101,7 @@ yarn install
 
 - [ ] Set up Infura/Alchemy account (Ethereum)
 - [ ] Set up Bitcoin node or API
+- [ ] Set up TronGrid API (for TRON/USDT)
 - [ ] Set up Solana RPC
 - [ ] Set up other blockchain APIs
 - [ ] Implement transaction verification

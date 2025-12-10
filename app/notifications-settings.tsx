@@ -1,31 +1,75 @@
-import React, { useState } from "react";
-import { ScrollView, StyleSheet, Switch, Text, View } from "react-native";
+import { useNotificationPreferences } from "@/hooks/useNotificationPreferences";
+import { notificationService } from "@/services/notification.service";
+import { pushNotificationService } from "@/services/push-notification.service";
+import React from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function NotificationsSettings() {
-  const [pushNotifications, setPushNotifications] = useState(true);
-  const [emailNotifications, setEmailNotifications] = useState(true);
-  const [newStories, setNewStories] = useState(true);
-  const [birdUpdates, setBirdUpdates] = useState(true);
-  const [communityActivity, setCommunityActivity] = useState(false);
-  const [supportUpdates, setSupportUpdates] = useState(true);
+  const { preferences, loading, saving, updatePreference } =
+    useNotificationPreferences();
+
+  const handleTestNotification = async () => {
+    try {
+      await notificationService.sendTestNotification();
+      Alert.alert("Success", "Test notification sent!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to send test notification");
+    }
+  };
+
+  const handleRequestPermission = async () => {
+    const granted = await pushNotificationService.requestPermission();
+    if (granted) {
+      Alert.alert("Success", "Push notification permissions granted!");
+      await pushNotificationService.initialize();
+    } else {
+      Alert.alert(
+        "Permission Denied",
+        "Please enable notifications in your device settings"
+      );
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4ECDC4" />
+        <Text style={styles.loadingText}>Loading preferences...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
+      {/* Test Notification Button */}
+      <View style={styles.section}>
+        <TouchableOpacity
+          style={styles.testButton}
+          onPress={handleTestNotification}
+          disabled={saving}
+        >
+          <Text style={styles.testButtonText}>Send Test Notification</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.testButton, styles.permissionButton]}
+          onPress={handleRequestPermission}
+          disabled={saving}
+        >
+          <Text style={styles.testButtonText}>Request Push Permissions</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>General</Text>
-
-        <View style={styles.settingItem}>
-          <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Push Notifications</Text>
-            <Text style={styles.settingDescription}>
-              Receive notifications on your device
-            </Text>
-          </View>
-          <Switch
-            value={pushNotifications}
-            onValueChange={setPushNotifications}
-          />
-        </View>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
@@ -35,8 +79,63 @@ export default function NotificationsSettings() {
             </Text>
           </View>
           <Switch
-            value={emailNotifications}
-            onValueChange={setEmailNotifications}
+            value={preferences.emailNotifications}
+            onValueChange={(value) =>
+              updatePreference("emailNotifications", value)
+            }
+            disabled={saving}
+          />
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Engagement</Text>
+
+        <View style={styles.settingItem}>
+          <View style={styles.settingInfo}>
+            <Text style={styles.settingTitle}>Love Notifications</Text>
+            <Text style={styles.settingDescription}>
+              When someone loves your bird
+            </Text>
+          </View>
+          <Switch
+            value={preferences.loveNotifications}
+            onValueChange={(value) =>
+              updatePreference("loveNotifications", value)
+            }
+            disabled={saving}
+          />
+        </View>
+
+        <View style={styles.settingItem}>
+          <View style={styles.settingInfo}>
+            <Text style={styles.settingTitle}>Support Notifications</Text>
+            <Text style={styles.settingDescription}>
+              When someone supports your bird
+            </Text>
+          </View>
+          <Switch
+            value={preferences.supportNotifications}
+            onValueChange={(value) =>
+              updatePreference("supportNotifications", value)
+            }
+            disabled={saving}
+          />
+        </View>
+
+        <View style={styles.settingItem}>
+          <View style={styles.settingInfo}>
+            <Text style={styles.settingTitle}>Comment Notifications</Text>
+            <Text style={styles.settingDescription}>
+              When someone comments on your content
+            </Text>
+          </View>
+          <Switch
+            value={preferences.commentNotifications}
+            onValueChange={(value) =>
+              updatePreference("commentNotifications", value)
+            }
+            disabled={saving}
           />
         </View>
       </View>
@@ -46,48 +145,75 @@ export default function NotificationsSettings() {
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>New Stories</Text>
+            <Text style={styles.settingTitle}>Story Notifications</Text>
             <Text style={styles.settingDescription}>
-              Notify when new stories are posted
+              New stories from birds you follow
             </Text>
           </View>
-          <Switch value={newStories} onValueChange={setNewStories} />
+          <Switch
+            value={preferences.storyNotifications}
+            onValueChange={(value) =>
+              updatePreference("storyNotifications", value)
+            }
+            disabled={saving}
+          />
         </View>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Bird Updates</Text>
+            <Text style={styles.settingTitle}>Bird Update Notifications</Text>
             <Text style={styles.settingDescription}>
               Updates about your loved birds
             </Text>
           </View>
-          <Switch value={birdUpdates} onValueChange={setBirdUpdates} />
-        </View>
-
-        <View style={styles.settingItem}>
-          <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Support Updates</Text>
-            <Text style={styles.settingDescription}>
-              Updates on birds you support
-            </Text>
-          </View>
-          <Switch value={supportUpdates} onValueChange={setSupportUpdates} />
+          <Switch
+            value={preferences.birdUpdateNotifications}
+            onValueChange={(value) =>
+              updatePreference("birdUpdateNotifications", value)
+            }
+            disabled={saving}
+          />
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Community</Text>
+        <Text style={styles.sectionTitle}>System</Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Community Activity</Text>
+            <Text style={styles.settingTitle}>System Notifications</Text>
             <Text style={styles.settingDescription}>
-              Updates about community discussions
+              Important system announcements
             </Text>
           </View>
           <Switch
-            value={communityActivity}
-            onValueChange={setCommunityActivity}
+            value={preferences.systemNotifications}
+            onValueChange={(value) =>
+              updatePreference("systemNotifications", value)
+            }
+            disabled={saving}
+          />
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Recommendations</Text>
+
+        <View style={styles.settingItem}>
+          <View style={styles.settingInfo}>
+            <Text style={styles.settingTitle}>
+              Recommendation Notifications
+            </Text>
+            <Text style={styles.settingDescription}>
+              Suggested birds and content
+            </Text>
+          </View>
+          <Switch
+            value={preferences.recommendationNotifications}
+            onValueChange={(value) =>
+              updatePreference("recommendationNotifications", value)
+            }
+            disabled={saving}
           />
         </View>
       </View>
@@ -99,6 +225,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#666",
   },
   section: {
     marginTop: 20,
@@ -134,5 +271,20 @@ const styles = StyleSheet.create({
   settingDescription: {
     fontSize: 13,
     color: "#666",
+  },
+  testButton: {
+    backgroundColor: "#4ECDC4",
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  permissionButton: {
+    backgroundColor: "#FF6B6B",
+  },
+  testButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });

@@ -4,12 +4,9 @@
  */
 
 import { MEDIA_CONFIG, MediaValidation } from "@/lib/constants/media";
+import * as ImagePicker from "expo-image-picker";
 import React, { useCallback, useState } from "react";
 import { Alert } from "react-native";
-
-// Note: Requires expo-image-picker and expo-av to be installed
-// Install with: npx expo install expo-image-picker expo-av
-// Import ImagePicker and Video when available
 
 export interface VideoPickerOptions {
   maxSizeBytes?: number;
@@ -123,16 +120,20 @@ export function useVideoPicker(
     setLoading(true);
 
     try {
-      // Placeholder for video picker logic
-      // This will be implemented when expo-image-picker is installed
-      Alert.alert(
-        "Video Picker",
-        "Video picker functionality requires expo-image-picker to be installed.\n\nRun: npx expo install expo-image-picker expo-av",
-        [{ text: "OK" }]
-      );
+      // Request permissions
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      // TODO: Implement with ImagePicker.launchImageLibraryAsync with mediaTypes: ImagePicker.MediaTypeOptions.Videos
-      /* Example implementation:
+      if (!permissionResult.granted) {
+        Alert.alert(
+          "Permission Required",
+          "Please allow access to your media library to select videos."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Launch image library with video option
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         allowsEditing: true,
@@ -142,25 +143,29 @@ export function useVideoPicker(
 
       if (!result.canceled && result.assets[0]) {
         const video = result.assets[0];
-        
+
+        // Convert duration from milliseconds to seconds
+        const durationInSeconds = video.duration
+          ? video.duration / 1000
+          : undefined;
+
         // Validate and process video
         const isValid = await validateVideo(
           video.uri,
-          video.duration,
-          video.fileSize
+          durationInSeconds,
+          video.fileSize ?? undefined
         );
-        
+
         if (isValid) {
           setUri(video.uri);
-          setDuration(video.duration || null);
+          setDuration(durationInSeconds || null);
           setSize(video.fileSize || null);
-          
+
           if (onVideoSelected) {
             onVideoSelected(video.uri);
           }
         }
       }
-      */
     } catch (err) {
       console.error("Error picking video:", err);
       setError("Failed to pick video");
@@ -176,42 +181,51 @@ export function useVideoPicker(
     setLoading(true);
 
     try {
-      // Placeholder for camera logic
-      Alert.alert(
-        "Record Video",
-        "Video recording functionality requires expo-image-picker to be installed.\n\nRun: npx expo install expo-image-picker expo-av",
-        [{ text: "OK" }]
-      );
+      // Request camera permissions
+      const permissionResult =
+        await ImagePicker.requestCameraPermissionsAsync();
 
-      // TODO: Implement with ImagePicker.launchCameraAsync with mediaTypes: Videos
-      /* Example implementation:
+      if (!permissionResult.granted) {
+        Alert.alert(
+          "Permission Required",
+          "Please allow access to your camera to record videos."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Launch camera for video recording
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-        allowsEditing: true,
+        allowsEditing: false, // Disable editing to prevent camera issues
         quality: finalOptions.quality,
         videoMaxDuration: finalOptions.maxDurationSeconds,
       });
 
       if (!result.canceled && result.assets[0]) {
         const video = result.assets[0];
-        
+
+        // Convert duration from milliseconds to seconds
+        const durationInSeconds = video.duration
+          ? video.duration / 1000
+          : undefined;
+
         const isValid = await validateVideo(
           video.uri,
-          video.duration,
-          video.fileSize
+          durationInSeconds,
+          video.fileSize ?? undefined
         );
-        
+
         if (isValid) {
           setUri(video.uri);
-          setDuration(video.duration || null);
+          setDuration(durationInSeconds || null);
           setSize(video.fileSize || null);
-          
+
           if (onVideoSelected) {
             onVideoSelected(video.uri);
           }
         }
       }
-      */
     } catch (err) {
       console.error("Error recording video:", err);
       setError("Failed to record video");

@@ -49,7 +49,7 @@ export const MEDIA_CONFIG = {
   videos: {
     // Bird Main Video (Required for each bird)
     birdMain: {
-      maxSizeBytes: 50 * 1024 * 1024, // 50MB (after compression)
+      maxSizeBytes: 100 * 1024 * 1024, // 100MB (after compression)
       maxDurationSeconds: 60, // 1 minute maximum
       minDurationSeconds: 5, // 5 seconds minimum
       targetWidth: 720, // 720p for cost optimization

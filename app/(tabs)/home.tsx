@@ -1,3 +1,4 @@
+import { NotificationBell } from "@/components/notification-bell";
 import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { useAuth } from "@/contexts/auth-context";
 import { Bird } from "@/types/bird";
@@ -146,19 +147,18 @@ export default function Home() {
       {/* Simplified Header - No gradient, just clean white */}
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>
-            {isAuthenticated
-              ? `${user?.name?.split(" ")[0] || "Hello"}`
-              : "Hello"}
-          </Text>
-          <Text style={styles.subtitle}>Discover birds</Text>
+          <Text style={styles.greeting}>Discover Birds</Text>
+          <Text style={styles.subtitle}>Find amazing birds near you</Text>
         </View>
-        <TouchableOpacity
-          onPress={() => router.push("/search")}
-          style={styles.searchButton}
-        >
-          <FontAwesome6 name="magnifying-glass" size={18} color="#666" />
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <NotificationBell iconSize={22} iconColor="#666" />
+          <TouchableOpacity
+            onPress={() => router.push("/search")}
+            style={styles.searchButton}
+          >
+            <FontAwesome6 name="magnifying-glass" size={18} color="#666" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Featured Birds - Primary Focus */}
@@ -253,6 +253,11 @@ const styles = StyleSheet.create({
     fontSize: Typography.body,
     color: "#666",
     marginTop: Spacing.xs,
+  },
+  headerActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   searchButton: {
     backgroundColor: "#F5F5F5",

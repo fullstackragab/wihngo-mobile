@@ -155,6 +155,15 @@ function RootLayoutNav() {
             headerTintColor: "#FFFFFF",
           }}
         />
+        <Stack.Screen
+          name="notifications"
+          options={{
+            title: "Notifications",
+            headerShown: true,
+            headerStyle: { backgroundColor: "#4ECDC4" },
+            headerTintColor: "#FFFFFF",
+          }}
+        />
         <Stack.Screen name="story/[id]" options={{ title: "Story" }} />
         <Stack.Screen name="support/[id]" options={{ title: "Support" }} />
       </Stack>

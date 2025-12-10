@@ -8,6 +8,7 @@ import Feather from "@expo/vector-icons/Feather";
 import React from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -25,6 +26,10 @@ interface ImagePickerButtonProps {
   style?: ViewStyle;
   aspectRatio?: [number, number];
   showPreview?: boolean;
+  required?: boolean;
+  error?: string;
+  touched?: boolean;
+  onBlur?: () => void;
 }
 
 export default function ImagePickerButton({
@@ -36,6 +41,10 @@ export default function ImagePickerButton({
   style,
   aspectRatio,
   showPreview = true,
+  required = false,
+  error,
+  touched,
+  onBlur,
 }: ImagePickerButtonProps) {
   const { uri, loading, pickImage, takePhoto, clearImage } = useImagePicker(
     {
@@ -50,13 +59,39 @@ export default function ImagePickerButton({
   const displayUri = uri || initialUri;
 
   const handlePress = () => {
-    // Default action: pick from library
-    pickImage();
+    // Show options to take photo or select from library
+    Alert.alert(
+      "Add Image",
+      "Choose how you want to add an image",
+      [
+        {
+          text: "Take Photo",
+          onPress: () => takePhoto(),
+        },
+        {
+          text: "Choose from Library",
+          onPress: () => pickImage(),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ],
+      { cancelable: true }
+    );
+    onBlur?.();
   };
+
+  const showError = touched && error;
 
   return (
     <View style={[styles.container, style]}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && (
+        <Text style={styles.label}>
+          {label}
+          {required && <Text style={styles.required}> *</Text>}
+        </Text>
+      )}
 
       <TouchableOpacity
         style={styles.button}
@@ -87,6 +122,9 @@ export default function ImagePickerButton({
           <Text style={styles.selectedText}>Image selected</Text>
         </View>
       )}
+
+      {/* Error Message */}
+      {showError && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 }
@@ -100,6 +138,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
     marginBottom: 8,
+  },
+  required: {
+    color: "#E74C3C",
   },
   button: {
     borderWidth: 2,
@@ -154,5 +195,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#10b981",
     fontWeight: "500",
+  },
+  errorText: {
+    color: "#E74C3C",
+    fontSize: 12,
+    marginTop: 4,
   },
 });

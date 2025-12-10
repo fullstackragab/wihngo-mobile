@@ -10,6 +10,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
 import {
   ActivityIndicator,
+  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -51,9 +52,26 @@ export default function VideoPickerButton({
   const displayUri = uri || initialUri;
 
   const handlePress = () => {
-    // Default action: pick from library
-    // User can record from camera app if they prefer
-    pickVideo();
+    // Show options to record or select video
+    Alert.alert(
+      "Add Video",
+      "Choose how you want to add a video",
+      [
+        {
+          text: "Record Video",
+          onPress: () => recordVideo(),
+        },
+        {
+          text: "Select from Library",
+          onPress: () => pickVideo(),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const showVideoGuidelines = () => {

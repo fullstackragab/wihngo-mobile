@@ -3,12 +3,9 @@
  * Reusable hook for image selection with validation and upload
  */
 
+import * as ImagePicker from "expo-image-picker";
 import { useCallback, useMemo, useState } from "react";
 import { Alert } from "react-native";
-
-// Note: Requires expo-image-picker to be installed
-// Install with: npx expo install expo-image-picker
-// Import ImagePicker when available
 
 export interface ImagePickerOptions {
   maxSizeMB?: number;
@@ -59,16 +56,54 @@ export function useImagePicker(
     setLoading(true);
 
     try {
-      // Placeholder for image picker logic
-      // This will be implemented when expo-image-picker is installed
-      Alert.alert(
-        "Image Picker",
-        "Image picker functionality requires expo-image-picker to be installed.\n\nRun: npx expo install expo-image-picker",
-        [{ text: "OK" }]
-      );
+      // Request permissions
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-      // TODO: Implement with ImagePicker.launchImageLibraryAsync
-      console.log("Image picker options:", finalOptions);
+      if (!permissionResult.granted) {
+        Alert.alert(
+          "Permission Required",
+          "Please allow access to your media library to select images."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Launch image library
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: finalOptions.allowsEditing,
+        quality: finalOptions.quality,
+        aspect: finalOptions.aspect,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const image = result.assets[0];
+
+        // Validate file size
+        if (image.fileSize) {
+          const maxSizeBytes = (finalOptions.maxSizeMB || 5) * 1024 * 1024;
+          if (image.fileSize > maxSizeBytes) {
+            Alert.alert(
+              "File Too Large",
+              `Image size exceeds ${
+                finalOptions.maxSizeMB
+              }MB limit.\n\nYour image: ${(
+                image.fileSize /
+                (1024 * 1024)
+              ).toFixed(
+                2
+              )}MB\n\nTip: The image will be automatically compressed.`
+            );
+            // Continue anyway - we'll compress it
+          }
+        }
+
+        setUri(image.uri);
+        if (onImageSelected) {
+          onImageSelected(image.uri);
+        }
+      }
     } catch (err) {
       console.error("Error picking image:", err);
       setError("Failed to pick image");
@@ -76,22 +111,61 @@ export function useImagePicker(
     } finally {
       setLoading(false);
     }
-  }, [finalOptions]);
+  }, [finalOptions, onImageSelected]);
 
   const takePhoto = useCallback(async () => {
     setError(null);
     setLoading(true);
 
     try {
-      // Placeholder for camera logic
-      Alert.alert(
-        "Camera",
-        "Camera functionality requires expo-image-picker to be installed.\n\nRun: npx expo install expo-image-picker",
-        [{ text: "OK" }]
-      );
+      // Request camera permissions
+      const permissionResult =
+        await ImagePicker.requestCameraPermissionsAsync();
 
-      // TODO: Implement with ImagePicker.launchCameraAsync
-      console.log("Camera options:", finalOptions);
+      if (!permissionResult.granted) {
+        Alert.alert(
+          "Permission Required",
+          "Please allow access to your camera to take photos."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Launch camera
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: finalOptions.allowsEditing,
+        quality: finalOptions.quality,
+        aspect: finalOptions.aspect,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const image = result.assets[0];
+
+        // Validate file size
+        if (image.fileSize) {
+          const maxSizeBytes = (finalOptions.maxSizeMB || 5) * 1024 * 1024;
+          if (image.fileSize > maxSizeBytes) {
+            Alert.alert(
+              "File Too Large",
+              `Image size exceeds ${
+                finalOptions.maxSizeMB
+              }MB limit.\n\nYour image: ${(
+                image.fileSize /
+                (1024 * 1024)
+              ).toFixed(
+                2
+              )}MB\n\nTip: The image will be automatically compressed.`
+            );
+            // Continue anyway - we'll compress it
+          }
+        }
+
+        setUri(image.uri);
+        if (onImageSelected) {
+          onImageSelected(image.uri);
+        }
+      }
     } catch (err) {
       console.error("Error taking photo:", err);
       setError("Failed to take photo");
@@ -99,7 +173,7 @@ export function useImagePicker(
     } finally {
       setLoading(false);
     }
-  }, [finalOptions]);
+  }, [finalOptions, onImageSelected]);
 
   const clearImage = useCallback(() => {
     setUri(null);

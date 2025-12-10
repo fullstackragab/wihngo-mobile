@@ -1,9 +1,11 @@
 import ImagePickerButton from "@/components/ui/image-picker-button";
+import SpeciesAutocomplete from "@/components/ui/species-autocomplete";
 import ValidatedTextInput from "@/components/ui/validated-text-input";
 import VideoPickerButton from "@/components/ui/video-picker-button";
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import { useFormValidation } from "@/hooks/useFormValidation";
+import { BirdSpecies } from "@/lib/constants/bird-species";
 import { MEDIA_CONFIG } from "@/lib/constants/media";
 import { birdService } from "@/services/bird.service";
 import { CreateBirdDto } from "@/types/bird";
@@ -25,8 +27,6 @@ export default function AddBird() {
   const { user, isAuthenticated } = useAuth();
   const [name, setName] = useState("");
   const [species, setSpecies] = useState("");
-  const [commonName, setCommonName] = useState("");
-  const [scientificName, setScientificName] = useState("");
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -37,6 +37,11 @@ export default function AddBird() {
   const [loading, setLoading] = useState(false);
   const { addNotification } = useNotifications();
 
+  const handleSpeciesSelected = (selectedSpecies: BirdSpecies) => {
+    console.log("Species selected:", selectedSpecies);
+    setSpecies(selectedSpecies.species);
+  };
+
   const { validateForm, getFieldError, setFieldTouched, isFieldTouched } =
     useFormValidation({
       name: { required: true, message: "Bird name is required" },
@@ -46,6 +51,7 @@ export default function AddBird() {
         maxLength: 100,
         message: "Tagline is required (max 100 characters)",
       },
+      imageUrl: { required: true, message: "Profile image is required" },
       videoUrl: { required: true, message: "Bird video is required" },
     });
 
@@ -62,12 +68,26 @@ export default function AddBird() {
     }
 
     // Validate form
-    const isValid = validateForm({ name, species, tagline, videoUrl });
+    const isValid = validateForm({
+      name,
+      species,
+      tagline,
+      imageUrl,
+      videoUrl,
+    });
     if (!isValid) {
       return;
     }
 
-    // Additional video validation
+    // Additional validation
+    if (!imageUrl.trim()) {
+      return;
+    }
+
+    if (!videoUrl.trim()) {
+      return;
+    }
+
     if (!videoUrl.trim()) {
       return;
     }
@@ -77,8 +97,6 @@ export default function AddBird() {
       const birdData: CreateBirdDto = {
         name: name.trim(),
         species: species.trim(),
-        commonName: commonName.trim() || undefined,
-        scientificName: scientificName.trim() || undefined,
         tagline: tagline.trim(),
         description: description.trim() || undefined,
         imageUrl: imageUrl.trim() || undefined,
@@ -136,6 +154,7 @@ export default function AddBird() {
             !name.trim() ||
             !species.trim() ||
             !tagline.trim() ||
+            !imageUrl.trim() ||
             !videoUrl.trim()
           }
         >
@@ -145,6 +164,7 @@ export default function AddBird() {
               (!name.trim() ||
                 !species.trim() ||
                 !tagline.trim() ||
+                !imageUrl.trim() ||
                 !videoUrl.trim() ||
                 loading) &&
                 styles.saveButtonDisabled,
@@ -170,29 +190,16 @@ export default function AddBird() {
             placeholder="e.g., Charlie"
           />
 
-          <ValidatedTextInput
+          <SpeciesAutocomplete
             label="Species"
             value={species}
             onChangeText={setSpecies}
+            onSpeciesSelected={handleSpeciesSelected}
             onBlur={() => setFieldTouched("species")}
             error={getFieldError("species")}
             touched={isFieldTouched("species")}
             required
-            placeholder="e.g., Hummingbird"
-          />
-
-          <ValidatedTextInput
-            label="Common Name"
-            value={commonName}
-            onChangeText={setCommonName}
-            placeholder="e.g., Anna's Hummingbird"
-          />
-
-          <ValidatedTextInput
-            label="Scientific Name"
-            value={scientificName}
-            onChangeText={setScientificName}
-            placeholder="e.g., Calypte anna"
+            placeholder="Search for a species..."
           />
 
           <ValidatedTextInput
@@ -248,6 +255,10 @@ export default function AddBird() {
             initialUri={imageUrl}
             onImageSelected={setImageUrl}
             maxSizeMB={MEDIA_CONFIG.images.profile.maxSizeBytes / (1024 * 1024)}
+            required
+            error={getFieldError("imageUrl")}
+            touched={isFieldTouched("imageUrl")}
+            onBlur={() => setFieldTouched("imageUrl")}
           />
 
           <ImagePickerButton

@@ -22,16 +22,17 @@ export default function Welcome() {
 
     try {
       setIsLoading(true);
+      console.log("🔐 Attempting login with email:", email);
       const authData = await loginService({ email, password });
       await authLogin(authData);
 
-      console.log("Login successful:", authData);
+      console.log("✅ Login successful:", authData);
       Alert.alert("Success", "Login successful!");
 
       // Navigate to main app
       router.replace("/(tabs)/home" as any);
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("❌ Login error:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Login failed";
       Alert.alert("Login Failed", errorMessage);

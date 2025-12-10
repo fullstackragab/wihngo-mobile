@@ -9,6 +9,13 @@ import Constants from "expo-constants";
 export const API_URL =
   Constants.expoConfig?.extra?.apiUrl || "http://localhost:5000/api/";
 
+// Log the API URL being used
+console.log("🔧 API_URL configured as:", API_URL);
+console.log(
+  "🔧 Constants.expoConfig?.extra?.apiUrl:",
+  Constants.expoConfig?.extra?.apiUrl
+);
+
 export const API_CONFIG = {
   baseUrl: API_URL,
   timeout: 30000, // 30 seconds

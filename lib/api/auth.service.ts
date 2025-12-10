@@ -71,7 +71,9 @@ export async function login(credentials: LoginDto): Promise<AuthResponseDto> {
   try {
     const apiUrl = getApiUrl();
     const endpoint = `${apiUrl}auth/login`;
-    console.log("Logging in at:", endpoint);
+    console.log("🌐 API Base URL:", apiUrl);
+    console.log("🔗 Login endpoint:", endpoint);
+    console.log("📧 Login email:", credentials.email);
 
     const response = await fetch(endpoint, {
       method: "POST",

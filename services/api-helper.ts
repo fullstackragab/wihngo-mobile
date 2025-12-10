@@ -1,6 +1,48 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+import { Platform } from "react-native";
 
 const TOKEN_KEY = "auth_token";
+
+/**
+ * Get the API base URL from configuration
+ */
+const getApiBaseUrl = (): string => {
+  let apiUrl =
+    Constants.expoConfig?.extra?.apiUrl || "http://localhost:5000/api/";
+
+  // Replace localhost with 10.0.2.2 for Android emulator
+  if (Platform.OS === "android" && apiUrl.includes("localhost")) {
+    apiUrl = apiUrl.replace("localhost", "10.0.2.2");
+  }
+
+  return apiUrl;
+};
+
+/**
+ * Convert relative URL to absolute URL
+ */
+const buildUrl = (endpoint: string): string => {
+  const baseUrl = getApiBaseUrl();
+
+  // If endpoint already starts with http/https, return as is
+  if (endpoint.startsWith("http://") || endpoint.startsWith("https://")) {
+    return endpoint;
+  }
+
+  // Remove leading slash from endpoint if present
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint.slice(1) : endpoint;
+
+  // Remove /api/ prefix from endpoint if present (since baseUrl already includes it)
+  const finalEndpoint = cleanEndpoint.startsWith("api/")
+    ? cleanEndpoint.slice(4)
+    : cleanEndpoint;
+
+  // Ensure baseUrl ends with /
+  const finalBaseUrl = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+
+  return `${finalBaseUrl}${finalEndpoint}`;
+};
 
 /**
  * API Error class for better error handling
@@ -25,6 +67,10 @@ export async function authenticatedFetch(
   options: RequestInit = {}
 ): Promise<Response> {
   try {
+    // Convert to absolute URL
+    const absoluteUrl = buildUrl(url);
+    console.log("🌐 API Request:", absoluteUrl);
+
     // Get token from storage
     const token = await AsyncStorage.getItem(TOKEN_KEY);
 
@@ -37,7 +83,7 @@ export async function authenticatedFetch(
     };
 
     // Make the request
-    const response = await fetch(url, {
+    const response = await fetch(absoluteUrl, {
       ...options,
       headers,
     });
@@ -212,6 +258,10 @@ export async function uploadFile<T>(
   additionalData?: Record<string, any>
 ): Promise<T> {
   try {
+    // Convert to absolute URL
+    const absoluteUrl = buildUrl(url);
+    console.log("🌐 Upload Request:", absoluteUrl);
+
     const token = await AsyncStorage.getItem(TOKEN_KEY);
     const formData = new FormData();
 
@@ -230,7 +280,7 @@ export async function uploadFile<T>(
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
 
-    const response = await fetch(url, {
+    const response = await fetch(absoluteUrl, {
       method: "POST",
       headers,
       body: formData,

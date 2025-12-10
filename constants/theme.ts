@@ -1,29 +1,85 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Whingo Design System
+ * Modern color palette and typography for the Whingo app
  */
 
 import { Platform } from "react-native";
 
-const tintColorLight = "#0a7ea4";
-const tintColorDark = "#fff";
+const tintColorLight = "#4ECDC4";
+const tintColorDark = "#4ECDC4";
 
 export const Colors = {
   light: {
-    text: "#11181C",
-    background: "#fff",
+    text: "#2C3E50",
+    background: "#F8F9FA",
     tint: tintColorLight,
-    icon: "#687076",
-    tabIconDefault: "#687076",
+    icon: "#7F8C8D",
+    tabIconDefault: "#95A5A6",
     tabIconSelected: tintColorLight,
+
+    // Brand Colors
+    primary: "#4ECDC4",
+    primaryDark: "#44A08D",
+    secondary: "#667EEA",
+    accent: "#FFD93D",
+
+    // Semantic Colors
+    success: "#10b981",
+    warning: "#F59E0B",
+    error: "#EF4444",
+    info: "#3B82F6",
+
+    // UI Colors
+    card: "#FFFFFF",
+    border: "#E0E0E0",
+    inputBackground: "#FFFFFF",
+    placeholder: "#95A5A6",
+
+    // Text Colors
+    textPrimary: "#2C3E50",
+    textSecondary: "#7F8C8D",
+    textMuted: "#95A5A6",
+
+    // Special Colors
+    heartRed: "#FF6B6B",
+    birdBlue: "#667EEA",
+    supportGreen: "#10b981",
   },
   dark: {
-    text: "#ECEDEE",
-    background: "#151718",
+    text: "#F8F9FA",
+    background: "#1A202C",
     tint: tintColorDark,
-    icon: "#9BA1A6",
-    tabIconDefault: "#9BA1A6",
+    icon: "#A0AEC0",
+    tabIconDefault: "#718096",
     tabIconSelected: tintColorDark,
+
+    // Brand Colors
+    primary: "#4ECDC4",
+    primaryDark: "#44A08D",
+    secondary: "#667EEA",
+    accent: "#FFD93D",
+
+    // Semantic Colors
+    success: "#10b981",
+    warning: "#F59E0B",
+    error: "#EF4444",
+    info: "#3B82F6",
+
+    // UI Colors
+    card: "#2D3748",
+    border: "#4A5568",
+    inputBackground: "#2D3748",
+    placeholder: "#718096",
+
+    // Text Colors
+    textPrimary: "#F8F9FA",
+    textSecondary: "#E2E8F0",
+    textMuted: "#A0AEC0",
+
+    // Special Colors
+    heartRed: "#FF6B6B",
+    birdBlue: "#667EEA",
+    supportGreen: "#10b981",
   },
 };
 

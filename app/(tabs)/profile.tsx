@@ -1,13 +1,12 @@
 import { useAuth } from "@/contexts/auth-context";
 import { Bird } from "@/types/bird";
-import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
   Image,
-  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -70,73 +69,171 @@ export default function Profile() {
   if (!isAuthenticated) {
     return (
       <View style={styles.container}>
-        <View style={styles.notAuthenticated}>
-          <FontAwesome6 name="user-circle" size={80} color="#BDC3C7" />
-          <Text style={styles.notAuthTitle}>Not Logged In</Text>
+        <LinearGradient
+          colors={["#4ECDC4", "#44A08D"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.notAuthHeader}
+        >
+          <FontAwesome6 name="user-circle" size={100} color="#FFFFFF" />
+          <Text style={styles.notAuthTitle}>Join Whingo</Text>
           <Text style={styles.notAuthText}>
-            Sign in to access your profile and saved birds
+            Sign in to save birds, create stories, and connect with the community
           </Text>
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() => router.push("/welcome")}
-          >
-            <Text style={styles.loginButtonText}>Sign In</Text>
-          </TouchableOpacity>
+        </LinearGradient>
+
+        <View style={styles.notAuthContent}>
+          <View style={styles.featuresList}>
+            <View style={styles.featureItem}>
+              <View style={[styles.featureIcon, { backgroundColor: "#FFE5E5" }]}>
+                <FontAwesome6 name="heart" size={24} color="#FF6B6B" />
+              </View>
+              <View style={styles.featureText}>
+                <Text style={styles.featureTitle}>Save Your Favorites</Text>
+                <Text style={styles.featureDescription}>
+                  Love and track birds you care about
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.featureItem}>
+              <View style={[styles.featureIcon, { backgroundColor: "#E0E7FF" }]}>
+                <FontAwesome6 name="book-open" size={24} color="#667EEA" />
+              </View>
+              <View style={styles.featureText}>
+                <Text style={styles.featureTitle}>Share Stories</Text>
+                <Text style={styles.featureDescription}>
+                  Create and share your bird experiences
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.featureItem}>
+              <View style={[styles.featureIcon, { backgroundColor: "#D4F4DD" }]}>
+                <FontAwesome6 name="hand-holding-heart" size={24} color="#10b981" />
+              </View>
+              <View style={styles.featureText}>
+                <Text style={styles.featureTitle}>Support Conservation</Text>
+                <Text style={styles.featureDescription}>
+                  Help protect endangered species
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.authButtons}>
+            <TouchableOpacity
+              style={styles.primaryButton}
+              onPress={() => router.push("/signup")}
+            >
+              <LinearGradient
+                colors={["#4ECDC4", "#44A08D"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.gradientButton}
+              >
+                <Text style={styles.primaryButtonText}>Create Account</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.secondaryButton}
+              onPress={() => router.push("/welcome")}
+            >
+              <Text style={styles.secondaryButtonText}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Profile</Text>
-        <TouchableOpacity onPress={() => router.push("/settings")}>
-          <FontAwesome6 name="gear" size={24} color="#2C3E50" />
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Header with Profile Info */}
+      <LinearGradient
+        colors={["#4ECDC4", "#44A08D"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.profileHeader}
+      >
+        <TouchableOpacity 
+          style={styles.settingsButton}
+          onPress={() => router.push("/settings")}
+        >
+          <FontAwesome6 name="gear" size={22} color="#FFFFFF" />
         </TouchableOpacity>
-      </View>
 
-      {/* User Info Card */}
-      <View style={styles.userCard}>
-        <View style={styles.avatar}>
-          {user?.avatarUrl ? (
-            <Image
-              source={{ uri: user.avatarUrl }}
-              style={styles.avatarImage}
-            />
-          ) : (
-            <FontAwesome6 name="user" size={40} color="#95A5A6" />
-          )}
+        <View style={styles.avatarContainer}>
+          <View style={styles.avatar}>
+            {user?.avatarUrl ? (
+              <Image
+                source={{ uri: user.avatarUrl }}
+                style={styles.avatarImage}
+              />
+            ) : (
+              <FontAwesome6 name="user" size={50} color="#FFFFFF" />
+            )}
+          </View>
+          <TouchableOpacity
+            style={styles.editAvatarButton}
+            onPress={() => router.push("/edit-profile")}
+          >
+            <FontAwesome6 name="camera" size={14} color="#FFFFFF" />
+          </TouchableOpacity>
         </View>
-        <View style={styles.userInfo}>
-          <Text style={styles.userName}>{user?.name || "User"}</Text>
-          <Text style={styles.userEmail}>{user?.email}</Text>
-        </View>
+
+        <Text style={styles.userName}>{user?.name || "User"}</Text>
+        <Text style={styles.userEmail}>{user?.email}</Text>
+
         <TouchableOpacity
-          style={styles.editButton}
+          style={styles.editProfileButton}
           onPress={() => router.push("/edit-profile")}
         >
-          <FontAwesome6 name="pen" size={16} color="#4ECDC4" />
+          <FontAwesome6 name="pen" size={14} color="#4ECDC4" />
+          <Text style={styles.editProfileText}>Edit Profile</Text>
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
 
-      {/* Stats */}
+      {/* Stats Cards */}
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
-          <FontAwesome6 name="heart" size={24} color="#FF6B6B" />
-          <Text style={styles.statValue}>{lovedBirds.length}</Text>
-          <Text style={styles.statLabel}>Loved Birds</Text>
+          <LinearGradient
+            colors={["#FF6B6B", "#EE5A6F"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.statGradient}
+          >
+            <FontAwesome6 name="heart" size={28} color="#FFFFFF" solid />
+            <Text style={styles.statValue}>{lovedBirds.length}</Text>
+            <Text style={styles.statLabel}>Loved Birds</Text>
+          </LinearGradient>
         </View>
+
         <View style={styles.statCard}>
-          <FontAwesome6 name="hand-holding-heart" size={24} color="#10b981" />
-          <Text style={styles.statValue}>{supportedBirds.length}</Text>
-          <Text style={styles.statLabel}>Supported</Text>
+          <LinearGradient
+            colors={["#10b981", "#059669"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.statGradient}
+          >
+            <FontAwesome6 name="hand-holding-heart" size={28} color="#FFFFFF" />
+            <Text style={styles.statValue}>{supportedBirds.length}</Text>
+            <Text style={styles.statLabel}>Supported</Text>
+          </LinearGradient>
         </View>
+
         <View style={styles.statCard}>
-          <FontAwesome6 name="book-open" size={24} color="#667EEA" />
-          <Text style={styles.statValue}>{stats.storiesCount}</Text>
-          <Text style={styles.statLabel}>Stories</Text>
+          <LinearGradient
+            colors={["#667EEA", "#764BA2"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.statGradient}
+          >
+            <FontAwesome6 name="book-open" size={28} color="#FFFFFF" />
+            <Text style={styles.statValue}>{stats.storiesCount}</Text>
+            <Text style={styles.statLabel}>Stories</Text>
+          </LinearGradient>
         </View>
       </View>
 
@@ -146,156 +243,50 @@ export default function Profile() {
 
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={() => router.push("/add-bird")}
+          onPress={() => router.push("/my-birds")}
         >
-          <View style={styles.menuItemIcon}>
-            <FontAwesome6 name="plus" size={20} color="#4ECDC4" />
+          <View style={styles.menuIconContainer}>
+            <FontAwesome6 name="dove" size={20} color="#4ECDC4" />
           </View>
-          <View style={styles.menuItemContent}>
-            <Text style={styles.menuItemTitle}>
-              {ownedBirds.length > 0 ? "Add New Bird" : "Add Your First Bird"}
-            </Text>
-            <Text style={styles.menuItemSubtitle}>
-              {ownedBirds.length > 0
-                ? "List another bird you care for"
-                : "Start your bird collection"}
-            </Text>
+          <Text style={styles.menuText}>My Birds</Text>
+          <FontAwesome6 name="chevron-right" size={16} color="#BDC3C7" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/loved-birds")}
+        >
+          <View style={styles.menuIconContainer}>
+            <FontAwesome6 name="heart" size={20} color="#FF6B6B" solid />
           </View>
-          <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
+          <Text style={styles.menuText}>Loved Birds</Text>
+          <FontAwesome6 name="chevron-right" size={16} color="#BDC3C7" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => router.push("/supported-birds")}
+        >
+          <View style={styles.menuIconContainer}>
+            <FontAwesome6 name="hand-holding-heart" size={20} color="#10b981" />
+          </View>
+          <Text style={styles.menuText}>Supported Birds</Text>
+          <FontAwesome6 name="chevron-right" size={16} color="#BDC3C7" />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => router.push("/create-story")}
         >
-          <View style={styles.menuItemIcon}>
-            <FontAwesome6 name="pen-to-square" size={20} color="#667EEA" />
+          <View style={styles.menuIconContainer}>
+            <FontAwesome6 name="pen" size={20} color="#667EEA" />
           </View>
-          <View style={styles.menuItemContent}>
-            <Text style={styles.menuItemTitle}>Create Story</Text>
-            <Text style={styles.menuItemSubtitle}>
-              Share your bird experiences
-            </Text>
-          </View>
-          <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
+          <Text style={styles.menuText}>Create Story</Text>
+          <FontAwesome6 name="chevron-right" size={16} color="#BDC3C7" />
         </TouchableOpacity>
       </View>
 
-      {/* My Birds */}
-      {ownedBirds.length > 0 && (
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>My Birds</Text>
-            <TouchableOpacity onPress={() => router.push("/my-birds")}>
-              <Text style={styles.seeAll}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {ownedBirds.slice(0, 3).map((bird) => (
-              <TouchableOpacity
-                key={bird.birdId}
-                style={styles.birdCard}
-                onPress={() => router.push(`/(tabs)/birds/${bird.birdId}`)}
-              >
-                <Image
-                  source={{
-                    uri: bird.imageUrl || "https://via.placeholder.com/100",
-                  }}
-                  style={styles.birdCardImage}
-                />
-                <Text style={styles.birdCardName} numberOfLines={1}>
-                  {bird.name}
-                </Text>
-                <View style={styles.birdCardStats}>
-                  <View style={styles.birdCardStat}>
-                    <FontAwesome6 name="heart" size={10} color="#FF6B6B" />
-                    <Text style={styles.birdCardStatText}>{bird.lovedBy}</Text>
-                  </View>
-                  <View style={styles.birdCardStat}>
-                    <FontAwesome6
-                      name="hand-holding-heart"
-                      size={10}
-                      color="#10b981"
-                    />
-                    <Text style={styles.birdCardStatText}>
-                      {bird.supportedBy}
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      )}
-
-      {/* Loved Birds */}
-      {lovedBirds.length > 0 && (
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Loved Birds</Text>
-            <TouchableOpacity onPress={() => router.push("/loved-birds")}>
-              <Text style={styles.seeAll}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {lovedBirds.slice(0, 3).map((bird) => (
-              <TouchableOpacity
-                key={bird.birdId}
-                style={styles.birdCard}
-                onPress={() => router.push(`/(tabs)/birds/${bird.birdId}`)}
-              >
-                <Image
-                  source={{
-                    uri: bird.imageUrl || "https://via.placeholder.com/100",
-                  }}
-                  style={styles.birdCardImage}
-                />
-                <Text style={styles.birdCardName} numberOfLines={1}>
-                  {bird.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      )}
-
-      {/* Supported Birds */}
-      {supportedBirds.length > 0 && (
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Supported Birds</Text>
-            <TouchableOpacity onPress={() => router.push("/supported-birds")}>
-              <Text style={styles.seeAll}>See All</Text>
-            </TouchableOpacity>
-          </View>
-          {stats.totalSupport > 0 && (
-            <Text style={styles.totalSupport}>
-              Total support: ${stats.totalSupport.toLocaleString()}
-            </Text>
-          )}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {supportedBirds.slice(0, 3).map((bird) => (
-              <TouchableOpacity
-                key={bird.birdId}
-                style={styles.birdCard}
-                onPress={() => router.push(`/(tabs)/birds/${bird.birdId}`)}
-              >
-                <Image
-                  source={{
-                    uri: bird.imageUrl || "https://via.placeholder.com/100",
-                  }}
-                  style={styles.birdCardImage}
-                />
-                <Text style={styles.birdCardName} numberOfLines={1}>
-                  {bird.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      )}
-
-      {/* Settings Menu */}
+      {/* Settings */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Settings</Text>
 
@@ -303,77 +294,45 @@ export default function Profile() {
           style={styles.menuItem}
           onPress={() => router.push("/notifications-settings")}
         >
-          <View style={styles.menuItemIcon}>
-            <FontAwesome6 name="bell" size={20} color="#F39C12" />
+          <View style={styles.menuIconContainer}>
+            <FontAwesome6 name="bell" size={20} color="#F59E0B" />
           </View>
-          <View style={styles.menuItemContent}>
-            <Text style={styles.menuItemTitle}>Notifications</Text>
-          </View>
-          <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => router.push("/payment-methods")}
-        >
-          <View style={styles.menuItemIcon}>
-            <FontAwesome6 name="credit-card" size={20} color="#9B59B6" />
-          </View>
-          <View style={styles.menuItemContent}>
-            <Text style={styles.menuItemTitle}>Payment Methods</Text>
-          </View>
-          <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
+          <Text style={styles.menuText}>Notifications</Text>
+          <FontAwesome6 name="chevron-right" size={16} color="#BDC3C7" />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => router.push("/privacy-settings")}
         >
-          <View style={styles.menuItemIcon}>
-            <FontAwesome6 name="lock" size={20} color="#E74C3C" />
+          <View style={styles.menuIconContainer}>
+            <FontAwesome6 name="shield-halved" size={20} color="#8B5CF6" />
           </View>
-          <View style={styles.menuItemContent}>
-            <Text style={styles.menuItemTitle}>Privacy</Text>
-          </View>
-          <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
+          <Text style={styles.menuText}>Privacy</Text>
+          <FontAwesome6 name="chevron-right" size={16} color="#BDC3C7" />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.menuItem}
-          onPress={async () => {
-            const paypalUrl =
-              "https://www.paypal.com/ncp/payment/AECE9FQMFFETS";
-            const canOpen = await Linking.canOpenURL(paypalUrl);
-            if (canOpen) {
-              await Linking.openURL(paypalUrl);
-            } else {
-              Alert.alert("Error", "Cannot open PayPal");
-            }
-          }}
+          onPress={() => router.push("/payment-methods")}
         >
-          <View style={styles.menuItemIcon}>
-            <Feather name="gift" size={20} color="#ec4899" />
+          <View style={styles.menuIconContainer}>
+            <FontAwesome6 name="credit-card" size={20} color="#EC4899" />
           </View>
-          <View style={styles.menuItemContent}>
-            <Text style={styles.menuItemTitle}>Support Wihngo</Text>
-            <Text style={styles.menuItemSubtitle}>
-              Help us keep the platform free
-            </Text>
-          </View>
-          <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
+          <Text style={styles.menuText}>Payment Methods</Text>
+          <FontAwesome6 name="chevron-right" size={16} color="#BDC3C7" />
         </TouchableOpacity>
       </View>
 
       {/* Logout */}
       <View style={styles.section}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <FontAwesome6 name="right-from-bracket" size={20} color="#E74C3C" />
-          <Text style={styles.logoutButtonText}>Logout</Text>
+          <FontAwesome6 name="right-from-bracket" size={20} color="#EF4444" />
+          <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
 
-      {/* App Version */}
-      <Text style={styles.version}>Wihngo v1.0.0</Text>
+      <View style={{ height: 40 }} />
     </ScrollView>
   );
 }
@@ -383,248 +342,255 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F8F9FA",
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  // Not Authenticated Styles
+  notAuthHeader: {
     alignItems: "center",
-    paddingHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 20,
-    backgroundColor: "#fff",
+    paddingBottom: 40,
+    paddingHorizontal: 20,
   },
-  title: {
-    fontSize: 28,
+  notAuthTitle: {
+    fontSize: 32,
     fontWeight: "bold",
-    color: "#2C3E50",
+    color: "#FFFFFF",
+    marginTop: 20,
+    marginBottom: 12,
   },
-  userCard: {
+  notAuthText: {
+    fontSize: 16,
+    color: "#E0F2F1",
+    textAlign: "center",
+    lineHeight: 24,
+  },
+  notAuthContent: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 32,
+  },
+  featuresList: {
+    gap: 20,
+    marginBottom: 40,
+  },
+  featureItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
-    marginHorizontal: 20,
-    marginTop: 20,
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: "#FFFFFF",
+    padding: 20,
+    borderRadius: 16,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: "#E8E8E8",
-    justifyContent: "center",
+  featureIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: "center",
-    overflow: "hidden",
+    justifyContent: "center",
+    marginRight: 16,
   },
-  avatarImage: {
-    width: "100%",
-    height: "100%",
-  },
-  userInfo: {
+  featureText: {
     flex: 1,
-    marginLeft: 16,
   },
-  userName: {
-    fontSize: 20,
+  featureTitle: {
+    fontSize: 17,
     fontWeight: "bold",
     color: "#2C3E50",
     marginBottom: 4,
   },
-  userEmail: {
+  featureDescription: {
     fontSize: 14,
     color: "#7F8C8D",
+    lineHeight: 20,
   },
-  editButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#E8F8F7",
-    justifyContent: "center",
+  authButtons: {
+    gap: 12,
+  },
+  primaryButton: {
+    borderRadius: 12,
+    overflow: "hidden",
+  },
+  gradientButton: {
+    paddingVertical: 16,
     alignItems: "center",
+    justifyContent: "center",
+  },
+  primaryButtonText: {
+    color: "#FFFFFF",
+    fontSize: 17,
+    fontWeight: "bold",
+  },
+  secondaryButton: {
+    backgroundColor: "#FFFFFF",
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#4ECDC4",
+  },
+  secondaryButtonText: {
+    color: "#4ECDC4",
+    fontSize: 17,
+    fontWeight: "bold",
+  },
+  // Authenticated Styles
+  profileHeader: {
+    paddingTop: 16,
+    paddingBottom: 32,
+    paddingHorizontal: 20,
+    alignItems: "center",
+  },
+  settingsButton: {
+    position: "absolute",
+    top: 16,
+    right: 20,
+    backgroundColor: "rgba(255,255,255,0.3)",
+    padding: 10,
+    borderRadius: 10,
+  },
+  avatarContainer: {
+    marginTop: 20,
+    marginBottom: 16,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "rgba(255,255,255,0.3)",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 4,
+    borderColor: "#FFFFFF",
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 50,
+  },
+  editAvatarButton: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: "#4ECDC4",
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 3,
+    borderColor: "#FFFFFF",
+  },
+  userName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginBottom: 4,
+  },
+  userEmail: {
+    fontSize: 15,
+    color: "#E0F2F1",
+    marginBottom: 16,
+  },
+  editProfileButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "#FFFFFF",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+  },
+  editProfileText: {
+    color: "#4ECDC4",
+    fontSize: 15,
+    fontWeight: "600",
   },
   statsContainer: {
     flexDirection: "row",
-    gap: 12,
     paddingHorizontal: 20,
-    marginTop: 20,
+    marginTop: -24,
+    gap: 12,
   },
   statCard: {
     flex: 1,
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 12,
-    alignItems: "center",
+    borderRadius: 16,
+    overflow: "hidden",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  statGradient: {
+    padding: 16,
+    alignItems: "center",
   },
   statValue: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#2C3E50",
+    color: "#FFFFFF",
     marginTop: 8,
+    marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
-    color: "#7F8C8D",
-    marginTop: 4,
+    color: "#FFFFFF",
+    opacity: 0.9,
   },
   section: {
-    marginTop: 24,
+    marginTop: 32,
     paddingHorizontal: 20,
   },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#2C3E50",
-  },
-  seeAll: {
-    fontSize: 14,
-    color: "#4ECDC4",
-    fontWeight: "600",
+    marginBottom: 16,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowRadius: 4,
+    elevation: 1,
   },
-  menuItemIcon: {
+  menuIconContainer: {
     width: 40,
     height: 40,
     borderRadius: 20,
     backgroundColor: "#F8F9FA",
+    alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
     marginRight: 12,
   },
-  menuItemContent: {
+  menuText: {
     flex: 1,
-  },
-  menuItemTitle: {
     fontSize: 16,
-    fontWeight: "600",
     color: "#2C3E50",
-  },
-  menuItemSubtitle: {
-    fontSize: 12,
-    color: "#7F8C8D",
-    marginTop: 2,
-  },
-  birdCard: {
-    width: 120,
-    marginRight: 12,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  birdCardImage: {
-    width: "100%",
-    height: 100,
-    backgroundColor: "#E8E8E8",
-  },
-  birdCardName: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#2C3E50",
-    padding: 8,
-  },
-  birdCardStats: {
-    flexDirection: "row",
-    gap: 8,
-    paddingHorizontal: 8,
-    paddingBottom: 8,
-  },
-  birdCardStat: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-  birdCardStatText: {
-    fontSize: 10,
-    color: "#7F8C8D",
-  },
-  totalSupport: {
-    fontSize: 14,
-    color: "#10b981",
-    fontWeight: "600",
-    marginBottom: 12,
+    fontWeight: "500",
   },
   logoutButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 12,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     padding: 16,
     borderRadius: 12,
     borderWidth: 2,
     borderColor: "#FEE2E2",
+    gap: 12,
   },
-  logoutButtonText: {
+  logoutText: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#E74C3C",
-  },
-  version: {
-    fontSize: 12,
-    color: "#95A5A6",
-    textAlign: "center",
-    marginTop: 24,
-    marginBottom: 40,
-  },
-  notAuthenticated: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 40,
-  },
-  notAuthTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    marginTop: 20,
-    marginBottom: 8,
-  },
-  notAuthText: {
-    fontSize: 14,
-    color: "#95A5A6",
-    textAlign: "center",
-    marginBottom: 24,
-  },
-  loginButton: {
-    backgroundColor: "#4ECDC4",
-    paddingHorizontal: 32,
-    paddingVertical: 14,
-    borderRadius: 8,
-  },
-  loginButtonText: {
-    color: "#fff",
-    fontSize: 16,
+    color: "#EF4444",
     fontWeight: "600",
   },
 });

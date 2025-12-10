@@ -1,3 +1,4 @@
+import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { useAuth } from "@/contexts/auth-context";
 import { Bird } from "@/types/bird";
 import { Story } from "@/types/story";
@@ -133,8 +134,8 @@ export default function Home() {
     <ScrollView
       style={styles.container}
       refreshControl={
-        <RefreshControl 
-          refreshing={refreshing} 
+        <RefreshControl
+          refreshing={refreshing}
           onRefresh={onRefresh}
           colors={["#4ECDC4"]}
           tintColor="#4ECDC4"
@@ -142,80 +143,27 @@ export default function Home() {
       }
       showsVerticalScrollIndicator={false}
     >
-      {/* Header */}
-      <LinearGradient
-        colors={["#4ECDC4", "#44A08D"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}
-      >
+      {/* Simplified Header - No gradient, just clean white */}
+      <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>
-            {isAuthenticated ? `Hello, ${user?.name}!` : "Welcome!"}
+            {isAuthenticated
+              ? `${user?.name?.split(" ")[0] || "Hello"}`
+              : "Hello"}
           </Text>
-          <Text style={styles.subtitle}>Discover amazing birds today</Text>
+          <Text style={styles.subtitle}>Discover birds</Text>
         </View>
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => router.push("/search")}
           style={styles.searchButton}
         >
-          <FontAwesome6 name="magnifying-glass" size={20} color="#FFFFFF" />
+          <FontAwesome6 name="magnifying-glass" size={18} color="#666" />
         </TouchableOpacity>
-      </LinearGradient>
-
-      {/* Quick Actions */}
-      <View style={styles.quickActionsSection}>
-        <View style={styles.quickActionsGrid}>
-          <TouchableOpacity 
-            style={styles.quickActionCard}
-            onPress={() => router.push("/(tabs)/birds")}
-          >
-            <View style={[styles.quickActionIcon, { backgroundColor: "#FFE5E5" }]}>
-              <FontAwesome6 name="dove" size={24} color="#FF6B6B" />
-            </View>
-            <Text style={styles.quickActionText}>Explore Birds</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.quickActionCard}
-            onPress={() => router.push("/(tabs)/stories")}
-          >
-            <View style={[styles.quickActionIcon, { backgroundColor: "#E0E7FF" }]}>
-              <FontAwesome6 name="book-open" size={24} color="#667EEA" />
-            </View>
-            <Text style={styles.quickActionText}>Read Stories</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.quickActionCard}
-            onPress={() => router.push("/add-bird")}
-          >
-            <View style={[styles.quickActionIcon, { backgroundColor: "#D4F4DD" }]}>
-              <FontAwesome6 name="plus" size={24} color="#10b981" />
-            </View>
-            <Text style={styles.quickActionText}>Add Bird</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.quickActionCard}
-            onPress={() => router.push("/create-story")}
-          >
-            <View style={[styles.quickActionIcon, { backgroundColor: "#FFF4E5" }]}>
-              <FontAwesome6 name="pen" size={24} color="#F59E0B" />
-            </View>
-            <Text style={styles.quickActionText}>Create Story</Text>
-          </TouchableOpacity>
-        </View>
       </View>
 
-      {/* Featured Birds */}
+      {/* Featured Birds - Primary Focus */}
       <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Featured Birds</Text>
-          <TouchableOpacity onPress={() => router.push("/(tabs)/birds")}>
-            <Text style={styles.seeAll}>See All →</Text>
-          </TouchableOpacity>
-        </View>
+        <Text style={styles.sectionTitle}>Featured</Text>
         {featuredBirds.length > 0 ? (
           <FlatList
             horizontal
@@ -227,106 +175,47 @@ export default function Home() {
           />
         ) : (
           <View style={styles.emptyState}>
-            <View style={styles.emptyIconContainer}>
-              <FontAwesome6 name="dove" size={48} color="#4ECDC4" />
-            </View>
-            <Text style={styles.emptyTitle}>No featured birds yet</Text>
-            <Text style={styles.emptyText}>
-              Be the first to explore our bird collection
-            </Text>
+            <FontAwesome6 name="dove" size={40} color="#E0E0E0" />
+            <Text style={styles.emptyText}>No birds yet</Text>
             <TouchableOpacity
-              style={styles.exploreButton}
+              style={styles.textButton}
               onPress={() => router.push("/(tabs)/birds")}
             >
-              <Text style={styles.exploreButtonText}>Explore Birds</Text>
-              <FontAwesome6 name="arrow-right" size={14} color="#FFFFFF" />
+              <Text style={styles.textButtonLabel}>Explore Birds</Text>
             </TouchableOpacity>
           </View>
         )}
       </View>
 
-      {/* Trending Stories */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Trending Stories</Text>
-          <TouchableOpacity onPress={() => router.push("/(tabs)/stories")}>
-            <Text style={styles.seeAll}>See All →</Text>
-          </TouchableOpacity>
-        </View>
-        {trendingStories.length > 0 ? (
-          <View>
-            {trendingStories.map((story) => (
-              <View key={story.storyId}>
-                {renderStoryCard({ item: story })}
-              </View>
-            ))}
-          </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <View style={styles.emptyIconContainer}>
-              <FontAwesome6 name="book-open" size={48} color="#667EEA" />
-            </View>
-            <Text style={styles.emptyTitle}>No stories yet</Text>
-            <Text style={styles.emptyText}>
-              Share your bird experiences and inspire others
-            </Text>
-            <TouchableOpacity
-              style={styles.exploreButton}
-              onPress={() => router.push("/create-story")}
-            >
-              <Text style={styles.exploreButtonText}>Create Story</Text>
-              <FontAwesome6 name="arrow-right" size={14} color="#FFFFFF" />
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
-
-      {/* Recently Supported - Only show if authenticated */}
-      {isAuthenticated && (
+      {/* Stories Section - Compact */}
+      {trendingStories.length > 0 && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Your Supported Birds</Text>
+            <Text style={styles.sectionTitle}>Stories</Text>
+            <TouchableOpacity onPress={() => router.push("/(tabs)/stories")}>
+              <Text style={styles.seeAll}>View all</Text>
+            </TouchableOpacity>
           </View>
-          {recentlySupported.length > 0 ? (
-            <FlatList
-              horizontal
-              data={recentlySupported}
-              renderItem={renderBirdCard}
-              keyExtractor={(item) => item.birdId}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.horizontalList}
-            />
-          ) : (
-            <View style={styles.emptyState}>
-              <View style={styles.emptyIconContainer}>
-                <FontAwesome6 name="hand-holding-heart" size={48} color="#10b981" />
-              </View>
-              <Text style={styles.emptyTitle}>Support your first bird</Text>
-              <Text style={styles.emptyText}>
-                Help protect and conserve endangered species
-              </Text>
-            </View>
-          )}
+          {trendingStories.map((story) => (
+            <View key={story.storyId}>{renderStoryCard({ item: story })}</View>
+          ))}
         </View>
       )}
 
-      {/* Impact Banner */}
-      <View style={styles.bannerSection}>
-        <LinearGradient
-          colors={["#667EEA", "#764BA2"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.banner}
-        >
-          <FontAwesome6 name="heart" size={32} color="#FFD93D" solid />
-          <View style={styles.bannerContent}>
-            <Text style={styles.bannerTitle}>Make an Impact</Text>
-            <Text style={styles.bannerText}>
-              Join our community in protecting endangered birds worldwide
-            </Text>
-          </View>
-        </LinearGradient>
-      </View>
+      {/* Recently Supported - Only show if authenticated and has data */}
+      {isAuthenticated && recentlySupported.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Your birds</Text>
+          <FlatList
+            horizontal
+            data={recentlySupported}
+            renderItem={renderBirdCard}
+            keyExtractor={(item) => item.birdId}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalList}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -334,148 +223,109 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#FFFFFF",
   },
   centerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#FFFFFF",
   },
   loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: "#7F8C8D",
+    marginTop: Spacing.md,
+    fontSize: Typography.body,
+    color: "#999",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 24,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.lg,
   },
   greeting: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    fontSize: Typography.hero,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 15,
-    color: "#E0F2F1",
-    marginTop: 4,
+    fontSize: Typography.body,
+    color: "#666",
+    marginTop: Spacing.xs,
   },
   searchButton: {
-    backgroundColor: "rgba(255,255,255,0.3)",
-    padding: 12,
-    borderRadius: 12,
-  },
-  quickActionsSection: {
-    paddingHorizontal: 20,
-    marginTop: 24,
-  },
-  quickActionsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    gap: 12,
-  },
-  quickActionCard: {
-    width: "48%",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    padding: 16,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  quickActionIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    backgroundColor: "#F5F5F5",
+    width: 44,
+    height: 44,
+    borderRadius: BorderRadius.full,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 12,
-  },
-  quickActionText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#2C3E50",
-    textAlign: "center",
   },
   section: {
-    marginTop: 32,
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.md,
   },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
-    marginBottom: 16,
+    paddingHorizontal: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   sectionTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#2C3E50",
+    fontSize: Typography.h2,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    letterSpacing: -0.3,
   },
   seeAll: {
-    fontSize: 15,
-    color: "#4ECDC4",
-    fontWeight: "600",
+    fontSize: Typography.small,
+    color: "#666",
+    fontWeight: "500",
   },
   horizontalList: {
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingHorizontal: Spacing.lg,
   },
   featuredCard: {
-    width: 180,
-    height: 240,
-    marginRight: 16,
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    width: 160,
+    marginRight: Spacing.md,
   },
   featuredImage: {
     width: "100%",
-    height: "100%",
-    position: "absolute",
+    height: 200,
+    borderRadius: BorderRadius.md,
   },
   imageOverlay: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    height: "50%",
+    height: "60%",
+    borderRadius: BorderRadius.md,
   },
   featuredInfo: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 12,
+    padding: Spacing.md,
   },
   birdName: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: Typography.h3,
+    fontWeight: "600",
     color: "#FFFFFF",
-    marginBottom: 4,
+    marginBottom: Spacing.xs,
   },
   birdSpecies: {
-    fontSize: 13,
-    color: "#E0E0E0",
-    marginBottom: 8,
+    fontSize: Typography.small,
+    color: "rgba(255,255,255,0.9)",
+    marginBottom: Spacing.sm,
   },
   statsRow: {
     flexDirection: "row",
-    gap: 12,
+    gap: Spacing.md,
   },
   stat: {
     flexDirection: "row",
@@ -483,121 +333,60 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   statText: {
-    fontSize: 12,
+    fontSize: Typography.small,
     color: "#FFFFFF",
-    fontWeight: "600",
+    fontWeight: "500",
   },
   storyCard: {
-    marginHorizontal: 20,
-    marginBottom: 16,
-    backgroundColor: "#fff",
-    borderRadius: 16,
+    marginHorizontal: Spacing.lg,
+    marginBottom: Spacing.md,
+    backgroundColor: "#FAFAFA",
+    borderRadius: BorderRadius.md,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
   },
   storyImage: {
     width: "100%",
-    height: 200,
-    backgroundColor: "#E8E8E8",
+    height: 180,
+    backgroundColor: "#F0F0F0",
   },
   storyContent: {
-    padding: 16,
+    padding: Spacing.md,
   },
   storyTitle: {
-    fontSize: 17,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    marginBottom: 8,
-    lineHeight: 24,
+    fontSize: Typography.h3,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    marginBottom: Spacing.xs,
+    lineHeight: 22,
   },
   storyAuthor: {
-    fontSize: 13,
-    color: "#7F8C8D",
-    marginBottom: 12,
+    fontSize: Typography.small,
+    color: "#999",
+    marginBottom: Spacing.sm,
   },
   storyStats: {
     flexDirection: "row",
-    gap: 16,
+    gap: Spacing.md,
   },
   emptyState: {
     alignItems: "center",
-    paddingVertical: 48,
-    paddingHorizontal: 32,
-  },
-  emptyIconContainer: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: "#F0F9FF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    marginBottom: 8,
+    paddingVertical: Spacing.xxl,
+    paddingHorizontal: Spacing.lg,
   },
   emptyText: {
-    fontSize: 14,
-    color: "#95A5A6",
+    fontSize: Typography.body,
+    color: "#999",
     textAlign: "center",
-    marginBottom: 24,
-    lineHeight: 20,
+    marginTop: Spacing.md,
+    marginBottom: Spacing.sm,
   },
-  exploreButton: {
-    backgroundColor: "#4ECDC4",
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    shadowColor: "#4ECDC4",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
+  textButton: {
+    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.md,
   },
-  exploreButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-    fontSize: 15,
-  },
-  bannerSection: {
-    marginTop: 32,
-    marginBottom: 48,
-    paddingHorizontal: 20,
-  },
-  banner: {
-    borderRadius: 20,
-    padding: 24,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 20,
-    shadowColor: "#667EEA",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  bannerContent: {
-    flex: 1,
-  },
-  bannerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#FFFFFF",
-    marginBottom: 6,
-  },
-  bannerText: {
-    fontSize: 14,
-    color: "#E0E7FF",
-    lineHeight: 20,
+  textButtonLabel: {
+    color: "#4ECDC4",
+    fontSize: Typography.body,
+    fontWeight: "500",
   },
 });

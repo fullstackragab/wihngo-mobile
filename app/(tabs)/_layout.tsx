@@ -1,11 +1,8 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Image } from "react-native";
 
 import { HapticTab } from "@/components/haptic-tab";
-import { NotificationBell } from "@/components/notification-bell";
-import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
@@ -15,10 +12,23 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerShown: true,
+        tabBarActiveTintColor: "#1A1A1A",
+        tabBarInactiveTintColor: "#999",
+        headerShown: false,
         tabBarButton: HapticTab,
-        headerRight: () => <NotificationBell />,
+        tabBarStyle: {
+          borderTopWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
+          backgroundColor: "#FFFFFF",
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: "500",
+        },
       }}
     >
       <Tabs.Screen
@@ -31,38 +41,26 @@ export default function TabLayout() {
         }}
       />
 
-      {/* <Tabs.Screen
-        name="community"
+      <Tabs.Screen
+        name="birds"
         options={{
-          title: "Community",
+          title: "Birds",
           tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="users" size={20} color={color} />
+            <FontAwesome6 name="dove" size={20} color={color} />
           ),
         }}
-      /> */}
+      />
 
       <Tabs.Screen
         name="stories"
         options={{
           title: "Stories",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="post" size={24} color={color} />
+            <MaterialCommunityIcons name="post" size={22} color={color} />
           ),
         }}
       />
 
-      <Tabs.Screen
-        name="birds"
-        options={{
-          title: "Birds",
-          tabBarIcon: ({ color }) => (
-            <Image
-              source={require("@/assets/images/birds.png")}
-              style={{ width: 30, height: 30 }}
-            />
-          ),
-        }}
-      />
       <Tabs.Screen
         name="profile"
         options={{

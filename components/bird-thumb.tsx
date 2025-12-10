@@ -1,3 +1,4 @@
+import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { Bird } from "@/types/bird";
 import React from "react";
 import {
@@ -15,7 +16,7 @@ interface BirdThumbProps {
 }
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
-const CARD_WIDTH = (SCREEN_WIDTH - 48) / 2; // 2 columns with 16px padding on sides and 16px gap
+const CARD_WIDTH = (SCREEN_WIDTH - 56) / 2; // 2 columns with spacing
 
 export default function BirdThumb({ bird, onPress }: BirdThumbProps) {
   return (
@@ -33,12 +34,8 @@ export default function BirdThumb({ bird, onPress }: BirdThumbProps) {
         <Text style={styles.name} numberOfLines={1}>
           {bird.name}
         </Text>
-        {/* <Text style={styles.species} numberOfLines={1}>
-          {bird.species}
-        </Text> */}
         <View style={styles.statsRow}>
           <Text style={styles.stats}>❤️ {bird.lovedBy}</Text>
-          <Text style={styles.stats}>🐦 {bird.supportedBy}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -49,42 +46,29 @@ const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
     backgroundColor: "#fff",
-    borderRadius: 12,
-    marginBottom: 16,
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.md,
     overflow: "hidden",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    padding: 20,
   },
   image: {
     width: "100%",
-    height: CARD_WIDTH,
-    backgroundColor: "#f0f0f0",
+    height: CARD_WIDTH * 1.1,
+    backgroundColor: "#F0F0F0",
   },
   info: {
-    padding: 10,
+    padding: Spacing.sm,
   },
   name: {
-    fontWeight: "normal",
-    fontSize: 12,
-    color: "#333",
-    marginBottom: 4,
-  },
-  species: {
-    fontSize: 12,
-    fontStyle: "italic",
-    color: "#666",
-    marginBottom: 6,
+    fontWeight: "500",
+    fontSize: Typography.small,
+    color: "#1A1A1A",
+    marginBottom: Spacing.xs,
   },
   statsRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
   },
   stats: {
-    fontSize: 11,
-    color: "#888",
+    fontSize: Typography.tiny,
+    color: "#999",
   },
 });

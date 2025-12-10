@@ -1,3 +1,4 @@
+import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
@@ -62,9 +63,23 @@ export default function Stories() {
   };
 
   const renderStoryItem = ({ item }: { item: Story }) => (
-    <View style={styles.storyCard}>
-      {/* Header */}
-      <View style={styles.storyHeader}>
+    <TouchableOpacity
+      style={styles.storyCard}
+      onPress={() => router.push(`./story/${item.storyId}`)}
+      activeOpacity={0.9}
+    >
+      {item.imageUrl && (
+        <Image source={{ uri: item.imageUrl }} style={styles.storyImage} />
+      )}
+
+      <Text style={styles.title} numberOfLines={2}>
+        {item.title}
+      </Text>
+      <Text style={styles.content} numberOfLines={3}>
+        {item.content}
+      </Text>
+
+      <View style={styles.footer}>
         <View style={styles.userInfo}>
           <View style={styles.avatar}>
             {item.userAvatar ? (
@@ -73,75 +88,36 @@ export default function Stories() {
                 style={styles.avatarImage}
               />
             ) : (
-              <FontAwesome6 name="user" size={20} color="#95A5A6" />
+              <FontAwesome6 name="user" size={14} color="#999" />
             )}
           </View>
-          <View>
-            <Text style={styles.userName}>{item.userName}</Text>
-            <Text style={styles.timestamp}>
-              {new Date(item.createdAt).toLocaleDateString()}
-            </Text>
+          <Text style={styles.userName}>{item.userName}</Text>
+        </View>
+
+        <View style={styles.actions}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={(e) => {
+              e.stopPropagation();
+              handleLike(item.storyId);
+            }}
+          >
+            <FontAwesome6
+              name="heart"
+              size={16}
+              color={item.isLiked ? "#FF6B6B" : "#CCC"}
+              solid={item.isLiked}
+            />
+            <Text style={styles.actionText}>{item.likes}</Text>
+          </TouchableOpacity>
+
+          <View style={styles.actionButton}>
+            <FontAwesome6 name="comment" size={16} color="#CCC" />
+            <Text style={styles.actionText}>{item.commentsCount}</Text>
           </View>
         </View>
-        <TouchableOpacity>
-          <FontAwesome6 name="ellipsis" size={20} color="#95A5A6" />
-        </TouchableOpacity>
       </View>
-
-      {/* Content */}
-      <TouchableOpacity
-        onPress={() => router.push(`./story/${item.storyId}`)}
-        activeOpacity={0.9}
-      >
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.content} numberOfLines={3}>
-          {item.content}
-        </Text>
-
-        {item.imageUrl && (
-          <Image source={{ uri: item.imageUrl }} style={styles.storyImage} />
-        )}
-
-        {item.birdName && (
-          <View style={styles.birdTag}>
-            <FontAwesome6 name="dove" size={14} color="#4ECDC4" />
-            <Text style={styles.birdTagText}>{item.birdName}</Text>
-          </View>
-        )}
-      </TouchableOpacity>
-
-      {/* Actions */}
-      <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => handleLike(item.storyId)}
-        >
-          <FontAwesome6
-            name="heart"
-            size={20}
-            color={item.isLiked ? "#FF6B6B" : "#95A5A6"}
-            solid={item.isLiked}
-          />
-          <Text
-            style={[styles.actionText, item.isLiked && styles.actionTextActive]}
-          >
-            {item.likes}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => router.push(`./story/${item.storyId}`)}
-        >
-          <FontAwesome6 name="comment" size={20} color="#95A5A6" />
-          <Text style={styles.actionText}>{item.commentsCount}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.actionButton}>
-          <FontAwesome6 name="share-nodes" size={20} color="#95A5A6" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 
   if (loading) {
@@ -154,15 +130,9 @@ export default function Stories() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Minimal Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Stories</Text>
-        <TouchableOpacity
-          style={styles.createButton}
-          onPress={() => router.push("./create-story")}
-        >
-          <FontAwesome6 name="plus" size={20} color="#fff" />
-        </TouchableOpacity>
       </View>
 
       {/* Stories List */}
@@ -178,20 +148,24 @@ export default function Stories() {
         />
       ) : (
         <View style={styles.emptyContainer}>
-          <FontAwesome6 name="book-open" size={60} color="#BDC3C7" />
-          <Text style={styles.emptyTitle}>No Stories Yet</Text>
-          <Text style={styles.emptyText}>
-            Be the first to share your bird story!
-          </Text>
+          <FontAwesome6 name="book-open" size={40} color="#E0E0E0" />
+          <Text style={styles.emptyText}>No stories yet</Text>
           <TouchableOpacity
             style={styles.createFirstButton}
             onPress={() => router.push("./create-story")}
           >
-            <FontAwesome6 name="plus" size={16} color="#fff" />
             <Text style={styles.createFirstButtonText}>Create Story</Text>
           </TouchableOpacity>
         </View>
       )}
+
+      {/* Floating Action Button */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => router.push("./create-story")}
+      >
+        <FontAwesome6 name="plus" size={20} color="#FFFFFF" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -199,68 +173,77 @@ export default function Stories() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#FFFFFF",
   },
   centerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#FFFFFF",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E8E8E8",
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.xl,
+    paddingBottom: Spacing.md,
   },
   headerTitle: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#2C3E50",
-  },
-  createButton: {
-    backgroundColor: "#4ECDC4",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    fontSize: Typography.hero,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    letterSpacing: -0.5,
   },
   listContainer: {
-    padding: 16,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.xl,
   },
   storyCard: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: "#FAFAFA",
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+    marginBottom: Spacing.md,
   },
-  storyHeader: {
+  storyImage: {
+    width: "100%",
+    height: 180,
+    borderRadius: BorderRadius.sm,
+    backgroundColor: "#F0F0F0",
+    marginBottom: Spacing.md,
+  },
+  title: {
+    fontSize: Typography.h3,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    marginBottom: Spacing.xs,
+    lineHeight: 22,
+  },
+  content: {
+    fontSize: Typography.body,
+    color: "#666",
+    lineHeight: 20,
+    marginBottom: Spacing.md,
+  },
+  footer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    paddingTop: Spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
   },
   userInfo: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: Spacing.sm,
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: "#E8E8E8",
+    width: 28,
+    height: 28,
+    borderRadius: BorderRadius.full,
+    backgroundColor: "#F0F0F0",
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
@@ -270,100 +253,60 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   userName: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#2C3E50",
-  },
-  timestamp: {
-    fontSize: 12,
-    color: "#95A5A6",
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    marginBottom: 8,
-  },
-  content: {
-    fontSize: 14,
-    color: "#5D6D7E",
-    lineHeight: 20,
-    marginBottom: 12,
-  },
-  storyImage: {
-    width: "100%",
-    height: 200,
-    borderRadius: 8,
-    backgroundColor: "#E8E8E8",
-    marginBottom: 12,
-  },
-  birdTag: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    backgroundColor: "#E8F8F7",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    alignSelf: "flex-start",
-    marginBottom: 12,
-  },
-  birdTagText: {
-    fontSize: 12,
-    color: "#4ECDC4",
-    fontWeight: "600",
+    fontSize: Typography.small,
+    fontWeight: "500",
+    color: "#666",
   },
   actions: {
     flexDirection: "row",
-    gap: 20,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: "#E8E8E8",
+    gap: Spacing.md,
   },
   actionButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 4,
   },
   actionText: {
-    fontSize: 14,
-    color: "#95A5A6",
-    fontWeight: "600",
-  },
-  actionTextActive: {
-    color: "#FF6B6B",
+    fontSize: Typography.small,
+    color: "#999",
   },
   emptyContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 40,
-  },
-  emptyTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#2C3E50",
-    marginTop: 20,
-    marginBottom: 8,
+    paddingHorizontal: Spacing.xl,
   },
   emptyText: {
-    fontSize: 14,
-    color: "#95A5A6",
-    textAlign: "center",
-    marginBottom: 24,
+    fontSize: Typography.body,
+    color: "#999",
+    marginTop: Spacing.md,
+    marginBottom: Spacing.sm,
   },
   createFirstButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: "#4ECDC4",
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    backgroundColor: "#1A1A1A",
+    borderRadius: BorderRadius.md,
   },
   createFirstButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
+    color: "#FFFFFF",
+    fontSize: Typography.body,
+    fontWeight: "500",
+  },
+  fab: {
+    position: "absolute",
+    right: 24,
+    bottom: 24,
+    width: 56,
+    height: 56,
+    borderRadius: BorderRadius.full,
+    backgroundColor: "#1A1A1A",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
 });

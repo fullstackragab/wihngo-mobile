@@ -1,3 +1,4 @@
+import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { hasPremium } from "@/services/premium.service";
 import { Bird } from "@/types/bird";
 import React from "react";
@@ -14,23 +15,28 @@ export default function BirdCard({ bird, onPress }: BirdCardProps) {
 
   return (
     <TouchableOpacity
-      style={[styles.card, isPremium && styles.premiumCard]}
+      style={styles.card}
       onPress={() => onPress(bird)}
+      activeOpacity={0.7}
     >
       <Image
         source={{ uri: bird.imageUrl || "https://via.placeholder.com/100" }}
-        style={[styles.image, isPremium && styles.premiumImage]}
+        style={styles.image}
       />
       <View style={styles.info}>
         <View style={styles.nameRow}>
-          <Text style={styles.name}>{bird.name}</Text>
+          <Text style={styles.name} numberOfLines={1}>
+            {bird.name}
+          </Text>
           {isPremium && <PremiumBadge size="small" />}
         </View>
-        <Text style={styles.species}>{bird.species}</Text>
-        <Text style={styles.tagline}>{bird.tagline}</Text>
-        <Text style={styles.stats}>
-          ❤️ {bird.lovedBy} | 🐦 {bird.supportedBy}
+        <Text style={styles.species} numberOfLines={1}>
+          {bird.species}
         </Text>
+        <View style={styles.stats}>
+          <Text style={styles.statText}>❤️ {bird.lovedBy}</Text>
+          <Text style={styles.statText}>🐦 {bird.supportedBy}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -39,30 +45,18 @@ export default function BirdCard({ bird, onPress }: BirdCardProps) {
 const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
-    backgroundColor: "#f8f8f8",
-    borderRadius: 10,
-    marginBottom: 12,
-    padding: 10,
+    backgroundColor: "#FAFAFA",
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.md,
+    padding: Spacing.md,
     alignItems: "center",
   },
-  premiumCard: {
-    borderWidth: 2,
-    borderColor: "#FFD700",
-    shadowColor: "#FFD700",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
-  },
   image: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginRight: 12,
-  },
-  premiumImage: {
-    borderWidth: 3,
-    borderColor: "#FFD700",
+    width: 70,
+    height: 70,
+    borderRadius: BorderRadius.sm,
+    marginRight: Spacing.md,
+    backgroundColor: "#F0F0F0",
   },
   info: {
     flex: 1,
@@ -70,23 +64,25 @@ const styles = StyleSheet.create({
   nameRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    marginBottom: 2,
+    gap: Spacing.xs,
+    marginBottom: Spacing.xs,
   },
   name: {
-    fontWeight: "bold",
-    fontSize: 16,
+    fontWeight: "600",
+    fontSize: Typography.h3,
+    color: "#1A1A1A",
   },
   species: {
-    fontStyle: "italic",
-    color: "#555",
-  },
-  tagline: {
-    color: "#333",
-    marginTop: 4,
+    fontSize: Typography.small,
+    color: "#999",
+    marginBottom: Spacing.xs,
   },
   stats: {
-    marginTop: 6,
-    color: "#888",
+    flexDirection: "row",
+    gap: Spacing.md,
+  },
+  statText: {
+    fontSize: Typography.tiny,
+    color: "#999",
   },
 });

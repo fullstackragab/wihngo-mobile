@@ -1,6 +1,6 @@
 /**
  * Whingo Design System
- * Modern color palette and typography for the Whingo app
+ * Modern, breathing design with emphasis on white space and elegance
  */
 
 import { Platform } from "react-native";
@@ -8,10 +8,42 @@ import { Platform } from "react-native";
 const tintColorLight = "#4ECDC4";
 const tintColorDark = "#4ECDC4";
 
+// Spacing system for consistent breathing room
+export const Spacing = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  xxl: 48,
+  xxxl: 64,
+};
+
+// Typography scale - smaller, more refined sizes
+export const Typography = {
+  hero: 32, // Large titles
+  h1: 24, // Section titles
+  h2: 20, // Card titles
+  h3: 16, // Subsections
+  body: 14, // Regular text
+  small: 12, // Secondary text
+  tiny: 10, // Captions
+};
+
+// Border radius for consistent shapes
+export const BorderRadius = {
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  full: 9999,
+};
+
 export const Colors = {
   light: {
     text: "#2C3E50",
-    background: "#F8F9FA",
+    background: "#FFFFFF", // Pure white background
+    backgroundAlt: "#F8F9FA", // Subtle grey for contrast
     tint: tintColorLight,
     icon: "#7F8C8D",
     tabIconDefault: "#95A5A6",
@@ -31,14 +63,15 @@ export const Colors = {
 
     // UI Colors
     card: "#FFFFFF",
-    border: "#E0E0E0",
+    border: "#F0F0F0", // Lighter borders
+    borderLight: "#F8F8F8", // Very subtle borders
     inputBackground: "#FFFFFF",
-    placeholder: "#95A5A6",
+    placeholder: "#A0A0A0",
 
     // Text Colors
-    textPrimary: "#2C3E50",
-    textSecondary: "#7F8C8D",
-    textMuted: "#95A5A6",
+    textPrimary: "#1A1A1A",
+    textSecondary: "#6B6B6B",
+    textMuted: "#9E9E9E",
 
     // Special Colors
     heartRed: "#FF6B6B",
@@ -48,6 +81,7 @@ export const Colors = {
   dark: {
     text: "#F8F9FA",
     background: "#1A202C",
+    backgroundAlt: "#2D3748",
     tint: tintColorDark,
     icon: "#A0AEC0",
     tabIconDefault: "#718096",
@@ -67,7 +101,8 @@ export const Colors = {
 
     // UI Colors
     card: "#2D3748",
-    border: "#4A5568",
+    border: "#374151",
+    borderLight: "#2D3748",
     inputBackground: "#2D3748",
     placeholder: "#718096",
 

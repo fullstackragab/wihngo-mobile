@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
   },
   memorialBadgeText: {
     color: "#fff",
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "600",
   },
   content: {
@@ -378,12 +378,12 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "800",
     color: "#2C3E50",
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontStyle: "italic",
     color: "#7F8C8D",
     marginBottom: 12,
@@ -400,20 +400,20 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   speciesText: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#4ECDC4",
     fontWeight: "600",
   },
   highlight: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     color: "#10b981",
     marginBottom: 12,
   },
   description: {
-    fontSize: 15,
+    fontSize: 13,
     color: "#5D6D7E",
-    lineHeight: 24,
+    lineHeight: 20,
     marginBottom: 20,
   },
   infoGrid: {
@@ -425,12 +425,12 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   infoLabel: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#7F8C8D",
     fontWeight: "600",
   },
   infoValue: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#2C3E50",
   },
   statsRow: {
@@ -451,11 +451,11 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontWeight: "700",
-    fontSize: 16,
+    fontSize: 14,
     color: "#2C3E50",
   },
   statLabel: {
-    fontSize: 13,
+    fontSize: 11,
     color: "#7F8C8D",
   },
   actions: {
@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
   actionText: {
     color: "#fff",
     fontWeight: "600",
-    fontSize: 16,
+    fontSize: 14,
   },
   transparencySection: {
     paddingHorizontal: 20,
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#2C3E50",
   },
@@ -513,15 +513,15 @@ const styles = StyleSheet.create({
     borderLeftColor: "#10b981",
   },
   transparencyAmount: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#10b981",
     marginBottom: 8,
   },
   transparencyText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#5D6D7E",
-    lineHeight: 20,
+    lineHeight: 18,
     marginBottom: 12,
   },
   transparencyLink: {
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   transparencyLinkText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#4ECDC4",
     fontWeight: "600",
   },
@@ -552,23 +552,23 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   healthLogTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#2C3E50",
     flex: 1,
   },
   healthLogDate: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#7F8C8D",
   },
   healthLogDescription: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#5D6D7E",
-    lineHeight: 20,
+    lineHeight: 18,
     marginBottom: 8,
   },
   healthLogCost: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "600",
     color: "#F39C12",
   },

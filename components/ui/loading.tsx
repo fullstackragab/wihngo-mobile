@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   message: {
     marginTop: 16,
-    fontSize: 16,
+    fontSize: 14,
     color: "#7F8C8D",
     textAlign: "center",
   },
@@ -102,17 +102,17 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   emptyTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#2C3E50",
     marginBottom: 8,
     textAlign: "center",
   },
   emptyMessage: {
-    fontSize: 15,
+    fontSize: 13,
     color: "#7F8C8D",
     textAlign: "center",
-    lineHeight: 22,
+    lineHeight: 20,
     marginBottom: 24,
   },
   emptyAction: {
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   emptyActionText: {
     color: "#FFFFFF",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
 });

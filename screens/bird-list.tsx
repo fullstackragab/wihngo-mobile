@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
     color: "#2C3E50",
   },
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 13,
     color: "#2C3E50",
   },
   sortContainer: {
@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
     borderColor: "#4ECDC4",
   },
   sortButtonText: {
-    fontSize: 13,
+    fontSize: 12,
     color: "#7F8C8D",
     fontWeight: "600",
   },
@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   activeFiltersLabel: {
-    fontSize: 13,
+    fontSize: 12,
     color: "#7F8C8D",
     fontWeight: "600",
   },
@@ -523,12 +523,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   filterTagText: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#fff",
     fontWeight: "600",
   },
   clearFilters: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#E74C3C",
     fontWeight: "600",
   },
@@ -547,11 +547,11 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 12,
-    fontSize: 16,
+    fontSize: 14,
     color: "#95A5A6",
   },
   errorText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#E74C3C",
     textAlign: "center",
     marginTop: 16,
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
   emptyContainer: {
@@ -575,7 +575,7 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   emptyText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#95A5A6",
     marginTop: 16,
     marginBottom: 20,
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     color: "#fff",
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
   },
   modalOverlay: {
@@ -612,7 +612,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#E8E8E8",
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#2C3E50",
   },
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   filterLabel: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     color: "#2C3E50",
     marginBottom: 8,
@@ -631,7 +631,7 @@ const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     borderRadius: 8,
     padding: 12,
-    fontSize: 14,
+    fontSize: 13,
     color: "#2C3E50",
   },
   checkboxContainer: {

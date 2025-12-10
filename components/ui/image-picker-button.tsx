@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#333",
     marginBottom: 8,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   overlayText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
   placeholderContainer: {
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   placeholderText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#999",
     textAlign: "center",
   },
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   selectedText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#10b981",
     fontWeight: "500",
   },

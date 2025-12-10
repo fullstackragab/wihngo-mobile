@@ -1,12 +1,12 @@
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
 import {
   StyleSheet,
+  Text,
   TextInput,
   TextInputProps,
   View,
-  Text,
 } from "react-native";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 interface RoundedTextInputProps extends TextInputProps {
   label?: string;
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "600",
     color: "#2C3E50",
     marginBottom: 8,
@@ -74,11 +74,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingVertical: 16,
-    fontSize: 16,
+    fontSize: 14,
     color: "#2C3E50",
   },
   errorText: {
-    fontSize: 13,
+    fontSize: 11,
     color: "#EF4444",
     marginTop: 6,
     marginLeft: 4,

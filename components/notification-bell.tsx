@@ -15,7 +15,7 @@ interface NotificationBellProps {
   iconColor?: string;
 }
 
-export default function NotificationBell({
+export function NotificationBell({
   iconSize = 24,
   iconColor = "#1f2937",
 }: NotificationBellProps) {
@@ -76,3 +76,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
 });
+
+// Also export as default for backward compatibility
+export default NotificationBell;

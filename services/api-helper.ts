@@ -78,6 +78,7 @@ export async function authenticatedFetch(
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
+      "ngrok-skip-browser-warning": "true", // Skip ngrok interstitial page
       ...options.headers,
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
@@ -277,6 +278,7 @@ export async function uploadFile<T>(
 
     const headers: HeadersInit = {
       Accept: "application/json",
+      "ngrok-skip-browser-warning": "true", // Skip ngrok interstitial page
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
 

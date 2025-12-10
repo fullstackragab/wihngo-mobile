@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#333",
     marginBottom: 8,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderColor: "#e0e0e0",
     paddingVertical: 14,
     paddingHorizontal: 16,
-    fontSize: 16,
+    fontSize: 14,
     color: "#333",
   },
   inputError: {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#ef4444",
-    fontSize: 13,
+    fontSize: 11,
     marginTop: 6,
     marginLeft: 4,
   },

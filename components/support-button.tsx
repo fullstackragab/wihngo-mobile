@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   gradientButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
   solidButton: {
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   solidButtonText: {
     color: "#fff",
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: "600",
   },
 });

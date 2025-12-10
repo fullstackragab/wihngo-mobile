@@ -46,16 +46,16 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "600",
     color: "#333",
     textAlign: "center",
   },
   message: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
     textAlign: "center",
-    lineHeight: 22,
+    lineHeight: 20,
   },
   button: {
     backgroundColor: "#007AFF",
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
 });

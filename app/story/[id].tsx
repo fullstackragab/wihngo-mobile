@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#E8E8E8",
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#2C3E50",
   },
@@ -299,26 +299,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   authorName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#2C3E50",
   },
   timestamp: {
-    fontSize: 13,
+    fontSize: 11,
     color: "#95A5A6",
     marginTop: 2,
   },
   title: {
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#2C3E50",
     paddingHorizontal: 20,
     marginBottom: 16,
   },
   contentText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#2C3E50",
-    lineHeight: 24,
+    lineHeight: 20,
     paddingHorizontal: 20,
     marginBottom: 20,
   },
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   birdTagText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#4ECDC4",
     fontWeight: "600",
   },
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   actionText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#95A5A6",
     fontWeight: "600",
   },
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   commentsTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#2C3E50",
     marginBottom: 16,
@@ -400,21 +400,21 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   commentAuthor: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     color: "#2C3E50",
   },
   commentTime: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#95A5A6",
   },
   commentText: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#5D6D7E",
-    lineHeight: 20,
+    lineHeight: 18,
   },
   noComments: {
-    fontSize: 14,
+    fontSize: 13,
     color: "#95A5A6",
     textAlign: "center",
     paddingVertical: 20,
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    fontSize: 14,
+    fontSize: 13,
     color: "#2C3E50",
     maxHeight: 100,
   },
@@ -449,7 +449,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   errorText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#95A5A6",
     marginBottom: 20,
   },
@@ -461,7 +461,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
 });

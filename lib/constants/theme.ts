@@ -77,13 +77,13 @@ export const BorderRadius = {
 } as const;
 
 export const FontSizes = {
-  xs: 12,
-  sm: 14,
-  md: 16,
-  lg: 18,
-  xl: 20,
-  xxl: 24,
-  xxxl: 32,
+  xs: 10,
+  sm: 12,
+  md: 14,
+  lg: 16,
+  xl: 18,
+  xxl: 20,
+  xxxl: 26,
 } as const;
 
 export const Shadows = {

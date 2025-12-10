@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   avatarImage: { width: 64, height: 64, borderRadius: 32 },
   content: { padding: 20 },
   name: {
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: "700",
     textAlign: "center",
     marginBottom: 8,
@@ -111,13 +111,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 12,
   },
-  metaText: { fontSize: 14, color: "#6b7280", marginLeft: 4 },
+  metaText: { fontSize: 12, color: "#6b7280", marginLeft: 4 },
   bio: {
-    fontSize: 15,
+    fontSize: 13,
     color: "#374151",
     textAlign: "center",
     marginBottom: 20,
-    lineHeight: 22,
+    lineHeight: 20,
   },
   stats: {
     flexDirection: "row",
@@ -132,6 +132,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: "center",
   },
-  statValue: { fontSize: 22, fontWeight: "700" },
-  statLabel: { fontSize: 13, color: "#374151", marginTop: 4 },
+  statValue: { fontSize: 20, fontWeight: "700" },
+  statLabel: { fontSize: 11, color: "#374151", marginTop: 4 },
 });

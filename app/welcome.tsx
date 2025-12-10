@@ -55,7 +55,9 @@ export default function Welcome() {
     } catch (error) {
       console.error("❌ Login error:", error);
       const errorMessage =
-        error instanceof Error ? error.message : "Login failed. Please check your credentials.";
+        error instanceof Error
+          ? error.message
+          : "Login failed. Please check your credentials.";
       Alert.alert("Login Failed", errorMessage);
     } finally {
       setIsLoading(false);
@@ -143,7 +145,10 @@ export default function Welcome() {
 
             {/* Login Button */}
             <TouchableOpacity
-              style={[styles.loginButton, isLoading && styles.loginButtonDisabled]}
+              style={[
+                styles.loginButton,
+                isLoading && styles.loginButtonDisabled,
+              ]}
               onPress={login}
               disabled={isLoading}
             >
@@ -217,18 +222,18 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   appTitle: {
-    fontSize: 42,
+    fontSize: 36,
     fontWeight: "bold",
     color: "#2C3E50",
     marginBottom: 8,
   },
   appSubtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#7F8C8D",
     marginBottom: 24,
   },
   welcomeText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "600",
     color: "#34495E",
   },
@@ -254,7 +259,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingVertical: 16,
-    fontSize: 16,
+    fontSize: 14,
     color: "#2C3E50",
   },
   eyeIcon: {
@@ -266,7 +271,7 @@ const styles = StyleSheet.create({
   },
   forgotPasswordText: {
     color: "#4ECDC4",
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: "600",
   },
   loginButton: {
@@ -284,7 +289,7 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: "#FFFFFF",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
   signupContainer: {
@@ -295,11 +300,11 @@ const styles = StyleSheet.create({
   },
   signupText: {
     color: "#7F8C8D",
-    fontSize: 15,
+    fontSize: 13,
   },
   signupLink: {
     color: "#4ECDC4",
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: "bold",
   },
   divider: {
@@ -315,7 +320,7 @@ const styles = StyleSheet.create({
   dividerText: {
     marginHorizontal: 16,
     color: "#95A5A6",
-    fontSize: 14,
+    fontSize: 12,
   },
   guestButton: {
     flexDirection: "row",
@@ -329,7 +334,7 @@ const styles = StyleSheet.create({
   },
   guestButtonText: {
     color: "#4ECDC4",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     marginLeft: 12,
   },

@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#f0f0f0",
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#333",
     flex: 1,
@@ -656,7 +656,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
     marginBottom: 24,
     textAlign: "center",
@@ -670,7 +670,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   amountHeader: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 12,
@@ -696,7 +696,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f7ff",
   },
   paymentMethodText: {
-    fontSize: 13,
+    fontSize: 11,
     fontWeight: "600",
     color: "#333",
   },
@@ -715,11 +715,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f7ff",
   },
   emoji: {
-    fontSize: 36,
+    fontSize: 30,
     marginBottom: 8,
   },
   amountLabel: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 8,
@@ -732,7 +732,7 @@ const styles = StyleSheet.create({
   },
   paypalText: {
     color: "#fff",
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "600",
   },
   backButton: {
@@ -744,18 +744,18 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: "#007AFF",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
   },
   selectorTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 8,
     textAlign: "center",
   },
   selectorSubtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
     marginBottom: 20,
     textAlign: "center",
@@ -775,17 +775,17 @@ const styles = StyleSheet.create({
   },
   currencyName: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#333",
   },
   currencyCode: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666",
     marginRight: 8,
   },
   networkTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 16,
@@ -804,7 +804,7 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
   },
   networkName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
     color: "#333",
   },
@@ -818,14 +818,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   platformSupportTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#333",
     textAlign: "center",
     marginBottom: 8,
   },
   platformSupportText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666",
     textAlign: "center",
     marginBottom: 16,
@@ -842,7 +842,7 @@ const styles = StyleSheet.create({
   },
   platformButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
   platformPaymentContainer: {

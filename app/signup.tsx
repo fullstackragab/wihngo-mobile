@@ -57,7 +57,10 @@ export default function SignUp() {
     }
 
     if (password.length < 6) {
-      Alert.alert("Weak Password", "Password must be at least 6 characters long");
+      Alert.alert(
+        "Weak Password",
+        "Password must be at least 6 characters long"
+      );
       return;
     }
 
@@ -68,23 +71,25 @@ export default function SignUp() {
 
     try {
       setIsLoading(true);
-      const authData = await registerService({ name: name.trim(), email, password });
+      const authData = await registerService({
+        name: name.trim(),
+        email,
+        password,
+      });
       await authLogin(authData);
-      
-      Alert.alert(
-        "Welcome!",
-        "Your account has been created successfully!",
-        [
-          {
-            text: "Get Started",
-            onPress: () => router.replace("/(tabs)/home"),
-          },
-        ]
-      );
+
+      Alert.alert("Welcome!", "Your account has been created successfully!", [
+        {
+          text: "Get Started",
+          onPress: () => router.replace("/(tabs)/home"),
+        },
+      ]);
     } catch (error) {
       console.error("Registration error:", error);
       const errorMessage =
-        error instanceof Error ? error.message : "Registration failed. Please try again.";
+        error instanceof Error
+          ? error.message
+          : "Registration failed. Please try again.";
       Alert.alert("Registration Failed", errorMessage);
     } finally {
       setIsLoading(false);
@@ -109,7 +114,9 @@ export default function SignUp() {
               style={styles.logo}
             />
             <Text style={styles.appTitle}>Join Whingo</Text>
-            <Text style={styles.appSubtitle}>Start your bird conservation journey</Text>
+            <Text style={styles.appSubtitle}>
+              Start your bird conservation journey
+            </Text>
           </View>
 
           {/* Sign Up Form */}
@@ -222,7 +229,10 @@ export default function SignUp() {
 
             {/* Sign Up Button */}
             <TouchableOpacity
-              style={[styles.signupButton, isLoading && styles.signupButtonDisabled]}
+              style={[
+                styles.signupButton,
+                isLoading && styles.signupButtonDisabled,
+              ]}
               onPress={submitForm}
               disabled={isLoading}
             >
@@ -287,13 +297,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   appTitle: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#2C3E50",
     marginBottom: 8,
   },
   appSubtitle: {
-    fontSize: 15,
+    fontSize: 13,
     color: "#7F8C8D",
     textAlign: "center",
   },
@@ -319,7 +329,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     paddingVertical: 16,
-    fontSize: 16,
+    fontSize: 14,
     color: "#2C3E50",
   },
   eyeIcon: {
@@ -330,7 +340,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   passwordHintText: {
-    fontSize: 13,
+    fontSize: 11,
     color: "#7F8C8D",
   },
   signupButton: {
@@ -348,15 +358,15 @@ const styles = StyleSheet.create({
   },
   signupButtonText: {
     color: "#FFFFFF",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
   termsText: {
-    fontSize: 13,
+    fontSize: 11,
     color: "#7F8C8D",
     textAlign: "center",
     marginBottom: 24,
-    lineHeight: 18,
+    lineHeight: 16,
   },
   termsLink: {
     color: "#4ECDC4",

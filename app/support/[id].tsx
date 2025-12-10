@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#E8E8E8",
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#2C3E50",
   },
@@ -391,13 +391,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   birdName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#2C3E50",
     marginBottom: 4,
   },
   birdSpecies: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#7F8C8D",
     marginBottom: 8,
   },
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   birdStatText: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#7F8C8D",
   },
   messageCard: {
@@ -424,23 +424,23 @@ const styles = StyleSheet.create({
     borderColor: "#FFE5CC",
   },
   messageTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#2C3E50",
     marginTop: 12,
     marginBottom: 8,
   },
   messageText: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#5D6D7E",
     textAlign: "center",
-    lineHeight: 20,
+    lineHeight: 18,
   },
   section: {
     marginBottom: 24,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#2C3E50",
     marginBottom: 12,
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
     borderColor: "#4ECDC4",
   },
   amountButtonText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     color: "#2C3E50",
   },
@@ -476,7 +476,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   customAmountLabel: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#7F8C8D",
     marginBottom: 8,
   },
@@ -490,14 +490,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   currencySymbol: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "600",
     color: "#2C3E50",
     marginRight: 8,
   },
   input: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "600",
     color: "#2C3E50",
     paddingVertical: 16,
@@ -508,13 +508,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#E8E8E8",
     padding: 16,
-    fontSize: 14,
+    fontSize: 13,
     color: "#2C3E50",
     minHeight: 100,
     textAlignVertical: "top",
   },
   characterCount: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#95A5A6",
     textAlign: "right",
     marginTop: 4,

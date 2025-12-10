@@ -78,14 +78,14 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   emptyText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     color: "#333",
     marginBottom: 8,
     marginTop: 16,
   },
   emptySubtext: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666",
     textAlign: "center",
   },

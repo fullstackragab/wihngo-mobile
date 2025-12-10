@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 16,
     marginBottom: 24,
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
     textAlign: "center",
   },
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
 });

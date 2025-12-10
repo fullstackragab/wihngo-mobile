@@ -183,13 +183,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   smallText: {
-    fontSize: 14,
+    fontSize: 12,
   },
   mediumText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   largeText: {
-    fontSize: 18,
+    fontSize: 16,
   },
   primaryText: {
     color: "#FFFFFF",

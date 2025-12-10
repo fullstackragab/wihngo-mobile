@@ -78,15 +78,29 @@ export async function authenticatedFetch(
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "ngrok-skip-browser-warning": "true", // Skip ngrok interstitial page
+      "ngrok-skip-browser-warning": "1", // Skip ngrok interstitial page
       ...options.headers,
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
+
+    // Log headers being sent (without sensitive token)
+    console.log("📤 Request Headers:", {
+      ...headers,
+      Authorization: token ? "Bearer <token>" : "(none)",
+    });
 
     // Make the request
     const response = await fetch(absoluteUrl, {
       ...options,
       headers,
+    });
+
+    // Log response details
+    console.log("📥 Response:", {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok,
+      type: response.type,
     });
 
     // Handle 401 Unauthorized - token might be expired
@@ -278,9 +292,15 @@ export async function uploadFile<T>(
 
     const headers: HeadersInit = {
       Accept: "application/json",
-      "ngrok-skip-browser-warning": "true", // Skip ngrok interstitial page
+      "ngrok-skip-browser-warning": "1", // Skip ngrok interstitial page
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
+
+    // Log headers being sent for file upload
+    console.log("📤 Upload Headers:", {
+      ...headers,
+      Authorization: token ? "Bearer <token>" : "(none)",
+    });
 
     const response = await fetch(absoluteUrl, {
       method: "POST",

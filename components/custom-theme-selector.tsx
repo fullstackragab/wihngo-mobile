@@ -1,17 +1,11 @@
 import { CUSTOM_THEMES } from "@/constants/premium-config";
 import { theme } from "@/constants/theme";
+import { useNotifications } from "@/contexts/notification-context";
 import { updateBirdPremiumStyle } from "@/services/premium.service";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import {
-  Alert,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 type CustomThemeSelectorProps = {
   birdId: string;
@@ -28,15 +22,13 @@ export function CustomThemeSelector({
 }: CustomThemeSelectorProps) {
   const [selectedTheme, setSelectedTheme] = useState(currentThemeId);
   const [isLoading, setIsLoading] = useState(false);
+  const { addNotification } = useNotifications();
 
   const handleThemeSelect = async (themeId: string) => {
     const themeConfig = CUSTOM_THEMES.find((t) => t.id === themeId);
 
     if (!themeConfig?.free && !isPremium) {
-      Alert.alert(
-        "Premium Feature",
-        "Custom themes are available with a premium subscription. Upgrade to celebrate your bird with personalized colors!"
-      );
+      // Premium required - user can see premium badge in UI
       return;
     }
 
@@ -45,10 +37,14 @@ export function CustomThemeSelector({
       await updateBirdPremiumStyle(birdId, { themeId });
       setSelectedTheme(themeId);
       onThemeUpdate?.(themeId);
-      Alert.alert("Success", "Profile theme updated!");
+      // Success - user sees updated theme
     } catch (error) {
       console.error("Failed to update theme:", error);
-      Alert.alert("Error", "Failed to update theme. Please try again.");
+      addNotification(
+        "recommendation",
+        "Theme Update Error",
+        "Failed to update theme. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }

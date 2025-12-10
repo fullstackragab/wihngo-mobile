@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { AuthProvider, useAuth } from "@/contexts/auth-context";
+import { NotificationProvider } from "@/contexts/notification-context";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { pushNotificationService } from "@/services/push-notification.service";
 
@@ -165,7 +166,9 @@ function RootLayoutNav() {
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <NotificationProvider>
+        <RootLayoutNav />
+      </NotificationProvider>
     </AuthProvider>
   );
 }

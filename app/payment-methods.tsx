@@ -1,3 +1,4 @@
+import { useNotifications } from "@/contexts/notification-context";
 import {
   getSavedCryptoWallets,
   removeCryptoWallet,
@@ -9,7 +10,6 @@ import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -20,6 +20,7 @@ import {
 export default function PaymentMethods() {
   const [cryptoWallets, setCryptoWallets] = useState<CryptoPaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
+  const { addNotification } = useNotifications();
 
   const paymentMethods = [
     {
@@ -48,25 +49,16 @@ export default function PaymentMethods() {
   };
 
   const handleRemoveCryptoWallet = async (walletId: string) => {
-    Alert.alert(
-      "Remove Wallet",
-      "Are you sure you want to remove this wallet?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Remove",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await removeCryptoWallet(walletId);
-              await loadCryptoWallets();
-            } catch (error) {
-              Alert.alert("Error", "Failed to remove wallet");
-            }
-          },
-        },
-      ]
-    );
+    try {
+      await removeCryptoWallet(walletId);
+      await loadCryptoWallets();
+    } catch (error) {
+      addNotification(
+        "recommendation",
+        "Removal Failed",
+        "Failed to remove wallet"
+      );
+    }
   };
 
   const handleSetDefaultCryptoWallet = async (walletId: string) => {
@@ -74,7 +66,11 @@ export default function PaymentMethods() {
       await setDefaultCryptoWallet(walletId);
       await loadCryptoWallets();
     } catch (error) {
-      Alert.alert("Error", "Failed to set default wallet");
+      addNotification(
+        "recommendation",
+        "Update Failed",
+        "Failed to set default wallet"
+      );
     }
   };
 

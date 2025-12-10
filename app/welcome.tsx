@@ -1,4 +1,5 @@
 import { useAuth } from "@/contexts/auth-context";
+import { useNotifications } from "@/contexts/notification-context";
 import { loginService } from "@/lib/api";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { LinearGradient } from "expo-linear-gradient";
@@ -6,7 +7,6 @@ import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -25,6 +25,7 @@ export default function Welcome() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { login: authLogin, isAuthenticated } = useAuth();
+  const { addNotification } = useNotifications();
   const router = useRouter();
 
   // Redirect if already authenticated
@@ -36,14 +37,14 @@ export default function Welcome() {
 
   async function login() {
     if (!email || !password) {
-      Alert.alert("Missing Fields", "Please enter both email and password");
+      // Missing fields - user can see empty inputs
       return;
     }
 
     // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      Alert.alert("Invalid Email", "Please enter a valid email address");
+      // Invalid email - user can see it's malformed
       return;
     }
 
@@ -58,7 +59,7 @@ export default function Welcome() {
         error instanceof Error
           ? error.message
           : "Login failed. Please check your credentials.";
-      Alert.alert("Login Failed", errorMessage);
+      addNotification("recommendation", "Login Failed", errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -175,22 +176,6 @@ export default function Welcome() {
                 </TouchableOpacity>
               </Link>
             </View>
-
-            {/* Divider */}
-            <View style={styles.divider}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>or continue as</Text>
-              <View style={styles.dividerLine} />
-            </View>
-
-            {/* Guest Button */}
-            <TouchableOpacity
-              style={styles.guestButton}
-              onPress={() => router.push("/(tabs)/home")}
-            >
-              <FontAwesome6 name="user" size={20} color="#4ECDC4" />
-              <Text style={styles.guestButtonText}>Continue as Guest</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -306,36 +291,5 @@ const styles = StyleSheet.create({
     color: "#4ECDC4",
     fontSize: 13,
     fontWeight: "bold",
-  },
-  divider: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#E0E0E0",
-  },
-  dividerText: {
-    marginHorizontal: 16,
-    color: "#95A5A6",
-    fontSize: 12,
-  },
-  guestButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    paddingVertical: 16,
-    borderWidth: 2,
-    borderColor: "#4ECDC4",
-  },
-  guestButtonText: {
-    color: "#4ECDC4",
-    fontSize: 14,
-    fontWeight: "600",
-    marginLeft: 12,
   },
 });

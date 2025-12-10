@@ -1,15 +1,9 @@
 import { theme } from "@/constants/theme";
+import { useNotifications } from "@/contexts/notification-context";
 import { updateBirdPremiumStyle } from "@/services/premium.service";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import {
-  Alert,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 type Frame = {
   id: string;
@@ -40,6 +34,7 @@ export function PremiumFrameSelector({
 }: PremiumFrameSelectorProps) {
   const [selectedFrame, setSelectedFrame] = useState(currentFrameId);
   const [isLoading, setIsLoading] = useState(false);
+  const { addNotification } = useNotifications();
 
   const handleFrameSelect = async (frameId: string) => {
     setIsLoading(true);
@@ -47,10 +42,14 @@ export function PremiumFrameSelector({
       await updateBirdPremiumStyle(birdId, { frameId });
       setSelectedFrame(frameId);
       onFrameUpdate?.(frameId);
-      Alert.alert("Success", "Frame updated successfully!");
+      // Success - user sees updated frame
     } catch (error) {
       console.error("Failed to update frame:", error);
-      Alert.alert("Error", "Failed to update frame. Please try again.");
+      addNotification(
+        "recommendation",
+        "Frame Update Error",
+        "Failed to update frame. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,5 @@
 import { useAuth } from "@/contexts/auth-context";
+import { useNotifications } from "@/contexts/notification-context";
 import { registerService } from "@/lib/api";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { LinearGradient } from "expo-linear-gradient";
@@ -6,7 +7,6 @@ import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -28,6 +28,7 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { login: authLogin, isAuthenticated } = useAuth();
+  const { addNotification } = useNotifications();
   const router = useRouter();
 
   // Redirect if already authenticated
@@ -40,32 +41,24 @@ export default function SignUp() {
   async function submitForm() {
     // Validation
     if (!name || !email || !password || !confirmPassword) {
-      Alert.alert("Missing Fields", "Please fill in all fields");
       return;
     }
 
     if (name.trim().length < 2) {
-      Alert.alert("Invalid Name", "Name must be at least 2 characters long");
       return;
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      Alert.alert("Invalid Email", "Please enter a valid email address");
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert(
-        "Weak Password",
-        "Password must be at least 6 characters long"
-      );
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Password Mismatch", "Passwords do not match");
       return;
     }
 
@@ -78,19 +71,15 @@ export default function SignUp() {
       });
       await authLogin(authData);
 
-      Alert.alert("Welcome!", "Your account has been created successfully!", [
-        {
-          text: "Get Started",
-          onPress: () => router.replace("/(tabs)/home"),
-        },
-      ]);
+      // Success - redirect to home (no alert needed)
+      router.replace("/(tabs)/home");
     } catch (error) {
       console.error("Registration error:", error);
       const errorMessage =
         error instanceof Error
           ? error.message
           : "Registration failed. Please try again.";
-      Alert.alert("Registration Failed", errorMessage);
+      addNotification("recommendation", "Registration Failed", errorMessage);
     } finally {
       setIsLoading(false);
     }

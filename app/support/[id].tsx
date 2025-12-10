@@ -1,9 +1,9 @@
+import { useNotifications } from "@/contexts/notification-context";
 import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -20,6 +20,7 @@ const PRESET_AMOUNTS = [5, 10, 25, 50, 100];
 export default function SupportBird() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { addNotification } = useNotifications();
   const [bird, setBird] = useState<Bird | null>(null);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
@@ -47,7 +48,7 @@ export default function SupportBird() {
     const amount = getFinalAmount();
 
     if (amount < 1) {
-      Alert.alert("Invalid Amount", "Please enter an amount of at least $1");
+      // Invalid amount - user can see input validation
       return;
     }
 
@@ -61,21 +62,14 @@ export default function SupportBird() {
       //   paymentMethod
       // });
 
-      Alert.alert(
-        "Thank You! 🎉",
-        `Your support of $${amount.toFixed(2)} helps ${
-          bird?.name || "this bird"
-        } thrive!`,
-        [
-          {
-            text: "Done",
-            onPress: () => router.back(),
-          },
-        ]
-      );
+      router.back(); // Success clear from navigation
     } catch (error) {
       console.error("Payment error:", error);
-      Alert.alert("Error", "Failed to process payment. Please try again.");
+      addNotification(
+        "recommendation",
+        "Payment Failed",
+        "Failed to process payment. Please try again."
+      );
     } finally {
       setLoading(false);
     }

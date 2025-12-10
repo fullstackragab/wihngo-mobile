@@ -14,6 +14,7 @@ export type Bird = {
   description?: string;
   imageUrl?: string;
   coverImageUrl?: string;
+  videoUrl?: string; // Main video for the bird (required)
   lovedBy: number;
   supportedBy: number;
   ownerId: string;
@@ -57,6 +58,7 @@ export type CreateBirdDto = {
   description?: string;
   imageUrl?: string;
   coverImageUrl?: string;
+  videoUrl: string; // Required: Main video for the bird
   age?: string;
   location?: string;
 };

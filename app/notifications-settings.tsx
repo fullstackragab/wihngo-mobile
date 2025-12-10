@@ -1,10 +1,10 @@
+import { useNotifications } from "@/contexts/notification-context";
 import { useNotificationPreferences } from "@/hooks/useNotificationPreferences";
 import { notificationService } from "@/services/notification.service";
 import { pushNotificationService } from "@/services/push-notification.service";
 import React from "react";
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   StyleSheet,
   Switch,
@@ -16,23 +16,29 @@ import {
 export default function NotificationsSettings() {
   const { preferences, loading, saving, updatePreference } =
     useNotificationPreferences();
+  const { addNotification } = useNotifications();
 
   const handleTestNotification = async () => {
     try {
       await notificationService.sendTestNotification();
-      Alert.alert("Success", "Test notification sent!");
+      // Test notification sent - no alert needed
     } catch (error) {
-      Alert.alert("Error", "Failed to send test notification");
+      addNotification(
+        "recommendation",
+        "Test Failed",
+        "Failed to send test notification"
+      );
     }
   };
 
   const handleRequestPermission = async () => {
     const granted = await pushNotificationService.requestPermission();
     if (granted) {
-      Alert.alert("Success", "Push notification permissions granted!");
+      // Permissions granted - no alert needed
       await pushNotificationService.initialize();
     } else {
-      Alert.alert(
+      addNotification(
+        "recommendation",
         "Permission Denied",
         "Please enable notifications in your device settings"
       );

@@ -6,7 +6,6 @@
 import Feather from "@expo/vector-icons/Feather";
 import React from "react";
 import {
-  Alert,
   Share,
   StyleSheet,
   Text,
@@ -69,7 +68,7 @@ export default function ShareButton({
       }
     } catch (error) {
       console.error("Error sharing:", error);
-      Alert.alert("Error", "Failed to share. Please try again.");
+      // Share failed - user already dismissed the share sheet
     }
   };
 

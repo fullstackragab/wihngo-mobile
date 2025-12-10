@@ -1,7 +1,7 @@
 import { theme } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Alert, Pressable, Share, StyleSheet, Text, View } from "react-native";
+import { Pressable, Share, StyleSheet, Text, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 
 type ProfileQRCodeProps = {
@@ -95,9 +95,9 @@ export function ProfileQRCode({
 
             <Pressable
               style={styles.actionButton}
-              onPress={() =>
-                Alert.alert("Download", "QR code download feature coming soon!")
-              }
+              onPress={() => {
+                // TODO: Implement QR code download
+              }}
             >
               <Ionicons
                 name="download"

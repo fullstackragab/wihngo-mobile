@@ -38,9 +38,9 @@ export const PAGINATION = {
   maxPageSize: 100,
 } as const;
 
-// Image Configuration
+// Image Configuration (Legacy - use MEDIA_CONFIG from media.ts for new implementations)
 export const IMAGE_CONFIG = {
-  maxSizeBytes: 5 * 1024 * 1024, // 5MB
+  maxSizeBytes: 2 * 1024 * 1024, // 2MB (reduced from 5MB)
   allowedTypes: ["image/jpeg", "image/png", "image/webp"],
   compressionQuality: 0.8,
 } as const;

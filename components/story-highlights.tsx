@@ -1,10 +1,10 @@
 import { theme } from "@/constants/theme";
+import { useNotifications } from "@/contexts/notification-context";
 import { highlightStory, unhighlightStory } from "@/services/premium.service";
 import { Story } from "@/types/story";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -27,6 +27,7 @@ export function StoryHighlights({
   onUpdate,
 }: StoryHighlightsProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const { addNotification } = useNotifications();
 
   const highlightedStories = stories
     .filter((s) => s.isHighlighted)
@@ -41,21 +42,22 @@ export function StoryHighlights({
       setIsLoading(true);
       try {
         await unhighlightStory(birdId, story.storyId);
-        Alert.alert("Success", "Story removed from highlights");
+        // Success - user sees updated UI
         onUpdate?.();
       } catch (error) {
         console.error("Failed to remove highlight:", error);
-        Alert.alert("Error", "Failed to remove highlight");
+        addNotification(
+          "recommendation",
+          "Highlight Error",
+          "Failed to remove highlight"
+        );
       } finally {
         setIsLoading(false);
       }
     } else {
       // Add highlight
       if (currentHighlightCount >= MAX_HIGHLIGHTS) {
-        Alert.alert(
-          "Limit Reached",
-          `You can only highlight up to ${MAX_HIGHLIGHTS} stories`
-        );
+        // Limit reached - user can see UI state
         return;
       }
 
@@ -63,11 +65,15 @@ export function StoryHighlights({
       try {
         const nextOrder = currentHighlightCount + 1;
         await highlightStory(birdId, story.storyId, nextOrder);
-        Alert.alert("Success", "Story added to highlights");
+        // Success - user sees updated UI
         onUpdate?.();
       } catch (error) {
         console.error("Failed to add highlight:", error);
-        Alert.alert("Error", "Failed to add highlight");
+        addNotification(
+          "recommendation",
+          "Highlight Error",
+          "Failed to add highlight"
+        );
       } finally {
         setIsLoading(false);
       }

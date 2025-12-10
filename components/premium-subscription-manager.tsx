@@ -1,4 +1,5 @@
 import { theme } from "@/constants/theme";
+import { useNotifications } from "@/contexts/notification-context";
 import {
   cancelBirdPremium,
   getBirdPremiumStatus,
@@ -9,7 +10,6 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Pressable,
   StyleSheet,
   Text,
@@ -31,6 +31,7 @@ export function PremiumSubscriptionManager({
   const [isPremium, setIsPremium] = useState(false);
   const [subscription, setSubscription] =
     useState<BirdPremiumSubscription | null>(null);
+  const { addNotification } = useNotifications();
 
   const loadSubscriptionStatus = useCallback(async () => {
     setIsLoading(true);
@@ -50,68 +51,45 @@ export function PremiumSubscriptionManager({
   }, [loadSubscriptionStatus]);
 
   const handleSubscribe = async () => {
-    Alert.alert(
-      "Subscribe to Premium",
-      "Upgrade this bird to premium for $4.99/month?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Subscribe",
-          onPress: async () => {
-            setIsLoading(true);
-            try {
-              await subscribeBirdToPremium(birdId, {
-                birdId,
-                provider: "stripe",
-                plan: "monthly",
-              });
-              Alert.alert("Success", "Successfully subscribed to premium!");
-              await loadSubscriptionStatus();
-              onStatusChange?.();
-            } catch (error) {
-              console.error("Failed to subscribe:", error);
-              Alert.alert("Error", "Failed to subscribe. Please try again.");
-            } finally {
-              setIsLoading(false);
-            }
-          },
-        },
-      ]
-    );
+    setIsLoading(true);
+    try {
+      await subscribeBirdToPremium(birdId, {
+        birdId,
+        provider: "stripe",
+        plan: "monthly",
+      });
+      // Success - user sees updated subscription status
+      await loadSubscriptionStatus();
+      onStatusChange?.();
+    } catch (error) {
+      console.error("Failed to subscribe:", error);
+      addNotification(
+        "recommendation",
+        "Subscription Error",
+        "Failed to subscribe. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = async () => {
-    Alert.alert(
-      "Cancel Premium",
-      "Are you sure you want to cancel premium for this bird? You'll lose all premium features.",
-      [
-        { text: "Keep Premium", style: "cancel" },
-        {
-          text: "Cancel",
-          style: "destructive",
-          onPress: async () => {
-            setIsLoading(true);
-            try {
-              await cancelBirdPremium(birdId);
-              Alert.alert(
-                "Cancelled",
-                "Premium subscription has been cancelled."
-              );
-              await loadSubscriptionStatus();
-              onStatusChange?.();
-            } catch (error) {
-              console.error("Failed to cancel:", error);
-              Alert.alert(
-                "Error",
-                "Failed to cancel subscription. Please try again."
-              );
-            } finally {
-              setIsLoading(false);
-            }
-          },
-        },
-      ]
-    );
+    setIsLoading(true);
+    try {
+      await cancelBirdPremium(birdId);
+      // Cancelled - user sees updated subscription status
+      await loadSubscriptionStatus();
+      onStatusChange?.();
+    } catch (error) {
+      console.error("Failed to cancel:", error);
+      addNotification(
+        "recommendation",
+        "Cancellation Error",
+        "Failed to cancel subscription. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isLoading) {

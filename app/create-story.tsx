@@ -1,10 +1,10 @@
+import { useNotifications } from "@/contexts/notification-context";
 import { Bird } from "@/types/bird";
 import { CreateStoryDto } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -23,10 +23,10 @@ export default function CreateStory() {
   const [selectedBird, setSelectedBird] = useState<Bird | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const { addNotification } = useNotifications();
 
   const handleSubmit = async () => {
     if (!title.trim() || !content.trim()) {
-      Alert.alert("Error", "Please fill in title and content");
       return;
     }
 
@@ -42,15 +42,15 @@ export default function CreateStory() {
       // TODO: Replace with actual API call
       // await storyService.createStory(storyData);
 
-      Alert.alert("Success", "Story created successfully!", [
-        {
-          text: "OK",
-          onPress: () => router.back(),
-        },
-      ]);
+      // Success - redirect back (no alert needed)
+      router.back();
     } catch (error) {
       console.error("Error creating story:", error);
-      Alert.alert("Error", "Failed to create story");
+      addNotification(
+        "recommendation",
+        "Error Creating Story",
+        "Failed to create story. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -132,10 +132,6 @@ export default function CreateStory() {
             style={styles.selectBirdButton}
             onPress={() => {
               // TODO: Open bird selector modal
-              Alert.alert(
-                "Coming Soon",
-                "Bird selector will be available soon"
-              );
             }}
           >
             {selectedBird ? (

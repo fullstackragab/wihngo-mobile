@@ -1,14 +1,16 @@
 import ImagePickerButton from "@/components/ui/image-picker-button";
 import ValidatedTextInput from "@/components/ui/validated-text-input";
+import VideoPickerButton from "@/components/ui/video-picker-button";
 import { useAuth } from "@/contexts/auth-context";
+import { useNotifications } from "@/contexts/notification-context";
 import { useFormValidation } from "@/hooks/useFormValidation";
+import { MEDIA_CONFIG } from "@/lib/constants/media";
 import { birdService } from "@/services/bird.service";
 import { CreateBirdDto } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -29,9 +31,11 @@ export default function AddBird() {
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [coverImageUrl, setCoverImageUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
   const [age, setAge] = useState("");
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
+  const { addNotification } = useNotifications();
 
   const { validateForm, getFieldError, setFieldTouched, isFieldTouched } =
     useFormValidation({
@@ -42,20 +46,29 @@ export default function AddBird() {
         maxLength: 100,
         message: "Tagline is required (max 100 characters)",
       },
+      videoUrl: { required: true, message: "Bird video is required" },
     });
 
   const handleSubmit = async () => {
     // Check if user is authenticated
     if (!isAuthenticated || !user) {
-      Alert.alert("Error", "You must be logged in to add a bird");
+      addNotification(
+        "recommendation",
+        "Authentication Required",
+        "You must be logged in to add a bird"
+      );
       router.push("/welcome");
       return;
     }
 
     // Validate form
-    const isValid = validateForm({ name, species, tagline });
+    const isValid = validateForm({ name, species, tagline, videoUrl });
     if (!isValid) {
-      Alert.alert("Validation Error", "Please fill in all required fields");
+      return;
+    }
+
+    // Additional video validation
+    if (!videoUrl.trim()) {
       return;
     }
 
@@ -70,6 +83,7 @@ export default function AddBird() {
         description: description.trim() || undefined,
         imageUrl: imageUrl.trim() || undefined,
         coverImageUrl: coverImageUrl.trim() || undefined,
+        videoUrl: videoUrl.trim(),
         age: age.trim() || undefined,
         location: location.trim() || undefined,
       };
@@ -78,32 +92,8 @@ export default function AddBird() {
       const createdBird = await birdService.createBird(birdData);
       console.log("Bird created successfully:", createdBird);
 
-      Alert.alert("Success", `${name} has been added to your profile!`, [
-        {
-          text: "View Bird",
-          onPress: () => {
-            router.back();
-            // Optionally navigate to the bird's profile
-            // router.push(`/bird/${createdBird.birdId}`);
-          },
-        },
-        {
-          text: "Add Another",
-          onPress: () => {
-            // Reset form
-            setName("");
-            setSpecies("");
-            setCommonName("");
-            setScientificName("");
-            setTagline("");
-            setDescription("");
-            setImageUrl("");
-            setCoverImageUrl("");
-            setAge("");
-            setLocation("");
-          },
-        },
-      ]);
+      // Success - redirect back (no alert needed)
+      router.back();
     } catch (error: any) {
       console.error("Error adding bird:", error);
 
@@ -122,7 +112,7 @@ export default function AddBird() {
         errorMessage = error.message;
       }
 
-      Alert.alert("Error", errorMessage);
+      addNotification("recommendation", "Error Adding Bird", errorMessage);
     } finally {
       setLoading(false);
     }
@@ -142,13 +132,21 @@ export default function AddBird() {
         <TouchableOpacity
           onPress={handleSubmit}
           disabled={
-            loading || !name.trim() || !species.trim() || !tagline.trim()
+            loading ||
+            !name.trim() ||
+            !species.trim() ||
+            !tagline.trim() ||
+            !videoUrl.trim()
           }
         >
           <Text
             style={[
               styles.saveButton,
-              (!name.trim() || !species.trim() || !tagline.trim() || loading) &&
+              (!name.trim() ||
+                !species.trim() ||
+                !tagline.trim() ||
+                !videoUrl.trim() ||
+                loading) &&
                 styles.saveButtonDisabled,
             ]}
           >
@@ -249,7 +247,7 @@ export default function AddBird() {
             placeholder="Tap to select a profile image"
             initialUri={imageUrl}
             onImageSelected={setImageUrl}
-            maxSizeMB={5}
+            maxSizeMB={MEDIA_CONFIG.images.profile.maxSizeBytes / (1024 * 1024)}
           />
 
           <ImagePickerButton
@@ -257,14 +255,34 @@ export default function AddBird() {
             placeholder="Tap to select a cover image"
             initialUri={coverImageUrl}
             onImageSelected={setCoverImageUrl}
-            maxSizeMB={5}
+            maxSizeMB={MEDIA_CONFIG.images.cover.maxSizeBytes / (1024 * 1024)}
             aspectRatio={[16, 9]}
+          />
+        </View>
+
+        {/* Video (Required) */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Video</Text>
+
+          <VideoPickerButton
+            label="Bird Video"
+            placeholder="Tap to record or select a video"
+            initialUri={videoUrl}
+            onVideoSelected={setVideoUrl}
+            required={true}
+            showGuidelines={true}
           />
         </View>
 
         {/* Tips */}
         <View style={styles.tipsSection}>
           <Text style={styles.tipsTitle}>💡 Tips for listing your bird</Text>
+          <Text style={styles.tipsText}>
+            • Record a short video (max 1 min) showing your bird's personality
+          </Text>
+          <Text style={styles.tipsText}>
+            • Upload actual video files (.mp4, .mov) - no YouTube links
+          </Text>
           <Text style={styles.tipsText}>• Use clear, high-quality photos</Text>
           <Text style={styles.tipsText}>
             • Write a compelling tagline that captures personality

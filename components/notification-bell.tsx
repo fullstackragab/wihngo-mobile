@@ -1,13 +1,13 @@
 /**
  * NotificationBell Component
  * Bell icon with badge showing unread count
- * Opens notification center when tapped
+ * Opens notification screen when tapped
  */
 
-import NotificationCenter from "@/components/notification-center";
-import { useNotifications } from "@/hooks/useNotifications";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useState } from "react";
+import { useNotifications } from "@/contexts/notification-context";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useRouter } from "expo-router";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface NotificationBellProps {
@@ -19,35 +19,29 @@ export function NotificationBell({
   iconSize = 24,
   iconColor = "#1f2937",
 }: NotificationBellProps) {
-  const [showCenter, setShowCenter] = useState(false);
+  const router = useRouter();
   const { unreadCount } = useNotifications();
 
   return (
-    <>
-      <TouchableOpacity
-        onPress={() => setShowCenter(true)}
-        style={styles.container}
-        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      >
-        <Ionicons
-          name={unreadCount > 0 ? "notifications" : "notifications-outline"}
-          size={iconSize}
-          color={iconColor}
-        />
-        {unreadCount > 0 && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>
-              {unreadCount > 99 ? "99+" : unreadCount}
-            </Text>
-          </View>
-        )}
-      </TouchableOpacity>
-
-      <NotificationCenter
-        visible={showCenter}
-        onClose={() => setShowCenter(false)}
+    <TouchableOpacity
+      onPress={() => router.push("/notifications")}
+      style={styles.container}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+    >
+      <FontAwesome6
+        name={unreadCount > 0 ? "bell" : "bell"}
+        size={iconSize}
+        color={iconColor}
+        solid={unreadCount > 0}
       />
-    </>
+      {unreadCount > 0 && (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>
+            {unreadCount > 99 ? "99+" : unreadCount}
+          </Text>
+        </View>
+      )}
+    </TouchableOpacity>
   );
 }
 

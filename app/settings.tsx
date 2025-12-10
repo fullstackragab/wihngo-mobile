@@ -34,11 +34,11 @@ export default function Settings() {
     <ScrollView style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Account</Text>
-        <SettingsItem
+        {/* <SettingsItem
           icon="user-pen"
           title="Edit Profile"
           onPress={() => router.push("/edit-profile")}
-        />
+        /> */}
         <SettingsItem
           icon="bell"
           title="Notifications"

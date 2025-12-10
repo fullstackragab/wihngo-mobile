@@ -1,9 +1,9 @@
 import { useAuth } from "@/contexts/auth-context";
+import { useNotifications } from "@/contexts/notification-context";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -18,6 +18,7 @@ import {
 export default function EditProfile() {
   const { user } = useAuth();
   const router = useRouter();
+  const { addNotification } = useNotifications();
 
   const [name, setName] = useState(user?.name || "");
   const [email] = useState(user?.email || "");
@@ -27,7 +28,6 @@ export default function EditProfile() {
 
   const handleSave = async () => {
     if (!name.trim()) {
-      Alert.alert("Error", "Name is required");
       return;
     }
 
@@ -36,14 +36,14 @@ export default function EditProfile() {
       // TODO: Implement API call to update profile
       // await userService.updateProfile({ name, bio, profilePicture });
 
-      Alert.alert("Success", "Profile updated successfully!", [
-        {
-          text: "OK",
-          onPress: () => router.back(),
-        },
-      ]);
+      // Success - redirect back (no alert needed)
+      router.back();
     } catch {
-      Alert.alert("Error", "Failed to update profile");
+      addNotification(
+        "recommendation",
+        "Error Updating Profile",
+        "Failed to update profile. Please try again."
+      );
     } finally {
       setLoading(false);
     }

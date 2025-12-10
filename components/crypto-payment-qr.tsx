@@ -13,7 +13,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as Clipboard from "expo-clipboard";
 import React, { useEffect, useState } from "react";
 
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 
 type CryptoPaymentQRProps = {
@@ -47,7 +47,7 @@ export default function CryptoPaymentQR({
   const copyToClipboard = async (text: string, label: string) => {
     await Clipboard.setStringAsync(text);
     setCopied(true);
-    Alert.alert("Copied!", `${label} copied to clipboard`);
+    // Copied - user sees visual feedback
     setTimeout(() => setCopied(false), 2000);
   };
 

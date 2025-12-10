@@ -7,13 +7,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ViewStyle,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
 import SupportModal from "./support-modal";
 
 interface SupportButtonProps {
@@ -41,10 +35,7 @@ export default function SupportButton({
 
   const handlePress = () => {
     if (isMemorial) {
-      Alert.alert(
-        "Memorial Bird",
-        "This bird is remembered with love. Support is no longer available."
-      );
+      // Memorial bird - support not available (user can see memorial status)
       return;
     }
     setShowModal(true);

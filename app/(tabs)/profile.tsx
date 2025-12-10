@@ -1,10 +1,11 @@
 import { useAuth } from "@/contexts/auth-context";
+import { useNotifications } from "@/contexts/notification-context";
+import { BorderRadius, FontSizes, Spacing } from "@/lib/constants/theme";
 import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -15,6 +16,7 @@ import {
 
 export default function Profile() {
   const { user, logout, isAuthenticated } = useAuth();
+  const { addNotification } = useNotifications();
   const router = useRouter();
   const [lovedBirds, setLovedBirds] = useState<Bird[]>([]);
   const [supportedBirds, setSupportedBirds] = useState<Bird[]>([]);
@@ -44,25 +46,17 @@ export default function Profile() {
   };
 
   const handleLogout = async () => {
-    Alert.alert("Logout", "Are you sure you want to logout?", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Logout",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await logout();
-            router.replace("/welcome");
-          } catch (error) {
-            console.error("Logout error:", error);
-            Alert.alert("Error", "Failed to logout");
-          }
-        },
-      },
-    ]);
+    try {
+      await logout();
+      router.replace("/welcome");
+    } catch (error) {
+      console.error("Logout error:", error);
+      addNotification(
+        "recommendation",
+        "Logout Failed",
+        "Failed to logout. Please try again."
+      );
+    }
   };
 
   if (!isAuthenticated) {
@@ -207,19 +201,19 @@ const styles = StyleSheet.create({
   // Not Authenticated Styles
   notAuthHeader: {
     alignItems: "center",
-    paddingTop: Spacing.xxxl,
+    paddingTop: 60,
     paddingBottom: Spacing.xl,
     paddingHorizontal: Spacing.lg,
   },
   notAuthTitle: {
-    fontSize: Typography.hero,
+    fontSize: FontSizes.xxxl,
     fontWeight: "600",
     color: "#1A1A1A",
     marginTop: Spacing.lg,
     marginBottom: Spacing.xs,
   },
   notAuthText: {
-    fontSize: Typography.body,
+    fontSize: FontSizes.md,
     color: "#666",
     textAlign: "center",
   },
@@ -236,7 +230,7 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     color: "#FFFFFF",
-    fontSize: Typography.h3,
+    fontSize: FontSizes.lg,
     fontWeight: "600",
   },
   secondaryButton: {
@@ -247,7 +241,7 @@ const styles = StyleSheet.create({
   },
   secondaryButtonText: {
     color: "#1A1A1A",
-    fontSize: Typography.h3,
+    fontSize: FontSizes.lg,
     fontWeight: "600",
   },
   // Authenticated Styles
@@ -283,13 +277,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   userName: {
-    fontSize: Typography.h1,
+    fontSize: FontSizes.xxl,
     fontWeight: "600",
     color: "#1A1A1A",
     marginBottom: Spacing.xs,
   },
   userEmail: {
-    fontSize: Typography.small,
+    fontSize: FontSizes.sm,
     color: "#999",
   },
   statsContainer: {
@@ -309,13 +303,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#E0E0E0",
   },
   statValue: {
-    fontSize: Typography.h1,
+    fontSize: FontSizes.xxl,
     fontWeight: "600",
     color: "#1A1A1A",
     marginBottom: Spacing.xs,
   },
   statLabel: {
-    fontSize: Typography.tiny,
+    fontSize: FontSizes.xs,
     color: "#999",
     textTransform: "uppercase",
     letterSpacing: 0.5,
@@ -332,7 +326,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     flex: 1,
-    fontSize: Typography.h3,
+    fontSize: FontSizes.lg,
     color: "#1A1A1A",
     fontWeight: "500",
   },
@@ -353,7 +347,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FAFAFA",
   },
   logoutText: {
-    fontSize: Typography.h3,
+    fontSize: FontSizes.lg,
     color: "#EF4444",
     fontWeight: "500",
   },

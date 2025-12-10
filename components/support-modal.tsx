@@ -1,4 +1,5 @@
 import { useAuth } from "@/contexts/auth-context";
+import { useNotifications } from "@/contexts/notification-context";
 import {
   createCryptoPayment,
   pollPaymentStatus,
@@ -16,7 +17,6 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Linking,
   Modal,
   ScrollView,
@@ -61,6 +61,7 @@ export default function SupportModal({
   const [showPlatformSupport, setShowPlatformSupport] = useState(false);
   const [customAmount, setCustomAmount] = useState<string>("");
   const { user, logout } = useAuth();
+  const { addNotification } = useNotifications();
   const router = useRouter();
 
   const supportAmounts = [
@@ -73,7 +74,7 @@ export default function SupportModal({
 
   const handleCryptoPayment = async (amount: number) => {
     if (!user) {
-      Alert.alert("Error", "Please login to support");
+      // Not logged in - user should see login requirement
       return;
     }
 
@@ -112,23 +113,21 @@ export default function SupportModal({
 
       // Handle session expiry
       if (error instanceof Error && error.message.includes("Session expired")) {
-        Alert.alert(
+        await logout();
+        router.replace("/welcome");
+        addNotification(
+          "recommendation",
           "Session Expired",
-          "Your session has expired. Please login again.",
-          [
-            {
-              text: "OK",
-              onPress: async () => {
-                await logout();
-                router.replace("/welcome");
-              },
-            },
-          ]
+          "Your session has expired. Please login again."
         );
         return;
       }
 
-      Alert.alert("Error", "Failed to create crypto payment request");
+      addNotification(
+        "recommendation",
+        "Payment Error",
+        "Failed to create crypto payment request"
+      );
       resetPaymentState();
     } finally {
       setIsProcessing(false);
@@ -154,13 +153,7 @@ export default function SupportModal({
             status: "completed",
           });
 
-          Alert.alert(
-            "Success",
-            `Thank you for supporting ${
-              isPlatformSupport ? "Wihngo" : birdName
-            }! Your crypto payment has been confirmed.`
-          );
-
+          // Success - close modal
           setTimeout(() => {
             onClose();
             resetPaymentState();
@@ -170,11 +163,7 @@ export default function SupportModal({
           updatedPayment.status === "failed"
         ) {
           clearInterval(pollInterval);
-          Alert.alert(
-            "Payment " +
-              (updatedPayment.status === "expired" ? "Expired" : "Failed"),
-            "Please try again or use a different payment method."
-          );
+          // Payment failed/expired - user sees status in UI
           resetPaymentState();
         }
       } catch (error) {
@@ -204,14 +193,18 @@ export default function SupportModal({
       onClose();
       resetPaymentState();
     } else {
-      Alert.alert("Error", "Cannot open PayPal");
+      addNotification(
+        "recommendation",
+        "Cannot Open PayPal",
+        "Unable to open PayPal. Please try again later."
+      );
     }
   };
 
   const handlePlatformCrypto = () => {
     const amount = parseFloat(customAmount);
     if (!customAmount || isNaN(amount) || amount < 5) {
-      Alert.alert("Invalid Amount", "Please enter an amount of at least $5");
+      // Invalid amount - user can see validation in UI
       return;
     }
     setSelectedAmount(amount);
@@ -221,7 +214,7 @@ export default function SupportModal({
 
   const handlePayPalPayment = async (amount: number) => {
     if (!user) {
-      Alert.alert("Error", "Please login to support");
+      // Not logged in - user should see login requirement
       return;
     }
 
@@ -250,12 +243,7 @@ export default function SupportModal({
               status: "completed",
             });
 
-            Alert.alert(
-              "Success",
-              `Thank you for supporting ${
-                isPlatformSupport ? "Wihngo" : birdName
-              }!`
-            );
+            // Success - close modal
             onClose();
           } catch (error) {
             console.error("Error recording transaction:", error);
@@ -265,36 +253,42 @@ export default function SupportModal({
               error instanceof Error &&
               error.message.includes("Session expired")
             ) {
-              Alert.alert(
+              await logout();
+              router.replace("/welcome");
+              addNotification(
+                "recommendation",
                 "Session Expired",
-                "Your session has expired. Please login again.",
-                [
-                  {
-                    text: "OK",
-                    onPress: async () => {
-                      await logout();
-                      router.replace("/welcome");
-                    },
-                  },
-                ]
+                "Your session has expired. Please login again."
               );
               return;
             }
 
-            Alert.alert("Error", "Failed to record transaction");
+            addNotification(
+              "recommendation",
+              "Transaction Error",
+              "Failed to record transaction"
+            );
           } finally {
             setIsProcessing(false);
             setSelectedAmount(null);
           }
         }, 2000);
       } else {
-        Alert.alert("Error", "Cannot open PayPal");
+        addNotification(
+          "recommendation",
+          "Cannot Open PayPal",
+          "Unable to open PayPal. Please try again later."
+        );
         setIsProcessing(false);
         setSelectedAmount(null);
       }
     } catch (error) {
       console.error("PayPal error:", error);
-      Alert.alert("Error", "Failed to process payment");
+      addNotification(
+        "recommendation",
+        "Payment Error",
+        "Failed to process payment"
+      );
       setIsProcessing(false);
       setSelectedAmount(null);
     }

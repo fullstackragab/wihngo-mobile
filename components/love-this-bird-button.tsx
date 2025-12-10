@@ -4,6 +4,7 @@
  */
 
 import { useAuth } from "@/contexts/auth-context";
+import { useNotifications } from "@/contexts/notification-context";
 import { birdService } from "@/services/bird.service";
 import { Ionicons } from "@expo/vector-icons";
 import Feather from "@expo/vector-icons/Feather";
@@ -12,7 +13,6 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -42,6 +42,7 @@ export default function LoveThisBirdButton({
   const [loveCount, setLoveCount] = useState(initialLoveCount);
   const [isLoading, setIsLoading] = useState(false);
   const { logout } = useAuth();
+  const { addNotification } = useNotifications();
   const router = useRouter();
 
   // Update state when props change
@@ -88,23 +89,16 @@ export default function LoveThisBirdButton({
 
       // Handle session expiry
       if (error instanceof Error && error.message.includes("Session expired")) {
-        Alert.alert(
-          "Session Expired",
-          "Your session has expired. Please login again.",
-          [
-            {
-              text: "OK",
-              onPress: async () => {
-                await logout();
-                router.replace("/welcome");
-              },
-            },
-          ]
-        );
+        await logout();
+        router.replace("/welcome");
         return;
       }
 
-      Alert.alert("Error", "Failed to update love status. Please try again.");
+      addNotification(
+        "recommendation",
+        "Love Status Error",
+        "Failed to update love status. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }

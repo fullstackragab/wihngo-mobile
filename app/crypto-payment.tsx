@@ -7,6 +7,7 @@ import CryptoCurrencySelector from "@/components/crypto-currency-selector";
 import CryptoPaymentQR from "@/components/crypto-payment-qr";
 import CryptoPaymentStatus from "@/components/crypto-payment-status";
 import NetworkSelector from "@/components/network-selector";
+import { useNotifications } from "@/contexts/notification-context";
 import {
   calculateCryptoAmount,
   createCryptoPayment,
@@ -25,7 +26,6 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -40,6 +40,7 @@ export default function CryptoPaymentScreen() {
   const plan = params.plan as "monthly" | "yearly" | "lifetime";
   const purpose = (params.purpose as any) || "premium_subscription";
 
+  const { addNotification } = useNotifications();
   const [step, setStep] = useState<CryptoPaymentStep>("select-currency");
   const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency>();
   const [selectedNetwork, setSelectedNetwork] = useState<CryptoNetwork>();
@@ -68,7 +69,11 @@ export default function CryptoPaymentScreen() {
       setCryptoAmount(amount);
     } catch (error) {
       console.error("Failed to fetch exchange rate:", error);
-      Alert.alert("Error", "Failed to fetch exchange rate. Please try again.");
+      addNotification(
+        "recommendation",
+        "Exchange Rate Error",
+        "Failed to fetch exchange rate. Please try again."
+      );
     }
   }, [selectedCurrency, amountUsd]);
 
@@ -101,7 +106,7 @@ export default function CryptoPaymentScreen() {
   // Create payment request
   const handleCreatePayment = async () => {
     if (!selectedCurrency || !selectedNetwork) {
-      Alert.alert("Error", "Please select currency and network");
+      // Missing selections - user can see UI state
       return;
     }
 
@@ -121,8 +126,9 @@ export default function CryptoPaymentScreen() {
       startPolling(response.paymentRequest.id);
     } catch (error) {
       console.error("Failed to create payment:", error);
-      Alert.alert(
-        "Error",
+      addNotification(
+        "recommendation",
+        "Payment Error",
         "Failed to create payment request. Please try again."
       );
     } finally {
@@ -184,24 +190,12 @@ export default function CryptoPaymentScreen() {
   const handleExpiration = () => {
     stopPolling();
     setStep("failed");
-    Alert.alert(
-      "Payment Expired",
-      "The payment window has expired. Please create a new payment."
-    );
+    // User sees failed step in UI
   };
 
   // Handle completion
   const handleComplete = () => {
-    Alert.alert(
-      "Success!",
-      "Your payment has been confirmed. Your premium features are now active!",
-      [
-        {
-          text: "OK",
-          onPress: () => router.back(),
-        },
-      ]
-    );
+    router.back(); // Success clear from navigation
   };
 
   const renderStepContent = () => {

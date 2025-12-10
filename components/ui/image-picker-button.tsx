@@ -8,7 +8,6 @@ import Feather from "@expo/vector-icons/Feather";
 import React from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
   StyleSheet,
   Text,
@@ -51,32 +50,8 @@ export default function ImagePickerButton({
   const displayUri = uri || initialUri;
 
   const handlePress = () => {
-    Alert.alert("Select Image", "Choose an option", [
-      {
-        text: "Take Photo",
-        onPress: takePhoto,
-      },
-      {
-        text: "Choose from Library",
-        onPress: pickImage,
-      },
-      ...(displayUri
-        ? [
-            {
-              text: "Remove Image",
-              style: "destructive" as const,
-              onPress: () => {
-                clearImage();
-                onImageSelected("");
-              },
-            },
-          ]
-        : []),
-      {
-        text: "Cancel",
-        style: "cancel" as const,
-      },
-    ]);
+    // Default action: pick from library
+    pickImage();
   };
 
   return (

@@ -9,6 +9,7 @@
 export * from "./bird";
 export * from "./crypto";
 export * from "./notification";
+export * from "./payment";
 export * from "./premium";
 export * from "./story";
 export * from "./support";

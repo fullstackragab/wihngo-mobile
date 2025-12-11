@@ -29,11 +29,18 @@ export default function CryptoPaymentQR({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    console.log("🔍 CryptoPaymentQR mounted with payment:", {
+      id: payment.id,
+      expiresAt: payment.expiresAt,
+      status: payment.status,
+    });
+
     const updateTimer = () => {
       const remaining = formatTimeRemaining(payment.expiresAt);
       setTimeRemaining(remaining);
 
       if (remaining === "Expired" && onExpired) {
+        console.log("⏰ Payment expired, calling onExpired callback");
         onExpired();
       }
     };
@@ -41,7 +48,10 @@ export default function CryptoPaymentQR({
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      console.log("🧹 CryptoPaymentQR cleanup, clearing interval");
+      clearInterval(interval);
+    };
   }, [payment.expiresAt, onExpired]);
 
   const copyToClipboard = async (text: string, label: string) => {

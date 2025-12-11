@@ -45,15 +45,37 @@ export default function CryptoPaymentStatus({
     }
   };
 
+  const getStatusColor = () => {
+    switch (payment.status) {
+      case "pending":
+        return "#FFA500"; // Orange
+      case "confirming":
+        return "#3498db"; // Blue
+      case "confirmed":
+      case "completed":
+        return "#27ae60"; // Green
+      case "expired":
+      case "failed":
+        return "#e74c3c"; // Red
+      case "cancelled":
+        return "#95a5a6"; // Gray
+      default:
+        return "#666";
+    }
+  };
+
   const isProcessing =
     payment.status === "pending" || payment.status === "confirming";
 
   return (
     <View style={styles.container}>
-      <View style={[styles.statusCard, { borderLeftColor: statusColor }]}>
+      <View style={[styles.statusCard, { borderLeftColor: getStatusColor() }]}>
         <View style={styles.statusHeader}>
           <View
-            style={[styles.iconContainer, { backgroundColor: statusColor }]}
+            style={[
+              styles.iconContainer,
+              { backgroundColor: getStatusColor() },
+            ]}
           >
             {isProcessing ? (
               <ActivityIndicator color="#fff" size="small" />
@@ -65,7 +87,7 @@ export default function CryptoPaymentStatus({
             <Text style={styles.statusTitle}>{getStatusMessage()}</Text>
             <Text style={styles.statusSubtitle}>
               Status:{" "}
-              <Text style={[styles.statusBadge, { color: statusColor }]}>
+              <Text style={[styles.statusBadge, { color: getStatusColor() }]}>
                 {payment.status.toUpperCase()}
               </Text>
             </Text>
@@ -83,14 +105,14 @@ export default function CryptoPaymentStatus({
                       (payment.confirmations / payment.requiredConfirmations) *
                       100
                     }%`,
-                    backgroundColor: statusColor,
+                    backgroundColor: getStatusColor(),
                   },
                 ]}
               />
             </View>
             <Text style={styles.progressText}>
-              {payment.confirmations} of {payment.requiredConfirmations}{" "}
-              confirmations
+              Confirmations: {payment.confirmations} /{" "}
+              {payment.requiredConfirmations}
             </Text>
           </View>
         )}

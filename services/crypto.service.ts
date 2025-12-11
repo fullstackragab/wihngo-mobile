@@ -32,7 +32,16 @@ export async function createCryptoPayment(
     purpose: dto.purpose,
   });
   const endpoint = `payments/crypto/create`;
-  return apiHelper.post<CryptoPaymentResponse>(endpoint, dto);
+  const response = await apiHelper.post<CryptoPaymentResponse>(endpoint, dto);
+
+  // Debug the response
+  console.log("💰 Crypto payment response:", {
+    paymentId: response.paymentRequest.id,
+    expiresAt: response.paymentRequest.expiresAt,
+    status: response.paymentRequest.status,
+  });
+
+  return response;
 }
 
 /**
@@ -152,7 +161,49 @@ export async function pollPaymentStatus(
   return getCryptoPayment(paymentId);
 }
 
+/**
+ * Check payment status with explicit endpoint
+ * Uses the new POST /check-status endpoint
+ */
+export async function checkPaymentStatus(
+  paymentId: string
+): Promise<CryptoPaymentRequest> {
+  const endpoint = `payments/crypto/${paymentId}/check-status`;
+  return apiHelper.post<CryptoPaymentRequest>(endpoint, {});
+}
+
 // ========== Client-side Utilities ==========
+
+/**
+ * Get platform wallet addresses for receiving crypto payments
+ */
+export function getPlatformWalletAddresses(): Record<
+  string,
+  Record<CryptoNetwork, string>
+> {
+  return {
+    USDT: {
+      tron: "TGRzhw2kwBW5PzncWfKCnqsvkrBezfsgiA",
+      ethereum: "0x4cc28f4cea7b440858b903b5c46685cb1478cdc4",
+      "binance-smart-chain": "0x83675000ac9915614afff618906421a2baea0020",
+      bitcoin: "", // Not supported for USDT
+      solana: "", // Not supported for USDT
+      polygon: "", // Not supported for USDT
+    },
+    // Add other currencies as needed
+  };
+}
+
+/**
+ * Get wallet address for a specific currency and network
+ */
+export function getWalletAddressForNetwork(
+  currency: CryptoCurrency,
+  network: CryptoNetwork
+): string | null {
+  const addresses = getPlatformWalletAddresses();
+  return addresses[currency]?.[network] || null;
+}
 
 /**
  * Get information about supported cryptocurrencies
@@ -160,74 +211,14 @@ export async function pollPaymentStatus(
 export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
   return [
     {
-      code: "BTC",
-      name: "Bitcoin",
-      symbol: "₿",
-      iconName: "bitcoin",
-      networks: ["bitcoin"],
-      minAmount: 10,
-      confirmationsRequired: 2,
-      estimatedTime: "10-30 minutes",
-    },
-    {
-      code: "ETH",
-      name: "Ethereum",
-      symbol: "Ξ",
-      iconName: "ethereum",
-      networks: ["ethereum"],
-      minAmount: 5,
-      confirmationsRequired: 12,
-      estimatedTime: "2-5 minutes",
-    },
-    {
       code: "USDT",
-      name: "Tether",
+      name: "Tether (USDT)",
       symbol: "₮",
       iconName: "dollar-sign",
-      networks: ["ethereum", "tron", "binance-smart-chain"],
-      minAmount: 5,
-      confirmationsRequired: 12, // Note: TRON uses 19 confirmations but is faster (~57 seconds)
-      estimatedTime: "1-5 minutes", // TRON: 1-2 min, Ethereum: 2-5 min, BSC: 1-3 min
-    },
-    {
-      code: "USDC",
-      name: "USD Coin",
-      symbol: "$",
-      iconName: "dollar-sign",
-      networks: ["ethereum", "polygon", "binance-smart-chain"],
-      minAmount: 5,
-      confirmationsRequired: 12,
-      estimatedTime: "2-5 minutes",
-    },
-    {
-      code: "BNB",
-      name: "Binance Coin",
-      symbol: "BNB",
-      iconName: "coins",
-      networks: ["binance-smart-chain"],
-      minAmount: 5,
-      confirmationsRequired: 15,
-      estimatedTime: "1-2 minutes",
-    },
-    {
-      code: "SOL",
-      name: "Solana",
-      symbol: "◎",
-      iconName: "circle-dot",
-      networks: ["solana"],
-      minAmount: 5,
-      confirmationsRequired: 32,
-      estimatedTime: "30-60 seconds",
-    },
-    {
-      code: "DOGE",
-      name: "Dogecoin",
-      symbol: "Ð",
-      iconName: "dog",
-      networks: ["bitcoin"],
+      networks: ["tron", "ethereum", "binance-smart-chain"],
       minAmount: 10,
-      confirmationsRequired: 6,
-      estimatedTime: "5-15 minutes",
+      confirmationsRequired: 19, // TRON uses 19 confirmations
+      estimatedTime: "1-5 minutes", // TRON: 1-2 min, Ethereum: 2-5 min, BSC: 1-3 min
     },
   ];
 }
@@ -413,8 +404,42 @@ export function getEstimatedFee(
  */
 export function formatTimeRemaining(expiresAt: string): string {
   const now = new Date().getTime();
-  const expiry = new Date(expiresAt).getTime();
-  const remaining = expiry - now;
+  let expiry = new Date(expiresAt).getTime();
+
+  // Check if the expiry seems wrong (less than 1 minute from now)
+  // This might happen if backend sends wrong format
+  let remaining = expiry - now;
+
+  // Debug logging
+  console.log("⏰ Time calculation (raw):", {
+    expiresAt,
+    expiresAtType: typeof expiresAt,
+    now: new Date(now).toISOString(),
+    expiry: new Date(expiry).toISOString(),
+    remaining: remaining,
+    remainingMinutes: Math.floor(remaining / 60000),
+  });
+
+  // If expiry is in the past or very soon (< 1 minute), assume backend sent wrong format
+  // Common issue: backend might send duration in seconds instead of timestamp
+  if (remaining < 60000 && remaining > 0) {
+    console.warn(
+      "⚠️ Payment expires in less than 1 minute. Possible backend timestamp issue."
+    );
+    console.warn("⚠️ Attempting to parse as duration in seconds...");
+
+    // Try parsing as seconds duration
+    const durationSeconds = parseInt(expiresAt);
+    if (!isNaN(durationSeconds) && durationSeconds > 60) {
+      // Looks like it might be a duration in seconds
+      expiry = now + durationSeconds * 1000;
+      remaining = expiry - now;
+      console.log("✅ Adjusted expiry:", {
+        newExpiry: new Date(expiry).toISOString(),
+        newRemainingMinutes: Math.floor(remaining / 60000),
+      });
+    }
+  }
 
   if (remaining <= 0) return "Expired";
 

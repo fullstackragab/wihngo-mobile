@@ -158,6 +158,7 @@ export type CryptoCurrencyInfo = {
 
 export type CryptoPaymentStep =
   | "select-currency"
+  | "select-network"
   | "review-amount"
   | "payment-address"
   | "awaiting-payment"

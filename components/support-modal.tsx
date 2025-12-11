@@ -10,11 +10,15 @@ import {
   CryptoNetwork,
   CryptoPaymentRequest,
 } from "@/types/crypto";
-import { SupportAmount } from "@/types/support";
+import {
+  calculateTotalAmount,
+  MINIMUM_DONATION_AMOUNT,
+  PLATFORM_FEE_PERCENTAGE,
+} from "@/types/support";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Linking,
@@ -60,17 +64,41 @@ export default function SupportModal({
   const [showCryptoSelector, setShowCryptoSelector] = useState(false);
   const [showPlatformSupport, setShowPlatformSupport] = useState(false);
   const [customAmount, setCustomAmount] = useState<string>("");
+  const [calculatedFee, setCalculatedFee] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
   const { user, logout } = useAuth();
   const { addNotification } = useNotifications();
   const router = useRouter();
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  const supportAmounts = [
-    { value: SupportAmount.Small, label: "$5", emoji: "☕" },
-    { value: SupportAmount.Medium, label: "$10", emoji: "🍕" },
-    { value: SupportAmount.Large, label: "$25", emoji: "🎁" },
-    { value: SupportAmount.Generous, label: "$50", emoji: "💝" },
-    { value: SupportAmount.VeryGenerous, label: "$100", emoji: "🌟" },
-  ];
+  // Cleanup polling on unmount or when modal closes
+  useEffect(() => {
+    if (!visible) {
+      stopPaymentPolling();
+      resetPaymentState();
+    }
+  }, [visible]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      stopPaymentPolling();
+    };
+  }, []);
+
+  // Handle amount input changes and calculate fees
+  const handleAmountChange = (value: string) => {
+    setCustomAmount(value);
+    const amount = parseFloat(value);
+    if (!isNaN(amount) && amount > 0) {
+      const { platformFee, totalAmount: total } = calculateTotalAmount(amount);
+      setCalculatedFee(platformFee);
+      setTotalAmount(total);
+    } else {
+      setCalculatedFee(0);
+      setTotalAmount(0);
+    }
+  };
 
   const handleCryptoPayment = async (amount: number) => {
     if (!user) {
@@ -146,45 +174,72 @@ export default function SupportModal({
   };
 
   const startPaymentPolling = (paymentId: string) => {
-    const pollInterval = setInterval(async () => {
+    // Clear any existing polling interval
+    stopPaymentPolling();
+
+    pollingIntervalRef.current = setInterval(async () => {
       try {
         const updatedPayment = await pollPaymentStatus(paymentId);
         setCryptoPayment(updatedPayment);
 
         if (updatedPayment.status === "completed") {
-          clearInterval(pollInterval);
+          stopPaymentPolling();
 
-          // Record the transaction
-          await createSupportTransaction({
-            supporterId: user!.userId,
-            birdId: isPlatformSupport ? undefined : birdId,
-            amount: selectedAmount!,
-            paymentProvider: "Crypto",
-            paymentId: updatedPayment.transactionHash || paymentId,
-            status: "completed",
-          });
+          // Record the transaction with fee breakdown
+          try {
+            const donationAmount = parseFloat(customAmount);
+            const { platformFee, totalAmount: total } = calculateTotalAmount(donationAmount);
+            
+            await createSupportTransaction({
+              supporterId: user!.userId,
+              birdId: isPlatformSupport ? undefined : birdId,
+              amount: donationAmount,
+              platformFee: platformFee,
+              totalAmount: total,
+              paymentProvider: "Crypto",
+              paymentId: updatedPayment.transactionHash || paymentId,
+              status: "completed",
+            });
 
-          // Success - close modal
+            addNotification(
+              "recommendation",
+              "Payment Successful",
+              "Thank you for your support!"
+            );
+          } catch (error) {
+            console.error("Error recording transaction:", error);
+          }
+
+          // Success - close modal after a delay
           setTimeout(() => {
             onClose();
             resetPaymentState();
           }, 2000);
         } else if (
           updatedPayment.status === "expired" ||
-          updatedPayment.status === "failed"
+          updatedPayment.status === "failed" ||
+          updatedPayment.status === "cancelled"
         ) {
-          clearInterval(pollInterval);
-          // Payment failed/expired - user sees status in UI
-          resetPaymentState();
+          stopPaymentPolling();
+          // Don't reset state immediately - let user see the status
+          // They can manually close or try again
         }
       } catch (error) {
         console.error("Error polling payment:", error);
-        clearInterval(pollInterval);
+        // Don't stop polling on error - might be temporary network issue
       }
     }, 5000); // Poll every 5 seconds
   };
 
+  const stopPaymentPolling = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  };
+
   const resetPaymentState = () => {
+    stopPaymentPolling();
     setSelectedAmount(null);
     setPaymentMethod(null);
     setCryptoCurrency(null);
@@ -214,11 +269,18 @@ export default function SupportModal({
 
   const handlePlatformCrypto = () => {
     const amount = parseFloat(customAmount);
-    if (!customAmount || isNaN(amount) || amount < 5) {
-      // Invalid amount - user can see validation in UI
+    if (!customAmount || isNaN(amount) || amount < MINIMUM_DONATION_AMOUNT) {
+      addNotification(
+        "recommendation",
+        "Minimum Amount Required",
+        `Crypto payments require a minimum of $${MINIMUM_DONATION_AMOUNT} due to blockchain network fees and transaction costs.`
+      );
       return;
     }
-    setSelectedAmount(amount);
+    
+    // Calculate total with platform fee
+    const { totalAmount: total } = calculateTotalAmount(amount);
+    setSelectedAmount(total); // Use total amount for payment
     setPaymentMethod("crypto");
     setShowCryptoSelector(true);
   };
@@ -471,7 +533,11 @@ export default function SupportModal({
 
                 <CryptoPaymentQR
                   payment={cryptoPayment}
-                  onExpired={resetPaymentState}
+                  onExpired={() => {
+                    // Don't reset state - just stop polling
+                    // User can see expired status and manually close
+                    stopPaymentPolling();
+                  }}
                 />
 
                 <CryptoPaymentStatus payment={cryptoPayment} />
@@ -500,74 +566,84 @@ export default function SupportModal({
                     : "Choose an amount to support this amazing bird"}
                 </Text>
 
-                <View style={styles.amountsContainer}>
-                  {supportAmounts.map((item) => (
-                    <View key={item.value} style={styles.amountGroup}>
-                      <Text style={styles.amountHeader}>{item.label}</Text>
-
-                      <View style={styles.paymentMethodsRow}>
-                        {/* PayPal Button */}
-                        <TouchableOpacity
-                          style={[
-                            styles.paymentMethodButton,
-                            selectedAmount === item.value &&
-                              paymentMethod === "paypal" &&
-                              styles.paymentMethodButtonSelected,
-                          ]}
-                          onPress={() => handlePayPalPayment(item.value)}
-                          disabled={isProcessing}
-                          activeOpacity={0.7}
-                        >
-                          {isProcessing &&
-                          selectedAmount === item.value &&
-                          paymentMethod === "paypal" ? (
-                            <ActivityIndicator size="small" color="#0070ba" />
-                          ) : (
-                            <>
-                              <FontAwesome6
-                                name="paypal"
-                                size={20}
-                                color="#0070ba"
-                              />
-                              <Text style={styles.paymentMethodText}>
-                                PayPal
-                              </Text>
-                            </>
-                          )}
-                        </TouchableOpacity>
-
-                        {/* Crypto Button */}
-                        <TouchableOpacity
-                          style={[
-                            styles.paymentMethodButton,
-                            selectedAmount === item.value &&
-                              paymentMethod === "crypto" &&
-                              styles.paymentMethodButtonSelected,
-                          ]}
-                          onPress={() => handleCryptoPayment(item.value)}
-                          disabled={isProcessing}
-                          activeOpacity={0.7}
-                        >
-                          {isProcessing &&
-                          selectedAmount === item.value &&
-                          paymentMethod === "crypto" ? (
-                            <ActivityIndicator size="small" color="#f7931a" />
-                          ) : (
-                            <>
-                              <FontAwesome6
-                                name="bitcoin"
-                                size={20}
-                                color="#f7931a"
-                              />
-                              <Text style={styles.paymentMethodText}>
-                                Crypto
-                              </Text>
-                            </>
-                          )}
-                        </TouchableOpacity>
+                {/* Custom Amount Input */}
+                <View style={styles.customAmountContainer}>
+                  <Text style={styles.customAmountLabel}>
+                    Enter Donation Amount (USD)
+                  </Text>
+                  <TextInput
+                    style={styles.customAmountInput}
+                    placeholder={`Minimum $${MINIMUM_DONATION_AMOUNT}`}
+                    keyboardType="decimal-pad"
+                    value={customAmount}
+                    onChangeText={handleAmountChange}
+                    autoFocus={false}
+                  />
+                  
+                  {/* Show fee breakdown when amount is valid */}
+                  {parseFloat(customAmount) >= MINIMUM_DONATION_AMOUNT && (
+                    <View style={styles.feeBreakdown}>
+                      <View style={styles.feeRow}>
+                        <Text style={styles.feeLabel}>Your donation:</Text>
+                        <Text style={styles.feeValue}>
+                          ${parseFloat(customAmount).toFixed(2)}
+                        </Text>
+                      </View>
+                      <View style={styles.feeRow}>
+                        <Text style={styles.feeLabel}>
+                          Platform fee ({(PLATFORM_FEE_PERCENTAGE * 100).toFixed(0)}%):
+                        </Text>
+                        <Text style={styles.feeValue}>
+                          ${calculatedFee.toFixed(2)}
+                        </Text>
+                      </View>
+                      <View style={[styles.feeRow, styles.totalRow]}>
+                        <Text style={styles.totalLabel}>Total to pay:</Text>
+                        <Text style={styles.totalValue}>
+                          ${totalAmount.toFixed(2)}
+                        </Text>
                       </View>
                     </View>
-                  ))}
+                  )}
+                  
+                  <Text style={styles.minAmountText}>
+                    💡 Minimum ${MINIMUM_DONATION_AMOUNT} required for crypto payments due to blockchain network fees.{\"\\n\"}\n                    ⚡ Platform fee: {(PLATFORM_FEE_PERCENTAGE * 100).toFixed(0)}% (minimum $1) helps maintain Wihngo.
+                  </Text>
+
+                  {/* Payment Method Buttons */}
+                  {parseFloat(customAmount) >= MINIMUM_DONATION_AMOUNT && (
+                    <View style={styles.paymentMethodsContainer}>
+                      <TouchableOpacity
+                        style={styles.paymentMethodButtonLarge}
+                        onPress={() => {
+                          const amount = parseFloat(customAmount);
+                          const { totalAmount: total } = calculateTotalAmount(amount);
+                          setSelectedAmount(total);
+                          setPaymentMethod(\"crypto\");
+                          setShowCryptoSelector(true);
+                        }}
+                        disabled={isProcessing}
+                      >
+                        {isProcessing && paymentMethod === \"crypto\" ? (
+                          <ActivityIndicator size=\"small\" color=\"#f7931a\" />
+                        ) : (
+                          <>
+                            <FontAwesome6
+                              name=\"bitcoin\"
+                              size={24}
+                              color=\"#f7931a\"
+                            />
+                            <Text style={styles.paymentMethodButtonTextLarge}>
+                              Pay with Crypto
+                            </Text>
+                            <Text style={styles.paymentMethodSubtext}>
+                              USDT on multiple networks
+                            </Text>
+                          </>
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
 
                 {!isPlatformSupport && (
@@ -579,87 +655,14 @@ export default function SupportModal({
                     <Text style={styles.platformSupportText}>
                       Help us continue building features for bird lovers!
                     </Text>
-
-                    {!showPlatformSupport ? (
-                      <TouchableOpacity
-                        style={styles.platformButton}
-                        onPress={() => setShowPlatformSupport(true)}
-                      >
-                        <Feather name="gift" size={20} color="#fff" />
-                        <Text style={styles.platformButtonText}>
-                          Support Wihngo
-                        </Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <View style={styles.platformPaymentContainer}>
-                        <TouchableOpacity
-                          style={styles.backButton}
-                          onPress={() => {
-                            setShowPlatformSupport(false);
-                            setCustomAmount("");
-                          }}
-                        >
-                          <Feather
-                            name="arrow-left"
-                            size={20}
-                            color="#007AFF"
-                          />
-                          <Text style={styles.backButtonText}>Back</Text>
-                        </TouchableOpacity>
-
-                        <Text style={styles.customAmountLabel}>
-                          Enter Amount (USD)
-                        </Text>
-                        <TextInput
-                          style={styles.customAmountInput}
-                          placeholder="e.g., 10"
-                          keyboardType="decimal-pad"
-                          value={customAmount}
-                          onChangeText={setCustomAmount}
-                        />
-                        <Text style={styles.minAmountText}>Minimum: $5</Text>
-
-                        <View style={styles.platformPaymentMethods}>
-                          <TouchableOpacity
-                            style={styles.platformPaymentButton}
-                            onPress={handlePlatformPayPal}
-                            disabled={isProcessing}
-                          >
-                            <FontAwesome6
-                              name="paypal"
-                              size={20}
-                              color="#0070ba"
-                            />
-                            <Text style={styles.platformPaymentButtonText}>
-                              Pay with PayPal
-                            </Text>
-                          </TouchableOpacity>
-
-                          <TouchableOpacity
-                            style={[
-                              styles.platformPaymentButton,
-                              styles.cryptoButton,
-                            ]}
-                            onPress={handlePlatformCrypto}
-                            disabled={isProcessing}
-                          >
-                            <FontAwesome6
-                              name="bitcoin"
-                              size={20}
-                              color="#f7931a"
-                            />
-                            <Text style={styles.platformPaymentButtonText}>
-                              Pay with Crypto
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    )}
+                    <Text style={styles.platformSupportNote}>
+                      Use the donation form above to support both the bird and Wihngo platform.
+                    </Text>
                   </View>
                 )}
 
                 <Text style={styles.disclaimer}>
-                  💳 Secure payment powered by PayPal & Crypto
+                  💳 Secure crypto payment • 🔒 Your donation helps conservation
                 </Text>
               </>
             )}
@@ -706,82 +709,102 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 24,
+    marginBottom: 20,
     textAlign: "center",
   },
-  amountsContainer: {
-    gap: 16,
-  },
-  amountGroup: {
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    padding: 16,
-  },
-  amountHeader: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 12,
-    textAlign: "center",
-  },
-  paymentMethodsRow: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  paymentMethodButton: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "#e0e0e0",
-    gap: 6,
-  },
-  paymentMethodButtonSelected: {
-    borderColor: "#007AFF",
-    backgroundColor: "#f0f7ff",
-  },
-  paymentMethodText: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: "#333",
-  },
-  amountCard: {
-    width: "48%",
+  customAmountContainer: {
     backgroundColor: "#f8f8f8",
     borderRadius: 16,
     padding: 20,
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "transparent",
+    marginBottom: 20,
+  },
+  customAmountLabel: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
     marginBottom: 12,
   },
-  amountCardSelected: {
-    borderColor: "#0070ba",
-    backgroundColor: "#f0f7ff",
-  },
-  emoji: {
-    fontSize: 30,
-    marginBottom: 8,
-  },
-  amountLabel: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 8,
-  },
-  paypalBadge: {
-    backgroundColor: "#0070ba",
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+  customAmountInput: {
+    backgroundColor: "#fff",
     borderRadius: 12,
-  },
-  paypalText: {
-    color: "#fff",
-    fontSize: 10,
+    borderWidth: 2,
+    borderColor: "#e0e0e0",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    fontSize: 20,
     fontWeight: "600",
+    color: "#333",
+    marginBottom: 12,
+  },
+  feeBreakdown: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 8,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+  },
+  feeRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  feeLabel: {
+    fontSize: 14,
+    color: "#666",
+  },
+  feeValue: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#333",
+  },
+  totalRow: {
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
+    paddingTop: 12,
+    marginTop: 4,
+    marginBottom: 0,
+  },
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#333",
+  },
+  totalValue: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#007AFF",
+  },
+  minAmountText: {
+    fontSize: 12,
+    color: "#666",
+    lineHeight: 18,
+    marginBottom: 16,
+  },
+  paymentMethodsContainer: {
+    gap: 12,
+  },
+  paymentMethodButtonLarge: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "#f7931a",
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  paymentMethodButtonTextLarge: {
+    color: "#333",
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  paymentMethodSubtext: {
+    color: "#666",
+    fontSize: 12,
   },
   backButton: {
     flexDirection: "row",
@@ -873,75 +896,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   platformSupportText: {
-    fontSize: 12,
-    color: "#666",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  platformButton: {
-    backgroundColor: "#ec4899",
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-  },
-  platformButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  platformPaymentContainer: {
-    gap: 12,
-  },
-  customAmountLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: 8,
-  },
-  customAmountInput: {
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: "#e0e0e0",
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#333",
-  },
-  minAmountText: {
     fontSize: 13,
     color: "#666",
-    marginTop: 4,
+    textAlign: "center",
     marginBottom: 8,
   },
-  platformPaymentMethods: {
-    gap: 12,
-    marginTop: 8,
-  },
-  platformPaymentButton: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: "#0070ba",
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-  },
-  platformPaymentButtonText: {
-    color: "#333",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  cryptoButton: {
-    borderColor: "#f7931a",
+  platformSupportNote: {
+    fontSize: 12,
+    color: "#999",
+    textAlign: "center",
+    fontStyle: "italic",
   },
   disclaimer: {
     marginTop: 24,

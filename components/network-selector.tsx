@@ -3,8 +3,12 @@
  * Allows users to select blockchain network for a cryptocurrency
  */
 
-import { getEstimatedFee, getNetworkName } from "@/services/crypto.service";
-import { CryptoNetwork } from "@/types/crypto";
+import {
+  getEstimatedFee,
+  getNetworkName,
+  getWalletAddressForNetwork,
+} from "@/services/crypto.service";
+import { CryptoCurrency, CryptoNetwork } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -13,7 +17,7 @@ type NetworkSelectorProps = {
   networks: CryptoNetwork[];
   selectedNetwork?: CryptoNetwork;
   onSelect: (network: CryptoNetwork) => void;
-  currency: string;
+  currency: CryptoCurrency;
   disabled?: boolean;
 };
 
@@ -28,13 +32,36 @@ export default function NetworkSelector({
     return null; // No need to show selector if only one network
   }
 
+  const getNetworkDetails = (network: CryptoNetwork) => {
+    const details: Record<
+      CryptoNetwork,
+      { speed: string; confirmations: number }
+    > = {
+      tron: { speed: "Fast (1-2 min)", confirmations: 19 },
+      ethereum: { speed: "Medium (2-5 min)", confirmations: 12 },
+      "binance-smart-chain": { speed: "Fast (1-3 min)", confirmations: 15 },
+      bitcoin: { speed: "Slow (10-30 min)", confirmations: 2 },
+      solana: { speed: "Very Fast (30-60 sec)", confirmations: 32 },
+      polygon: { speed: "Fast (1-3 min)", confirmations: 128 },
+    };
+    return details[network] || { speed: "Unknown", confirmations: 0 };
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Select Network</Text>
+      <Text style={styles.sublabel}>
+        Choose the blockchain network to use for your payment
+      </Text>
       <View style={styles.networkList}>
         {networks.map((network) => {
           const isSelected = selectedNetwork === network;
-          const fee = getEstimatedFee(currency as any, network);
+          const fee = getEstimatedFee(currency, network);
+          const details = getNetworkDetails(network);
+          const address = getWalletAddressForNetwork(currency, network);
+
+          // Skip networks without configured addresses
+          if (!address) return null;
 
           return (
             <TouchableOpacity
@@ -48,13 +75,37 @@ export default function NetworkSelector({
               disabled={disabled}
             >
               <View style={styles.networkInfo}>
-                <Text style={styles.networkName}>
+                <Text
+                  style={[
+                    styles.networkName,
+                    isSelected && styles.selectedText,
+                  ]}
+                >
                   {getNetworkName(network)}
                 </Text>
-                <Text style={styles.networkFee}>Fee: ~${fee.toFixed(2)}</Text>
+                <View style={styles.detailsRow}>
+                  <View style={styles.detailItem}>
+                    <FontAwesome6
+                      name="clock"
+                      size={12}
+                      color={isSelected ? "#007AFF" : "#666"}
+                    />
+                    <Text style={styles.networkDetail}>{details.speed}</Text>
+                  </View>
+                  <View style={styles.detailItem}>
+                    <FontAwesome6
+                      name="dollar-sign"
+                      size={12}
+                      color={isSelected ? "#007AFF" : "#666"}
+                    />
+                    <Text style={styles.networkDetail}>
+                      Fee: ~${fee.toFixed(2)}
+                    </Text>
+                  </View>
+                </View>
               </View>
               {isSelected && (
-                <FontAwesome6 name="circle-check" size={20} color="#007AFF" />
+                <FontAwesome6 name="circle-check" size={24} color="#007AFF" />
               )}
             </TouchableOpacity>
           );
@@ -69,21 +120,26 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "600",
     color: "#333",
+    marginBottom: 4,
+  },
+  sublabel: {
+    fontSize: 13,
+    color: "#666",
     marginBottom: 12,
   },
   networkList: {
-    gap: 8,
+    gap: 12,
   },
   networkCard: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 12,
+    padding: 16,
     backgroundColor: "#f8f8f8",
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 2,
     borderColor: "transparent",
   },
@@ -95,15 +151,28 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   networkInfo: {
-    gap: 4,
+    flex: 1,
+    gap: 8,
   },
   networkName: {
-    fontSize: 14,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: "600",
     color: "#333",
   },
-  networkFee: {
-    fontSize: 12,
+  selectedText: {
+    color: "#007AFF",
+  },
+  detailsRow: {
+    flexDirection: "row",
+    gap: 16,
+  },
+  detailItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  networkDetail: {
+    fontSize: 13,
     color: "#666",
   },
 });

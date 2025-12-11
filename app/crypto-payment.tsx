@@ -9,12 +9,15 @@ import CryptoPaymentStatus from "@/components/crypto-payment-status";
 import NetworkSelector from "@/components/network-selector";
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
+import { usePaymentStatusPolling } from "@/hooks/usePaymentStatusPolling";
 import {
   calculateCryptoAmount,
   createCryptoPayment,
   getCryptoExchangeRate,
+  getEstimatedFee,
+  getNetworkName,
   getSupportedCryptocurrencies,
-  pollPaymentStatus,
+  verifyCryptoPayment,
 } from "@/services/crypto.service";
 import {
   CryptoCurrency,
@@ -30,6 +33,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -43,14 +47,71 @@ export default function CryptoPaymentScreen() {
 
   const { isAuthenticated, token } = useAuth();
   const { addNotification } = useNotifications();
-  const [step, setStep] = useState<CryptoPaymentStep>("select-currency");
-  const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency>();
+  const [step, setStep] = useState<CryptoPaymentStep>("select-network");
+  const [selectedCurrency, setSelectedCurrency] =
+    useState<CryptoCurrency>("USDT");
   const [selectedNetwork, setSelectedNetwork] = useState<CryptoNetwork>();
   const [exchangeRate, setExchangeRate] = useState<number>(0);
   const [cryptoAmount, setCryptoAmount] = useState<number>(0);
   const [payment, setPayment] = useState<CryptoPaymentRequest | null>(null);
   const [loading, setLoading] = useState(false);
-  const [pollingInterval, setPollingInterval] = useState<any>(null);
+  const [enablePolling, setEnablePolling] = useState(false);
+  const [showTxHashInput, setShowTxHashInput] = useState(false);
+  const [txHashInput, setTxHashInput] = useState("");
+
+  // Use payment status polling hook
+  const {
+    status: pollingStatus,
+    confirmations: pollingConfirmations,
+    requiredConfirmations: pollingRequiredConfirmations,
+    loading: pollingLoading,
+    error: pollingError,
+    paymentData,
+    forceCheck,
+  } = usePaymentStatusPolling({
+    paymentId: payment?.id || "",
+    authToken: token || "",
+    enabled: enablePolling && !!payment?.id && !!token,
+    onStatusChange: (updatedPayment) => {
+      console.log("📊 Payment status changed:", updatedPayment.status);
+      setPayment(updatedPayment as CryptoPaymentRequest);
+
+      // Handle status transitions
+      if (updatedPayment.status === "confirming" && step !== "confirming") {
+        console.log("✅ Transaction detected, waiting for confirmations...");
+        setStep("confirming");
+        addNotification(
+          "recommendation",
+          "Transaction Detected",
+          "Your transaction is being confirmed on the blockchain."
+        );
+      }
+
+      if (
+        updatedPayment.status === "completed" ||
+        updatedPayment.status === "confirmed"
+      ) {
+        console.log("🎉 Payment completed successfully!");
+        setStep("completed");
+        setEnablePolling(false);
+        addNotification(
+          "recommendation",
+          "Payment Confirmed",
+          "Your crypto payment has been confirmed!"
+        );
+      }
+
+      if (
+        updatedPayment.status === "expired" ||
+        updatedPayment.status === "failed" ||
+        updatedPayment.status === "cancelled"
+      ) {
+        console.log("❌ Payment failed/expired:", updatedPayment.status);
+        setStep("failed");
+        setEnablePolling(false);
+      }
+    },
+  });
 
   // Check authentication on mount
   useEffect(() => {
@@ -98,23 +159,10 @@ export default function CryptoPaymentScreen() {
     }
   }, [selectedCurrency, fetchExchangeRate]);
 
-  // Handle currency selection
-  const handleCurrencySelect = (currency: CryptoCurrency) => {
-    setSelectedCurrency(currency);
-    const networks = getSupportedCryptocurrencies().find(
-      (c) => c.code === currency
-    )?.networks;
-    if (networks && networks.length === 1) {
-      setSelectedNetwork(networks[0]);
-    } else {
-      setSelectedNetwork(undefined);
-    }
-    setStep("review-amount");
-  };
-
-  // Handle network selection
+  // Handle network selection and proceed to payment
   const handleNetworkSelect = (network: CryptoNetwork) => {
     setSelectedNetwork(network);
+    setStep("review-amount");
   };
 
   // Create payment request
@@ -148,7 +196,7 @@ export default function CryptoPaymentScreen() {
 
       setPayment(response.paymentRequest);
       setStep("payment-address");
-      startPolling(response.paymentRequest.id);
+      setEnablePolling(true);
     } catch (error: any) {
       console.error("Failed to create payment:", error);
 
@@ -173,71 +221,87 @@ export default function CryptoPaymentScreen() {
     }
   };
 
-  // Poll for payment status
-  const startPolling = (paymentId: string) => {
-    const interval = setInterval(async () => {
-      try {
-        const updatedPayment = await pollPaymentStatus(paymentId);
-        setPayment(updatedPayment);
+  // Manual refresh payment status using the hook's forceCheck
+  const handleRefreshStatus = async () => {
+    if (!payment?.id) return;
 
-        if (updatedPayment.status === "confirming" && step !== "confirming") {
-          setStep("confirming");
-        }
-
-        if (
-          updatedPayment.status === "completed" ||
-          updatedPayment.status === "confirmed"
-        ) {
-          setStep("completed");
-          stopPolling();
-        }
-
-        if (
-          updatedPayment.status === "expired" ||
-          updatedPayment.status === "failed" ||
-          updatedPayment.status === "cancelled"
-        ) {
-          setStep("failed");
-          stopPolling();
-        }
-      } catch (error: any) {
-        console.error("Failed to poll payment status:", error);
-
-        // Stop polling on authentication errors
-        if (error?.message?.includes("Session expired")) {
-          stopPolling();
-          addNotification(
-            "recommendation",
-            "Session Expired",
-            "Your session has expired. Redirecting to login..."
-          );
-          setTimeout(() => router.replace("/welcome"), 1500);
-        }
-      }
-    }, 5000); // Poll every 5 seconds
-
-    setPollingInterval(interval);
-  };
-
-  const stopPolling = () => {
-    if (pollingInterval) {
-      clearInterval(pollingInterval);
-      setPollingInterval(null);
+    console.log("🔄 Manual refresh triggered");
+    try {
+      await forceCheck();
+    } catch (error: any) {
+      console.error("❌ Manual refresh failed:", error);
+      addNotification(
+        "recommendation",
+        "Refresh Failed",
+        "Could not refresh payment status. Please try again."
+      );
     }
   };
 
-  // Cleanup polling on unmount
-  useEffect(() => {
-    return () => {
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
+  // Manual transaction verification
+  const handleVerifyTransaction = async () => {
+    if (!payment?.id || !txHashInput.trim()) {
+      addNotification(
+        "recommendation",
+        "Missing Information",
+        "Please enter a transaction hash to verify."
+      );
+      return;
+    }
+
+    console.log("🔍 Manual transaction verification:", txHashInput);
+    setLoading(true);
+    try {
+      const updatedPayment = await verifyCryptoPayment(payment.id, {
+        transactionHash: txHashInput.trim(),
+      });
+      console.log("✅ Transaction verified:", {
+        status: updatedPayment.status,
+        confirmations: updatedPayment.confirmations,
+      });
+      setPayment(updatedPayment);
+      setTxHashInput("");
+      setShowTxHashInput(false);
+
+      // Enable polling after verification
+      setEnablePolling(true);
+
+      if (updatedPayment.status === "confirming") {
+        setStep("confirming");
+        addNotification(
+          "recommendation",
+          "Transaction Found",
+          "Your transaction is being confirmed on the blockchain."
+        );
       }
-    };
-  }, [pollingInterval]);
+
+      if (
+        updatedPayment.status === "completed" ||
+        updatedPayment.status === "confirmed"
+      ) {
+        setStep("completed");
+        addNotification(
+          "recommendation",
+          "Payment Confirmed",
+          "Your crypto payment has been confirmed!"
+        );
+      }
+    } catch (error: any) {
+      console.error("❌ Transaction verification failed:", error);
+      addNotification(
+        "recommendation",
+        "Verification Failed",
+        error?.message ||
+          "Could not verify transaction. Please check the transaction hash and try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Handle payment expiration
   const handleExpiration = () => {
-    stopPolling();
+    setEnablePolling(false);
     setStep("failed");
     // User sees failed step in UI
   };
@@ -249,39 +313,99 @@ export default function CryptoPaymentScreen() {
 
   const renderStepContent = () => {
     switch (step) {
+      case "select-network":
+        const networks = getNetworksForCurrency();
+        return (
+          <View style={styles.networkSelectionContainer}>
+            <View style={styles.headerInfo}>
+              <Text style={styles.headerTitle}>Pay with USDT</Text>
+              <Text style={styles.headerSubtitle}>
+                Select your preferred blockchain network
+              </Text>
+              <View style={styles.amountPreview}>
+                <Text style={styles.amountPreviewLabel}>Amount to Pay</Text>
+                <Text style={styles.amountPreviewValue}>
+                  ${amountUsd.toFixed(2)} USD
+                </Text>
+                {cryptoAmount > 0 && (
+                  <Text style={styles.amountPreviewCrypto}>
+                    ≈ {cryptoAmount.toFixed(2)} USDT
+                  </Text>
+                )}
+              </View>
+            </View>
+            <NetworkSelector
+              networks={networks}
+              selectedNetwork={selectedNetwork}
+              onSelect={handleNetworkSelect}
+              currency={selectedCurrency}
+            />
+          </View>
+        );
+
       case "select-currency":
         return (
           <CryptoCurrencySelector
             selectedCurrency={selectedCurrency}
-            onSelect={handleCurrencySelect}
+            onSelect={() => {}}
+            disabled={true}
           />
         );
 
       case "review-amount":
-        const networks = getNetworksForCurrency();
+        const reviewNetworks = getNetworksForCurrency();
         return (
           <View style={styles.reviewContainer}>
             <View style={styles.amountCard}>
-              <Text style={styles.amountLabel}>Amount to Pay</Text>
+              <Text style={styles.amountLabel}>Payment Summary</Text>
               <View style={styles.amountDisplay}>
                 <Text style={styles.cryptoAmountLarge}>
-                  {cryptoAmount.toFixed(8)} {selectedCurrency}
+                  {cryptoAmount.toFixed(2)} USDT
                 </Text>
                 <Text style={styles.usdAmountLarge}>
                   ≈ ${amountUsd.toFixed(2)} USD
                 </Text>
               </View>
               <Text style={styles.exchangeRate}>
-                1 {selectedCurrency} = ${exchangeRate.toFixed(2)} USD
+                1 USDT ≈ ${exchangeRate.toFixed(4)} USD
               </Text>
             </View>
 
-            <NetworkSelector
-              networks={networks}
-              selectedNetwork={selectedNetwork}
-              onSelect={handleNetworkSelect}
-              currency={selectedCurrency!}
-            />
+            <View style={styles.networkInfoCard}>
+              <Text style={styles.networkInfoLabel}>Selected Network</Text>
+              <Text style={styles.networkInfoValue}>
+                {selectedNetwork && getNetworkName(selectedNetwork)}
+              </Text>
+              <TouchableOpacity
+                style={styles.changeNetworkButton}
+                onPress={() => setStep("select-network")}
+              >
+                <Text style={styles.changeNetworkText}>Change Network</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.detailsCard}>
+              <View style={styles.detailRow}>
+                <Text style={styles.detailLabel}>Purpose:</Text>
+                <Text style={styles.detailValue}>
+                  {purpose === "premium_subscription"
+                    ? `Premium ${plan || "subscription"}`
+                    : purpose}
+                </Text>
+              </View>
+              {selectedNetwork && (
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Network Fee:</Text>
+                  <Text style={styles.detailValue}>
+                    ~$
+                    {getEstimatedFee(selectedCurrency, selectedNetwork).toFixed(
+                      2
+                    )}{" "}
+                    USD
+                  </Text>
+                </View>
+              )}
+            </View>
 
             <TouchableOpacity
               style={[
@@ -311,6 +435,108 @@ export default function CryptoPaymentScreen() {
           <View>
             <CryptoPaymentQR payment={payment} onExpired={handleExpiration} />
             <CryptoPaymentStatus payment={payment} />
+
+            {/* Debug info */}
+            {__DEV__ && (
+              <View
+                style={{
+                  padding: 12,
+                  backgroundColor: "#f0f0f0",
+                  borderRadius: 8,
+                  marginTop: 12,
+                }}
+              >
+                <Text style={{ fontSize: 12, fontFamily: "monospace" }}>
+                  🐛 Debug: Polling={enablePolling ? "ON" : "OFF"} | Status=
+                  {payment.status} | PollingStatus={pollingStatus || "null"}
+                </Text>
+              </View>
+            )}
+
+            <TouchableOpacity
+              style={styles.refreshButton}
+              onPress={handleRefreshStatus}
+              disabled={pollingLoading}
+            >
+              {pollingLoading ? (
+                <ActivityIndicator size="small" color="#007AFF" />
+              ) : (
+                <>
+                  <FontAwesome6
+                    name="arrow-rotate-right"
+                    size={16}
+                    color="#007AFF"
+                  />
+                  <Text style={styles.refreshButtonText}>Check Status Now</Text>
+                </>
+              )}
+            </TouchableOpacity>
+
+            {pollingError && (
+              <View style={styles.errorContainer}>
+                <FontAwesome6
+                  name="triangle-exclamation"
+                  size={14}
+                  color="#dc3545"
+                />
+                <Text style={styles.errorText}>{pollingError}</Text>
+              </View>
+            )}
+
+            {!showTxHashInput ? (
+              <TouchableOpacity
+                style={styles.verifyButton}
+                onPress={() => setShowTxHashInput(true)}
+              >
+                <FontAwesome6 name="magnifying-glass" size={14} color="#666" />
+                <Text style={styles.verifyButtonText}>
+                  Already Sent? Verify Transaction
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <View style={styles.txHashContainer}>
+                <Text style={styles.txHashLabel}>Enter Transaction Hash:</Text>
+                <TextInput
+                  style={styles.txHashInput}
+                  value={txHashInput}
+                  onChangeText={setTxHashInput}
+                  placeholder="Enter transaction hash (txid)"
+                  placeholderTextColor="#999"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+                <View style={styles.txHashButtons}>
+                  <TouchableOpacity
+                    style={styles.txHashButtonCancel}
+                    onPress={() => {
+                      setShowTxHashInput(false);
+                      setTxHashInput("");
+                    }}
+                  >
+                    <Text style={styles.txHashButtonCancelText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.txHashButtonVerify,
+                      !txHashInput.trim() && styles.disabledButton,
+                    ]}
+                    onPress={handleVerifyTransaction}
+                    disabled={!txHashInput.trim() || loading}
+                  >
+                    {loading ? (
+                      <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                      <Text style={styles.txHashButtonVerifyText}>Verify</Text>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+
+            <Text style={styles.infoText}>
+              💡 Payment status checks automatically every 5 seconds. Tap "Check
+              Status Now" for immediate update.
+            </Text>
           </View>
         ) : null;
 
@@ -519,6 +745,90 @@ const styles = StyleSheet.create({
   reviewContainer: {
     gap: 20,
   },
+  networkSelectionContainer: {
+    gap: 20,
+  },
+  headerInfo: {
+    backgroundColor: "#f8f8f8",
+    borderRadius: 12,
+    padding: 20,
+    gap: 12,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#333",
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: "#666",
+  },
+  amountPreview: {
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#ddd",
+    gap: 4,
+  },
+  amountPreviewLabel: {
+    fontSize: 12,
+    color: "#666",
+  },
+  amountPreviewValue: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#007AFF",
+  },
+  amountPreviewCrypto: {
+    fontSize: 14,
+    color: "#666",
+  },
+  networkInfoCard: {
+    backgroundColor: "#f8f8f8",
+    borderRadius: 12,
+    padding: 16,
+    gap: 8,
+  },
+  networkInfoLabel: {
+    fontSize: 12,
+    color: "#666",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  networkInfoValue: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
+  },
+  changeNetworkButton: {
+    marginTop: 8,
+    alignSelf: "flex-start",
+  },
+  changeNetworkText: {
+    fontSize: 14,
+    color: "#007AFF",
+    fontWeight: "600",
+  },
+  detailsCard: {
+    backgroundColor: "#f8f8f8",
+    borderRadius: 12,
+    padding: 16,
+    gap: 12,
+  },
+  detailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  detailLabel: {
+    fontSize: 14,
+    color: "#666",
+  },
+  detailValue: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#333",
+  },
   amountCard: {
     backgroundColor: "#f8f8f8",
     borderRadius: 12,
@@ -649,5 +959,115 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     color: "#666",
+  },
+  refreshButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: "#fff",
+    borderWidth: 2,
+    borderColor: "#007AFF",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  refreshButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#007AFF",
+  },
+  infoText: {
+    fontSize: 12,
+    color: "#999",
+    textAlign: "center",
+    marginTop: 12,
+    paddingHorizontal: 16,
+  },
+  verifyButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: "#f8f8f8",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  verifyButtonText: {
+    fontSize: 13,
+    color: "#666",
+  },
+  txHashContainer: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: "#f8f8f8",
+    borderRadius: 12,
+    gap: 12,
+  },
+  txHashLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#333",
+  },
+  txHashInput: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontSize: 13,
+    fontFamily: "monospace",
+    color: "#333",
+  },
+  txHashButtons: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  txHashButtonCancel: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  txHashButtonCancelText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#666",
+  },
+  txHashButtonVerify: {
+    flex: 1,
+    backgroundColor: "#007AFF",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  txHashButtonVerifyText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#fff",
+  },
+  errorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: "#FFEBEE",
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  errorText: {
+    fontSize: 13,
+    color: "#dc3545",
+    flex: 1,
   },
 });

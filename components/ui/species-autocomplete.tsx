@@ -4,13 +4,13 @@
  */
 
 import { BirdSpecies, searchBirdSpecies } from "@/lib/constants/bird-species";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   FlatList,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
@@ -42,13 +42,39 @@ export default function SpeciesAutocomplete({
 }: SpeciesAutocompleteProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [suggestions, setSuggestions] = useState<BirdSpecies[]>([]);
   const isSelectingRef = useRef(false);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const suggestions = useMemo(() => {
-    if (!showDropdown || !value) {
-      return [];
+  // Debounced search for species
+  useEffect(() => {
+    // Don't search if we're selecting an item
+    if (isSelectingRef.current) {
+      return;
     }
-    return searchBirdSpecies(value).slice(0, 10); // Limit to 10 results
+
+    if (!showDropdown || !value) {
+      setSuggestions([]);
+      return;
+    }
+
+    // Clear previous timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Set new timer (300ms debounce)
+    debounceTimerRef.current = setTimeout(() => {
+      const results = searchBirdSpecies(value).slice(0, 10);
+      setSuggestions(results);
+    }, 300);
+
+    // Cleanup
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
   }, [value, showDropdown]);
 
   const handleFocus = useCallback(() => {
@@ -57,25 +83,20 @@ export default function SpeciesAutocomplete({
   }, []);
 
   const handleBlur = useCallback(() => {
-    // Don't close dropdown if we're in the middle of selecting
-    if (isSelectingRef.current) {
-      return;
+    // Only close if not selecting
+    if (!isSelectingRef.current) {
+      setIsFocused(false);
+      setShowDropdown(false);
+      onBlur?.();
     }
-
-    setIsFocused(false);
-    // Delay hiding dropdown to allow selection
-    setTimeout(() => {
-      if (!isSelectingRef.current) {
-        setShowDropdown(false);
-      }
-    }, 150);
-    onBlur?.();
   }, [onBlur]);
 
   const handleSelectSpecies = useCallback(
     (species: BirdSpecies) => {
-      console.log("handleSelectSpecies called with:", species);
+      // Prevent blur from closing dropdown
       isSelectingRef.current = true;
+
+      console.log("handleSelectSpecies called with:", species);
 
       // Update the input value first
       onChangeText(species.species);
@@ -89,7 +110,7 @@ export default function SpeciesAutocomplete({
       setShowDropdown(false);
       setIsFocused(false);
 
-      // Reset selection flag
+      // Reset selection flag after a delay to prevent useEffect from re-opening
       setTimeout(() => {
         isSelectingRef.current = false;
       }, 100);
@@ -135,15 +156,24 @@ export default function SpeciesAutocomplete({
             data={suggestions}
             keyExtractor={(item, index) => `${item.species}-${index}`}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.suggestionItem}
-                onPress={() => handleSelectSpecies(item)}
-                activeOpacity={0.7}
+              <Pressable
+                style={({ pressed }) => [
+                  styles.suggestionItem,
+                  pressed && styles.suggestionItemPressed,
+                ]}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                  isSelectingRef.current = true;
+                }}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  handleSelectSpecies(item);
+                }}
               >
                 <Text style={styles.speciesName}>{item.species}</Text>
                 <Text style={styles.commonName}>{item.commonName}</Text>
                 <Text style={styles.scientificName}>{item.scientificName}</Text>
-              </TouchableOpacity>
+              </Pressable>
             )}
             keyboardShouldPersistTaps="handled"
             nestedScrollEnabled
@@ -216,6 +246,9 @@ const styles = StyleSheet.create({
     padding: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#F0F0F0",
+  },
+  suggestionItemPressed: {
+    backgroundColor: "#F0F0F0",
   },
   speciesName: {
     fontSize: 16,

@@ -1,3 +1,4 @@
+import CityAutocomplete from "@/components/ui/city-autocomplete";
 import ImagePickerButton from "@/components/ui/image-picker-button";
 import SpeciesAutocomplete from "@/components/ui/species-autocomplete";
 import ValidatedTextInput from "@/components/ui/validated-text-input";
@@ -237,11 +238,10 @@ export default function AddBird() {
             placeholder="e.g., 2 years"
           />
 
-          <ValidatedTextInput
-            label="Location"
+          <CityAutocomplete
             value={location}
-            onChangeText={setLocation}
-            placeholder="e.g., California"
+            onCitySelected={setLocation}
+            placeholder="Search for a city..."
           />
         </View>
 

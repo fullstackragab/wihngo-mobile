@@ -7,6 +7,7 @@ import CryptoCurrencySelector from "@/components/crypto-currency-selector";
 import CryptoPaymentQR from "@/components/crypto-payment-qr";
 import CryptoPaymentStatus from "@/components/crypto-payment-status";
 import NetworkSelector from "@/components/network-selector";
+import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import {
   calculateCryptoAmount,
@@ -40,6 +41,7 @@ export default function CryptoPaymentScreen() {
   const plan = params.plan as "monthly" | "yearly" | "lifetime";
   const purpose = (params.purpose as any) || "premium_subscription";
 
+  const { isAuthenticated, token } = useAuth();
   const { addNotification } = useNotifications();
   const [step, setStep] = useState<CryptoPaymentStep>("select-currency");
   const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency>();
@@ -49,6 +51,18 @@ export default function CryptoPaymentScreen() {
   const [payment, setPayment] = useState<CryptoPaymentRequest | null>(null);
   const [loading, setLoading] = useState(false);
   const [pollingInterval, setPollingInterval] = useState<any>(null);
+
+  // Check authentication on mount
+  useEffect(() => {
+    if (!isAuthenticated || !token) {
+      addNotification(
+        "recommendation",
+        "Authentication Required",
+        "Please login to make a payment."
+      );
+      router.replace("/welcome");
+    }
+  }, [isAuthenticated, token]);
 
   // Get networks for selected currency
   const getNetworksForCurrency = () => {
@@ -110,6 +124,17 @@ export default function CryptoPaymentScreen() {
       return;
     }
 
+    // Check authentication before making payment
+    if (!isAuthenticated || !token) {
+      addNotification(
+        "recommendation",
+        "Authentication Required",
+        "Please login to make a payment."
+      );
+      router.replace("/welcome");
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await createCryptoPayment({
@@ -124,13 +149,25 @@ export default function CryptoPaymentScreen() {
       setPayment(response.paymentRequest);
       setStep("payment-address");
       startPolling(response.paymentRequest.id);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to create payment:", error);
-      addNotification(
-        "recommendation",
-        "Payment Error",
-        "Failed to create payment request. Please try again."
-      );
+
+      // Check if it's an authentication error
+      if (error?.message?.includes("Session expired")) {
+        addNotification(
+          "recommendation",
+          "Session Expired",
+          "Your session has expired. Please login again."
+        );
+        // Navigate back - AuthContext will handle the logout
+        setTimeout(() => router.replace("/welcome"), 1500);
+      } else {
+        addNotification(
+          "recommendation",
+          "Payment Error",
+          "Failed to create payment request. Please try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -163,8 +200,19 @@ export default function CryptoPaymentScreen() {
           setStep("failed");
           stopPolling();
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to poll payment status:", error);
+
+        // Stop polling on authentication errors
+        if (error?.message?.includes("Session expired")) {
+          stopPolling();
+          addNotification(
+            "recommendation",
+            "Session Expired",
+            "Your session has expired. Redirecting to login..."
+          );
+          setTimeout(() => router.replace("/welcome"), 1500);
+        }
       }
     }, 5000); // Poll every 5 seconds
 

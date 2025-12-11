@@ -25,6 +25,12 @@ import { apiHelper } from "./api-helper";
 export async function createCryptoPayment(
   dto: CreateCryptoPaymentDto
 ): Promise<CryptoPaymentResponse> {
+  console.log("💰 Creating crypto payment:", {
+    currency: dto.currency,
+    network: dto.network,
+    amountUsd: dto.amountUsd,
+    purpose: dto.purpose,
+  });
   const endpoint = `payments/crypto/create`;
   return apiHelper.post<CryptoPaymentResponse>(endpoint, dto);
 }

@@ -1,8 +1,20 @@
+import { getAuthToken as getValidToken } from "@/lib/auth/auth-manager";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
 
 const TOKEN_KEY = "auth_token";
+
+// Global handler for authentication errors
+let authErrorHandler: (() => void) | null = null;
+
+/**
+ * Register a handler to be called when authentication errors occur (401)
+ * This should be called by the AuthContext to handle logout
+ */
+export function setAuthErrorHandler(handler: () => void) {
+  authErrorHandler = handler;
+}
 
 /**
  * Get the API base URL from configuration
@@ -71,8 +83,18 @@ export async function authenticatedFetch(
     const absoluteUrl = buildUrl(url);
     console.log("🌐 API Request:", absoluteUrl);
 
-    // Get token from storage
-    const token = await AsyncStorage.getItem(TOKEN_KEY);
+    // Get token from storage with expiration check
+    const token = await getValidToken();
+
+    // Check if token exists before making request
+    if (!token) {
+      console.warn("⚠️ No valid authentication token found");
+      // Call the auth error handler if registered
+      if (authErrorHandler) {
+        authErrorHandler();
+      }
+      throw new Error("Session expired. Please login again.");
+    }
 
     // Merge headers with authorization
     const headers = {
@@ -80,13 +102,13 @@ export async function authenticatedFetch(
       Accept: "application/json",
       "ngrok-skip-browser-warning": "1", // Skip ngrok interstitial page
       ...options.headers,
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      Authorization: `Bearer ${token}`,
     };
 
     // Log headers being sent (without sensitive token)
     console.log("📤 Request Headers:", {
       ...headers,
-      Authorization: token ? "Bearer <token>" : "(none)",
+      Authorization: "Bearer <token>",
     });
 
     // Make the request
@@ -105,8 +127,10 @@ export async function authenticatedFetch(
 
     // Handle 401 Unauthorized - token might be expired
     if (response.status === 401) {
-      // Clear stored auth data
-      await AsyncStorage.multiRemove([TOKEN_KEY, "auth_user"]);
+      // Call the auth error handler if registered (triggers logout in AuthContext)
+      if (authErrorHandler) {
+        authErrorHandler();
+      }
       throw new Error("Session expired. Please login again.");
     }
 

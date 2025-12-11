@@ -89,6 +89,17 @@ export default function SupportModal({
   ) => {
     if (!selectedAmount) return;
 
+    // Double-check user is authenticated
+    if (!user) {
+      addNotification(
+        "recommendation",
+        "Authentication Required",
+        "Please login to make a payment."
+      );
+      router.replace("/welcome");
+      return;
+    }
+
     try {
       setIsProcessing(true);
       setCryptoCurrency(currency);

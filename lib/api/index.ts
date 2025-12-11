@@ -3,11 +3,17 @@
  * Import all services from a single entry point
  *
  * @example
- * import { authService, birdService } from '@/lib/api';
+ * import { loginService, registerService, birdService } from '@/lib/api';
  */
 
+// Export API client utilities
 export * from "./api-client";
-export * from "./auth.service";
+
+// Export auth services with clear naming
+export {
+  login as loginService,
+  register as registerService,
+} from "./auth.service";
 
 // Legacy service exports (still in /services folder)
 // These will be migrated to /lib/api gradually

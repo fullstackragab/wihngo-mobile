@@ -1,7 +1,19 @@
+import { getAuthToken } from "@/lib/auth/auth-manager";
 import { STORAGE_KEYS } from "@/lib/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TOKEN_KEY = STORAGE_KEYS.AUTH_TOKEN;
+
+// Global handler for authentication errors
+let authErrorHandler: (() => void) | null = null;
+
+/**
+ * Register a handler to be called when authentication errors occur (401)
+ * This should be called by the AuthContext to handle logout
+ */
+export function setAuthErrorHandler(handler: () => void) {
+  authErrorHandler = handler;
+}
 
 /**
  * API Error class for better error handling
@@ -26,15 +38,25 @@ export async function authenticatedFetch(
   options: RequestInit = {}
 ): Promise<Response> {
   try {
-    // Get token from storage
-    const token = await AsyncStorage.getItem(TOKEN_KEY);
+    // Get token from storage with expiration check
+    const token = await getAuthToken();
 
-    // Merge headers with authorization
+    // Check if token exists before making request
+    if (!token) {
+      console.warn("⚠️ No valid authentication token found");
+      // Call the auth error handler if registered
+      if (authErrorHandler) {
+        authErrorHandler();
+      }
+      throw new Error("Session expired. Please login again.");
+    }
+
+    // Set up headers with authorization
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
       ...options.headers,
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      Authorization: `Bearer ${token}`,
     };
 
     // Make the request
@@ -45,8 +67,10 @@ export async function authenticatedFetch(
 
     // Handle 401 Unauthorized - token might be expired
     if (response.status === 401) {
-      // Clear stored auth data
-      await AsyncStorage.multiRemove([TOKEN_KEY, STORAGE_KEYS.USER_PROFILE]);
+      // Call the auth error handler if registered (triggers logout in AuthContext)
+      if (authErrorHandler) {
+        authErrorHandler();
+      }
       throw new Error("Session expired. Please login again.");
     }
 
@@ -254,38 +278,10 @@ export async function uploadFile<T>(
   }
 }
 
-/**
- * Check if user is authenticated
- */
-export async function isAuthenticated(): Promise<boolean> {
-  const token = await getAuthToken();
-  return !!token;
-}
-
-/**
- * Save auth token to storage
- */
-export async function saveAuthToken(token: string): Promise<void> {
-  await AsyncStorage.setItem(TOKEN_KEY, token);
-}
-
-/**
- * Get auth token from storage
- */
-export async function getAuthToken(): Promise<string | null> {
-  return await AsyncStorage.getItem(TOKEN_KEY);
-}
-
-/**
- * Remove auth token from storage
- */
-export async function removeAuthToken(): Promise<void> {
-  await AsyncStorage.removeItem(TOKEN_KEY);
-}
-
-/**
- * Clear all auth data from storage
- */
-export async function clearAuthData(): Promise<void> {
-  await AsyncStorage.multiRemove([TOKEN_KEY, STORAGE_KEYS.USER_PROFILE]);
-}
+// Re-export auth utilities from centralized auth-manager
+export {
+  clearAuthData,
+  getAuthToken,
+  isAuthenticated,
+  saveAuthToken,
+} from "@/lib/auth/auth-manager";

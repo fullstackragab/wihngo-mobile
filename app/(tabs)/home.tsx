@@ -27,6 +27,7 @@ export default function Home() {
   const [recentlySupported, setRecentlySupported] = useState<Bird[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [filter, setFilter] = useState<"nearby" | "popular" | "new">("nearby");
 
   const loadHomeData = async () => {
     try {
@@ -144,11 +145,57 @@ export default function Home() {
       }
       showsVerticalScrollIndicator={false}
     >
-      {/* Simplified Header - No gradient, just clean white */}
+      {/* Header with Filter Buttons */}
       <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>Discover Birds</Text>
-          <Text style={styles.subtitle}>Find amazing birds near you</Text>
+        <View style={styles.filterContainer}>
+          <TouchableOpacity
+            style={[
+              styles.filterButton,
+              filter === "nearby" && styles.filterButtonActive,
+            ]}
+            onPress={() => setFilter("nearby")}
+          >
+            <Text
+              style={[
+                styles.filterButtonText,
+                filter === "nearby" && styles.filterButtonTextActive,
+              ]}
+            >
+              Nearby
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.filterButton,
+              filter === "popular" && styles.filterButtonActive,
+            ]}
+            onPress={() => setFilter("popular")}
+          >
+            <Text
+              style={[
+                styles.filterButtonText,
+                filter === "popular" && styles.filterButtonTextActive,
+              ]}
+            >
+              Popular
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.filterButton,
+              filter === "new" && styles.filterButtonActive,
+            ]}
+            onPress={() => setFilter("new")}
+          >
+            <Text
+              style={[
+                styles.filterButtonText,
+                filter === "new" && styles.filterButtonTextActive,
+              ]}
+            >
+              New
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.headerActions}>
           <NotificationBell iconSize={22} iconColor="#666" />
@@ -243,16 +290,27 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.xl,
     paddingBottom: Spacing.lg,
   },
-  greeting: {
-    fontSize: Typography.hero,
-    fontWeight: "600",
-    color: "#1A1A1A",
-    letterSpacing: -0.5,
+  filterContainer: {
+    flexDirection: "row",
+    gap: 8,
+    flex: 1,
   },
-  subtitle: {
-    fontSize: Typography.body,
+  filterButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: BorderRadius.md,
+    backgroundColor: "#F5F5F5",
+  },
+  filterButtonActive: {
+    backgroundColor: "#1A1A1A",
+  },
+  filterButtonText: {
+    fontSize: 13,
+    fontWeight: "600",
     color: "#666",
-    marginTop: Spacing.xs,
+  },
+  filterButtonTextActive: {
+    color: "#FFFFFF",
   },
   headerActions: {
     flexDirection: "row",

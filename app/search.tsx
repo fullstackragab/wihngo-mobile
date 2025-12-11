@@ -1,6 +1,5 @@
 import { Bird } from "@/types/bird";
 import { Story } from "@/types/story";
-import { User } from "@/types/user";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -15,7 +14,7 @@ import {
   View,
 } from "react-native";
 
-type SearchTab = "all" | "birds" | "stories" | "users";
+type SearchTab = "all" | "birds" | "stories";
 
 export default function Search() {
   const router = useRouter();
@@ -24,13 +23,11 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [birdResults, setBirdResults] = useState<Bird[]>([]);
   const [storyResults, setStoryResults] = useState<Story[]>([]);
-  const [userResults, setUserResults] = useState<User[]>([]);
 
   const handleSearch = async (searchQuery: string) => {
     if (searchQuery.trim().length < 2) {
       setBirdResults([]);
       setStoryResults([]);
-      setUserResults([]);
       return;
     }
 
@@ -40,7 +37,6 @@ export default function Search() {
       // const results = await searchService.search(searchQuery);
       // setBirdResults(results.birds);
       // setStoryResults(results.stories);
-      // setUserResults(results.users);
     } catch (error) {
       console.error("Search error:", error);
     } finally {
@@ -103,60 +99,20 @@ export default function Search() {
     </TouchableOpacity>
   );
 
-  const renderUserItem = ({ item }: { item: User }) => (
-    <TouchableOpacity
-      style={styles.resultCard}
-      onPress={() => router.push(`./user/${item.userId}`)}
-    >
-      <View style={styles.userAvatar}>
-        {item.avatarUrl ? (
-          <Image source={{ uri: item.avatarUrl }} style={styles.avatarImage} />
-        ) : (
-          <FontAwesome6 name="user" size={24} color="#95A5A6" />
-        )}
-      </View>
-      <View style={styles.resultContent}>
-        <Text style={styles.resultTitle}>{item.name}</Text>
-        <Text style={styles.resultSubtitle}>{item.email}</Text>
-        {item.bio && (
-          <Text style={styles.userBio} numberOfLines={1}>
-            {item.bio}
-          </Text>
-        )}
-      </View>
-      <FontAwesome6 name="chevron-right" size={16} color="#95A5A6" />
-    </TouchableOpacity>
-  );
-
   const getFilteredResults = () => {
     switch (activeTab) {
       case "birds":
         return birdResults;
       case "stories":
         return storyResults;
-      case "users":
-        return userResults;
       case "all":
       default:
-        return [
-          ...birdResults.slice(0, 3),
-          ...storyResults.slice(0, 3),
-          ...userResults.slice(0, 3),
-        ];
+        return [...birdResults.slice(0, 3), ...storyResults.slice(0, 3)];
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <FontAwesome6 name="arrow-left" size={24} color="#2C3E50" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Search</Text>
-        <View style={{ width: 24 }} />
-      </View>
-
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <FontAwesome6
@@ -167,7 +123,7 @@ export default function Search() {
         />
         <TextInput
           style={styles.searchInput}
-          placeholder="Search birds, stories, users..."
+          placeholder="Search birds and stories..."
           placeholderTextColor="#95A5A6"
           value={query}
           onChangeText={(text) => {
@@ -222,19 +178,6 @@ export default function Search() {
             ]}
           >
             Stories ({storyResults.length})
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === "users" && styles.tabActive]}
-          onPress={() => setActiveTab("users")}
-        >
-          <Text
-            style={[
-              styles.tabText,
-              activeTab === "users" && styles.tabTextActive,
-            ]}
-          >
-            Users ({userResults.length})
           </Text>
         </TouchableOpacity>
       </View>
@@ -299,20 +242,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F8F9FA",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 16,
-    backgroundColor: "#fff",
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#2C3E50",
   },
   searchContainer: {
     flexDirection: "row",

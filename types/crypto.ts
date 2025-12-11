@@ -26,8 +26,8 @@ export type CryptoPaymentStatus =
   | "confirmed" // Payment confirmed
   | "completed" // Payment completed and credited
   | "expired" // Payment window expired
-  | "failed" // Payment failed
-  | "refunded"; // Payment refunded
+  | "cancelled" // Payment cancelled by user
+  | "failed"; // Payment failed
 
 export type CryptoPaymentMethod = {
   id: string;
@@ -67,6 +67,7 @@ export type CryptoPaymentRequest = {
 
   status: CryptoPaymentStatus;
   purpose: "premium_subscription" | "donation" | "purchase";
+  plan?: "monthly" | "yearly" | "lifetime"; // For premium subscriptions
 
   // Timing
   expiresAt: string; // Payment window expiration

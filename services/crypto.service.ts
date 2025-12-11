@@ -17,10 +17,7 @@ import {
   SaveCryptoWalletDto,
   VerifyCryptoPaymentDto,
 } from "@/types/crypto";
-import Constants from "expo-constants";
 import { apiHelper } from "./api-helper";
-
-const API_URL = Constants.expoConfig?.extra?.apiUrl;
 
 /**
  * Create a new crypto payment request
@@ -28,7 +25,7 @@ const API_URL = Constants.expoConfig?.extra?.apiUrl;
 export async function createCryptoPayment(
   dto: CreateCryptoPaymentDto
 ): Promise<CryptoPaymentResponse> {
-  const endpoint = `${API_URL}payments/crypto/create`;
+  const endpoint = `payments/crypto/create`;
   return apiHelper.post<CryptoPaymentResponse>(endpoint, dto);
 }
 
@@ -38,7 +35,7 @@ export async function createCryptoPayment(
 export async function getCryptoPayment(
   paymentId: string
 ): Promise<CryptoPaymentRequest> {
-  const endpoint = `${API_URL}payments/crypto/${paymentId}`;
+  const endpoint = `payments/crypto/${paymentId}`;
   return apiHelper.get<CryptoPaymentRequest>(endpoint);
 }
 
@@ -49,7 +46,7 @@ export async function verifyCryptoPayment(
   paymentId: string,
   dto: VerifyCryptoPaymentDto
 ): Promise<CryptoPaymentRequest> {
-  const endpoint = `${API_URL}payments/crypto/${paymentId}/verify`;
+  const endpoint = `payments/crypto/${paymentId}/verify`;
   return apiHelper.post<CryptoPaymentRequest>(endpoint, dto);
 }
 
@@ -57,7 +54,7 @@ export async function verifyCryptoPayment(
  * Get current exchange rates for all supported cryptocurrencies
  */
 export async function getCryptoExchangeRates(): Promise<CryptoExchangeRate[]> {
-  const endpoint = `${API_URL}payments/crypto/rates`;
+  const endpoint = `payments/crypto/rates`;
   return apiHelper.get<CryptoExchangeRate[]>(endpoint);
 }
 
@@ -67,7 +64,7 @@ export async function getCryptoExchangeRates(): Promise<CryptoExchangeRate[]> {
 export async function getCryptoExchangeRate(
   currency: CryptoCurrency
 ): Promise<CryptoExchangeRate> {
-  const endpoint = `${API_URL}payments/crypto/rates/${currency}`;
+  const endpoint = `payments/crypto/rates/${currency}`;
   return apiHelper.get<CryptoExchangeRate>(endpoint);
 }
 
@@ -78,7 +75,7 @@ export async function getWalletInfo(
   currency: CryptoCurrency,
   network: CryptoNetwork
 ): Promise<CryptoWalletInfo> {
-  const endpoint = `${API_URL}payments/crypto/wallet/${currency}/${network}`;
+  const endpoint = `payments/crypto/wallet/${currency}/${network}`;
   return apiHelper.get<CryptoWalletInfo>(endpoint);
 }
 
@@ -89,7 +86,7 @@ export async function getCryptoPaymentHistory(
   page: number = 1,
   pageSize: number = 20
 ): Promise<CryptoPaymentHistory> {
-  const endpoint = `${API_URL}payments/crypto/history?page=${page}&pageSize=${pageSize}`;
+  const endpoint = `payments/crypto/history?page=${page}&pageSize=${pageSize}`;
   return apiHelper.get<CryptoPaymentHistory>(endpoint);
 }
 
@@ -99,7 +96,7 @@ export async function getCryptoPaymentHistory(
 export async function cancelCryptoPayment(
   paymentId: string
 ): Promise<CryptoPaymentRequest> {
-  const endpoint = `${API_URL}payments/crypto/${paymentId}/cancel`;
+  const endpoint = `payments/crypto/${paymentId}/cancel`;
   return apiHelper.post<CryptoPaymentRequest>(endpoint, {});
 }
 
@@ -107,7 +104,7 @@ export async function cancelCryptoPayment(
  * Get user's saved crypto wallets
  */
 export async function getSavedCryptoWallets(): Promise<CryptoPaymentMethod[]> {
-  const endpoint = `${API_URL}payments/crypto/wallets`;
+  const endpoint = `payments/crypto/wallets`;
   return apiHelper.get<CryptoPaymentMethod[]>(endpoint);
 }
 
@@ -117,7 +114,7 @@ export async function getSavedCryptoWallets(): Promise<CryptoPaymentMethod[]> {
 export async function saveCryptoWallet(
   dto: SaveCryptoWalletDto
 ): Promise<CryptoPaymentMethod> {
-  const endpoint = `${API_URL}payments/crypto/wallets`;
+  const endpoint = `payments/crypto/wallets`;
   return apiHelper.post<CryptoPaymentMethod>(endpoint, dto);
 }
 
@@ -125,7 +122,7 @@ export async function saveCryptoWallet(
  * Remove a saved crypto wallet
  */
 export async function removeCryptoWallet(walletId: string): Promise<void> {
-  const endpoint = `${API_URL}payments/crypto/wallets/${walletId}`;
+  const endpoint = `payments/crypto/wallets/${walletId}`;
   return apiHelper.delete<void>(endpoint);
 }
 
@@ -135,7 +132,7 @@ export async function removeCryptoWallet(walletId: string): Promise<void> {
 export async function setDefaultCryptoWallet(
   walletId: string
 ): Promise<CryptoPaymentMethod> {
-  const endpoint = `${API_URL}payments/crypto/wallets/${walletId}/default`;
+  const endpoint = `payments/crypto/wallets/${walletId}/default`;
   return apiHelper.patch<CryptoPaymentMethod>(endpoint, {});
 }
 
@@ -436,8 +433,8 @@ export function getPaymentStatusColor(
     confirmed: "#32CD32",
     completed: "#28a745",
     expired: "#DC143C",
+    cancelled: "#6c757d",
     failed: "#FF0000",
-    refunded: "#9370DB",
   };
   return colors[status];
 }
@@ -454,8 +451,8 @@ export function getPaymentStatusIcon(
     confirmed: "check-circle",
     completed: "check-double",
     expired: "clock-rotate-left",
+    cancelled: "ban",
     failed: "circle-xmark",
-    refunded: "arrow-rotate-left",
   };
   return icons[status];
 }

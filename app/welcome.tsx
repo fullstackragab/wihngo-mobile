@@ -169,7 +169,9 @@ export default function Welcome() {
 
             {/* Sign Up Link */}
             <View style={styles.signupContainer}>
-              <Text style={styles.signupText}>Don't have an account? </Text>
+              <Text style={styles.signupText}>
+                Don&apos;t have an account?{" "}
+              </Text>
               <Link href="/signup" asChild>
                 <TouchableOpacity>
                   <Text style={styles.signupLink}>Sign Up</Text>

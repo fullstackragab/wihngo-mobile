@@ -36,10 +36,10 @@ export default function CryptoPaymentStatus({
         return "Payment completed successfully!";
       case "expired":
         return "Payment window expired";
+      case "cancelled":
+        return "Payment cancelled";
       case "failed":
         return "Payment failed";
-      case "refunded":
-        return "Payment refunded";
       default:
         return "Unknown status";
     }

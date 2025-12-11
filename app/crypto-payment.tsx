@@ -157,7 +157,8 @@ export default function CryptoPaymentScreen() {
 
         if (
           updatedPayment.status === "expired" ||
-          updatedPayment.status === "failed"
+          updatedPayment.status === "failed" ||
+          updatedPayment.status === "cancelled"
         ) {
           setStep("failed");
           stopPolling();

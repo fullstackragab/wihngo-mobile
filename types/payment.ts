@@ -13,6 +13,7 @@ export interface PaymentStatus {
   network: string;
   exchangeRate: number;
   walletAddress: string;
+  addressIndex?: number;
   userWalletAddress?: string;
   qrCodeData: string;
   paymentUri: string;
@@ -53,6 +54,7 @@ export interface PaymentStatusCheckResponse {
   network: string;
   amountCrypto: number;
   walletAddress: string;
+  addressIndex?: number;
   confirmedAt?: string;
   completedAt?: string;
   updatedAt: string;

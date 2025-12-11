@@ -210,34 +210,39 @@ export function getPollingInterval(status: string): number {
 // ========== Client-side Utilities ==========
 
 /**
+ * @deprecated This function is deprecated as of HD wallet integration.
+ * Each payment request now receives a UNIQUE HD-derived address from the backend.
+ * Always use the walletAddress from the payment response (createCryptoPayment).
+ *
  * Get platform wallet addresses for receiving crypto payments
+ * @returns Empty object - addresses are now dynamically generated per payment
  */
 export function getPlatformWalletAddresses(): Record<
   string,
   Record<CryptoNetwork, string>
 > {
-  return {
-    USDT: {
-      tron: "TGRzhw2kwBW5PzncWfKCnqsvkrBezfsgiA",
-      ethereum: "0x4cc28f4cea7b440858b903b5c46685cb1478cdc4",
-      "binance-smart-chain": "0x83675000ac9915614afff618906421a2baea0020",
-      bitcoin: "", // Not supported for USDT
-      solana: "", // Not supported for USDT
-      polygon: "", // Not supported for USDT
-    },
-    // Add other currencies as needed
-  };
+  console.warn(
+    "⚠️ getPlatformWalletAddresses is deprecated. Use payment.walletAddress from API response."
+  );
+  return {};
 }
 
 /**
+ * @deprecated This function is deprecated as of HD wallet integration.
+ * Each payment request now receives a UNIQUE HD-derived address from the backend.
+ * Always use the walletAddress from the payment response (createCryptoPayment).
+ *
  * Get wallet address for a specific currency and network
+ * @returns null - addresses are now dynamically generated per payment
  */
 export function getWalletAddressForNetwork(
   currency: CryptoCurrency,
   network: CryptoNetwork
 ): string | null {
-  const addresses = getPlatformWalletAddresses();
-  return addresses[currency]?.[network] || null;
+  console.warn(
+    "⚠️ getWalletAddressForNetwork is deprecated. Use payment.walletAddress from API response."
+  );
+  return null;
 }
 
 /**

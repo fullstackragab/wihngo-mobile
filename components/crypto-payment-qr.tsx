@@ -19,11 +19,13 @@ import QRCode from "react-native-qrcode-svg";
 type CryptoPaymentQRProps = {
   payment: CryptoPaymentRequest;
   onExpired?: () => void;
+  children?: React.ReactNode;
 };
 
 export default function CryptoPaymentQR({
   payment,
   onExpired,
+  children,
 }: CryptoPaymentQRProps) {
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [copied, setCopied] = useState(false);
@@ -142,34 +144,19 @@ export default function CryptoPaymentQR({
         </View>
       </View>
 
-      {/* Instructions */}
+      {/* Simplified Instructions */}
       <View style={styles.instructionsContainer}>
-        <Text style={styles.instructionsTitle}>Payment Instructions</Text>
-        <View style={styles.instructionsList}>
-          <View style={styles.instructionItem}>
-            <FontAwesome6 name="1" size={16} color="#007AFF" />
-            <Text style={styles.instructionText}>
-              Send exactly{" "}
-              <Text style={styles.bold}>
-                {formatCryptoAmount(payment.amountCrypto, payment.currency)}{" "}
-                {payment.currency}
-              </Text>{" "}
-              to the address above
-            </Text>
-          </View>
-          <View style={styles.instructionItem}>
-            <FontAwesome6 name="2" size={16} color="#007AFF" />
-            <Text style={styles.instructionText}>
-              Wait for automatic detection (no transaction hash needed!)
-            </Text>
-          </View>
-          <View style={styles.instructionItem}>
-            <FontAwesome6 name="3" size={16} color="#007AFF" />
-            <Text style={styles.instructionText}>
-              Payment completes after {payment.requiredConfirmations}{" "}
-              confirmations
-            </Text>
-          </View>
+        <Text style={styles.instructionsTitle}>How to Pay</Text>
+        <View style={styles.instructionItem}>
+          <FontAwesome6 name="wallet" size={20} color="#007AFF" />
+          <Text style={styles.instructionText}>
+            Send{" "}
+            <Text style={styles.bold}>
+              {formatCryptoAmount(payment.amountCrypto, payment.currency)}{" "}
+              {payment.currency}
+            </Text>{" "}
+            (or more) to the address above
+          </Text>
         </View>
       </View>
 
@@ -178,20 +165,25 @@ export default function CryptoPaymentQR({
         <FontAwesome6 name="magnifying-glass" size={16} color="#4CAF50" />
         <View style={styles.autoDetectContent}>
           <Text style={styles.autoDetectTitle}>
-            🔍 Automatic Detection Active
+            ✨ Automatic Payment Detection
           </Text>
           <Text style={styles.autoDetectText}>
-            We're scanning the blockchain every 30 seconds. Your payment will be
-            detected automatically within 10-60 seconds after sending.
+            Your payment will be detected automatically within 10-60 seconds. No
+            transaction hash needed! Payment completes after{" "}
+            {payment.requiredConfirmations} confirmations.
           </Text>
         </View>
       </View>
 
-      {/* Warning */}
-      <View style={styles.warningBox}>
-        <FontAwesome6 name="triangle-exclamation" size={16} color="#FF9800" />
-        <Text style={styles.warningText}>
-          Sending a different amount may result in loss of funds
+      {/* Payment Status */}
+      {children}
+
+      {/* Info Notice */}
+      <View style={styles.infoBox}>
+        <FontAwesome6 name="circle-info" size={16} color="#2196F3" />
+        <Text style={styles.infoText}>
+          This address is unique to your transaction. Any amount sent will be
+          credited to your account.
         </Text>
       </View>
     </View>
@@ -356,19 +348,19 @@ const styles = StyleSheet.create({
     color: "#1B5E20",
     lineHeight: 18,
   },
-  warningBox: {
+  infoBox: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
     padding: 12,
-    backgroundColor: "#FFF3E0",
+    backgroundColor: "#E3F2FD",
     borderRadius: 8,
     borderLeftWidth: 4,
-    borderLeftColor: "#FF9800",
+    borderLeftColor: "#2196F3",
   },
-  warningText: {
+  infoText: {
     flex: 1,
     fontSize: 12,
-    color: "#E65100",
+    color: "#0D47A1",
   },
 });

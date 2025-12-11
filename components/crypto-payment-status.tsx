@@ -127,16 +127,6 @@ export default function CryptoPaymentStatus({
         )}
       </View>
 
-      {showDetails && payment.status === "pending" && (
-        <View style={styles.helpBox}>
-          <FontAwesome6 name="circle-info" size={16} color="#007AFF" />
-          <Text style={styles.helpText}>
-            Send the exact amount to the address provided. The payment will be
-            detected automatically once the transaction is broadcast.
-          </Text>
-        </View>
-      )}
-
       {showDetails && payment.status === "confirming" && (
         <View style={styles.helpBox}>
           <FontAwesome6 name="circle-info" size={16} color="#007AFF" />

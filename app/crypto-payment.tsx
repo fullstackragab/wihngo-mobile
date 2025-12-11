@@ -25,6 +25,7 @@ import {
   CryptoPaymentRequest,
   CryptoPaymentStep,
   getCurrencyForNetwork,
+  isValidCurrencyNetwork,
 } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router, useLocalSearchParams } from "expo-router";
@@ -348,7 +349,7 @@ export default function CryptoPaymentScreen() {
         return (
           <View style={styles.networkSelectionContainer}>
             <View style={styles.headerInfo}>
-              <Text style={styles.headerTitle}>
+              <Text style={styles.headerInfoTitle}>
                 Pay with {selectedCurrency}
               </Text>
               <Text style={styles.headerSubtitle}>
@@ -472,8 +473,9 @@ export default function CryptoPaymentScreen() {
       case "awaiting-payment":
         return payment ? (
           <View>
-            <CryptoPaymentQR payment={payment} onExpired={handleExpiration} />
-            <CryptoPaymentStatus payment={payment} />
+            <CryptoPaymentQR payment={payment} onExpired={handleExpiration}>
+              <CryptoPaymentStatus payment={payment} />
+            </CryptoPaymentQR>
 
             {/* Debug info */}
             {__DEV__ && (
@@ -585,9 +587,9 @@ export default function CryptoPaymentScreen() {
                 <Text style={styles.infoTextBold}>
                   Automatic Detection Active:
                 </Text>{" "}
-                We're scanning the blockchain every 30 seconds. Your payment
-                will be detected within 10-60 seconds after sending. No manual
-                action required!
+                We&apos;re scanning the blockchain every 30 seconds. Your
+                payment will be detected within 10-60 seconds after sending. No
+                manual action required!
               </Text>
             </View>
           </View>
@@ -807,7 +809,7 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 12,
   },
-  headerTitle: {
+  headerInfoTitle: {
     fontSize: 24,
     fontWeight: "700",
     color: "#333",

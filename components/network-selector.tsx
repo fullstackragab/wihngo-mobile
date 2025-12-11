@@ -3,11 +3,7 @@
  * Allows users to select blockchain network for a cryptocurrency
  */
 
-import {
-  getEstimatedFee,
-  getNetworkName,
-  getWalletAddressForNetwork,
-} from "@/services/crypto.service";
+import { getEstimatedFee, getNetworkName } from "@/services/crypto.service";
 import { CryptoCurrency, CryptoNetwork } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
@@ -60,11 +56,7 @@ export default function NetworkSelector({
           const networkCurrency = getCurrencyForNetwork(network);
           const fee = getEstimatedFee(networkCurrency, network);
           const details = getNetworkDetails(network);
-          const address = getWalletAddressForNetwork(networkCurrency, network);
           const isTestnet = network === "sepolia";
-
-          // Skip networks without configured addresses
-          if (!address) return null;
 
           return (
             <TouchableOpacity

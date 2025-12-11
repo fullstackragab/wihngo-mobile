@@ -73,7 +73,8 @@ export type CryptoPaymentRequest = {
   exchangeRate: number; // Rate used for conversion
 
   // Payment details
-  walletAddress: string; // Our receiving address
+  walletAddress: string; // Our receiving address (unique HD-derived address)
+  addressIndex?: number; // HD wallet derivation index
   userWalletAddress?: string; // User's sending address (if provided)
   qrCodeData: string; // QR code string for payment
   paymentUri: string; // Payment URI (bitcoin:, ethereum:, etc.)

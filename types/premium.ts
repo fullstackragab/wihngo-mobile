@@ -85,6 +85,7 @@ export type PremiumPlanDetails = {
   currency: string;
   interval: "month" | "year" | "lifetime";
   savings?: string;
+  description?: string; // Love-focused description
   features: string[];
   charityAllocation?: number; // Percentage going to bird charities
 };

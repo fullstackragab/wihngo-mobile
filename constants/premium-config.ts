@@ -4,9 +4,10 @@ export const PREMIUM_PLANS: PremiumPlanDetails[] = [
   {
     id: "monthly",
     name: "Monthly Celebration",
-    price: 4.99,
+    price: 3.99,
     currency: "USD",
     interval: "month",
+    description: "Show your love & support your bird monthly",
     features: [
       "Custom profile theme & cover",
       "Highlighted Best Moments",
@@ -17,17 +18,18 @@ export const PREMIUM_PLANS: PremiumPlanDetails[] = [
       "Pin up to 5 story highlights",
       "Donation tracker display",
     ],
-    charityAllocation: 10, // 10% to bird charities
+    charityAllocation: 10, // 10% to bird charities/shelters
   },
   {
     id: "yearly",
     name: "Yearly Celebration",
-    price: 49.99,
+    price: 39.99,
     currency: "USD",
     interval: "year",
-    savings: "Save 2 months!",
+    savings: "Save $8/year - 2 months free!",
+    description: "A year of love & celebration for your bird",
     features: [
-      "All Monthly features",
+      "All Monthly features included",
       "Custom profile theme & cover",
       "Highlighted Best Moments",
       "'Celebrated Bird' badge",
@@ -38,7 +40,7 @@ export const PREMIUM_PLANS: PremiumPlanDetails[] = [
       "Donation tracker display",
       "Priority support",
     ],
-    charityAllocation: 15, // 15% to bird charities
+    charityAllocation: 15, // 15% to bird charities/shelters
   },
   {
     id: "lifetime",
@@ -46,7 +48,8 @@ export const PREMIUM_PLANS: PremiumPlanDetails[] = [
     price: 69.99,
     currency: "USD",
     interval: "lifetime",
-    savings: "One-time payment, forever!",
+    savings: "One-time payment, celebrate forever!",
+    description: "Eternal love & premium features for your bird",
     features: [
       "All premium features forever",
       "Custom profile theme & cover",
@@ -59,8 +62,9 @@ export const PREMIUM_PLANS: PremiumPlanDetails[] = [
       "Donation tracker display",
       "Exclusive lifetime badge",
       "Support bird charities",
+      "VIP support access",
     ],
-    charityAllocation: 20, // 20% to bird charities
+    charityAllocation: 20, // 20% to bird charities/conservation
   },
 ];
 

@@ -15,13 +15,14 @@ export default function BirdCard({ bird, onPress }: BirdCardProps) {
 
   return (
     <TouchableOpacity
-      style={styles.card}
+      style={[styles.card, isPremium && styles.premiumCard]}
       onPress={() => onPress(bird)}
       activeOpacity={0.7}
     >
+      {isPremium && <View style={styles.premiumGlow} />}
       <Image
         source={{ uri: bird.imageUrl || "https://via.placeholder.com/100" }}
-        style={styles.image}
+        style={[styles.image, isPremium && styles.premiumImage]}
       />
       <View style={styles.info}>
         <View style={styles.nameRow}>
@@ -33,6 +34,9 @@ export default function BirdCard({ bird, onPress }: BirdCardProps) {
         <Text style={styles.species} numberOfLines={1}>
           {bird.species}
         </Text>
+        {isPremium && (
+          <Text style={styles.celebratedTag}>💛 Celebrated Bird</Text>
+        )}
         <View style={styles.stats}>
           <Text style={styles.statText}>❤️ {bird.lovedBy}</Text>
           <Text style={styles.statText}>🐦 {bird.supportedBy}</Text>
@@ -50,6 +54,26 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     padding: Spacing.md,
     alignItems: "center",
+    position: "relative",
+    overflow: "hidden",
+  },
+  premiumCard: {
+    backgroundColor: "#FFF9E5",
+    borderWidth: 2,
+    borderColor: "#FFD700",
+    shadowColor: "#FFD700",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  premiumGlow: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 215, 0, 0.05)",
   },
   image: {
     width: 70,
@@ -57,6 +81,10 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     marginRight: Spacing.md,
     backgroundColor: "#F0F0F0",
+  },
+  premiumImage: {
+    borderWidth: 2,
+    borderColor: "#FFD700",
   },
   info: {
     flex: 1,
@@ -75,6 +103,12 @@ const styles = StyleSheet.create({
   species: {
     fontSize: Typography.small,
     color: "#999",
+    marginBottom: Spacing.xs,
+  },
+  celebratedTag: {
+    fontSize: Typography.tiny,
+    color: "#FF6B6B",
+    fontStyle: "italic",
     marginBottom: Spacing.xs,
   },
   stats: {

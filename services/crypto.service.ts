@@ -160,6 +160,7 @@ export async function setDefaultCryptoWallet(
 /**
  * Poll for payment status updates
  * Returns updated payment request
+ * Legacy method - use checkPaymentStatus for automatic detection
  */
 export async function pollPaymentStatus(
   paymentId: string
@@ -170,7 +171,8 @@ export async function pollPaymentStatus(
 /**
  * Check payment status with explicit endpoint
  * Uses the new POST /check-status endpoint
- * Forces immediate blockchain verification
+ * Forces immediate blockchain verification and automatic transaction detection
+ * This is the PRIMARY method for payment status checking
  */
 export async function checkPaymentStatus(
   paymentId: string
@@ -182,8 +184,27 @@ export async function checkPaymentStatus(
     status: result.status,
     confirmations: result.confirmations,
     requiredConfirmations: result.requiredConfirmations,
+    transactionHash: result.transactionHash,
   });
   return result;
+}
+
+/**
+ * Get recommended polling interval based on payment status
+ * Optimized intervals for automatic detection
+ */
+export function getPollingInterval(status: string): number {
+  const POLLING_INTERVALS = {
+    pending: 10000, // 10 seconds - waiting for transaction detection
+    confirming: 15000, // 15 seconds - waiting for confirmations
+    confirmed: 5000, // 5 seconds - final check before completion
+    completed: 0, // Stop polling
+    expired: 0, // Stop polling
+    cancelled: 0, // Stop polling
+    failed: 0, // Stop polling
+  };
+
+  return POLLING_INTERVALS[status as keyof typeof POLLING_INTERVALS] || 0;
 }
 
 // ========== Client-side Utilities ==========
@@ -240,6 +261,26 @@ export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
         bitcoin: 6,
         polygon: 6,
         solana: 6,
+        sepolia: 6, // Testnet USDT (if supported)
+      },
+    },
+    {
+      code: "ETH",
+      name: "Ethereum (ETH)",
+      symbol: "Ξ",
+      iconName: "ethereum",
+      networks: ["ethereum", "sepolia"],
+      minAmount: 5,
+      confirmationsRequired: 12,
+      estimatedTime: "2-5 minutes",
+      decimals: {
+        tron: 18,
+        ethereum: 18, // Native ETH uses 18 decimals
+        "binance-smart-chain": 18,
+        bitcoin: 18,
+        polygon: 18,
+        solana: 18,
+        sepolia: 18, // Sepolia testnet ETH uses 18 decimals
       },
     },
     {
@@ -258,6 +299,7 @@ export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
         bitcoin: 6,
         polygon: 6,
         solana: 6,
+        sepolia: 6, // Testnet USDC (if supported)
       },
     },
   ];
@@ -274,6 +316,7 @@ export function getNetworkName(network: CryptoNetwork): string {
     solana: "Solana",
     polygon: "Polygon",
     tron: "Tron (TRC-20)",
+    sepolia: "Sepolia Testnet (ETH)",
   };
   return networks[network];
 }
@@ -287,9 +330,9 @@ export function formatCryptoAmount(
 ): string {
   const decimals: Record<CryptoCurrency, number> = {
     BTC: 8,
-    ETH: 6,
-    USDT: 2,
-    USDC: 2,
+    ETH: 8, // 8 decimals for ETH (including Sepolia testnet)
+    USDT: 6, // 6 decimals for most USDT (TRC-20, ERC-20; BEP-20 is 18 but displayed as 6)
+    USDC: 6,
     BNB: 4,
     SOL: 4,
     DOGE: 2,
@@ -380,6 +423,7 @@ export function validateWalletAddress(
       case "ethereum":
       case "polygon":
       case "binance-smart-chain":
+      case "sepolia": // Sepolia uses same format as Ethereum (EVM-compatible)
         // EVM-compatible addresses (0x + 40 hex chars)
         return /^0x[a-fA-F0-9]{40}$/.test(address);
       case "bitcoin":
@@ -402,7 +446,7 @@ export function validateWalletAddress(
     case "USDC":
       // For USDT/USDC, check if it matches any supported format
       return (
-        /^0x[a-fA-F0-9]{40}$/.test(address) || // EVM (Ethereum, BSC, Polygon)
+        /^0x[a-fA-F0-9]{40}$/.test(address) || // EVM (Ethereum, BSC, Polygon, Sepolia)
         /^T[a-zA-Z0-9]{33}$/.test(address) // TRON
       );
     case "SOL":
@@ -425,12 +469,15 @@ export function getEstimatedFee(
   const fees: Record<string, number> = {
     "BTC-bitcoin": 2.5,
     "ETH-ethereum": 5.0,
+    "ETH-sepolia": 0.0, // Testnet - no real cost
     "USDT-ethereum": 5.0,
     "USDT-tron": 1.0,
     "USDT-binance-smart-chain": 0.5,
+    "USDT-sepolia": 0.0, // Testnet
     "USDC-ethereum": 5.0,
     "USDC-polygon": 0.1,
     "USDC-binance-smart-chain": 0.5,
+    "USDC-sepolia": 0.0, // Testnet
     "BNB-binance-smart-chain": 0.3,
     "SOL-solana": 0.01,
     "DOGE-bitcoin": 0.5,

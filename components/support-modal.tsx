@@ -22,7 +22,6 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Image,
   Linking,
   Modal,
   ScrollView,
@@ -179,13 +178,34 @@ export default function SupportModal({
         return;
       }
 
-      addNotification(
-        "recommendation",
-        "Payment Error",
-        `Failed to create crypto payment: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      // Handle unsupported currency or backend validation errors
+      if (error instanceof Error && error.message.includes("400")) {
+        // Try to get more specific error message from backend
+        let errorMessage = `${currency} on ${network} network is not yet supported by the backend.`;
+
+        // Check if we have ApiError with data
+        const apiError = error as any;
+        if (apiError.data) {
+          console.log("Backend error data:", apiError.data);
+          // Backend might return { error: "message" } or { message: "message" }
+          errorMessage =
+            apiError.data.error || apiError.data.message || errorMessage;
+        }
+
+        addNotification(
+          "recommendation",
+          "Currency Not Supported",
+          errorMessage
+        );
+      } else {
+        addNotification(
+          "recommendation",
+          "Payment Error",
+          `Failed to create crypto payment: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
+      }
       resetPaymentState();
     } finally {
       setIsProcessing(false);
@@ -417,7 +437,10 @@ export default function SupportModal({
         code: "ETH" as CryptoCurrency,
         name: "Ethereum",
         icon: "ethereum",
-        networks: ["ethereum" as CryptoNetwork],
+        networks: [
+          "ethereum" as CryptoNetwork,
+          "sepolia" as CryptoNetwork, // Sepolia testnet
+        ],
       },
       {
         code: "USDT" as CryptoCurrency,
@@ -449,6 +472,7 @@ export default function SupportModal({
         tron: "Tron (TRC20)",
         polygon: "Polygon",
         solana: "Solana",
+        sepolia: "Sepolia Testnet",
       };
       return names[network] || network;
     };
@@ -457,6 +481,14 @@ export default function SupportModal({
       <View>
         <Text style={styles.selectorTitle}>Select Cryptocurrency</Text>
         <Text style={styles.selectorSubtitle}>Amount: ${selectedAmount}</Text>
+
+        <View style={styles.infoBox}>
+          <FontAwesome6 name="circle-info" size={14} color="#007AFF" />
+          <Text style={styles.infoBoxText}>
+            ✅ Currently supported: USDT on Tron network{"\n"}
+            ⚠️ Other currencies are in development
+          </Text>
+        </View>
 
         {!selectedCurrency ? (
           <View style={styles.currencyList}>
@@ -651,122 +683,11 @@ export default function SupportModal({
                 </View>
               </View>
             ) : showCryptoSelector ? (
-              <View>
-                <TouchableOpacity
-                  style={styles.backButton}
-                  onPress={() => setShowCryptoSelector(false)}
-                >
-                  <Feather name="arrow-left" size={20} color="#007AFF" />
-                  <Text style={styles.backButtonText}>Back to amounts</Text>
-                </TouchableOpacity>
-
-                {/* USDT Network Selection */}
-                <View style={styles.usdtNetworkContainer}>
-                  <Text style={styles.networkTitle}>
-                    Select Network for USDT Payment
-                  </Text>
-                  <Text style={styles.networkSubtitle}>
-                    Choose your preferred blockchain network
-                  </Text>
-
-                  <View style={styles.networkList}>
-                    {/* Ethereum Network */}
-                    <TouchableOpacity
-                      style={[
-                        styles.networkCard,
-                        cryptoNetwork === "ethereum" &&
-                          styles.selectedNetworkCard,
-                      ]}
-                      onPress={async () => {
-                        const shouldSkip = await AsyncStorage.getItem(
-                          NETWORK_WARNING_KEY
-                        );
-                        if (shouldSkip === "true") {
-                          setCryptoNetwork("ethereum");
-                          handleCryptoSelection("USDT", "ethereum");
-                        } else {
-                          setPendingNetwork("ethereum");
-                          setShowNetworkConfirmation(true);
-                        }
-                      }}
-                    >
-                      <Image
-                        source={require("@/assets/icons/ethereum-logo.png")}
-                        style={styles.networkIcon}
-                      />
-                      <View style={styles.networkInfo}>
-                        <Text style={styles.networkName}>
-                          Ethereum (ERC-20)
-                        </Text>
-                        <Text style={styles.networkSpeed}>
-                          Medium speed • ~2-5 min
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-
-                    {/* Tron Network */}
-                    <TouchableOpacity
-                      style={[
-                        styles.networkCard,
-                        cryptoNetwork === "tron" && styles.selectedNetworkCard,
-                      ]}
-                      onPress={async () => {
-                        const shouldSkip = await AsyncStorage.getItem(
-                          NETWORK_WARNING_KEY
-                        );
-                        if (shouldSkip === "true") {
-                          setCryptoNetwork("tron");
-                          handleCryptoSelection("USDT", "tron");
-                        } else {
-                          setPendingNetwork("tron");
-                          setShowNetworkConfirmation(true);
-                        }
-                      }}
-                    >
-                      <Image
-                        source={require("@/assets/icons/tron-trx-logo.png")}
-                        style={styles.networkIcon}
-                      />
-                      <View style={styles.networkInfo}>
-                        <Text style={styles.networkName}>Tron (TRC-20)</Text>
-                        <Text style={styles.networkSpeed}>Fast • ~1-2 min</Text>
-                      </View>
-                    </TouchableOpacity>
-
-                    {/* Binance Smart Chain */}
-                    <TouchableOpacity
-                      style={[
-                        styles.networkCard,
-                        cryptoNetwork === "binance-smart-chain" &&
-                          styles.selectedNetworkCard,
-                      ]}
-                      onPress={async () => {
-                        const shouldSkip = await AsyncStorage.getItem(
-                          NETWORK_WARNING_KEY
-                        );
-                        if (shouldSkip === "true") {
-                          setCryptoNetwork("binance-smart-chain");
-                          handleCryptoSelection("USDT", "binance-smart-chain");
-                        } else {
-                          setPendingNetwork("binance-smart-chain");
-                          setShowNetworkConfirmation(true);
-                        }
-                      }}
-                    >
-                      <Image
-                        source={require("@/assets/icons/binance-smart-chain-bsc-logo.png")}
-                        style={styles.networkIcon}
-                      />
-                      <View style={styles.networkInfo}>
-                        <Text style={styles.networkName}>
-                          Binance Smart Chain (BEP-20)
-                        </Text>
-                        <Text style={styles.networkSpeed}>Fast • ~1-3 min</Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
+              <NetworkSelector
+                selectedAmount={selectedAmount || 0}
+                onSelect={handleCryptoSelection}
+                onBack={() => setShowCryptoSelector(false)}
+              />
             ) : (
               <>
                 <Text style={styles.subtitle}>
@@ -881,7 +802,6 @@ export default function SupportModal({
                             calculateTotalAmount(amount);
                           setSelectedAmount(total);
                           setPaymentMethod("crypto");
-                          setCryptoCurrency("USDT");
                           setShowCryptoSelector(true);
                         }}
                         disabled={isProcessing}
@@ -896,7 +816,7 @@ export default function SupportModal({
                               color="#26A17B"
                             />
                             <Text style={styles.paymentMethodButtonText}>
-                              Crypto (USDT)
+                              Crypto
                             </Text>
                           </>
                         )}
@@ -1146,6 +1066,23 @@ const styles = StyleSheet.create({
     color: "#666",
     marginBottom: 20,
     textAlign: "center",
+  },
+  infoBox: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    backgroundColor: "#E8F4FD",
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: "#B3D9F9",
+  },
+  infoBoxText: {
+    flex: 1,
+    fontSize: 12,
+    color: "#007AFF",
+    lineHeight: 18,
   },
   currencyList: {
     gap: 12,

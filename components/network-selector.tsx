@@ -43,6 +43,7 @@ export default function NetworkSelector({
       bitcoin: { speed: "Slow (10-30 min)", confirmations: 2 },
       solana: { speed: "Very Fast (30-60 sec)", confirmations: 32 },
       polygon: { speed: "Fast (1-3 min)", confirmations: 128 },
+      sepolia: { speed: "Fast (1-2 min) [TEST]", confirmations: 6 },
     };
     return details[network] || { speed: "Unknown", confirmations: 0 };
   };
@@ -56,9 +57,11 @@ export default function NetworkSelector({
       <View style={styles.networkList}>
         {networks.map((network) => {
           const isSelected = selectedNetwork === network;
-          const fee = getEstimatedFee(currency, network);
+          const networkCurrency = getCurrencyForNetwork(network);
+          const fee = getEstimatedFee(networkCurrency, network);
           const details = getNetworkDetails(network);
-          const address = getWalletAddressForNetwork(currency, network);
+          const address = getWalletAddressForNetwork(networkCurrency, network);
+          const isTestnet = network === "sepolia";
 
           // Skip networks without configured addresses
           if (!address) return null;
@@ -70,19 +73,28 @@ export default function NetworkSelector({
                 styles.networkCard,
                 isSelected && styles.selectedCard,
                 disabled && styles.disabledCard,
+                isTestnet && styles.testnetCard,
               ]}
               onPress={() => !disabled && onSelect(network)}
               disabled={disabled}
             >
               <View style={styles.networkInfo}>
-                <Text
-                  style={[
-                    styles.networkName,
-                    isSelected && styles.selectedText,
-                  ]}
-                >
-                  {getNetworkName(network)}
-                </Text>
+                <View style={styles.networkHeader}>
+                  <Text
+                    style={[
+                      styles.networkName,
+                      isSelected && styles.selectedText,
+                    ]}
+                  >
+                    {getNetworkName(network)}
+                  </Text>
+                  {isTestnet && (
+                    <View style={styles.testnetBadge}>
+                      <Text style={styles.testnetBadgeText}>TESTNET</Text>
+                    </View>
+                  )}
+                </View>
+                <Text style={styles.currencyInfo}>Uses {networkCurrency}</Text>
                 <View style={styles.detailsRow}>
                   <View style={styles.detailItem}>
                     <FontAwesome6
@@ -150,14 +162,39 @@ const styles = StyleSheet.create({
   disabledCard: {
     opacity: 0.5,
   },
+  testnetCard: {
+    borderLeftWidth: 4,
+    borderLeftColor: "#FF9800",
+  },
   networkInfo: {
     flex: 1,
+    gap: 8,
+  },
+  networkHeader: {
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   networkName: {
     fontSize: 16,
     fontWeight: "600",
     color: "#333",
+  },
+  testnetBadge: {
+    backgroundColor: "#FF9800",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  testnetBadgeText: {
+    fontSize: 10,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  currencyInfo: {
+    fontSize: 13,
+    color: "#007AFF",
+    fontWeight: "500",
   },
   selectedText: {
     color: "#007AFF",

@@ -27,7 +27,12 @@ export default function SupportBird() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<
-    "card" | "paypal" | "googlepay" | "applepay"
+    | "card"
+    | "paypal"
+    | "googlepay"
+    | "applepay"
+    | "crypto-usdt"
+    | "crypto-sepolia"
   >("card");
 
   React.useEffect(() => {
@@ -296,6 +301,57 @@ export default function SupportBird() {
               </TouchableOpacity>
             )}
           </View>
+
+          {/* Crypto Payment Options */}
+          <Text style={styles.cryptoSectionTitle}>Cryptocurrency</Text>
+          <View style={styles.paymentMethods}>
+            <TouchableOpacity
+              style={[
+                styles.paymentButton,
+                paymentMethod === "crypto-usdt" && styles.paymentButtonActive,
+              ]}
+              onPress={() => setPaymentMethod("crypto-usdt")}
+            >
+              <FontAwesome6
+                name="dollar-sign"
+                size={20}
+                color={paymentMethod === "crypto-usdt" ? "#fff" : "#2C3E50"}
+              />
+              <Text
+                style={[
+                  styles.paymentButtonText,
+                  paymentMethod === "crypto-usdt" &&
+                    styles.paymentButtonTextActive,
+                ]}
+              >
+                USDT (Tron)
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.paymentButton,
+                paymentMethod === "crypto-sepolia" &&
+                  styles.paymentButtonActive,
+              ]}
+              onPress={() => setPaymentMethod("crypto-sepolia")}
+            >
+              <FontAwesome6
+                name="vial"
+                size={20}
+                color={paymentMethod === "crypto-sepolia" ? "#fff" : "#2C3E50"}
+              />
+              <Text
+                style={[
+                  styles.paymentButtonText,
+                  paymentMethod === "crypto-sepolia" &&
+                    styles.paymentButtonTextActive,
+                ]}
+              >
+                Sepolia ETH
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Total */}
@@ -438,6 +494,13 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#2C3E50",
     marginBottom: 12,
+  },
+  cryptoSectionTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#2C3E50",
+    marginBottom: 12,
+    marginTop: 16,
   },
   amountGrid: {
     flexDirection: "row",

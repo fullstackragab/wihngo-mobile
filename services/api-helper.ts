@@ -178,8 +178,10 @@ export async function authenticatedPost<T>(url: string, data: any): Promise<T> {
     let errorData;
     try {
       errorData = await response.json();
+      console.log("❌ POST Error response data:", errorData);
     } catch {
       errorData = await response.text();
+      console.log("❌ POST Error response text:", errorData);
     }
     throw new ApiError(response.status, response.statusText, errorData);
   }

@@ -5,7 +5,7 @@
 
 export type CryptoCurrency =
   | "BTC" // Bitcoin
-  | "ETH" // Ethereum
+  | "ETH" // Ethereum (includes mainnet and Sepolia testnet)
   | "USDT" // Tether (TRC-20, ERC-20, BEP-20)
   | "USDC" // USD Coin (ERC-20, BEP-20)
   | "BNB" // Binance Coin
@@ -18,13 +18,15 @@ export type CryptoNetwork =
   | "binance-smart-chain"
   | "solana"
   | "polygon"
-  | "tron";
+  | "tron"
+  | "sepolia"; // Ethereum Sepolia Testnet
 
 /**
  * Network confirmation requirements
  * Tron: 19 blocks (~57 seconds)
  * Ethereum: 12 blocks (~2.4 minutes)
  * BSC: 15 blocks (~45 seconds)
+ * Sepolia: 6 blocks (~1.2 minutes) - Testnet only
  */
 export const NETWORK_CONFIRMATIONS: Record<CryptoNetwork, number> = {
   tron: 19,
@@ -33,6 +35,7 @@ export const NETWORK_CONFIRMATIONS: Record<CryptoNetwork, number> = {
   bitcoin: 6,
   polygon: 128,
   solana: 32,
+  sepolia: 6, // Ethereum Sepolia Testnet
 };
 
 export type CryptoPaymentStatus =
@@ -181,3 +184,43 @@ export type CryptoPaymentStep =
   | "confirming"
   | "completed"
   | "failed";
+
+/**
+ * Network to Currency Mapping
+ * Defines which currency is used for each network
+ */
+export const NETWORK_TO_CURRENCY: Record<CryptoNetwork, CryptoCurrency> = {
+  sepolia: "ETH", // Sepolia testnet uses native ETH
+  ethereum: "USDT", // Ethereum mainnet typically uses USDT
+  tron: "USDT", // Tron uses USDT (TRC-20)
+  "binance-smart-chain": "USDT", // BSC uses USDT (BEP-20)
+  bitcoin: "BTC", // Bitcoin network uses BTC
+  polygon: "USDT", // Polygon uses USDT
+  solana: "SOL", // Solana uses native SOL
+};
+
+/**
+ * Get currency for a specific network
+ */
+export function getCurrencyForNetwork(network: CryptoNetwork): CryptoCurrency {
+  return NETWORK_TO_CURRENCY[network] || "USDT";
+}
+
+/**
+ * Check if a currency-network combination is valid
+ */
+export function isValidCurrencyNetwork(
+  currency: CryptoCurrency,
+  network: CryptoNetwork
+): boolean {
+  const validCombinations: Record<CryptoCurrency, CryptoNetwork[]> = {
+    ETH: ["ethereum", "sepolia"],
+    USDT: ["tron", "ethereum", "binance-smart-chain", "polygon"],
+    USDC: ["ethereum", "binance-smart-chain", "polygon"],
+    BTC: ["bitcoin"],
+    BNB: ["binance-smart-chain"],
+    SOL: ["solana"],
+    DOGE: [],
+  };
+  return validCombinations[currency]?.includes(network) || false;
+}

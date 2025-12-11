@@ -72,6 +72,7 @@ export function usePaymentStatusPolling({
 
   /**
    * Check payment status from API
+   * Uses the check-status endpoint for automatic transaction detection
    */
   const checkPaymentStatus = useCallback(async (): Promise<void> => {
     if (!paymentId || !authToken) {
@@ -87,7 +88,10 @@ export function usePaymentStatusPolling({
         process.env.EXPO_PUBLIC_API_URL || "http://localhost:5000/api";
       const endpoint = `${API_URL}/payments/crypto/${paymentId}/check-status`;
 
-      console.log("🔄 Checking payment status:", paymentId);
+      console.log(
+        "🔄 Checking payment status (automatic detection):",
+        paymentId
+      );
 
       const response = await fetch(endpoint, {
         method: "POST",
@@ -119,7 +123,10 @@ export function usePaymentStatusPolling({
         confirmations: data.confirmations,
         requiredConfirmations: data.requiredConfirmations,
         transactionHash: data.transactionHash,
-        fullData: data,
+        autoDetected:
+          !data.transactionHash && data.status === "pending"
+            ? "scanning"
+            : "detected",
       });
 
       // Update state

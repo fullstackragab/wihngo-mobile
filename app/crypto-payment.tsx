@@ -24,6 +24,7 @@ import {
   CryptoNetwork,
   CryptoPaymentRequest,
   CryptoPaymentStep,
+  getCurrencyForNetwork,
 } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router, useLocalSearchParams } from "expo-router";
@@ -58,6 +59,17 @@ export default function CryptoPaymentScreen() {
   const [enablePolling, setEnablePolling] = useState(false);
   const [showTxHashInput, setShowTxHashInput] = useState(false);
   const [txHashInput, setTxHashInput] = useState("");
+
+  // Update selected currency when network changes
+  useEffect(() => {
+    if (selectedNetwork) {
+      const currency = getCurrencyForNetwork(selectedNetwork);
+      setSelectedCurrency(currency);
+      console.log(
+        `🔄 Network changed to ${selectedNetwork}, using currency ${currency}`
+      );
+    }
+  }, [selectedNetwork]);
 
   // Use payment status polling hook
   const {
@@ -172,6 +184,18 @@ export default function CryptoPaymentScreen() {
       return;
     }
 
+    // Validate currency-network combination
+    if (!isValidCurrencyNetwork(selectedCurrency, selectedNetwork)) {
+      addNotification(
+        "recommendation",
+        "Invalid Configuration",
+        `${selectedCurrency} is not supported on ${getNetworkName(
+          selectedNetwork
+        )}`
+      );
+      return;
+    }
+
     // Check authentication before making payment
     if (!isAuthenticated || !token) {
       addNotification(
@@ -185,6 +209,12 @@ export default function CryptoPaymentScreen() {
 
     setLoading(true);
     try {
+      console.log("💰 Creating payment with:", {
+        currency: selectedCurrency,
+        network: selectedNetwork,
+        amountUsd,
+      });
+
       const response = await createCryptoPayment({
         birdId,
         amountUsd,
@@ -318,7 +348,9 @@ export default function CryptoPaymentScreen() {
         return (
           <View style={styles.networkSelectionContainer}>
             <View style={styles.headerInfo}>
-              <Text style={styles.headerTitle}>Pay with USDT</Text>
+              <Text style={styles.headerTitle}>
+                Pay with {selectedCurrency}
+              </Text>
               <Text style={styles.headerSubtitle}>
                 Select your preferred blockchain network
               </Text>
@@ -329,7 +361,11 @@ export default function CryptoPaymentScreen() {
                 </Text>
                 {cryptoAmount > 0 && (
                   <Text style={styles.amountPreviewCrypto}>
-                    ≈ {cryptoAmount.toFixed(2)} USDT
+                    ≈{" "}
+                    {selectedCurrency === "ETH"
+                      ? cryptoAmount.toFixed(8)
+                      : cryptoAmount.toFixed(2)}{" "}
+                    {selectedCurrency}
                   </Text>
                 )}
               </View>
@@ -360,14 +396,17 @@ export default function CryptoPaymentScreen() {
               <Text style={styles.amountLabel}>Payment Summary</Text>
               <View style={styles.amountDisplay}>
                 <Text style={styles.cryptoAmountLarge}>
-                  {cryptoAmount.toFixed(2)} USDT
+                  {selectedCurrency === "ETH"
+                    ? cryptoAmount.toFixed(8)
+                    : cryptoAmount.toFixed(6)}{" "}
+                  {selectedCurrency}
                 </Text>
                 <Text style={styles.usdAmountLarge}>
                   ≈ ${amountUsd.toFixed(2)} USD
                 </Text>
               </View>
               <Text style={styles.exchangeRate}>
-                1 USDT ≈ ${exchangeRate.toFixed(4)} USD
+                1 {selectedCurrency} ≈ ${exchangeRate.toFixed(4)} USD
               </Text>
             </View>
 
@@ -490,12 +529,18 @@ export default function CryptoPaymentScreen() {
               >
                 <FontAwesome6 name="magnifying-glass" size={14} color="#666" />
                 <Text style={styles.verifyButtonText}>
-                  Already Sent? Verify Transaction
+                  Manual Verification (Optional)
                 </Text>
               </TouchableOpacity>
             ) : (
               <View style={styles.txHashContainer}>
-                <Text style={styles.txHashLabel}>Enter Transaction Hash:</Text>
+                <Text style={styles.txHashLabel}>
+                  Enter Transaction Hash (Optional):
+                </Text>
+                <Text style={styles.txHashSubLabel}>
+                  Automatic detection is active. Manual verification is only
+                  needed if you want instant confirmation.
+                </Text>
                 <TextInput
                   style={styles.txHashInput}
                   value={txHashInput}
@@ -533,10 +578,18 @@ export default function CryptoPaymentScreen() {
               </View>
             )}
 
-            <Text style={styles.infoText}>
-              💡 Payment status checks automatically every 5 seconds. Tap "Check
-              Status Now" for immediate update.
-            </Text>
+            <View style={styles.autoDetectInfoBox}>
+              <FontAwesome6 name="robot" size={16} color="#4CAF50" />
+              <Text style={styles.infoText}>
+                🚀{" "}
+                <Text style={styles.infoTextBold}>
+                  Automatic Detection Active:
+                </Text>{" "}
+                We're scanning the blockchain every 30 seconds. Your payment
+                will be detected within 10-60 seconds after sending. No manual
+                action required!
+              </Text>
+            </View>
           </View>
         ) : null;
 
@@ -1014,6 +1067,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
   },
+  txHashSubLabel: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: -6,
+    fontStyle: "italic",
+  },
   txHashInput: {
     backgroundColor: "#fff",
     borderWidth: 1,
@@ -1054,6 +1113,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: "#fff",
+  },
+  autoDetectInfoBox: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+    backgroundColor: "#E8F5E9",
+    padding: 16,
+    borderRadius: 12,
+    marginTop: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: "#4CAF50",
+  },
+  infoTextBold: {
+    fontWeight: "600",
+    color: "#2E7D32",
   },
   errorContainer: {
     flexDirection: "row",

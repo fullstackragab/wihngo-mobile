@@ -160,9 +160,30 @@ export default function CryptoPaymentQR({
           <View style={styles.instructionItem}>
             <FontAwesome6 name="2" size={16} color="#007AFF" />
             <Text style={styles.instructionText}>
-              Wait for {payment.requiredConfirmations} network confirmations
+              Wait for automatic detection (no transaction hash needed!)
             </Text>
           </View>
+          <View style={styles.instructionItem}>
+            <FontAwesome6 name="3" size={16} color="#007AFF" />
+            <Text style={styles.instructionText}>
+              Payment completes after {payment.requiredConfirmations}{" "}
+              confirmations
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Automatic Detection Notice */}
+      <View style={styles.autoDetectBox}>
+        <FontAwesome6 name="magnifying-glass" size={16} color="#4CAF50" />
+        <View style={styles.autoDetectContent}>
+          <Text style={styles.autoDetectTitle}>
+            🔍 Automatic Detection Active
+          </Text>
+          <Text style={styles.autoDetectText}>
+            We're scanning the blockchain every 30 seconds. Your payment will be
+            detected automatically within 10-60 seconds after sending.
+          </Text>
         </View>
       </View>
 
@@ -309,6 +330,31 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: "600",
     color: "#333",
+  },
+  autoDetectBox: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+    padding: 16,
+    backgroundColor: "#E8F5E9",
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#4CAF50",
+    marginBottom: 16,
+  },
+  autoDetectContent: {
+    flex: 1,
+    gap: 4,
+  },
+  autoDetectTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#2E7D32",
+  },
+  autoDetectText: {
+    fontSize: 12,
+    color: "#1B5E20",
+    lineHeight: 18,
   },
   warningBox: {
     flexDirection: "row",

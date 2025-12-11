@@ -256,9 +256,9 @@ export function useVideoPicker(
 }
 
 // Note: Video compression and processing will be handled by the backend
-// The frontend will upload the original video, and the backend will:
+// The frontend accepts videos up to 200MB, and the backend will:
 // 1. Compress video to target bitrate (2 Mbps)
-// 2. Resize to target dimensions (720x1280 for vertical)
+// 2. Resize to 720p resolution (720x1280 for vertical)
 // 3. Optimize for mobile streaming
 // 4. Generate thumbnails
 // 5. Return the processed video URL

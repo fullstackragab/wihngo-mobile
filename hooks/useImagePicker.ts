@@ -29,7 +29,7 @@ const DEFAULT_OPTIONS: ImagePickerOptions = {
   maxSizeMB: 5,
   allowedTypes: ["image/jpeg", "image/png", "image/webp"],
   quality: 0.8,
-  allowsEditing: true,
+  allowsEditing: false,
 };
 
 export function useImagePicker(

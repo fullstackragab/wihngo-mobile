@@ -5,15 +5,19 @@ import ErrorView from "@/components/ui/error-view";
 import LoadingScreen from "@/components/ui/loading-screen";
 import { getBirdByIdService } from "@/services/bird.service";
 import { Bird } from "@/types/bird";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Stack, useLocalSearchParams } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { VideoView, useVideoPlayer } from "expo-video";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   Image,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -24,7 +28,15 @@ export default function BirdDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [loveCount, setLoveCount] = useState(0);
+  const [showImage, setShowImage] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const { id } = useLocalSearchParams<{ id: string }>();
+  const videoViewRef = useRef<VideoView>(null);
+
+  const player = useVideoPlayer(bird?.videoUrl || "", (player) => {
+    player.loop = false;
+    player.muted = false;
+  });
 
   const loadBirdDetails = useCallback(async () => {
     if (!id) return;
@@ -52,6 +64,93 @@ export default function BirdDetails() {
   useEffect(() => {
     loadBirdDetails();
   }, [loadBirdDetails]);
+
+  // Ensure portrait orientation when component mounts
+  useEffect(() => {
+    const setPortraitOrientation = async () => {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    };
+    setPortraitOrientation();
+  }, []);
+
+  // Show image for 1 second then play video
+  useEffect(() => {
+    if (bird?.videoUrl && player) {
+      setShowImage(true);
+      const timer = setTimeout(() => {
+        setShowImage(false);
+        // Play video after image is hidden
+        player.play();
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [bird, player]);
+
+  // Listen for video end to show image again
+  useEffect(() => {
+    if (!player) return;
+
+    const playingSubscription = player.addListener("playingChange", (event) => {
+      setIsPlaying(event.isPlaying);
+    });
+
+    const playToEndSubscription = player.addListener("playToEnd", () => {
+      // When video finishes playing, show image
+      setShowImage(true);
+    });
+
+    return () => {
+      playingSubscription.remove();
+      playToEndSubscription.remove();
+    };
+  }, [player]);
+
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      player.pause();
+    } else {
+      player.play();
+    }
+  };
+
+  const handleFullscreen = async () => {
+    try {
+      // Change to landscape orientation before entering fullscreen
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.LANDSCAPE
+      );
+      await videoViewRef.current?.enterFullscreen();
+    } catch (error) {
+      console.error("Error entering fullscreen:", error);
+    }
+  };
+
+  const handleFullscreenExit = async () => {
+    try {
+      // First unlock orientation to allow rotation
+      await ScreenOrientation.unlockAsync();
+      // Then explicitly set to portrait and lock
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    } catch (error) {
+      console.error("Error setting portrait orientation:", error);
+    }
+  };
+
+  const handleImagePress = () => {
+    if (bird?.videoUrl && player) {
+      setShowImage(false);
+      // Reset player position to beginning and play after component mounts
+      setTimeout(() => {
+        player.currentTime = 0;
+        player.play();
+      }, 150);
+    }
+  };
 
   const handleLoveChange = (isLoved: boolean, newCount: number) => {
     setLoveCount(newCount);
@@ -84,11 +183,61 @@ export default function BirdDetails() {
       <Stack.Screen options={{ title: `Bird Details`, headerShown: false }} />
 
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <Image
-          source={{ uri: bird.imageUrl || "https://via.placeholder.com/400" }}
-          style={styles.heroImage}
-          resizeMode="cover"
-        />
+        {bird.videoUrl ? (
+          <View style={styles.videoContainer}>
+            <VideoView
+              ref={videoViewRef}
+              player={player}
+              style={styles.heroImage}
+              contentFit="cover"
+              allowsFullscreen
+              allowsPictureInPicture={false}
+              nativeControls={false}
+              onFullscreenExit={handleFullscreenExit}
+            />
+            {showImage && (
+              <TouchableOpacity
+                onPress={handleImagePress}
+                activeOpacity={0.9}
+                style={styles.imageOverlay}
+              >
+                <Image
+                  source={{
+                    uri: bird.imageUrl || "https://via.placeholder.com/400",
+                  }}
+                  style={styles.heroImage}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+            )}
+            {!showImage && (
+              <View style={styles.customControls}>
+                <TouchableOpacity
+                  onPress={handlePlayPause}
+                  style={styles.controlButton}
+                >
+                  <Ionicons
+                    name={isPlaying ? "pause" : "play"}
+                    size={20}
+                    color="white"
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={handleFullscreen}
+                  style={styles.controlButton}
+                >
+                  <Ionicons name="expand" size={18} color="white" />
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        ) : (
+          <Image
+            source={{ uri: bird.imageUrl || "https://via.placeholder.com/400" }}
+            style={styles.heroImage}
+            resizeMode="cover"
+          />
+        )}
         <View style={styles.statsContainer}>
           <View
             style={{
@@ -182,6 +331,37 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderColor: "white",
     paddingBottom: 0,
+  },
+  videoContainer: {
+    position: "relative",
+    width: SCREEN_WIDTH,
+    height: SCREEN_WIDTH,
+  },
+  imageOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
+  },
+  customControls: {
+    position: "absolute",
+    bottom: 40,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
+  },
+  controlButton: {
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
   },
   content: {
     padding: 22,

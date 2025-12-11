@@ -50,7 +50,7 @@ export default function ImagePickerButton({
     {
       maxSizeMB,
       aspect: aspectRatio,
-      allowsEditing: true,
+      allowsEditing: false,
       quality: 0.8,
     },
     onImageSelected

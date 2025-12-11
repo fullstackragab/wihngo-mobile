@@ -160,14 +160,6 @@ export default function CryptoPaymentQR({
           <View style={styles.instructionItem}>
             <FontAwesome6 name="2" size={16} color="#007AFF" />
             <Text style={styles.instructionText}>
-              Use{" "}
-              <Text style={styles.bold}>{getNetworkName(payment.network)}</Text>{" "}
-              network only
-            </Text>
-          </View>
-          <View style={styles.instructionItem}>
-            <FontAwesome6 name="3" size={16} color="#007AFF" />
-            <Text style={styles.instructionText}>
               Wait for {payment.requiredConfirmations} network confirmations
             </Text>
           </View>
@@ -178,8 +170,7 @@ export default function CryptoPaymentQR({
       <View style={styles.warningBox}>
         <FontAwesome6 name="triangle-exclamation" size={16} color="#FF9800" />
         <Text style={styles.warningText}>
-          Sending a different amount or using a different network may result in
-          loss of funds
+          Sending a different amount may result in loss of funds
         </Text>
       </View>
     </View>

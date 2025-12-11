@@ -6,8 +6,8 @@
 export type CryptoCurrency =
   | "BTC" // Bitcoin
   | "ETH" // Ethereum
-  | "USDT" // Tether
-  | "USDC" // USD Coin
+  | "USDT" // Tether (TRC-20, ERC-20, BEP-20)
+  | "USDC" // USD Coin (ERC-20, BEP-20)
   | "BNB" // Binance Coin
   | "SOL" // Solana
   | "DOGE"; // Dogecoin
@@ -19,6 +19,21 @@ export type CryptoNetwork =
   | "solana"
   | "polygon"
   | "tron";
+
+/**
+ * Network confirmation requirements
+ * Tron: 19 blocks (~57 seconds)
+ * Ethereum: 12 blocks (~2.4 minutes)
+ * BSC: 15 blocks (~45 seconds)
+ */
+export const NETWORK_CONFIRMATIONS: Record<CryptoNetwork, number> = {
+  tron: 19,
+  ethereum: 12,
+  "binance-smart-chain": 15,
+  bitcoin: 6,
+  polygon: 128,
+  solana: 32,
+};
 
 export type CryptoPaymentStatus =
   | "pending" // Payment initiated, awaiting confirmation
@@ -154,6 +169,7 @@ export type CryptoCurrencyInfo = {
   minAmount: number; // Minimum payment amount in USD
   confirmationsRequired: number;
   estimatedTime: string; // e.g., "10-30 minutes"
+  decimals: Record<CryptoNetwork, number>; // Important: BEP-20 USDT uses 18 decimals!
 };
 
 export type CryptoPaymentStep =

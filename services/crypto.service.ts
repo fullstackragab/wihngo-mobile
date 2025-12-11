@@ -39,6 +39,8 @@ export async function createCryptoPayment(
     paymentId: response.paymentRequest.id,
     expiresAt: response.paymentRequest.expiresAt,
     status: response.paymentRequest.status,
+    amountCrypto: response.paymentRequest.amountCrypto,
+    walletAddress: response.paymentRequest.walletAddress,
   });
 
   return response;
@@ -61,6 +63,10 @@ export async function verifyCryptoPayment(
   paymentId: string,
   dto: VerifyCryptoPaymentDto
 ): Promise<CryptoPaymentRequest> {
+  console.log("🔍 Verifying crypto payment:", {
+    paymentId,
+    transactionHash: dto.transactionHash,
+  });
   const endpoint = `payments/crypto/${paymentId}/verify`;
   return apiHelper.post<CryptoPaymentRequest>(endpoint, dto);
 }
@@ -164,12 +170,20 @@ export async function pollPaymentStatus(
 /**
  * Check payment status with explicit endpoint
  * Uses the new POST /check-status endpoint
+ * Forces immediate blockchain verification
  */
 export async function checkPaymentStatus(
   paymentId: string
 ): Promise<CryptoPaymentRequest> {
+  console.log("🔄 Checking payment status:", paymentId);
   const endpoint = `payments/crypto/${paymentId}/check-status`;
-  return apiHelper.post<CryptoPaymentRequest>(endpoint, {});
+  const result = await apiHelper.post<CryptoPaymentRequest>(endpoint, {});
+  console.log("📊 Payment status result:", {
+    status: result.status,
+    confirmations: result.confirmations,
+    requiredConfirmations: result.requiredConfirmations,
+  });
+  return result;
 }
 
 // ========== Client-side Utilities ==========
@@ -216,9 +230,35 @@ export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
       symbol: "₮",
       iconName: "dollar-sign",
       networks: ["tron", "ethereum", "binance-smart-chain"],
-      minAmount: 10,
+      minAmount: 5, // Backend enforces $5 minimum
       confirmationsRequired: 19, // TRON uses 19 confirmations
       estimatedTime: "1-5 minutes", // TRON: 1-2 min, Ethereum: 2-5 min, BSC: 1-3 min
+      decimals: {
+        tron: 6, // TRC-20 USDT uses 6 decimals
+        ethereum: 6, // ERC-20 USDT uses 6 decimals
+        "binance-smart-chain": 18, // BEP-20 USDT uses 18 decimals! (Important!)
+        bitcoin: 6,
+        polygon: 6,
+        solana: 6,
+      },
+    },
+    {
+      code: "USDC",
+      name: "USD Coin (USDC)",
+      symbol: "$",
+      iconName: "dollar-sign",
+      networks: ["ethereum", "binance-smart-chain", "polygon"],
+      minAmount: 5,
+      confirmationsRequired: 12,
+      estimatedTime: "2-5 minutes",
+      decimals: {
+        tron: 6,
+        ethereum: 6,
+        "binance-smart-chain": 18,
+        bitcoin: 6,
+        polygon: 6,
+        solana: 6,
+      },
     },
   ];
 }

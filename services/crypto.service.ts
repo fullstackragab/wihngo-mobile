@@ -80,6 +80,30 @@ export async function getCryptoExchangeRates(): Promise<CryptoExchangeRate[]> {
 }
 
 /**
+ * Get available networks from backend
+ */
+export async function getAvailableNetworks(): Promise<any[]> {
+  const endpoint = `payments/crypto/networks`;
+  return apiHelper.get<any[]>(endpoint);
+}
+
+/**
+ * Get available currencies from backend
+ */
+export async function getAvailableCurrencies(): Promise<any[]> {
+  const endpoint = `payments/crypto/currencies`;
+  return apiHelper.get<any[]>(endpoint);
+}
+
+/**
+ * Get supported currency-network combinations from backend
+ */
+export async function getSupportedCombinations(): Promise<any> {
+  const endpoint = `payments/crypto/supported-combinations`;
+  return apiHelper.get<any>(endpoint);
+}
+
+/**
  * Get exchange rate for a specific cryptocurrency
  */
 export async function getCryptoExchangeRate(
@@ -247,72 +271,43 @@ export function getWalletAddressForNetwork(
 
 /**
  * Get information about supported cryptocurrencies - Updated v2.0
- * Breaking Change: Removed BTC, SOL, MATIC, Sepolia support
- * Network-specific currencies:
- * - Tron: USDT, USDC
- * - Ethereum: ETH, USDT, USDC
- * - Binance Smart Chain: BNB, USDT, USDC
+ * Supported networks: Ethereum, Solana, Polygon, Base, Stellar
+ * Supported currencies: USDC, EURC
  */
 export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
   return [
     {
-      code: "USDT",
-      name: "Tether (USDT)",
-      symbol: "₮",
-      iconName: "dollar-sign",
-      networks: ["tron", "ethereum", "binance-smart-chain"],
-      minAmount: 5,
-      confirmationsRequired: 19,
-      estimatedTime: "~1 min", // TRON is fastest
-      decimals: {
-        tron: 6, // TRC-20 USDT uses 6 decimals
-        ethereum: 6, // ERC-20 USDT uses 6 decimals
-        "binance-smart-chain": 18, // BEP-20 USDT uses 18 decimals
-      },
-    },
-    {
       code: "USDC",
       name: "USD Coin (USDC)",
       symbol: "$",
-      iconName: "dollar-sign",
-      networks: ["tron", "ethereum", "binance-smart-chain"],
-      minAmount: 5,
+      iconName: "usdc",
+      networks: ["ethereum", "solana", "polygon", "base", "stellar"],
+      minAmount: 1,
       confirmationsRequired: 12,
-      estimatedTime: "~3 min",
+      estimatedTime: "~30 sec - 5 min",
       decimals: {
-        tron: 6,
         ethereum: 6,
-        "binance-smart-chain": 18,
+        solana: 6,
+        polygon: 6,
+        base: 6,
+        stellar: 7,
       },
     },
     {
-      code: "ETH",
-      name: "Ethereum (ETH)",
-      symbol: "Ξ",
-      iconName: "ethereum",
-      networks: ["ethereum"],
-      minAmount: 5,
+      code: "EURC",
+      name: "Euro Coin (EURC)",
+      symbol: "€",
+      iconName: "eurc",
+      networks: ["ethereum", "solana", "polygon", "base", "stellar"],
+      minAmount: 1,
       confirmationsRequired: 12,
-      estimatedTime: "~3 min",
+      estimatedTime: "~30 sec - 5 min",
       decimals: {
-        tron: 18,
-        ethereum: 18, // Native ETH uses 18 decimals
-        "binance-smart-chain": 18,
-      },
-    },
-    {
-      code: "BNB",
-      name: "Binance Coin (BNB)",
-      symbol: "BNB",
-      iconName: "b",
-      networks: ["binance-smart-chain"],
-      minAmount: 5,
-      confirmationsRequired: 15,
-      estimatedTime: "~1 min",
-      decimals: {
-        tron: 18,
-        ethereum: 18,
-        "binance-smart-chain": 18,
+        ethereum: 6,
+        solana: 6,
+        polygon: 6,
+        base: 6,
+        stellar: 7,
       },
     },
   ];
@@ -323,9 +318,11 @@ export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
  */
 export function getNetworkName(network: CryptoNetwork): string {
   const networks: Record<CryptoNetwork, string> = {
-    ethereum: "Ethereum (ERC-20)",
-    "binance-smart-chain": "Binance Smart Chain (BEP-20)",
-    tron: "Tron (TRC-20)",
+    ethereum: "Ethereum",
+    solana: "Solana",
+    polygon: "Polygon",
+    base: "Base",
+    stellar: "Stellar",
   };
   return networks[network];
 }
@@ -338,10 +335,8 @@ export function formatCryptoAmount(
   currency: CryptoCurrency
 ): string {
   const decimals: Record<CryptoCurrency, number> = {
-    ETH: 8,
-    USDT: 6,
     USDC: 6,
-    BNB: 4,
+    EURC: 6,
   };
 
   return amount.toFixed(decimals[currency]);
@@ -355,23 +350,24 @@ export function generatePaymentUri(
   currency: CryptoCurrency,
   address: string,
   amount: number,
+  network?: CryptoNetwork,
   label?: string
 ): string {
-  switch (currency) {
-    case "ETH":
-    case "BNB":
-      return `ethereum:${address}?value=${amount * 1e18}${
-        label ? `&label=${encodeURIComponent(label)}` : ""
-      }`;
-    case "USDT":
-    case "USDC":
-      // Backend generates proper URI based on network
-      // This is a fallback for Ethereum network
-      return `ethereum:${address}?value=${amount * 1e18}${
-        label ? `&label=${encodeURIComponent(label)}` : ""
-      }`;
-    default:
-      return address;
+  // Backend should generate proper URIs, this is a fallback
+  // For USDC/EURC, the URI format depends on the network
+  if (network === "solana") {
+    return `solana:${address}?amount=${amount}${
+      label ? `&label=${encodeURIComponent(label)}` : ""
+    }`;
+  } else if (network === "stellar") {
+    return `web+stellar:pay?destination=${address}&amount=${amount}${
+      label ? `&memo=${encodeURIComponent(label)}` : ""
+    }`;
+  } else {
+    // Ethereum, Polygon, Base use EVM-compatible format
+    return `ethereum:${address}?value=${amount}${
+      label ? `&label=${encodeURIComponent(label)}` : ""
+    }`;
   }
 }
 
@@ -405,34 +401,25 @@ export function validateWalletAddress(
 ): boolean {
   if (!address || address.trim().length === 0) return false;
 
-  // For currencies with multiple networks, validate based on network
+  // Validate based on network
   if (network) {
     switch (network) {
-      case "tron":
-        // TRON addresses start with 'T' and are 34 characters
-        return /^T[a-zA-Z0-9]{33}$/.test(address);
       case "ethereum":
-      case "binance-smart-chain":
+      case "polygon":
+      case "base":
         // EVM-compatible addresses (0x + 40 hex chars)
         return /^0x[a-fA-F0-9]{40}$/.test(address);
+      case "solana":
+        // Solana addresses are base58 encoded, 32-44 characters
+        return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
+      case "stellar":
+        // Stellar addresses start with G and are 56 characters
+        return /^G[A-Z2-7]{55}$/.test(address);
     }
   }
 
-  // Fallback to currency-based validation
-  switch (currency) {
-    case "ETH":
-    case "BNB":
-      return /^0x[a-fA-F0-9]{40}$/.test(address);
-    case "USDT":
-    case "USDC":
-      // For USDT/USDC, check if it matches any supported format
-      return (
-        /^0x[a-fA-F0-9]{40}$/.test(address) || // EVM (Ethereum, BSC)
-        /^T[a-zA-Z0-9]{33}$/.test(address) // TRON
-      );
-    default:
-      return false;
-  }
+  // Fallback: accept any reasonable length address
+  return address.length >= 26 && address.length <= 100;
 }
 
 /**
@@ -444,13 +431,16 @@ export function getEstimatedFee(
 ): number {
   // Fee estimates for supported networks
   const fees: Record<string, number> = {
-    "USDT-tron": 0.01, // TRON - cheapest, recommended
-    "USDT-binance-smart-chain": 0.05, // BSC - low fee
-    "USDT-ethereum": 5.0, // Ethereum - higher fees
-    "USDC-binance-smart-chain": 0.05, // BSC - low fee
-    "USDC-ethereum": 5.0, // Ethereum - higher fees
-    "ETH-ethereum": 5.0, // Native ETH
-    "BNB-binance-smart-chain": 0.05, // Native BNB
+    "USDC-ethereum": 3.0, // Ethereum - higher fees
+    "USDC-solana": 0.00025, // Solana - very low fees
+    "USDC-polygon": 0.01, // Polygon - low fees
+    "USDC-base": 0.05, // Base - low fees
+    "USDC-stellar": 0.00001, // Stellar - minimal fees
+    "EURC-ethereum": 3.0, // Ethereum - higher fees
+    "EURC-solana": 0.00025, // Solana - very low fees
+    "EURC-polygon": 0.01, // Polygon - low fees
+    "EURC-base": 0.05, // Base - low fees
+    "EURC-stellar": 0.00001, // Stellar - minimal fees
   };
 
   const key = `${currency}-${network}`;

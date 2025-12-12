@@ -53,6 +53,8 @@ A React Native mobile application for celebrating, supporting, and memorializing
    - Press `a` for Android emulator
    - Scan QR code with Expo Go app on your phone
 
+> ⚠️ **Important:** Push notifications (remote notifications) require a **development build** in Expo SDK 53+. Expo Go no longer supports this feature. See [Development Builds Guide](https://docs.expo.dev/develop/development-builds/introduction/) for setup instructions.
+
 ## 📁 Project Structure
 
 ```
@@ -87,6 +89,28 @@ wihngo/
 - `npm run ios` - Run on iOS
 - `npm run web` - Run in web browser
 - `npm run lint` - Run ESLint
+
+### Building for Production
+
+For push notifications and other native features to work properly in SDK 53+, create a development or production build:
+
+```bash
+# Install EAS CLI
+npm install -g eas-cli
+
+# Login and configure
+eas login
+eas build:configure
+
+# Create development build (for testing)
+eas build --profile development --platform android
+eas build --profile development --platform ios
+
+# Create production build
+eas build --profile production --platform all
+```
+
+See [NOTIFICATION_SETUP.md](./docs/NOTIFICATION_SETUP.md) for detailed notification configuration.
 
 ### Code Organization
 

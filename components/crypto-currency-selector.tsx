@@ -3,16 +3,15 @@
  * Allows users to select a cryptocurrency for payment
  */
 
-import { getSupportedCryptocurrencies } from "@/services/crypto.service";
 import {
-  CryptoCurrency,
-  CryptoCurrencyInfo,
-  CryptoNetwork,
   getCurrenciesForNetwork,
-} from "@/types/crypto";
+  useCryptoConfig,
+} from "@/hooks/useCryptoConfig";
+import { CryptoCurrency, CryptoNetwork } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   StyleSheet,
@@ -31,10 +30,8 @@ type CryptoCurrencySelectorProps = {
 // Helper function to get currency icon
 const getCurrencyIcon = (code: CryptoCurrency) => {
   const icons: Record<CryptoCurrency, any> = {
-    USDT: require("@/assets/icons/tether-usdt-logo.png"),
-    USDC: require("@/assets/icons/usd-coin-usdc-logo.png"),
-    ETH: require("@/assets/icons/ethereum-eth-logo.png"),
-    BNB: require("@/assets/icons/bnb-bnb-logo.png"),
+    USDC: require("@/assets/icons/usdc.png"),
+    EURC: require("@/assets/icons/eurc.png"),
   };
   return icons[code];
 };
@@ -45,24 +42,42 @@ export default function CryptoCurrencySelector({
   disabled = false,
   network,
 }: CryptoCurrencySelectorProps) {
-  const allCryptocurrencies = getSupportedCryptocurrencies();
+  const { currencies, combinations, loading, error } = useCryptoConfig();
 
   // Filter currencies based on selected network
-  const cryptocurrencies = network
-    ? allCryptocurrencies.filter((crypto) =>
-        getCurrenciesForNetwork(network).includes(crypto.code)
+  const availableCurrencies = network
+    ? currencies.filter((crypto) =>
+        getCurrenciesForNetwork(network, combinations).includes(crypto.code)
       )
-    : allCryptocurrencies;
+    : currencies;
 
   // Debug logging
   console.log("🔍 CryptoCurrencySelector Debug:", {
     network,
-    allCryptocurrencies: allCryptocurrencies.map((c) => c.code),
-    availableCurrencies: network ? getCurrenciesForNetwork(network) : "all",
-    filteredCurrencies: cryptocurrencies.map((c) => c.code),
+    allCurrencies: currencies.map((c) => c.code),
+    availableCurrencies: availableCurrencies.map((c) => c.code),
   });
 
-  const renderCurrencyCard = (crypto: CryptoCurrencyInfo) => {
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={styles.loadingText}>Loading currencies...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <FontAwesome6 name="circle-exclamation" size={48} color="#dc3545" />
+        <Text style={styles.errorText}>{error}</Text>
+        <Text style={styles.errorSubtext}>Please try again later</Text>
+      </View>
+    );
+  }
+
+  const renderCurrencyCard = (crypto: (typeof currencies)[0]) => {
     const isSelected = selectedCurrency === crypto.code;
 
     return (
@@ -96,6 +111,10 @@ export default function CryptoCurrencySelector({
         </View>
 
         <View style={styles.cardRight}>
+          <Text style={styles.estimatedTime}>
+            {crypto.networks.length} network
+            {crypto.networks.length > 1 ? "s" : ""}
+          </Text>
           <Text style={styles.estimatedTime}>{crypto.estimatedTime}</Text>
           {isSelected && (
             <FontAwesome6 name="circle-check" size={20} color="#007AFF" />
@@ -115,8 +134,8 @@ export default function CryptoCurrencySelector({
       </View>
 
       <View style={styles.currencyList}>
-        {cryptocurrencies.length > 0 ? (
-          cryptocurrencies.map(renderCurrencyCard)
+        {availableCurrencies.length > 0 ? (
+          availableCurrencies.map(renderCurrencyCard)
         ) : (
           <View style={styles.emptyState}>
             <FontAwesome6 name="circle-exclamation" size={48} color="#999" />
@@ -247,6 +266,35 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   emptyStateSubtext: {
+    fontSize: 14,
+    color: "#999",
+    textAlign: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 40,
+    gap: 16,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#666",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 40,
+    gap: 12,
+  },
+  errorText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#dc3545",
+    textAlign: "center",
+  },
+  errorSubtext: {
     fontSize: 14,
     color: "#999",
     textAlign: "center",

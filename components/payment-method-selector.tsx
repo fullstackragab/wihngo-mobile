@@ -31,9 +31,11 @@ export default function PaymentMethodSelector({
 
   // Group methods by network for organized display
   const methodsByNetwork: Record<string, PaymentMethod[]> = {
-    tron: [],
+    solana: [],
+    stellar: [],
+    base: [],
+    polygon: [],
     ethereum: [],
-    "binance-smart-chain": [],
   };
 
   allMethods.forEach((method) => {
@@ -44,29 +46,27 @@ export default function PaymentMethodSelector({
 
   const getCurrencyIcon = (currency: CryptoCurrency): string => {
     const icons: Record<CryptoCurrency, string> = {
-      USDT: "dollar-sign",
       USDC: "dollar-sign",
-      ETH: "ethereum",
-      BNB: "b",
+      EURC: "euro-sign",
     };
     return icons[currency] || "coins";
   };
 
   const getCurrencyColor = (currency: CryptoCurrency): string => {
     const colors: Record<CryptoCurrency, string> = {
-      USDT: "#26A17B",
       USDC: "#2775CA",
-      ETH: "#627EEA",
-      BNB: "#F3BA2F",
+      EURC: "#0052FF",
     };
     return colors[currency] || "#007AFF";
   };
 
   const getNetworkName = (network: CryptoNetwork): string => {
     const names: Record<CryptoNetwork, string> = {
-      tron: "Tron (TRC-20)",
-      ethereum: "Ethereum (ERC-20)",
-      "binance-smart-chain": "BSC (BEP-20)",
+      ethereum: "Ethereum",
+      solana: "Solana",
+      polygon: "Polygon",
+      base: "Base",
+      stellar: "Stellar",
     };
     return names[network] || network;
   };
@@ -150,32 +150,58 @@ export default function PaymentMethodSelector({
         </Text>
       </View>
 
-      {/* Network: Tron */}
-      {methodsByNetwork.tron.length > 0 && (
+      {/* Network: Solana */}
+      {methodsByNetwork.solana.length > 0 && (
         <View style={styles.networkSection}>
           <View style={styles.networkSectionHeader}>
-            <FontAwesome6 name="coins" size={20} color="#00D4FF" />
+            <FontAwesome6 name="bolt" size={20} color="#14F195" />
             <Text style={styles.networkSectionTitle}>
-              {getNetworkName("tron")}
+              {getNetworkName("solana")}
             </Text>
-            <View style={[styles.badge, { backgroundColor: "#00D4FF" }]}>
-              <Text style={styles.badgeText}>LOWEST FEES</Text>
+            <View style={[styles.badge, { backgroundColor: "#14F195" }]}>
+              <Text style={styles.badgeText}>RECOMMENDED</Text>
             </View>
           </View>
-          {methodsByNetwork.tron.map(renderCurrencyButton)}
+          {methodsByNetwork.solana.map(renderCurrencyButton)}
         </View>
       )}
 
-      {/* Network: Binance Smart Chain */}
-      {methodsByNetwork["binance-smart-chain"].length > 0 && (
+      {/* Network: Stellar */}
+      {methodsByNetwork.stellar.length > 0 && (
         <View style={styles.networkSection}>
           <View style={styles.networkSectionHeader}>
-            <FontAwesome6 name="b" size={20} color="#F3BA2F" />
+            <FontAwesome6 name="star" size={20} color="#7D7D7D" />
             <Text style={styles.networkSectionTitle}>
-              {getNetworkName("binance-smart-chain")}
+              {getNetworkName("stellar")}
             </Text>
           </View>
-          {methodsByNetwork["binance-smart-chain"].map(renderCurrencyButton)}
+          {methodsByNetwork.stellar.map(renderCurrencyButton)}
+        </View>
+      )}
+
+      {/* Network: Base */}
+      {methodsByNetwork.base.length > 0 && (
+        <View style={styles.networkSection}>
+          <View style={styles.networkSectionHeader}>
+            <FontAwesome6 name="layer-group" size={20} color="#0052FF" />
+            <Text style={styles.networkSectionTitle}>
+              {getNetworkName("base")}
+            </Text>
+          </View>
+          {methodsByNetwork.base.map(renderCurrencyButton)}
+        </View>
+      )}
+
+      {/* Network: Polygon */}
+      {methodsByNetwork.polygon.length > 0 && (
+        <View style={styles.networkSection}>
+          <View style={styles.networkSectionHeader}>
+            <FontAwesome6 name="hexagon" size={20} color="#8247E5" />
+            <Text style={styles.networkSectionTitle}>
+              {getNetworkName("polygon")}
+            </Text>
+          </View>
+          {methodsByNetwork.polygon.map(renderCurrencyButton)}
         </View>
       )}
 

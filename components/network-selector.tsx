@@ -33,13 +33,11 @@ export default function NetworkSelector({
       CryptoNetwork,
       { speed: string; confirmations: number }
     > = {
-      tron: { speed: "Fast (1-2 min)", confirmations: 19 },
       ethereum: { speed: "Medium (2-5 min)", confirmations: 12 },
-      "binance-smart-chain": { speed: "Fast (1-3 min)", confirmations: 15 },
-      bitcoin: { speed: "Slow (10-30 min)", confirmations: 2 },
-      solana: { speed: "Very Fast (30-60 sec)", confirmations: 32 },
-      polygon: { speed: "Fast (1-3 min)", confirmations: 128 },
-      sepolia: { speed: "Fast (1-2 min) [TEST]", confirmations: 6 },
+      solana: { speed: "Very Fast (~1 sec)", confirmations: 1 },
+      polygon: { speed: "Medium (4-5 min)", confirmations: 128 },
+      base: { speed: "Fast (~24 sec)", confirmations: 12 },
+      stellar: { speed: "Very Fast (~5 sec)", confirmations: 1 },
     };
     return details[network] || { speed: "Unknown", confirmations: 0 };
   };

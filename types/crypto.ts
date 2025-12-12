@@ -5,24 +5,31 @@
 
 // Updated payment currencies - Breaking Change v2.0
 export type CryptoCurrency =
-  | "USDT" // Tether (TRC-20, ERC-20, BEP-20)
-  | "USDC" // USD Coin (ERC-20, BEP-20)
-  | "ETH" // Ethereum
-  | "BNB"; // Binance Coin
+  | "USDC" // USD Coin
+  | "EURC"; // Euro Coin
 
 // Updated supported networks - Breaking Change v2.0
-export type CryptoNetwork = "tron" | "ethereum" | "binance-smart-chain";
+export type CryptoNetwork =
+  | "ethereum"
+  | "solana"
+  | "polygon"
+  | "base"
+  | "stellar";
 
 /**
  * Network confirmation requirements - Updated v2.0
- * Tron: 19 blocks (~57 seconds)
  * Ethereum: 12 blocks (~2.4 minutes)
- * BSC: 15 blocks (~45 seconds)
+ * Solana: 1 block (~400ms finalized)
+ * Polygon: 128 blocks (~4.5 minutes)
+ * Base: 12 blocks (~24 seconds)
+ * Stellar: 1 ledger (~5 seconds)
  */
 export const NETWORK_CONFIRMATIONS: Record<CryptoNetwork, number> = {
-  tron: 19,
   ethereum: 12,
-  "binance-smart-chain": 15,
+  solana: 1,
+  polygon: 128,
+  base: 12,
+  stellar: 1,
 };
 
 export type CryptoPaymentStatus =
@@ -175,41 +182,37 @@ export type CryptoPaymentStep =
 
 /**
  * Network to Currency Mapping - Updated v2.0
- * Defines which currency is used for each network
+ * Both USDC and EURC are supported on all networks
+ * Default to USDC for backward compatibility
  */
 export const NETWORK_TO_CURRENCY: Record<CryptoNetwork, CryptoCurrency> = {
-  tron: "USDT", // Tron uses USDT (TRC-20) - RECOMMENDED
-  ethereum: "USDT", // Ethereum mainnet uses USDT
-  "binance-smart-chain": "USDT", // BSC uses USDT (BEP-20)
+  ethereum: "USDC",
+  solana: "USDC",
+  polygon: "USDC",
+  base: "USDC",
+  stellar: "USDC",
 };
 
 /**
  * Get currency for a specific network
  */
 export function getCurrencyForNetwork(network: CryptoNetwork): CryptoCurrency {
-  return NETWORK_TO_CURRENCY[network] || "USDT";
+  return NETWORK_TO_CURRENCY[network] || "USDC";
 }
 
 /**
  * Valid currency-network combinations - Updated v2.0
- * Breaking Change: Removed BTC, SOL, MATIC, Sepolia support
- * Network-specific currencies:
- * - Tron: USDT, USDC
- * - Ethereum: ETH, USDT, USDC
- * - Binance Smart Chain: BNB, USDT, USDC
+ * Both USDC and EURC are supported on all networks:
+ * - Ethereum, Solana, Polygon, Base, Stellar
  */
 export interface CurrencyNetworkMap {
-  USDT: ("tron" | "ethereum" | "binance-smart-chain")[];
-  USDC: ("tron" | "ethereum" | "binance-smart-chain")[];
-  ETH: ["ethereum"];
-  BNB: ["binance-smart-chain"];
+  USDC: ("ethereum" | "solana" | "polygon" | "base" | "stellar")[];
+  EURC: ("ethereum" | "solana" | "polygon" | "base" | "stellar")[];
 }
 
 export const VALID_COMBINATIONS: CurrencyNetworkMap = {
-  USDT: ["tron", "ethereum", "binance-smart-chain"],
-  USDC: ["tron", "ethereum", "binance-smart-chain"],
-  ETH: ["ethereum"],
-  BNB: ["binance-smart-chain"],
+  USDC: ["ethereum", "solana", "polygon", "base", "stellar"],
+  EURC: ["ethereum", "solana", "polygon", "base", "stellar"],
 };
 
 /**

@@ -2,6 +2,8 @@
 
 This guide covers the complete setup and configuration of the notification system in Wihngo.
 
+> ⚠️ **Important for SDK 53+:** Android Push notifications (remote notifications) functionality provided by expo-notifications was removed from Expo Go with the release of SDK 53. You **must use a development build** instead of Expo Go. Read more at [Development Builds Introduction](https://docs.expo.dev/develop/development-builds/introduction/).
+
 ## 📦 Installation
 
 ### 1. Install Required Dependencies
@@ -10,7 +12,40 @@ This guide covers the complete setup and configuration of the notification syste
 npx expo install expo-notifications expo-device
 ```
 
-### 2. Configure app.json
+### 2. Create a Development Build (Required for SDK 53+)
+
+Since Expo Go no longer supports push notifications, you need to create a development build:
+
+**Option A: Using EAS Build (Recommended)**
+
+```bash
+# Install EAS CLI
+npm install -g eas-cli
+
+# Login to your Expo account
+eas login
+
+# Configure EAS
+eas build:configure
+
+# Create a development build
+eas build --profile development --platform android
+eas build --profile development --platform ios
+```
+
+**Option B: Local Development Build**
+
+```bash
+# Android
+npx expo run:android
+
+# iOS
+npx expo run:ios
+```
+
+> 💡 **Tip:** For testing push notifications, you'll need a physical device or a properly configured emulator with Google Play Services (Android) or a simulator with push notification support (iOS).
+
+### 3. Configure app.json
 
 Update your `app.json` with notification settings:
 

@@ -55,10 +55,8 @@ export default function SupportModal({
   // Helper function to get currency icon
   const getCurrencyIcon = (code: CryptoCurrency) => {
     const icons: Record<CryptoCurrency, any> = {
-      USDT: require("@/assets/icons/tether-usdt-logo.png"),
-      USDC: require("@/assets/icons/usd-coin-usdc-logo.png"),
-      ETH: require("@/assets/icons/ethereum-eth-logo.png"),
-      BNB: require("@/assets/icons/bnb-bnb-logo.png"),
+      USDC: require("@/assets/icons/usdc.png"),
+      EURC: require("@/assets/icons/eurc.png"),
     };
     return icons[code];
   };
@@ -445,44 +443,38 @@ export default function SupportModal({
     const currencies = [
       // Updated v2.0 - Only supported currencies
       {
-        code: "USDT" as CryptoCurrency,
-        name: "Tether (USDT)",
-        icon: "dollar-sign",
-        networks: [
-          "tron" as CryptoNetwork, // RECOMMENDED
-          "ethereum" as CryptoNetwork,
-          "binance-smart-chain" as CryptoNetwork,
-        ],
-      },
-      {
         code: "USDC" as CryptoCurrency,
         name: "USD Coin (USDC)",
         icon: "dollar-sign",
         networks: [
-          "tron" as CryptoNetwork,
+          "solana" as CryptoNetwork, // RECOMMENDED - fastest & cheapest
+          "stellar" as CryptoNetwork,
+          "base" as CryptoNetwork,
+          "polygon" as CryptoNetwork,
           "ethereum" as CryptoNetwork,
-          "binance-smart-chain" as CryptoNetwork,
         ],
       },
       {
-        code: "ETH" as CryptoCurrency,
-        name: "Ethereum (ETH)",
-        icon: "ethereum",
-        networks: ["ethereum" as CryptoNetwork],
-      },
-      {
-        code: "BNB" as CryptoCurrency,
-        name: "Binance Coin (BNB)",
-        icon: "b",
-        networks: ["binance-smart-chain" as CryptoNetwork],
+        code: "EURC" as CryptoCurrency,
+        name: "Euro Coin (EURC)",
+        icon: "euro-sign",
+        networks: [
+          "solana" as CryptoNetwork, // RECOMMENDED - fastest & cheapest
+          "stellar" as CryptoNetwork,
+          "base" as CryptoNetwork,
+          "polygon" as CryptoNetwork,
+          "ethereum" as CryptoNetwork,
+        ],
       },
     ];
 
     const getNetworkDisplayName = (network: CryptoNetwork): string => {
       const names: Record<CryptoNetwork, string> = {
-        ethereum: "Ethereum (ERC20)",
-        "binance-smart-chain": "BSC (BEP20)",
-        tron: "Tron (TRC20)",
+        ethereum: "Ethereum",
+        solana: "Solana",
+        polygon: "Polygon",
+        base: "Base",
+        stellar: "Stellar",
       };
       return names[network] || network;
     };
@@ -495,8 +487,8 @@ export default function SupportModal({
         <View style={styles.infoBox}>
           <FontAwesome6 name="circle-info" size={14} color="#007AFF" />
           <Text style={styles.infoBoxText}>
-            ✅ Supported: USDT, USDC, ETH, BNB{"\n"}
-            💡 USDT on Tron recommended (lowest fees ~$0.01)
+            ✅ Supported: USDC, EURC{"\n"}
+            💡 Solana & Stellar recommended (lowest fees ~$0.0003)
           </Text>
         </View>
 
@@ -638,7 +630,8 @@ export default function SupportModal({
                   </Text>
 
                   <Text style={styles.confirmationText}>
-                    You must send USDT using the same network you select.
+                    You must send cryptocurrency using the same network you
+                    select.
                   </Text>
 
                   <Text style={styles.confirmationWarning}>
@@ -680,7 +673,7 @@ export default function SupportModal({
                         }
                         setCryptoNetwork(pendingNetwork);
                         setShowNetworkConfirmation(false);
-                        handleCryptoSelection("USDT", pendingNetwork);
+                        handleCryptoSelection("USDC", pendingNetwork);
                         setPendingNetwork(null);
                         setDoNotShowWarningAgain(false);
                       }
@@ -885,7 +878,7 @@ export default function SupportModal({
                           Crypto
                         </Text>
                         <Text style={styles.paymentMethodDescription}>
-                          USDT, USDC, ETH, BNB
+                          USDC, EURC
                         </Text>
                       </>
                     )}

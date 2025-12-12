@@ -43,41 +43,71 @@ export interface NetworkOption {
  */
 export const NETWORK_OPTIONS: NetworkOption[] = [
   {
-    network: "tron",
-    name: "Tron (TRC-20)",
-    icon: "coins",
-    description: "Lowest fees, fastest confirmations",
-    estimatedFee: "~$0.01",
-    estimatedTime: "~1 min",
-    confirmations: 19,
+    network: "solana",
+    name: "Solana",
+    icon: "bolt",
+    description: "Fastest, lowest fees",
+    estimatedFee: "~$0.00025",
+    estimatedTime: "~1 sec",
+    confirmations: 1,
     badge: "RECOMMENDED",
-    badgeColor: "#00D4FF",
-    advantages: ["Lowest fees ($0.01)", "Very fast (1 min)", "Most popular"],
-    supportedCurrencies: ["USDT", "USDC"],
+    badgeColor: "#14F195",
+    advantages: [
+      "Lowest fees ($0.0003)",
+      "Fastest (~1 sec)",
+      "Modern technology",
+    ],
+    supportedCurrencies: ["USDC", "EURC"],
   },
   {
-    network: "binance-smart-chain",
-    name: "Binance Smart Chain (BEP-20)",
-    icon: "b",
-    description: "Low fees, multiple tokens",
+    network: "stellar",
+    name: "Stellar",
+    icon: "star",
+    description: "Ultra-low fees, fast",
+    estimatedFee: "~$0.00001",
+    estimatedTime: "~5 sec",
+    confirmations: 1,
+    advantages: [
+      "Minimal fees ($0.00001)",
+      "Very fast (5 sec)",
+      "Optimized for payments",
+    ],
+    supportedCurrencies: ["USDC", "EURC"],
+  },
+  {
+    network: "base",
+    name: "Base",
+    icon: "layer-group",
+    description: "Low fees, Ethereum L2",
     estimatedFee: "~$0.05",
-    estimatedTime: "~1 min",
-    confirmations: 15,
-    advantages: ["Low fees ($0.05)", "Fast (1 min)", "Multiple tokens"],
-    supportedCurrencies: ["USDT", "USDC", "BNB"],
+    estimatedTime: "~24 sec",
+    confirmations: 12,
+    advantages: ["Low fees ($0.05)", "Ethereum ecosystem", "Fast (24 sec)"],
+    supportedCurrencies: ["USDC", "EURC"],
+  },
+  {
+    network: "polygon",
+    name: "Polygon",
+    icon: "hexagon",
+    description: "Low fees, Ethereum compatible",
+    estimatedFee: "~$0.01",
+    estimatedTime: "~4.5 min",
+    confirmations: 128,
+    advantages: ["Low fees ($0.01)", "Ethereum compatible", "Widely supported"],
+    supportedCurrencies: ["USDC", "EURC"],
   },
   {
     network: "ethereum",
-    name: "Ethereum (ERC-20)",
+    name: "Ethereum",
     icon: "ethereum",
     description: "Most trusted, higher fees",
-    estimatedFee: "$5-50",
-    estimatedTime: "~3 min",
+    estimatedFee: "$1-5",
+    estimatedTime: "~2.4 min",
     confirmations: 12,
     badge: "MOST TRUSTED",
     badgeColor: "#627EEA",
-    advantages: ["Most secure", "Most trusted", "Multiple tokens"],
-    supportedCurrencies: ["USDT", "USDC", "ETH"],
+    advantages: ["Most secure", "Most trusted", "Largest ecosystem"],
+    supportedCurrencies: ["USDC", "EURC"],
   },
 ];
 
@@ -86,73 +116,135 @@ export const NETWORK_OPTIONS: NetworkOption[] = [
  * Ordered by recommendation (cheapest/fastest first)
  */
 export const PAYMENT_METHODS: PaymentMethod[] = [
-  // RECOMMENDED - Show first
+  // RECOMMENDED - Solana (fastest and cheapest)
   {
-    id: "usdt-tron",
-    name: "USDT (Tron)",
-    currency: "USDT",
-    network: "tron",
+    id: "usdc-solana",
+    name: "USDC (Solana)",
+    currency: "USDC",
+    network: "solana",
     icon: "dollar-sign",
     badge: "RECOMMENDED",
-    badgeColor: "#00D4FF",
-    estimatedFee: "~$0.01",
-    estimatedTime: "~1 min",
-    description: "Cheapest and fastest option",
-    advantages: ["Lowest fees", "Very fast", "Most popular"],
-    confirmations: 19,
+    badgeColor: "#14F195",
+    estimatedFee: "~$0.00025",
+    estimatedTime: "~1 sec",
+    description: "Fastest and cheapest option",
+    advantages: ["Lowest fees", "Instant", "Modern technology"],
+    confirmations: 1,
     enabled: true,
     sortOrder: 1,
   },
 
   {
-    id: "usdc-tron",
-    name: "USDC (Tron)",
-    currency: "USDC",
-    network: "tron",
-    icon: "dollar-sign",
+    id: "eurc-solana",
+    name: "EURC (Solana)",
+    currency: "EURC",
+    network: "solana",
+    icon: "euro-sign",
     badge: "RECOMMENDED",
-    badgeColor: "#00D4FF",
-    estimatedFee: "~$0.01",
-    estimatedTime: "~1 min",
-    description: "Regulated stablecoin, lowest fees",
-    advantages: ["FDIC-backed", "Lowest fees", "Very fast"],
-    confirmations: 19,
+    badgeColor: "#14F195",
+    estimatedFee: "~$0.00025",
+    estimatedTime: "~1 sec",
+    description: "Euro stablecoin, fastest network",
+    advantages: ["Euro-backed", "Lowest fees", "Instant"],
+    confirmations: 1,
     enabled: true,
     sortOrder: 2,
   },
 
-  // Low-fee alternatives
+  // Stellar - Ultra-low fees
   {
-    id: "usdt-bsc",
-    name: "USDT (BSC)",
-    currency: "USDT",
-    network: "binance-smart-chain",
+    id: "usdc-stellar",
+    name: "USDC (Stellar)",
+    currency: "USDC",
+    network: "stellar",
     icon: "dollar-sign",
-    estimatedFee: "~$0.05",
-    estimatedTime: "~1 min",
-    description: "Low fee alternative",
-    advantages: ["Low fees", "Fast", "Reliable"],
-    confirmations: 15,
+    estimatedFee: "~$0.00001",
+    estimatedTime: "~5 sec",
+    description: "Minimal fees, very fast",
+    advantages: ["Minimal fees", "Very fast", "Payment-focused"],
+    confirmations: 1,
     enabled: true,
     sortOrder: 3,
   },
 
   {
-    id: "usdc-bsc",
-    name: "USDC (BSC)",
-    currency: "USDC",
-    network: "binance-smart-chain",
-    icon: "dollar-sign",
-    estimatedFee: "~$0.05",
-    estimatedTime: "~1 min",
-    description: "USDC on low-fee network",
-    advantages: ["Regulated stablecoin", "Low fees", "Fast"],
-    confirmations: 15,
+    id: "eurc-stellar",
+    name: "EURC (Stellar)",
+    currency: "EURC",
+    network: "stellar",
+    icon: "euro-sign",
+    estimatedFee: "~$0.00001",
+    estimatedTime: "~5 sec",
+    description: "Euro stablecoin, minimal fees",
+    advantages: ["Euro-backed", "Minimal fees", "Very fast"],
+    confirmations: 1,
     enabled: true,
     sortOrder: 4,
   },
 
-  // Ethereum options - higher fees but most trusted
+  // Base - Low-fee Ethereum L2
+  {
+    id: "usdc-base",
+    name: "USDC (Base)",
+    currency: "USDC",
+    network: "base",
+    icon: "dollar-sign",
+    estimatedFee: "~$0.05",
+    estimatedTime: "~24 sec",
+    description: "Low-fee Ethereum L2",
+    advantages: ["Low fees", "Ethereum ecosystem", "Fast"],
+    confirmations: 12,
+    enabled: true,
+    sortOrder: 5,
+  },
+
+  {
+    id: "eurc-base",
+    name: "EURC (Base)",
+    currency: "EURC",
+    network: "base",
+    icon: "euro-sign",
+    estimatedFee: "~$0.05",
+    estimatedTime: "~24 sec",
+    description: "Euro stablecoin on Base L2",
+    advantages: ["Euro-backed", "Low fees", "Ethereum ecosystem"],
+    confirmations: 12,
+    enabled: true,
+    sortOrder: 6,
+  },
+
+  // Polygon - Low fees
+  {
+    id: "usdc-polygon",
+    name: "USDC (Polygon)",
+    currency: "USDC",
+    network: "polygon",
+    icon: "dollar-sign",
+    estimatedFee: "~$0.01",
+    estimatedTime: "~4.5 min",
+    description: "Low fees, Ethereum compatible",
+    advantages: ["Low fees", "Ethereum compatible", "Widely supported"],
+    confirmations: 128,
+    enabled: true,
+    sortOrder: 7,
+  },
+
+  {
+    id: "eurc-polygon",
+    name: "EURC (Polygon)",
+    currency: "EURC",
+    network: "polygon",
+    icon: "euro-sign",
+    estimatedFee: "~$0.01",
+    estimatedTime: "~4.5 min",
+    description: "Euro stablecoin on Polygon",
+    advantages: ["Euro-backed", "Low fees", "Ethereum compatible"],
+    confirmations: 128,
+    enabled: true,
+    sortOrder: 8,
+  },
+
+  // Ethereum - Most trusted but higher fees
   {
     id: "usdc-ethereum",
     name: "USDC (Ethereum)",
@@ -161,59 +253,30 @@ export const PAYMENT_METHODS: PaymentMethod[] = [
     icon: "dollar-sign",
     badge: "MOST TRUSTED",
     badgeColor: "#627EEA",
-    estimatedFee: "$5-50",
-    estimatedTime: "~3 min",
-    description: "Most trusted stablecoin",
-    advantages: ["Regulated", "FDIC-backed", "Most secure"],
+    estimatedFee: "$1-5",
+    estimatedTime: "~2.4 min",
+    description: "Most trusted network",
+    advantages: ["Most secure", "Most trusted", "Largest ecosystem"],
     confirmations: 12,
     enabled: true,
-    sortOrder: 5,
+    sortOrder: 9,
   },
 
   {
-    id: "usdt-ethereum",
-    name: "USDT (Ethereum)",
-    currency: "USDT",
+    id: "eurc-ethereum",
+    name: "EURC (Ethereum)",
+    currency: "EURC",
     network: "ethereum",
-    icon: "dollar-sign",
-    estimatedFee: "$5-50",
-    estimatedTime: "~3 min",
-    description: "USDT on Ethereum network",
-    advantages: ["Most liquid", "Widely accepted"],
+    icon: "euro-sign",
+    badge: "MOST TRUSTED",
+    badgeColor: "#627EEA",
+    estimatedFee: "$1-5",
+    estimatedTime: "~2.4 min",
+    description: "Euro stablecoin on Ethereum",
+    advantages: ["Euro-backed", "Most secure", "Most trusted"],
     confirmations: 12,
     enabled: true,
-    sortOrder: 6,
-  },
-
-  // Native tokens - for users who hold these
-  {
-    id: "eth",
-    name: "ETH",
-    currency: "ETH",
-    network: "ethereum",
-    icon: "ethereum",
-    estimatedFee: "$5-50",
-    estimatedTime: "~3 min",
-    description: "Native Ethereum",
-    advantages: ["Native token", "Widely held"],
-    confirmations: 12,
-    enabled: true,
-    sortOrder: 7,
-  },
-
-  {
-    id: "bnb",
-    name: "BNB",
-    currency: "BNB",
-    network: "binance-smart-chain",
-    icon: "b",
-    estimatedFee: "~$0.05",
-    estimatedTime: "~1 min",
-    description: "Native BSC token",
-    advantages: ["Low fees", "Fast", "Popular"],
-    confirmations: 15,
-    enabled: true,
-    sortOrder: 8,
+    sortOrder: 10,
   },
 ];
 
@@ -248,10 +311,10 @@ export const getPaymentMethodsForNetwork = (
   PAYMENT_METHODS.filter((m) => m.network === network && m.enabled);
 
 /**
- * Get the recommended payment method (USDT on Tron)
+ * Get the recommended payment method (USDC on Solana)
  */
 export const getRecommendedPaymentMethod = (): PaymentMethod =>
-  PAYMENT_METHODS[0]; // USDT on Tron
+  PAYMENT_METHODS[0]; // USDC on Solana
 
 /**
  * Get payment methods by fee category
@@ -260,13 +323,16 @@ export const getPaymentMethodsByFeeCategory = (
   category: "low" | "medium" | "high"
 ): PaymentMethod[] => {
   const feeCategories: Record<string, "low" | "medium" | "high"> = {
-    "usdt-tron": "low",
-    "usdt-bsc": "low",
-    "usdc-bsc": "low",
-    bnb: "low",
+    "usdc-solana": "low",
+    "eurc-solana": "low",
+    "usdc-stellar": "low",
+    "eurc-stellar": "low",
+    "usdc-base": "low",
+    "eurc-base": "low",
+    "usdc-polygon": "low",
+    "eurc-polygon": "low",
     "usdc-ethereum": "high",
-    "usdt-ethereum": "high",
-    eth: "high",
+    "eurc-ethereum": "high",
   };
 
   return PAYMENT_METHODS.filter(
@@ -301,10 +367,10 @@ export const getAvailableNetworks = (): NetworkOption[] => {
 };
 
 /**
- * Get the recommended network (Tron)
+ * Get the recommended network (Solana)
  */
 export const getRecommendedNetwork = (): NetworkOption => {
-  return NETWORK_OPTIONS[0]; // Tron
+  return NETWORK_OPTIONS[0]; // Solana
 };
 
 /**

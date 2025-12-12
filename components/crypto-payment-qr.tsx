@@ -154,7 +154,7 @@ export default function CryptoPaymentQR({
               <Text style={styles.bold}>$10</Text>
             </Text>
             <Text style={styles.feeExample}>
-              Example: Send $10 → Receive ~$8 | Send $100 → Receive ~$94
+              Example: Send $100 → Receive ~$94 ($5 Wihngo fee + $1 network fee)
             </Text>
           </View>
         </View>

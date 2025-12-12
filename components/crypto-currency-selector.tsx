@@ -4,10 +4,16 @@
  */
 
 import { getSupportedCryptocurrencies } from "@/services/crypto.service";
-import { CryptoCurrency, CryptoCurrencyInfo } from "@/types/crypto";
+import {
+  CryptoCurrency,
+  CryptoCurrencyInfo,
+  CryptoNetwork,
+  getCurrenciesForNetwork,
+} from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,14 +25,42 @@ type CryptoCurrencySelectorProps = {
   selectedCurrency?: CryptoCurrency;
   onSelect: (currency: CryptoCurrency) => void;
   disabled?: boolean;
+  network?: CryptoNetwork; // Filter currencies by network
+};
+
+// Helper function to get currency icon
+const getCurrencyIcon = (code: CryptoCurrency) => {
+  const icons: Record<CryptoCurrency, any> = {
+    USDT: require("@/assets/icons/tether-usdt-logo.png"),
+    USDC: require("@/assets/icons/usd-coin-usdc-logo.png"),
+    ETH: require("@/assets/icons/ethereum-eth-logo.png"),
+    BNB: require("@/assets/icons/bnb-bnb-logo.png"),
+  };
+  return icons[code];
 };
 
 export default function CryptoCurrencySelector({
   selectedCurrency,
   onSelect,
   disabled = false,
+  network,
 }: CryptoCurrencySelectorProps) {
-  const cryptocurrencies = getSupportedCryptocurrencies();
+  const allCryptocurrencies = getSupportedCryptocurrencies();
+
+  // Filter currencies based on selected network
+  const cryptocurrencies = network
+    ? allCryptocurrencies.filter((crypto) =>
+        getCurrenciesForNetwork(network).includes(crypto.code)
+      )
+    : allCryptocurrencies;
+
+  // Debug logging
+  console.log("🔍 CryptoCurrencySelector Debug:", {
+    network,
+    allCryptocurrencies: allCryptocurrencies.map((c) => c.code),
+    availableCurrencies: network ? getCurrenciesForNetwork(network) : "all",
+    filteredCurrencies: cryptocurrencies.map((c) => c.code),
+  });
 
   const renderCurrencyCard = (crypto: CryptoCurrencyInfo) => {
     const isSelected = selectedCurrency === crypto.code;
@@ -49,10 +83,10 @@ export default function CryptoCurrencySelector({
               isSelected && styles.selectedIconContainer,
             ]}
           >
-            <FontAwesome6
-              name={crypto.iconName as any}
-              size={24}
-              color={isSelected ? "#fff" : "#007AFF"}
+            <Image
+              source={getCurrencyIcon(crypto.code)}
+              style={styles.currencyIcon}
+              resizeMode="contain"
             />
           </View>
           <View style={styles.currencyInfo}>
@@ -81,7 +115,19 @@ export default function CryptoCurrencySelector({
       </View>
 
       <View style={styles.currencyList}>
-        {cryptocurrencies.map(renderCurrencyCard)}
+        {cryptocurrencies.length > 0 ? (
+          cryptocurrencies.map(renderCurrencyCard)
+        ) : (
+          <View style={styles.emptyState}>
+            <FontAwesome6 name="circle-exclamation" size={48} color="#999" />
+            <Text style={styles.emptyStateText}>
+              No currencies available for this network
+            </Text>
+            {network && (
+              <Text style={styles.emptyStateSubtext}>Network: {network}</Text>
+            )}
+          </View>
+        )}
       </View>
 
       <View style={styles.infoBox}>
@@ -140,12 +186,19 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#E3F2FD",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
   },
   selectedIconContainer: {
-    backgroundColor: "#007AFF",
+    borderColor: "#007AFF",
+    borderWidth: 2,
+  },
+  currencyIcon: {
+    width: 36,
+    height: 36,
   },
   currencyInfo: {
     gap: 4,
@@ -180,5 +233,22 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     color: "#007AFF",
+  },
+  emptyState: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 40,
+    gap: 12,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#666",
+    textAlign: "center",
+  },
+  emptyStateSubtext: {
+    fontSize: 14,
+    color: "#999",
+    textAlign: "center",
   },
 });

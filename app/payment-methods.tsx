@@ -129,7 +129,7 @@ export default function PaymentMethods() {
             <FontAwesome6 name="wallet" size={48} color="#ccc" />
             <Text style={styles.emptyText}>No crypto wallets saved</Text>
             <Text style={styles.emptySubtext}>
-              Pay with Bitcoin, Ethereum, USDT and more
+              Pay with USDT, USDC, ETH and BNB
             </Text>
           </View>
         ) : (
@@ -188,9 +188,9 @@ export default function PaymentMethods() {
         <View style={styles.cryptoInfoContent}>
           <Text style={styles.cryptoInfoTitle}>About Crypto Payments</Text>
           <Text style={styles.cryptoInfoText}>
-            Pay instantly with Bitcoin, Ethereum, USDT, and other
-            cryptocurrencies. Your payments are processed securely on the
-            blockchain.
+            Pay instantly with USDT, USDC, ETH, and BNB. Your payments are
+            processed securely on the blockchain. USDT on Tron recommended for
+            lowest fees.
           </Text>
         </View>
       </View>

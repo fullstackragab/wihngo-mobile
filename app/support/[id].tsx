@@ -27,12 +27,7 @@ export default function SupportBird() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<
-    | "card"
-    | "paypal"
-    | "googlepay"
-    | "applepay"
-    | "crypto-usdt"
-    | "crypto-sepolia"
+    "card" | "paypal" | "googlepay" | "applepay" | "crypto-usdt"
   >("card");
 
   React.useEffect(() => {
@@ -328,29 +323,7 @@ export default function SupportBird() {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[
-                styles.paymentButton,
-                paymentMethod === "crypto-sepolia" &&
-                  styles.paymentButtonActive,
-              ]}
-              onPress={() => setPaymentMethod("crypto-sepolia")}
-            >
-              <FontAwesome6
-                name="vial"
-                size={20}
-                color={paymentMethod === "crypto-sepolia" ? "#fff" : "#2C3E50"}
-              />
-              <Text
-                style={[
-                  styles.paymentButtonText,
-                  paymentMethod === "crypto-sepolia" &&
-                    styles.paymentButtonTextActive,
-                ]}
-              >
-                Sepolia ETH
-              </Text>
-            </TouchableOpacity>
+            {/* Removed Sepolia testnet - no longer supported in v2.0 */}
           </View>
         </View>
 

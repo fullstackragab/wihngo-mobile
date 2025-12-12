@@ -3,39 +3,26 @@
  * Defines types for cryptocurrency payment functionality
  */
 
+// Updated payment currencies - Breaking Change v2.0
 export type CryptoCurrency =
-  | "BTC" // Bitcoin
-  | "ETH" // Ethereum (includes mainnet and Sepolia testnet)
   | "USDT" // Tether (TRC-20, ERC-20, BEP-20)
   | "USDC" // USD Coin (ERC-20, BEP-20)
-  | "BNB" // Binance Coin
-  | "SOL" // Solana
-  | "DOGE"; // Dogecoin
+  | "ETH" // Ethereum
+  | "BNB"; // Binance Coin
 
-export type CryptoNetwork =
-  | "bitcoin"
-  | "ethereum"
-  | "binance-smart-chain"
-  | "solana"
-  | "polygon"
-  | "tron"
-  | "sepolia"; // Ethereum Sepolia Testnet
+// Updated supported networks - Breaking Change v2.0
+export type CryptoNetwork = "tron" | "ethereum" | "binance-smart-chain";
 
 /**
- * Network confirmation requirements
+ * Network confirmation requirements - Updated v2.0
  * Tron: 19 blocks (~57 seconds)
  * Ethereum: 12 blocks (~2.4 minutes)
  * BSC: 15 blocks (~45 seconds)
- * Sepolia: 6 blocks (~1.2 minutes) - Testnet only
  */
 export const NETWORK_CONFIRMATIONS: Record<CryptoNetwork, number> = {
   tron: 19,
   ethereum: 12,
   "binance-smart-chain": 15,
-  bitcoin: 6,
-  polygon: 128,
-  solana: 32,
-  sepolia: 6, // Ethereum Sepolia Testnet
 };
 
 export type CryptoPaymentStatus =
@@ -187,17 +174,13 @@ export type CryptoPaymentStep =
   | "failed";
 
 /**
- * Network to Currency Mapping
+ * Network to Currency Mapping - Updated v2.0
  * Defines which currency is used for each network
  */
 export const NETWORK_TO_CURRENCY: Record<CryptoNetwork, CryptoCurrency> = {
-  sepolia: "ETH", // Sepolia testnet uses native ETH
-  ethereum: "USDT", // Ethereum mainnet typically uses USDT
-  tron: "USDT", // Tron uses USDT (TRC-20)
+  tron: "USDT", // Tron uses USDT (TRC-20) - RECOMMENDED
+  ethereum: "USDT", // Ethereum mainnet uses USDT
   "binance-smart-chain": "USDT", // BSC uses USDT (BEP-20)
-  bitcoin: "BTC", // Bitcoin network uses BTC
-  polygon: "USDT", // Polygon uses USDT
-  solana: "SOL", // Solana uses native SOL
 };
 
 /**
@@ -208,20 +191,52 @@ export function getCurrencyForNetwork(network: CryptoNetwork): CryptoCurrency {
 }
 
 /**
+ * Valid currency-network combinations - Updated v2.0
+ * Breaking Change: Removed BTC, SOL, MATIC, Sepolia support
+ * Network-specific currencies:
+ * - Tron: USDT, USDC
+ * - Ethereum: ETH, USDT, USDC
+ * - Binance Smart Chain: BNB, USDT, USDC
+ */
+export interface CurrencyNetworkMap {
+  USDT: ("tron" | "ethereum" | "binance-smart-chain")[];
+  USDC: ("tron" | "ethereum" | "binance-smart-chain")[];
+  ETH: ["ethereum"];
+  BNB: ["binance-smart-chain"];
+}
+
+export const VALID_COMBINATIONS: CurrencyNetworkMap = {
+  USDT: ["tron", "ethereum", "binance-smart-chain"],
+  USDC: ["tron", "ethereum", "binance-smart-chain"],
+  ETH: ["ethereum"],
+  BNB: ["binance-smart-chain"],
+};
+
+/**
  * Check if a currency-network combination is valid
  */
 export function isValidCurrencyNetwork(
   currency: CryptoCurrency,
   network: CryptoNetwork
 ): boolean {
-  const validCombinations: Record<CryptoCurrency, CryptoNetwork[]> = {
-    ETH: ["ethereum", "sepolia"],
-    USDT: ["tron", "ethereum", "binance-smart-chain", "polygon"],
-    USDC: ["ethereum", "binance-smart-chain", "polygon"],
-    BTC: ["bitcoin"],
-    BNB: ["binance-smart-chain"],
-    SOL: ["solana"],
-    DOGE: [],
-  };
-  return validCombinations[currency]?.includes(network) || false;
+  const validNetworks = VALID_COMBINATIONS[currency];
+  return validNetworks?.includes(network as any) ?? false;
+}
+
+/**
+ * Get available currencies for a specific network
+ */
+export function getCurrenciesForNetwork(
+  network: CryptoNetwork
+): CryptoCurrency[] {
+  const currencies: CryptoCurrency[] = [];
+
+  // Check each currency to see if it supports this network
+  (Object.keys(VALID_COMBINATIONS) as CryptoCurrency[]).forEach((currency) => {
+    if (VALID_COMBINATIONS[currency].includes(network as any)) {
+      currencies.push(currency);
+    }
+  });
+
+  return currencies;
 }

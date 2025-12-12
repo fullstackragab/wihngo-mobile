@@ -88,20 +88,6 @@ export default function CryptoPaymentQR({
 
       {/* Payment Details */}
       <View style={styles.detailsContainer}>
-        {/* Amount */}
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Amount</Text>
-          <View style={styles.detailValue}>
-            <Text style={styles.cryptoAmount}>
-              {formatCryptoAmount(payment.amountCrypto, payment.currency)}{" "}
-              {payment.currency}
-            </Text>
-            <Text style={styles.usdAmount}>
-              ≈ ${payment.amountUsd.toFixed(2)}
-            </Text>
-          </View>
-        </View>
-
         {/* Network */}
         <View style={styles.detailRow}>
           <Text style={styles.detailLabel}>Network</Text>
@@ -155,8 +141,22 @@ export default function CryptoPaymentQR({
               {formatCryptoAmount(payment.amountCrypto, payment.currency)}{" "}
               {payment.currency}
             </Text>{" "}
-            (or more) to the address above
+            (≈ ${payment.amountUsd.toFixed(2)}) or more to the address above
           </Text>
+        </View>
+        <View style={styles.feeInfoBox}>
+          <FontAwesome6 name="circle-info" size={16} color="#FF9500" />
+          <View style={styles.feeInfoContent}>
+            <Text style={styles.feeInfoTitle}>Transaction Fees</Text>
+            <Text style={styles.feeInfoText}>
+              • Wihngo deducts 5% (minimum $1){"\n"}• Plus network fees (varies
+              by blockchain){"\n"}• Minimum recommended:{" "}
+              <Text style={styles.bold}>$10</Text>
+            </Text>
+            <Text style={styles.feeExample}>
+              Example: Send $10 → Receive ~$8 | Send $100 → Receive ~$94
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -322,6 +322,37 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: "600",
     color: "#333",
+  },
+  feeInfoBox: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+    padding: 16,
+    backgroundColor: "#FFF3E0",
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: "#FF9500",
+    marginTop: 12,
+  },
+  feeInfoContent: {
+    flex: 1,
+    gap: 6,
+  },
+  feeInfoTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#E65100",
+  },
+  feeInfoText: {
+    fontSize: 12,
+    color: "#E65100",
+    lineHeight: 18,
+  },
+  feeExample: {
+    fontSize: 12,
+    color: "#E65100",
+    fontStyle: "italic",
+    marginTop: 4,
   },
   autoDetectBox: {
     flexDirection: "row",

@@ -1,7 +1,28 @@
 /**
- * Payment Status Types
+ * Payment Status Types - Updated v2.0
  * Defines types for payment status polling and checking
  */
+
+// Supported payment currencies - Breaking Change v2.0
+export type SupportedCurrency = "USDT" | "USDC" | "ETH" | "BNB";
+
+// Supported payment networks - Breaking Change v2.0
+export type SupportedNetwork = "tron" | "ethereum" | "binance-smart-chain";
+
+// Valid currency-network combinations
+export interface CurrencyNetworkMap {
+  USDT: ("tron" | "ethereum" | "binance-smart-chain")[];
+  USDC: ("ethereum" | "binance-smart-chain")[];
+  ETH: ["ethereum"];
+  BNB: ["binance-smart-chain"];
+}
+
+export const VALID_COMBINATIONS: CurrencyNetworkMap = {
+  USDT: ["tron", "ethereum", "binance-smart-chain"],
+  USDC: ["ethereum", "binance-smart-chain"],
+  ETH: ["ethereum"],
+  BNB: ["binance-smart-chain"],
+};
 
 export interface PaymentStatus {
   id: string;
@@ -9,8 +30,8 @@ export interface PaymentStatus {
   birdId?: string;
   amountUsd: number;
   amountCrypto: number;
-  currency: string;
-  network: string;
+  currency: SupportedCurrency;
+  network: SupportedNetwork;
   exchangeRate: number;
   walletAddress: string;
   addressIndex?: number;
@@ -50,8 +71,8 @@ export interface PaymentStatusCheckResponse {
   confirmations: number;
   requiredConfirmations: number;
   transactionHash?: string;
-  currency: string;
-  network: string;
+  currency: SupportedCurrency;
+  network: SupportedNetwork;
   amountCrypto: number;
   walletAddress: string;
   addressIndex?: number;
@@ -59,3 +80,22 @@ export interface PaymentStatusCheckResponse {
   completedAt?: string;
   updatedAt: string;
 }
+
+// Payment creation request
+export interface CreatePaymentRequest {
+  amountUsd: number;
+  currency: SupportedCurrency;
+  network: SupportedNetwork;
+  purpose: "premium_subscription" | "bird_adoption" | "donation" | "custom";
+  plan?: "monthly" | "yearly";
+  birdId?: string;
+}
+
+// Helper function to validate currency-network combination
+export const isValidCombination = (
+  currency: string,
+  network: string
+): boolean => {
+  const validNetworks = VALID_COMBINATIONS[currency as SupportedCurrency];
+  return validNetworks?.includes(network as any) ?? false;
+};

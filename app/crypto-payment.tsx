@@ -6,7 +6,6 @@
 import CryptoCurrencySelector from "@/components/crypto-currency-selector";
 import CryptoPaymentQR from "@/components/crypto-payment-qr";
 import CryptoPaymentStatus from "@/components/crypto-payment-status";
-import NetworkSelector from "@/components/network-selector";
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import { usePaymentStatusPolling } from "@/hooks/usePaymentStatusPolling";
@@ -50,8 +49,7 @@ export default function CryptoPaymentScreen() {
   const { isAuthenticated, token } = useAuth();
   const { addNotification } = useNotifications();
   const [step, setStep] = useState<CryptoPaymentStep>("select-network");
-  const [selectedCurrency, setSelectedCurrency] =
-    useState<CryptoCurrency>("USDT");
+  const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency>();
   const [selectedNetwork, setSelectedNetwork] = useState<CryptoNetwork>();
   const [exchangeRate, setExchangeRate] = useState<number>(0);
   const [cryptoAmount, setCryptoAmount] = useState<number>(0);
@@ -60,17 +58,6 @@ export default function CryptoPaymentScreen() {
   const [enablePolling, setEnablePolling] = useState(false);
   const [showTxHashInput, setShowTxHashInput] = useState(false);
   const [txHashInput, setTxHashInput] = useState("");
-
-  // Update selected currency when network changes
-  useEffect(() => {
-    if (selectedNetwork) {
-      const currency = getCurrencyForNetwork(selectedNetwork);
-      setSelectedCurrency(currency);
-      console.log(
-        `🔄 Network changed to ${selectedNetwork}, using currency ${currency}`
-      );
-    }
-  }, [selectedNetwork]);
 
   // Use payment status polling hook
   const {
@@ -138,6 +125,23 @@ export default function CryptoPaymentScreen() {
     }
   }, [isAuthenticated, token]);
 
+  // Get network details helper
+  const getNetworkDetails = (network: CryptoNetwork) => {
+    const details: Record<
+      CryptoNetwork,
+      { speed: string; confirmations: number }
+    > = {
+      tron: { speed: "Fast (1-2 min)", confirmations: 19 },
+      ethereum: { speed: "Medium (2-5 min)", confirmations: 12 },
+      "binance-smart-chain": { speed: "Fast (1-3 min)", confirmations: 15 },
+      bitcoin: { speed: "Slow (10-30 min)", confirmations: 2 },
+      solana: { speed: "Very Fast (30-60 sec)", confirmations: 32 },
+      polygon: { speed: "Fast (1-3 min)", confirmations: 128 },
+      sepolia: { speed: "Fast (1-2 min) [TEST]", confirmations: 6 },
+    };
+    return details[network] || { speed: "Unknown", confirmations: 0 };
+  };
+
   // Get networks for selected currency
   const getNetworksForCurrency = () => {
     if (!selectedCurrency) return [];
@@ -172,10 +176,10 @@ export default function CryptoPaymentScreen() {
     }
   }, [selectedCurrency, fetchExchangeRate]);
 
-  // Handle network selection and proceed to payment
+  // Handle network selection and proceed to currency selection
   const handleNetworkSelect = (network: CryptoNetwork) => {
     setSelectedNetwork(network);
-    setStep("review-amount");
+    setStep("select-currency");
   };
 
   // Create payment request
@@ -345,48 +349,148 @@ export default function CryptoPaymentScreen() {
   const renderStepContent = () => {
     switch (step) {
       case "select-network":
-        const networks = getNetworksForCurrency();
+        // Show all available networks
+        const allNetworks: CryptoNetwork[] = [
+          "tron",
+          "ethereum",
+          "binance-smart-chain",
+        ];
         return (
           <View style={styles.networkSelectionContainer}>
             <View style={styles.headerInfo}>
               <Text style={styles.headerInfoTitle}>
-                Pay with {selectedCurrency}
+                Select Blockchain Network
               </Text>
               <Text style={styles.headerSubtitle}>
-                Select your preferred blockchain network
+                Choose your preferred blockchain network first
               </Text>
               <View style={styles.amountPreview}>
                 <Text style={styles.amountPreviewLabel}>Amount to Pay</Text>
                 <Text style={styles.amountPreviewValue}>
                   ${amountUsd.toFixed(2)} USD
                 </Text>
-                {cryptoAmount > 0 && (
-                  <Text style={styles.amountPreviewCrypto}>
-                    ≈{" "}
-                    {selectedCurrency === "ETH"
-                      ? cryptoAmount.toFixed(8)
-                      : cryptoAmount.toFixed(2)}{" "}
-                    {selectedCurrency}
-                  </Text>
-                )}
               </View>
             </View>
-            <NetworkSelector
-              networks={networks}
-              selectedNetwork={selectedNetwork}
-              onSelect={handleNetworkSelect}
-              currency={selectedCurrency}
-            />
+            <View style={styles.networkList}>
+              {allNetworks.map((network) => {
+                const isSelected = selectedNetwork === network;
+                const details = getNetworkDetails(network);
+                return (
+                  <TouchableOpacity
+                    key={network}
+                    style={[
+                      styles.networkCard,
+                      isSelected && styles.selectedCard,
+                    ]}
+                    onPress={() => {
+                      setSelectedNetwork(network);
+                      setStep("select-currency");
+                    }}
+                  >
+                    <View style={styles.networkInfo}>
+                      <Text style={styles.networkName}>
+                        {getNetworkName(network)}
+                      </Text>
+                      <Text style={styles.networkDetail}>{details.speed}</Text>
+                      <Text style={styles.networkDetail}>
+                        Fee: ~$
+                        {getEstimatedFee(
+                          getCurrencyForNetwork(network),
+                          network
+                        ).toFixed(2)}
+                      </Text>
+                    </View>
+                    {isSelected && (
+                      <FontAwesome6
+                        name="circle-check"
+                        size={24}
+                        color="#007AFF"
+                      />
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           </View>
         );
 
       case "select-currency":
         return (
-          <CryptoCurrencySelector
-            selectedCurrency={selectedCurrency}
-            onSelect={() => {}}
-            disabled={true}
-          />
+          <View style={styles.currencySelectionContainer}>
+            <View style={styles.headerInfo}>
+              <Text style={styles.headerInfoTitle}>Select Currency</Text>
+              <Text style={styles.headerSubtitle}>
+                Available on{" "}
+                {selectedNetwork && getNetworkName(selectedNetwork)}
+              </Text>
+              <TouchableOpacity
+                style={styles.changeNetworkButton}
+                onPress={() => setStep("select-network")}
+                disabled={loading}
+              >
+                <FontAwesome6 name="arrow-left" size={14} color="#007AFF" />
+                <Text style={styles.changeNetworkText}>Change Network</Text>
+              </TouchableOpacity>
+            </View>
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#007AFF" />
+                <Text style={styles.loadingText}>Creating payment...</Text>
+              </View>
+            ) : (
+              <CryptoCurrencySelector
+                selectedCurrency={selectedCurrency}
+                onSelect={async (currency) => {
+                  setSelectedCurrency(currency);
+                  // Immediately create payment after currency selection
+                  setLoading(true);
+                  try {
+                    console.log("💰 Creating payment with:", {
+                      currency,
+                      network: selectedNetwork,
+                      amountUsd,
+                    });
+
+                    const response = await createCryptoPayment({
+                      birdId,
+                      amountUsd,
+                      currency,
+                      network: selectedNetwork!,
+                      purpose,
+                      plan,
+                    });
+
+                    setPayment(response.paymentRequest);
+                    setStep("payment-address");
+                    setEnablePolling(true);
+                  } catch (error: any) {
+                    console.error("Failed to create payment:", error);
+
+                    // Check if it's an authentication error
+                    if (error?.message?.includes("Session expired")) {
+                      addNotification(
+                        "recommendation",
+                        "Session Expired",
+                        "Your session has expired. Please login again."
+                      );
+                      setTimeout(() => router.replace("/welcome"), 1500);
+                    } else {
+                      addNotification(
+                        "recommendation",
+                        "Payment Error",
+                        "Failed to create payment request. Please try again."
+                      );
+                      setStep("select-network");
+                    }
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                network={selectedNetwork}
+              />
+            )}
+          </View>
         );
 
       case "review-amount":
@@ -803,6 +907,39 @@ const styles = StyleSheet.create({
   networkSelectionContainer: {
     gap: 20,
   },
+  currencySelectionContainer: {
+    gap: 20,
+  },
+  networkList: {
+    gap: 12,
+  },
+  networkCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 16,
+    backgroundColor: "#f8f8f8",
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: "transparent",
+  },
+  selectedCard: {
+    backgroundColor: "#E3F2FD",
+    borderColor: "#007AFF",
+  },
+  networkInfo: {
+    flex: 1,
+    gap: 6,
+  },
+  networkName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
+  },
+  networkDetail: {
+    fontSize: 13,
+    color: "#666",
+  },
   headerInfo: {
     backgroundColor: "#f8f8f8",
     borderRadius: 12,
@@ -858,6 +995,9 @@ const styles = StyleSheet.create({
   changeNetworkButton: {
     marginTop: 8,
     alignSelf: "flex-start",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
   changeNetworkText: {
     fontSize: 14,
@@ -1145,5 +1285,17 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#dc3545",
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 40,
+    gap: 16,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#666",
+    marginTop: 8,
   },
 });

@@ -1,7 +1,12 @@
+import {
+  getCurrenciesForNetwork,
+  NETWORK_OPTIONS,
+} from "@/config/paymentMethods";
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import {
   createCryptoPayment,
+  getSupportedCryptocurrencies,
   pollPaymentStatus,
 } from "@/services/crypto.service";
 import { createSupportTransaction } from "@/services/support.service";
@@ -10,11 +15,7 @@ import {
   CryptoNetwork,
   CryptoPaymentRequest,
 } from "@/types/crypto";
-import {
-  calculateTotalAmount,
-  MINIMUM_DONATION_AMOUNT,
-  PLATFORM_FEE_PERCENTAGE,
-} from "@/types/support";
+import { calculateTotalAmount, MINIMUM_DONATION_AMOUNT } from "@/types/support";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,12 +23,12 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Image,
   Linking,
   Modal,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -51,6 +52,17 @@ export default function SupportModal({
   birdName,
   isPlatformSupport = false,
 }: SupportModalProps) {
+  // Helper function to get currency icon
+  const getCurrencyIcon = (code: CryptoCurrency) => {
+    const icons: Record<CryptoCurrency, any> = {
+      USDT: require("@/assets/icons/tether-usdt-logo.png"),
+      USDC: require("@/assets/icons/usd-coin-usdc-logo.png"),
+      ETH: require("@/assets/icons/ethereum-eth-logo.png"),
+      BNB: require("@/assets/icons/bnb-bnb-logo.png"),
+    };
+    return icons[code];
+  };
+
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<
@@ -65,6 +77,8 @@ export default function SupportModal({
   const [cryptoPayment, setCryptoPayment] =
     useState<CryptoPaymentRequest | null>(null);
   const [showCryptoSelector, setShowCryptoSelector] = useState(false);
+  const [showNetworkSelector, setShowNetworkSelector] = useState(false);
+  const [showCurrencySelector, setShowCurrencySelector] = useState(false);
   const [showPlatformSupport, setShowPlatformSupport] = useState(false);
   const [showNetworkConfirmation, setShowNetworkConfirmation] = useState(false);
   const [pendingNetwork, setPendingNetwork] = useState<CryptoNetwork | null>(
@@ -286,6 +300,8 @@ export default function SupportModal({
     setCryptoNetwork(null);
     setCryptoPayment(null);
     setShowCryptoSelector(false);
+    setShowNetworkSelector(false);
+    setShowCurrencySelector(false);
     setShowPlatformSupport(false);
     setCustomAmount("");
     setIsProcessing(false);
@@ -427,52 +443,46 @@ export default function SupportModal({
       useState<CryptoCurrency | null>(null);
 
     const currencies = [
-      {
-        code: "BTC" as CryptoCurrency,
-        name: "Bitcoin",
-        icon: "bitcoin",
-        networks: ["bitcoin" as CryptoNetwork],
-      },
-      {
-        code: "ETH" as CryptoCurrency,
-        name: "Ethereum",
-        icon: "ethereum",
-        networks: [
-          "ethereum" as CryptoNetwork,
-          "sepolia" as CryptoNetwork, // Sepolia testnet
-        ],
-      },
+      // Updated v2.0 - Only supported currencies
       {
         code: "USDT" as CryptoCurrency,
-        name: "Tether",
+        name: "Tether (USDT)",
         icon: "dollar-sign",
         networks: [
+          "tron" as CryptoNetwork, // RECOMMENDED
           "ethereum" as CryptoNetwork,
-          "tron" as CryptoNetwork,
           "binance-smart-chain" as CryptoNetwork,
         ],
       },
       {
         code: "USDC" as CryptoCurrency,
-        name: "USD Coin",
+        name: "USD Coin (USDC)",
         icon: "dollar-sign",
         networks: [
+          "tron" as CryptoNetwork,
           "ethereum" as CryptoNetwork,
-          "polygon" as CryptoNetwork,
           "binance-smart-chain" as CryptoNetwork,
         ],
+      },
+      {
+        code: "ETH" as CryptoCurrency,
+        name: "Ethereum (ETH)",
+        icon: "ethereum",
+        networks: ["ethereum" as CryptoNetwork],
+      },
+      {
+        code: "BNB" as CryptoCurrency,
+        name: "Binance Coin (BNB)",
+        icon: "b",
+        networks: ["binance-smart-chain" as CryptoNetwork],
       },
     ];
 
     const getNetworkDisplayName = (network: CryptoNetwork): string => {
       const names: Record<CryptoNetwork, string> = {
-        bitcoin: "Bitcoin",
         ethereum: "Ethereum (ERC20)",
         "binance-smart-chain": "BSC (BEP20)",
         tron: "Tron (TRC20)",
-        polygon: "Polygon",
-        solana: "Solana",
-        sepolia: "Sepolia Testnet",
       };
       return names[network] || network;
     };
@@ -485,8 +495,8 @@ export default function SupportModal({
         <View style={styles.infoBox}>
           <FontAwesome6 name="circle-info" size={14} color="#007AFF" />
           <Text style={styles.infoBoxText}>
-            ✅ Currently supported: USDT on Tron network{"\n"}
-            ⚠️ Other currencies are in development
+            ✅ Supported: USDT, USDC, ETH, BNB{"\n"}
+            💡 USDT on Tron recommended (lowest fees ~$0.01)
           </Text>
         </View>
 
@@ -688,141 +698,198 @@ export default function SupportModal({
                 onSelect={handleCryptoSelection}
                 onBack={() => setShowCryptoSelector(false)}
               />
-            ) : (
+            ) : showNetworkSelector ? (
+              <View>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={() => setShowNetworkSelector(false)}
+                >
+                  <Feather name="arrow-left" size={20} color="#007AFF" />
+                  <Text style={styles.backButtonText}>
+                    Back to payment methods
+                  </Text>
+                </TouchableOpacity>
+
+                <Text style={styles.selectorTitle}>Select Network</Text>
+                <Text style={styles.selectorSubtitle}>
+                  Choose the blockchain network you prefer
+                </Text>
+
+                <View style={styles.networkList}>
+                  {NETWORK_OPTIONS.map((network) => (
+                    <TouchableOpacity
+                      key={network.network}
+                      style={styles.networkCard}
+                      onPress={() => {
+                        setCryptoNetwork(network.network);
+                        setShowNetworkSelector(false);
+                        setShowCurrencySelector(true);
+                      }}
+                    >
+                      <View style={styles.networkCardContent}>
+                        <Text style={styles.networkName}>{network.name}</Text>
+                        <Text style={styles.networkDescription}>
+                          {network.description}
+                        </Text>
+                      </View>
+                      <Feather name="chevron-right" size={20} color="#999" />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            ) : showCurrencySelector ? (
+              <View>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={() => {
+                    setShowCurrencySelector(false);
+                    setShowNetworkSelector(true);
+                    setCryptoNetwork(null);
+                  }}
+                >
+                  <Feather name="arrow-left" size={20} color="#007AFF" />
+                  <Text style={styles.backButtonText}>Back to networks</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.selectorTitle}>Select Currency</Text>
+                <Text style={styles.selectorSubtitle}>
+                  Available on{" "}
+                  {
+                    NETWORK_OPTIONS.find((n) => n.network === cryptoNetwork)
+                      ?.name
+                  }
+                </Text>
+
+                <View style={styles.currencyList}>
+                  {cryptoNetwork ? (
+                    getSupportedCryptocurrencies()
+                      .filter((crypto) =>
+                        getCurrenciesForNetwork(cryptoNetwork).includes(
+                          crypto.code
+                        )
+                      )
+                      .map((currency) => (
+                        <TouchableOpacity
+                          key={currency.code}
+                          style={styles.currencyCard}
+                          onPress={async () => {
+                            setCryptoCurrency(currency.code);
+                            // Now create the payment with a default amount or ask for amount here
+                            // For now, using a default minimum amount
+                            const defaultAmount = MINIMUM_DONATION_AMOUNT;
+                            const { totalAmount: total } =
+                              calculateTotalAmount(defaultAmount);
+                            setSelectedAmount(total);
+
+                            if (cryptoNetwork) {
+                              await handleCryptoSelection(
+                                currency.code,
+                                cryptoNetwork
+                              );
+                            }
+                          }}
+                        >
+                          <Image
+                            source={getCurrencyIcon(currency.code)}
+                            style={styles.currencyIcon}
+                            resizeMode="contain"
+                          />
+                          <Text style={styles.currencyName}>
+                            {currency.name}
+                          </Text>
+                          <Text style={styles.currencyCode}>
+                            {currency.code}
+                          </Text>
+                        </TouchableOpacity>
+                      ))
+                  ) : (
+                    <View style={styles.emptyState}>
+                      <Text style={styles.emptyStateText}>
+                        Please select a network first
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+            ) : paymentMethod === null ? (
               <>
                 <Text style={styles.subtitle}>
                   {isPlatformSupport
                     ? "Help us keep Wihngo running and support bird conservation!"
-                    : "Choose an amount to support this amazing bird"}
+                    : "Choose your payment method to support this amazing bird"}
                 </Text>
 
-                {/* Custom Amount Input */}
-                <View style={styles.customAmountContainer}>
-                  <Text style={styles.customAmountLabel}>
-                    Enter Donation Amount (USD)
-                  </Text>
-                  <TextInput
-                    style={styles.customAmountInput}
-                    placeholder={`Minimum $${MINIMUM_DONATION_AMOUNT}`}
-                    keyboardType="decimal-pad"
-                    value={customAmount}
-                    onChangeText={handleAmountChange}
-                    autoFocus={false}
-                  />
-
-                  {/* Show fee breakdown when amount is valid */}
-                  {parseFloat(customAmount) >= MINIMUM_DONATION_AMOUNT && (
-                    <View style={styles.feeBreakdown}>
-                      <View style={styles.feeRow}>
-                        <Text style={styles.feeLabel}>Your donation:</Text>
-                        <Text style={styles.feeValue}>
-                          ${parseFloat(customAmount).toFixed(2)}
+                {/* Payment Method Selection - Show First */}
+                <View style={styles.paymentMethodsContainer}>
+                  {/* PayPal Button */}
+                  <TouchableOpacity
+                    style={[
+                      styles.paymentMethodButtonLarge,
+                      styles.paypalButton,
+                    ]}
+                    onPress={async () => {
+                      const paypalUrl = isPlatformSupport
+                        ? "https://www.paypal.com/ncp/payment/AECE9FQMFFETS"
+                        : "https://www.paypal.com/ncp/payment/JGD55LPGBHWQW";
+                      const canOpen = await Linking.canOpenURL(paypalUrl);
+                      if (canOpen) {
+                        await Linking.openURL(paypalUrl);
+                        addNotification(
+                          "recommendation",
+                          "Opening PayPal",
+                          "Complete your donation on PayPal"
+                        );
+                      } else {
+                        addNotification(
+                          "recommendation",
+                          "Cannot Open PayPal",
+                          "Unable to open PayPal. Please try again later."
+                        );
+                      }
+                    }}
+                    disabled={isProcessing}
+                  >
+                    {isProcessing && paymentMethod === "paypal" ? (
+                      <ActivityIndicator size="large" color="#0070BA" />
+                    ) : (
+                      <>
+                        <FontAwesome6 name="paypal" size={24} color="#0070BA" />
+                        <Text style={styles.paymentMethodButtonTextLarge}>
+                          PayPal
                         </Text>
-                      </View>
-                      <View style={styles.feeRow}>
-                        <Text style={styles.feeLabel}>
-                          Platform fee (
-                          {(PLATFORM_FEE_PERCENTAGE * 100).toFixed(0)}%):
+                        <Text style={styles.paymentMethodDescription}>
+                          Quick & secure payment
                         </Text>
-                        <Text style={styles.feeValue}>
-                          ${calculatedFee.toFixed(2)}
+                      </>
+                    )}
+                  </TouchableOpacity>
+
+                  {/* Crypto Button */}
+                  <TouchableOpacity
+                    style={[
+                      styles.paymentMethodButtonLarge,
+                      styles.cryptoButton,
+                    ]}
+                    onPress={() => {
+                      setPaymentMethod("crypto");
+                      setShowNetworkSelector(true);
+                    }}
+                    disabled={isProcessing}
+                  >
+                    {isProcessing && paymentMethod === "crypto" ? (
+                      <ActivityIndicator size="large" color="#26A17B" />
+                    ) : (
+                      <>
+                        <FontAwesome6 name="coins" size={24} color="#26A17B" />
+                        <Text style={styles.paymentMethodButtonTextLarge}>
+                          Crypto
                         </Text>
-                      </View>
-                      <View style={[styles.feeRow, styles.totalRow]}>
-                        <Text style={styles.totalLabel}>Total to pay:</Text>
-                        <Text style={styles.totalValue}>
-                          ${totalAmount.toFixed(2)}
+                        <Text style={styles.paymentMethodDescription}>
+                          USDT, USDC, ETH, BNB
                         </Text>
-                      </View>
-                    </View>
-                  )}
-
-                  <Text style={styles.minAmountText}>
-                    💡 Minimum ${MINIMUM_DONATION_AMOUNT} required for crypto
-                    payments due to blockchain network fees.{"\n"}⚡ Platform
-                    fee: {(PLATFORM_FEE_PERCENTAGE * 100).toFixed(0)}% (minimum
-                    $1) helps maintain Wihngo.
-                  </Text>
-
-                  {/* Payment Method Buttons */}
-                  {parseFloat(customAmount) >= MINIMUM_DONATION_AMOUNT && (
-                    <View style={styles.paymentMethodsContainer}>
-                      {/* PayPal Button */}
-                      <TouchableOpacity
-                        style={[
-                          styles.paymentMethodButton,
-                          styles.paypalButton,
-                        ]}
-                        onPress={async () => {
-                          const paypalUrl =
-                            "https://www.paypal.com/ncp/payment/JGD55LPGBHWQW";
-                          const canOpen = await Linking.canOpenURL(paypalUrl);
-                          if (canOpen) {
-                            await Linking.openURL(paypalUrl);
-                            addNotification(
-                              "recommendation",
-                              "Opening PayPal",
-                              "Complete your donation on PayPal"
-                            );
-                          } else {
-                            addNotification(
-                              "recommendation",
-                              "Cannot Open PayPal",
-                              "Unable to open PayPal. Please try again later."
-                            );
-                          }
-                        }}
-                        disabled={isProcessing}
-                      >
-                        {isProcessing && paymentMethod === "paypal" ? (
-                          <ActivityIndicator size="small" color="#0070BA" />
-                        ) : (
-                          <>
-                            <FontAwesome6
-                              name="paypal"
-                              size={28}
-                              color="#0070BA"
-                            />
-                            <Text style={styles.paymentMethodButtonText}>
-                              PayPal
-                            </Text>
-                          </>
-                        )}
-                      </TouchableOpacity>
-
-                      {/* Crypto Button */}
-                      <TouchableOpacity
-                        style={[
-                          styles.paymentMethodButton,
-                          styles.cryptoButton,
-                        ]}
-                        onPress={() => {
-                          const amount = parseFloat(customAmount);
-                          const { totalAmount: total } =
-                            calculateTotalAmount(amount);
-                          setSelectedAmount(total);
-                          setPaymentMethod("crypto");
-                          setShowCryptoSelector(true);
-                        }}
-                        disabled={isProcessing}
-                      >
-                        {isProcessing && paymentMethod === "crypto" ? (
-                          <ActivityIndicator size="small" color="#26A17B" />
-                        ) : (
-                          <>
-                            <FontAwesome6
-                              name="coins"
-                              size={28}
-                              color="#26A17B"
-                            />
-                            <Text style={styles.paymentMethodButtonText}>
-                              Crypto
-                            </Text>
-                          </>
-                        )}
-                      </TouchableOpacity>
-                    </View>
-                  )}
+                      </>
+                    )}
+                  </TouchableOpacity>
                 </View>
 
                 {!isPlatformSupport && (
@@ -858,16 +925,18 @@ export default function SupportModal({
                         }
                       }}
                     >
-                      <FontAwesome6 name="heart" size={16} color="#fff" />
+                      <FontAwesome6 name="heart" size={14} color="#fff" />
                       <Text style={styles.supportWihngoButtonText}>
-                        Support Wihngo
+                        Support Wihngo via PayPal
                       </Text>
                     </TouchableOpacity>
                   </View>
                 )}
-
-                <Text style={styles.disclaimer}>
-                  💳 Secure payments • 🔒 Your donation helps bird conservation
+              </>
+            ) : (
+              <>
+                <Text style={styles.subtitle}>
+                  This fallback should not appear. Please go back.
                 </Text>
               </>
             )}
@@ -997,6 +1066,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     marginTop: 16,
+    justifyContent: "center",
+    alignItems: "center",
   },
   paymentMethodButton: {
     flex: 1,
@@ -1024,19 +1095,34 @@ const styles = StyleSheet.create({
   },
   paymentMethodButtonLarge: {
     backgroundColor: "#fff",
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: "#f7931a",
-    paddingVertical: 18,
-    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: 4,
+    minWidth: 120,
+    maxWidth: 140,
   },
   paymentMethodButtonTextLarge: {
     color: "#333",
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "700",
+  },
+  paymentMethodDescription: {
+    color: "#666",
+    fontSize: 10,
+    marginTop: 2,
+  },
+  networkCardContent: {
+    flex: 1,
+  },
+  networkDescription: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 4,
   },
   paymentMethodSubtext: {
     color: "#666",
@@ -1096,6 +1182,10 @@ const styles = StyleSheet.create({
     gap: 12,
     borderWidth: 2,
     borderColor: "transparent",
+  },
+  currencyIcon: {
+    width: 40,
+    height: 40,
   },
   currencyName: {
     flex: 1,
@@ -1183,17 +1273,17 @@ const styles = StyleSheet.create({
   },
   supportWihngoButton: {
     backgroundColor: "#007AFF",
-    borderRadius: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: 6,
   },
   supportWihngoButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
   },
   platformSupportNote: {
@@ -1278,5 +1368,15 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  emptyState: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 40,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
   },
 });

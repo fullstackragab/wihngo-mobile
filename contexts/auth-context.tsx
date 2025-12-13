@@ -19,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Centralized storage keys - must match across all files
 const TOKEN_KEY = "auth_token";
+const REFRESH_TOKEN_KEY = "auth_refresh_token";
 const USER_KEY = "auth_user";
 const TOKEN_EXPIRY_KEY = "auth_token_expiry";
 
@@ -70,13 +71,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         userId: authData.userId,
         name: authData.name,
         email: authData.email,
+        profileImageUrl: authData.profileImageUrl,
+        profileImageS3Key: authData.profileImageS3Key,
       };
 
-      // Calculate token expiry (24 hours from now)
-      const expiryTime = Date.now() + 24 * 60 * 60 * 1000;
+      // Use expiresAt from API response, or calculate (1 hour from now as per API spec)
+      const expiryTime = authData.expiresAt
+        ? new Date(authData.expiresAt).getTime()
+        : Date.now() + 60 * 60 * 1000; // 1 hour default
 
       await Promise.all([
         AsyncStorage.setItem(TOKEN_KEY, authData.token),
+        AsyncStorage.setItem(REFRESH_TOKEN_KEY, authData.refreshToken),
         AsyncStorage.setItem(USER_KEY, JSON.stringify(userData)),
         AsyncStorage.setItem(TOKEN_EXPIRY_KEY, expiryTime.toString()),
       ]);
@@ -85,6 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(userData);
 
       console.log("✅ Login: Auth data saved successfully");
+      console.log("📧 Email confirmed:", authData.emailConfirmed);
     } catch (error) {
       console.error("❌ Error saving auth data:", error);
       throw error;
@@ -97,6 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       await Promise.all([
         AsyncStorage.removeItem(TOKEN_KEY),
+        AsyncStorage.removeItem(REFRESH_TOKEN_KEY),
         AsyncStorage.removeItem(USER_KEY),
         AsyncStorage.removeItem(TOKEN_EXPIRY_KEY),
       ]);

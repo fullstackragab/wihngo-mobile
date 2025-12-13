@@ -1,3 +1,5 @@
+import "@walletconnect/react-native-compat";
+
 import {
   DarkTheme,
   DefaultTheme,
@@ -6,12 +8,17 @@ import {
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { View } from "react-native";
 import "react-native-reanimated";
 
+import { appKit } from "@/config/AppKitConfig";
 import { AuthProvider, useAuth } from "@/contexts/auth-context";
 import { NotificationProvider } from "@/contexts/notification-context";
+import { useAuthDeepLink } from "@/hooks/use-auth-deep-link";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { usePayPalDeepLink } from "@/hooks/use-paypal-deep-link";
 import { pushNotificationService } from "@/services/push-notification.service";
+import { AppKit, AppKitProvider } from "@reown/appkit-react-native";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -22,6 +29,10 @@ function RootLayoutNav() {
   const { isAuthenticated, isLoading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
+
+  // Initialize deep link handlers
+  useAuthDeepLink();
+  usePayPalDeepLink();
 
   useEffect(() => {
     // Initialize push notifications
@@ -58,6 +69,18 @@ function RootLayoutNav() {
         <Stack.Screen name="welcome" options={{ headerShown: false }} />
         <Stack.Screen name="signup" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="auth/confirm-email"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="auth/forgot-password"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="auth/reset-password"
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="modal"
           options={{ presentation: "modal", title: "Modal" }}
@@ -166,6 +189,36 @@ function RootLayoutNav() {
         />
         <Stack.Screen name="story/[id]" options={{ title: "Story" }} />
         <Stack.Screen name="support/[id]" options={{ title: "Support" }} />
+        <Stack.Screen
+          name="donation/index"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="donation/checkout"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="donation/waiting"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="donation/result"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="donation/history"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
@@ -174,10 +227,16 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <AuthProvider>
-      <NotificationProvider>
-        <RootLayoutNav />
-      </NotificationProvider>
-    </AuthProvider>
+    <AppKitProvider instance={appKit}>
+      <AuthProvider>
+        <NotificationProvider>
+          <RootLayoutNav />
+          {/* AppKit modal - wrapped in View for Android compatibility */}
+          <View style={{ position: "absolute", height: "100%", width: "100%" }}>
+            <AppKit />
+          </View>
+        </NotificationProvider>
+      </AuthProvider>
+    </AppKitProvider>
   );
 }

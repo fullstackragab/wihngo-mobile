@@ -19,7 +19,7 @@ export function setAuthErrorHandler(handler: () => void) {
 /**
  * Get the API base URL from configuration
  */
-const getApiBaseUrl = (): string => {
+export const getApiBaseUrl = (): string => {
   let apiUrl =
     Constants.expoConfig?.extra?.apiUrl || "http://localhost:5000/api/";
 

@@ -135,12 +135,197 @@ export async function testConnection(): Promise<string> {
 }
 
 /**
+ * Confirm email with token
+ */
+export async function confirmEmail(
+  email: string,
+  token: string
+): Promise<{ message: string }> {
+  try {
+    const apiUrl = getApiUrl();
+    const endpoint = `${apiUrl}auth/confirm-email`;
+    console.log("Confirming email at:", endpoint);
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ email, token }),
+    });
+
+    console.log("Confirm email response status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+
+      if (response.status === 400) {
+        if (errorData.code === "TOKEN_EXPIRED") {
+          throw new Error(
+            "Confirmation token has expired. Please request a new one."
+          );
+        } else if (errorData.code === "INVALID_TOKEN") {
+          throw new Error("Invalid confirmation token.");
+        } else if (errorData.code === "EMAIL_ALREADY_CONFIRMED") {
+          throw new Error("Email is already confirmed.");
+        }
+      }
+
+      throw new Error(
+        errorData.message || `Email confirmation failed: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+    console.log("Email confirmed successfully");
+
+    return data;
+  } catch (error) {
+    console.error("Error during email confirmation:", error);
+    throw error;
+  }
+}
+
+/**
+ * Resend confirmation email
+ */
+export async function resendConfirmation(
+  email: string
+): Promise<{ message: string }> {
+  try {
+    const apiUrl = getApiUrl();
+    const endpoint = `${apiUrl}auth/resend-confirmation`;
+    console.log("Resending confirmation email at:", endpoint);
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    console.log("Resend confirmation response status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `Failed to resend confirmation: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+    console.log("Confirmation email resent successfully");
+
+    return data;
+  } catch (error) {
+    console.error("Error resending confirmation:", error);
+    throw error;
+  }
+}
+
+/**
+ * Request password reset
+ */
+export async function forgotPassword(
+  email: string
+): Promise<{ message: string }> {
+  try {
+    const apiUrl = getApiUrl();
+    const endpoint = `${apiUrl}auth/forgot-password`;
+    console.log("Requesting password reset at:", endpoint);
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    console.log("Forgot password response status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `Password reset request failed: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+    console.log("Password reset email sent successfully");
+
+    return data;
+  } catch (error) {
+    console.error("Error requesting password reset:", error);
+    throw error;
+  }
+}
+
+/**
+ * Reset password with token
+ */
+export async function resetPassword(
+  email: string,
+  token: string,
+  newPassword: string
+): Promise<{ message: string }> {
+  try {
+    const apiUrl = getApiUrl();
+    const endpoint = `${apiUrl}auth/reset-password`;
+    console.log("Resetting password at:", endpoint);
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ email, token, newPassword }),
+    });
+
+    console.log("Reset password response status:", response.status);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+
+      if (response.status === 400) {
+        if (errorData.code === "TOKEN_EXPIRED") {
+          throw new Error("Reset token has expired. Please request a new one.");
+        } else if (errorData.code === "INVALID_TOKEN") {
+          throw new Error("Invalid reset token.");
+        }
+      }
+
+      throw new Error(
+        errorData.message || `Password reset failed: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+    console.log("Password reset successfully");
+
+    return data;
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    throw error;
+  }
+}
+
+/**
  * Auth service object for cleaner imports
  */
 export const authService = {
   register,
   login,
   testConnection,
+  confirmEmail,
+  resendConfirmation,
+  forgotPassword,
+  resetPassword,
 };
 
 // Legacy exports for backward compatibility

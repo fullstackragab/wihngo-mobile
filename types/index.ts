@@ -8,6 +8,7 @@
 
 export * from "./bird";
 export * from "./crypto";
+export * from "./invoice";
 export * from "./notification";
 export * from "./payment";
 export * from "./premium";

@@ -18,6 +18,7 @@ export {
 // Legacy service exports (still in /services folder)
 // These will be migrated to /lib/api gradually
 export { birdService } from "@/services/bird.service";
+export { mediaService } from "@/services/media.service";
 export { premiumService } from "@/services/premium.service";
 export { searchService } from "@/services/search.service";
 export { storyService } from "@/services/story.service";

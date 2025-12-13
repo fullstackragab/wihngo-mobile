@@ -13,12 +13,18 @@ const getDynamicAppConfig = () => {
 
     // Pass dynamic variables to the app's JS code using the 'extra' field
     extra: {
-      apiUrl: isProduction
-        ? "https://wihngo-api.onrender.com/api/"
-        : "https://horsier-maliah-semilyrical.ngrok-free.dev/api/",
+      apiUrl:
+        process.env.EXPO_PUBLIC_API_URL ||
+        (isProduction
+          ? "https://wihngo-api.onrender.com/api/"
+          : "https://horsier-maliah-semilyrical.ngrok-free.dev/api/"),
+      reownProjectId: process.env.EXPO_PUBLIC_REOWN_PROJECT_ID,
+      projectId:
+        process.env.EXPO_PUBLIC_PROJECT_ID ||
+        "1f8be543-8a9c-49dc-ae05-8e8161b36f4c",
       // Add other environment-specific variables here if needed
       eas: {
-        projectId: "your-eas-project-id", // <-- Important for EAS builds
+        projectId: "1f8be543-8a9c-49dc-ae05-8e8161b36f4c", // <-- Important for EAS builds
       },
     },
     // ... other standard Expo config fields like version, orientation, icons, etc.

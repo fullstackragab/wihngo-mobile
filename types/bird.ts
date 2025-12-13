@@ -12,9 +12,12 @@ export type Bird = {
   scientificName?: string;
   tagline: string;
   description?: string;
-  imageUrl?: string;
-  coverImageUrl?: string;
-  videoUrl?: string; // Main video for the bird (required)
+  imageUrl?: string; // Pre-signed URL from API
+  imageS3Key?: string; // S3 storage key
+  coverImageUrl?: string; // Pre-signed URL from API
+  coverImageS3Key?: string; // S3 storage key
+  videoUrl?: string; // Pre-signed URL from API (required)
+  videoS3Key?: string; // S3 storage key (required)
   lovedBy: number;
   supportedBy: number;
   ownerId: string;
@@ -45,7 +48,8 @@ export type BirdHealthLog = {
   title: string;
   description: string;
   cost?: number;
-  imageUrl?: string;
+  imageUrl?: string; // Pre-signed URL from API
+  imageS3Key?: string; // S3 storage key
   createdAt: string;
 };
 
@@ -56,9 +60,9 @@ export type CreateBirdDto = {
   scientificName?: string;
   tagline: string;
   description?: string;
-  imageUrl?: string;
-  coverImageUrl?: string;
-  videoUrl: string; // Required: Main video for the bird
+  imageS3Key?: string;
+  coverImageS3Key?: string;
+  videoS3Key: string; // Required: Main video S3 key for the bird
   age?: string;
   location?: string;
 };

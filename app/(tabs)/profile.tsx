@@ -1,10 +1,12 @@
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import { BorderRadius, FontSizes, Spacing } from "@/lib/constants/theme";
+import { userService } from "@/services/user.service";
 import { Bird } from "@/types/bird";
+import { User } from "@/types/user";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -15,7 +17,7 @@ import {
 } from "react-native";
 
 export default function Profile() {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, updateUser } = useAuth();
   const { addNotification } = useNotifications();
   const router = useRouter();
   const [lovedBirds, setLovedBirds] = useState<Bird[]>([]);
@@ -31,6 +33,33 @@ export default function Profile() {
       loadUserData();
     }
   }, [isAuthenticated]);
+
+  // Refresh user profile when screen comes into focus (e.g., after editing profile)
+  useFocusEffect(
+    useCallback(() => {
+      if (isAuthenticated) {
+        refreshUserProfile();
+      }
+    }, [isAuthenticated])
+  );
+
+  const refreshUserProfile = async () => {
+    try {
+      // Fetch latest profile data including S3 image URL
+      const profileData = await userService.getProfile();
+      const updatedUser: User = {
+        ...user,
+        name: profileData.name,
+        bio: profileData.bio,
+        profileImageUrl: profileData.profileImageUrl, // S3 pre-signed URL
+        profileImageS3Key: profileData.profileImageS3Key,
+      };
+      updateUser(updatedUser);
+      console.log("✅ Profile data refreshed with S3 image URL");
+    } catch (error) {
+      console.error("Error refreshing profile data:", error);
+    }
+  };
 
   const loadUserData = async () => {
     try {
@@ -99,9 +128,9 @@ export default function Profile() {
         </TouchableOpacity>
 
         <View style={styles.avatarContainer}>
-          {user?.avatarUrl ? (
+          {user?.profileImageUrl || user?.avatarUrl ? (
             <Image
-              source={{ uri: user.avatarUrl }}
+              source={{ uri: user.profileImageUrl || user.avatarUrl }}
               style={styles.avatarImage}
             />
           ) : (

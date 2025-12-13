@@ -9,6 +9,7 @@ import { useFormValidation } from "@/hooks/useFormValidation";
 import { BirdSpecies } from "@/lib/constants/bird-species";
 import { MEDIA_CONFIG } from "@/lib/constants/media";
 import { birdService } from "@/services/bird.service";
+import { mediaService } from "@/services/media.service";
 import { CreateBirdDto } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
@@ -30,9 +31,9 @@ export default function AddBird() {
   const [species, setSpecies] = useState("");
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [coverImageUrl, setCoverImageUrl] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
+  const [imageUri, setImageUri] = useState("");
+  const [coverImageUri, setCoverImageUri] = useState("");
+  const [videoUri, setVideoUri] = useState("");
   const [age, setAge] = useState("");
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
@@ -52,8 +53,8 @@ export default function AddBird() {
         maxLength: 100,
         message: "Tagline is required (max 100 characters)",
       },
-      imageUrl: { required: true, message: "Profile image is required" },
-      videoUrl: { required: true, message: "Bird video is required" },
+      imageUri: { required: true, message: "Profile image is required" },
+      videoUri: { required: true, message: "Bird video is required" },
     });
 
   const handleSubmit = async () => {
@@ -73,40 +74,72 @@ export default function AddBird() {
       name,
       species,
       tagline,
-      imageUrl,
-      videoUrl,
+      imageUri,
+      videoUri,
     });
     if (!isValid) {
       return;
     }
 
     // Additional validation
-    if (!imageUrl.trim()) {
+    if (!imageUri.trim()) {
+      addNotification(
+        "recommendation",
+        "Image Required",
+        "Please select a profile image"
+      );
       return;
     }
 
-    if (!videoUrl.trim()) {
-      return;
-    }
-
-    if (!videoUrl.trim()) {
+    if (!videoUri.trim()) {
+      addNotification(
+        "recommendation",
+        "Video Required",
+        "Please select or record a video"
+      );
       return;
     }
 
     setLoading(true);
     try {
+      // Step 1: Upload profile image to S3 (required)
+      console.log("📤 Uploading profile image...");
+      const imageS3Key = await mediaService.uploadFile(
+        imageUri,
+        "bird-profile-image"
+      );
+      console.log("✅ Profile image uploaded:", imageS3Key);
+
+      // Step 2: Upload cover image to S3 (optional)
+      let coverImageS3Key: string | undefined;
+      if (coverImageUri.trim()) {
+        console.log("📤 Uploading cover image...");
+        coverImageS3Key = await mediaService.uploadFile(
+          coverImageUri,
+          "bird-profile-image"
+        );
+        console.log("✅ Cover image uploaded:", coverImageS3Key);
+      }
+
+      // Step 3: Upload video to S3 (required)
+      console.log("📤 Uploading video...");
+      const videoS3Key = await mediaService.uploadFile(videoUri, "bird-video");
+      console.log("✅ Video uploaded:", videoS3Key);
+
+      // Step 4: Create bird with S3 keys
       const birdData: CreateBirdDto = {
         name: name.trim(),
         species: species.trim(),
         tagline: tagline.trim(),
         description: description.trim() || undefined,
-        imageUrl: imageUrl.trim() || undefined,
-        coverImageUrl: coverImageUrl.trim() || undefined,
-        videoUrl: videoUrl.trim(),
+        imageS3Key,
+        coverImageS3Key,
+        videoS3Key,
         age: age.trim() || undefined,
         location: location.trim() || undefined,
       };
 
+      console.log("💾 Creating bird with data:", birdData);
       // Create bird through API (automatically associates with authenticated user)
       const createdBird = await birdService.createBird(birdData);
       console.log("Bird created successfully:", createdBird);
@@ -155,8 +188,8 @@ export default function AddBird() {
             !name.trim() ||
             !species.trim() ||
             !tagline.trim() ||
-            !imageUrl.trim() ||
-            !videoUrl.trim()
+            !imageUri.trim() ||
+            !videoUri.trim()
           }
         >
           <Text
@@ -165,8 +198,8 @@ export default function AddBird() {
               (!name.trim() ||
                 !species.trim() ||
                 !tagline.trim() ||
-                !imageUrl.trim() ||
-                !videoUrl.trim() ||
+                !imageUri.trim() ||
+                !videoUri.trim() ||
                 loading) &&
                 styles.saveButtonDisabled,
             ]}
@@ -252,20 +285,20 @@ export default function AddBird() {
           <ImagePickerButton
             label="Profile Image"
             placeholder="Tap to select a profile image"
-            initialUri={imageUrl}
-            onImageSelected={setImageUrl}
+            initialUri={imageUri}
+            onImageSelected={setImageUri}
             maxSizeMB={MEDIA_CONFIG.images.profile.maxSizeBytes / (1024 * 1024)}
             required
-            error={getFieldError("imageUrl")}
-            touched={isFieldTouched("imageUrl")}
-            onBlur={() => setFieldTouched("imageUrl")}
+            error={getFieldError("imageUri")}
+            touched={isFieldTouched("imageUri")}
+            onBlur={() => setFieldTouched("imageUri")}
           />
 
           <ImagePickerButton
             label="Cover Image"
             placeholder="Tap to select a cover image"
-            initialUri={coverImageUrl}
-            onImageSelected={setCoverImageUrl}
+            initialUri={coverImageUri}
+            onImageSelected={setCoverImageUri}
             maxSizeMB={MEDIA_CONFIG.images.cover.maxSizeBytes / (1024 * 1024)}
             aspectRatio={[16, 9]}
           />
@@ -278,8 +311,8 @@ export default function AddBird() {
           <VideoPickerButton
             label="Bird Video"
             placeholder="Tap to record or select a video"
-            initialUri={videoUrl}
-            onVideoSelected={setVideoUrl}
+            initialUri={videoUri}
+            onVideoSelected={setVideoUri}
             required={true}
             showGuidelines={true}
           />

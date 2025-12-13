@@ -54,25 +54,60 @@ export default function SignUp() {
       return;
     }
 
-    if (password.length < 6) {
+    // Password validation - minimum 8 characters
+    if (password.length < 8) {
+      addNotification(
+        "recommendation",
+        "Password Too Short",
+        "Password must be at least 8 characters long"
+      );
+      return;
+    }
+
+    // Check password strength
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
+      addNotification(
+        "recommendation",
+        "Weak Password",
+        "Password must contain uppercase, lowercase, number, and special character"
+      );
       return;
     }
 
     if (password !== confirmPassword) {
+      addNotification(
+        "recommendation",
+        "Passwords Don't Match",
+        "Please make sure both passwords match"
+      );
       return;
     }
 
     try {
       setIsLoading(true);
-      const authData = await registerService({
+      console.log("Registering user:", { name, email, password });
+      await registerService({
         name: name.trim(),
         email,
         password,
       });
-      await authLogin(authData);
 
-      // Success - redirect to home (no alert needed)
-      router.replace("/(tabs)/home");
+      // Show success message about email confirmation
+      addNotification(
+        "recommendation",
+        "Registration Successful! 🎉",
+        "Please check your email to confirm your account. We've sent you a confirmation link."
+      );
+
+      // Redirect to login
+      setTimeout(() => {
+        router.replace("/welcome");
+      }, 1500);
     } catch (error) {
       console.error("Registration error:", error);
       const errorMessage =
@@ -212,7 +247,10 @@ export default function SignUp() {
             {/* Password Requirements */}
             <View style={styles.passwordHints}>
               <Text style={styles.passwordHintText}>
-                • At least 6 characters
+                • At least 8 characters
+              </Text>
+              <Text style={styles.passwordHintText}>
+                • Include uppercase, lowercase, number & special character
               </Text>
             </View>
 

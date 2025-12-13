@@ -1,5 +1,7 @@
 import { useNotifications } from "@/contexts/notification-context";
 import { useImagePicker } from "@/hooks/useImagePicker";
+import { mediaService } from "@/services/media.service";
+import { storyService } from "@/services/story.service";
 import { Bird } from "@/types/bird";
 import { CreateStoryDto } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -73,17 +75,37 @@ export default function CreateStory() {
 
     setLoading(true);
     try {
+      // Step 1: Upload image to S3 if present (optional)
+      let imageS3Key: string | undefined;
+      if (imageUri) {
+        console.log("📤 Uploading story image...");
+        imageS3Key = await mediaService.uploadFile(
+          imageUri,
+          "story-image",
+          selectedBird.birdId
+        );
+        console.log("✅ Story image uploaded:", imageS3Key);
+      }
+
+      // Step 2: Create story with S3 key
       const storyData: CreateStoryDto = {
         title: title.trim(),
         content: content.trim(),
         birdId: selectedBird.birdId,
-        imageUrl: imageUri || undefined,
+        imageS3Key,
       };
 
-      // TODO: Replace with actual API call
-      // await storyService.createStory(storyData);
+      console.log("💾 Creating story with data:", storyData);
+      await storyService.createStory(storyData);
+      console.log("✅ Story created successfully");
 
-      // Success - redirect back (no alert needed)
+      addNotification(
+        "recommendation",
+        "Story Created",
+        "Your story has been shared successfully!"
+      );
+
+      // Success - redirect back
       router.back();
     } catch (error) {
       console.error("Error creating story:", error);

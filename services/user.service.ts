@@ -1,5 +1,10 @@
 import { Bird } from "@/types/bird";
-import { UpdateUserDto, UserProfile } from "@/types/user";
+import {
+  ProfileResponse,
+  UpdateProfileDto,
+  UpdateUserDto,
+  UserProfile,
+} from "@/types/user";
 import { apiHelper } from "./api-helper";
 
 const USER_ENDPOINT = "/api/users";
@@ -71,6 +76,33 @@ export const userService = {
     } catch (error) {
       console.error("Error fetching owned birds:", error);
       return [];
+    }
+  },
+
+  // Get current user profile (authenticated)
+  async getProfile(): Promise<ProfileResponse> {
+    try {
+      const response = await apiHelper.get<ProfileResponse>(
+        `${USER_ENDPOINT}/profile`
+      );
+      return response;
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      throw error;
+    }
+  },
+
+  // Update current user profile (authenticated)
+  async updateProfile(data: UpdateProfileDto): Promise<ProfileResponse> {
+    try {
+      const response = await apiHelper.put<ProfileResponse>(
+        `${USER_ENDPOINT}/profile`,
+        data
+      );
+      return response;
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      throw error;
     }
   },
 };

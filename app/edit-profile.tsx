@@ -1,9 +1,15 @@
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
+import { useImagePicker } from "@/hooks/useImagePicker";
+import { mediaService } from "@/services/media.service";
+import { userService } from "@/services/user.service";
+import { User } from "@/types/user";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -16,34 +22,92 @@ import {
 } from "react-native";
 
 export default function EditProfile() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const router = useRouter();
   const { addNotification } = useNotifications();
 
   const [name, setName] = useState(user?.name || "");
   const [email] = useState(user?.email || "");
   const [bio, setBio] = useState(user?.bio || "");
-  const [profilePicture] = useState(user?.avatarUrl || "");
   const [loading, setLoading] = useState(false);
+
+  const {
+    uri: profilePicture,
+    loading: imageLoading,
+    pickImage,
+    takePhoto,
+  } = useImagePicker(
+    {
+      maxSizeMB: 5,
+      allowsEditing: false,
+      quality: 0.8,
+    },
+    (uri) => {
+      console.log("New profile picture selected:", uri);
+    }
+  );
 
   const handleSave = async () => {
     if (!name.trim()) {
+      addNotification(
+        "recommendation",
+        "Name Required",
+        "Please enter your name"
+      );
       return;
     }
 
     setLoading(true);
     try {
-      // TODO: Implement API call to update profile
-      // await userService.updateProfile({ name, bio, profilePicture });
+      let profileImageS3Key: string | undefined;
 
-      // Success - redirect back (no alert needed)
-      router.back();
-    } catch {
+      // If user selected a new image, upload it to S3 first
+      if (profilePicture) {
+        console.log("📤 Uploading new profile image...");
+        profileImageS3Key = await mediaService.uploadFile(
+          profilePicture,
+          "profile-image"
+        );
+        console.log("✅ Profile image uploaded:", profileImageS3Key);
+      }
+
+      // Update profile with new data
+      console.log("💾 Updating profile...");
+      const updatedProfile = await userService.updateProfile({
+        name: name.trim(),
+        bio: bio.trim() || undefined,
+        profileImageS3Key,
+      });
+
+      console.log("✅ Profile updated successfully:", updatedProfile);
+
+      // Update user context with new profile data including S3 URL
+      const updatedUser: User = {
+        ...user,
+        name: updatedProfile.name,
+        bio: updatedProfile.bio,
+        profileImageUrl: updatedProfile.profileImageUrl, // S3 pre-signed URL
+        profileImageS3Key: updatedProfile.profileImageS3Key,
+      };
+      updateUser(updatedUser);
+      console.log("✅ User context updated with new profile image URL");
+
       addNotification(
         "recommendation",
-        "Error Updating Profile",
-        "Failed to update profile. Please try again."
+        "Profile Updated",
+        "Your profile has been updated successfully"
       );
+
+      // Navigate back
+      router.back();
+    } catch (error) {
+      console.error("❌ Error updating profile:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to update profile. Please try again.";
+
+      addNotification("recommendation", "Error Updating Profile", errorMessage);
     } finally {
       setLoading(false);
     }
@@ -56,9 +120,15 @@ export default function EditProfile() {
     >
       <ScrollView>
         <View style={styles.profilePictureContainer}>
-          {profilePicture ? (
+          {imageLoading ? (
+            <View style={styles.profilePicturePlaceholder}>
+              <ActivityIndicator size="large" color="#4ECDC4" />
+            </View>
+          ) : profilePicture || user?.profileImageUrl || user?.avatarUrl ? (
             <Image
-              source={{ uri: profilePicture }}
+              source={{
+                uri: profilePicture || user?.profileImageUrl || user?.avatarUrl,
+              }}
               style={styles.profilePicture}
             />
           ) : (
@@ -66,7 +136,36 @@ export default function EditProfile() {
               <FontAwesome6 name="user" size={50} color="#999" />
             </View>
           )}
-          <TouchableOpacity style={styles.changePictureButton}>
+          <TouchableOpacity
+            style={styles.changePictureButton}
+            onPress={() => {
+              Alert.alert(
+                "Change Profile Photo",
+                "Choose how you want to add a photo",
+                [
+                  {
+                    text: "Take Photo",
+                    onPress: () => takePhoto(),
+                  },
+                  {
+                    text: "Choose from Library",
+                    onPress: () => pickImage(),
+                  },
+                  {
+                    text: "Cancel",
+                    style: "cancel",
+                  },
+                ],
+                { cancelable: true }
+              );
+            }}
+          >
+            <FontAwesome6
+              name="camera"
+              size={16}
+              color="#4ECDC4"
+              style={styles.cameraIcon}
+            />
             <Text style={styles.changePictureText}>Change Photo</Text>
           </TouchableOpacity>
         </View>
@@ -145,11 +244,17 @@ const styles = StyleSheet.create({
   },
   changePictureButton: {
     marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  cameraIcon: {
+    marginRight: 4,
   },
   changePictureText: {
-    color: "#007AFF",
+    color: "#4ECDC4",
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   form: {
     padding: 20,

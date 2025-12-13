@@ -3,7 +3,9 @@ export type User = {
   name: string;
   email: string;
   bio?: string;
-  avatarUrl?: string;
+  avatarUrl?: string; // Pre-signed URL from API (deprecated, use profileImageUrl)
+  profileImageUrl?: string; // Pre-signed S3 URL from API
+  profileImageS3Key?: string; // S3 storage key
   location?: string;
   isOwner?: boolean; // Has birds listed
 };
@@ -20,6 +22,8 @@ export type UserCreateDto = {
   name: string;
   email: string;
   password: string;
+  profileImage?: string;
+  bio?: string;
 };
 
 export type LoginDto = {
@@ -29,9 +33,14 @@ export type LoginDto = {
 
 export type AuthResponseDto = {
   token: string;
+  refreshToken: string;
+  expiresAt: string;
   userId: string;
   name: string;
   email: string;
+  emailConfirmed: boolean;
+  profileImageUrl?: string;
+  profileImageS3Key?: string;
 };
 
 export type UpdateUserDto = {
@@ -39,4 +48,22 @@ export type UpdateUserDto = {
   bio?: string;
   avatarUrl?: string;
   location?: string;
+};
+
+export type UpdateProfileDto = {
+  name?: string;
+  bio?: string;
+  profileImageS3Key?: string;
+};
+
+export type ProfileResponse = {
+  userId: string;
+  name: string;
+  email: string;
+  profileImageS3Key?: string;
+  profileImageUrl?: string;
+  bio?: string;
+  emailConfirmed: boolean;
+  createdAt: string;
+  updatedAt: string;
 };

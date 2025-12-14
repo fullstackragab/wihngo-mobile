@@ -7,6 +7,7 @@ import { User } from "@/types/user";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -22,6 +23,7 @@ import {
 } from "react-native";
 
 export default function EditProfile() {
+  const { t } = useTranslation();
   const { user, updateUser } = useAuth();
   const router = useRouter();
   const { addNotification } = useNotifications();
@@ -51,8 +53,8 @@ export default function EditProfile() {
     if (!name.trim()) {
       addNotification(
         "recommendation",
-        "Name Required",
-        "Please enter your name"
+        t("profile.nameRequired"),
+        t("profile.enterName")
       );
       return;
     }
@@ -94,8 +96,8 @@ export default function EditProfile() {
 
       addNotification(
         "recommendation",
-        "Profile Updated",
-        "Your profile has been updated successfully"
+        t("profile.profileUpdated"),
+        t("profile.profileUpdatedSuccess")
       );
 
       // Navigate back
@@ -103,11 +105,13 @@ export default function EditProfile() {
     } catch (error) {
       console.error("❌ Error updating profile:", error);
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Failed to update profile. Please try again.";
+        error instanceof Error ? error.message : t("profile.updateFailed");
 
-      addNotification("recommendation", "Error Updating Profile", errorMessage);
+      addNotification(
+        "recommendation",
+        t("profile.errorUpdatingProfile"),
+        errorMessage
+      );
     } finally {
       setLoading(false);
     }
@@ -140,19 +144,19 @@ export default function EditProfile() {
             style={styles.changePictureButton}
             onPress={() => {
               Alert.alert(
-                "Change Profile Photo",
-                "Choose how you want to add a photo",
+                t("profile.changeProfilePhoto"),
+                t("profile.choosePhotoMethod"),
                 [
                   {
-                    text: "Take Photo",
+                    text: t("profile.takePhoto"),
                     onPress: () => takePhoto(),
                   },
                   {
-                    text: "Choose from Library",
+                    text: t("profile.chooseFromLibrary"),
                     onPress: () => pickImage(),
                   },
                   {
-                    text: "Cancel",
+                    text: t("common.cancel"),
                     style: "cancel",
                   },
                 ],
@@ -166,39 +170,43 @@ export default function EditProfile() {
               color="#4ECDC4"
               style={styles.cameraIcon}
             />
-            <Text style={styles.changePictureText}>Change Photo</Text>
+            <Text style={styles.changePictureText}>
+              {t("profile.changePhoto")}
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.form}>
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Name</Text>
+            <Text style={styles.label}>{t("profile.name")}</Text>
             <TextInput
               style={styles.input}
               value={name}
               onChangeText={setName}
-              placeholder="Your name"
+              placeholder={t("profile.yourName")}
             />
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Email</Text>
+            <Text style={styles.label}>{t("profile.email")}</Text>
             <TextInput
               style={[styles.input, styles.inputDisabled]}
               value={email}
               editable={false}
-              placeholder="Your email"
+              placeholder={t("profile.yourEmail")}
             />
-            <Text style={styles.helperText}>Email cannot be changed</Text>
+            <Text style={styles.helperText}>
+              {t("profile.emailCannotChange")}
+            </Text>
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Bio</Text>
+            <Text style={styles.label}>{t("profile.bio")}</Text>
             <TextInput
               style={[styles.input, styles.textArea]}
               value={bio}
               onChangeText={setBio}
-              placeholder="Tell us about yourself..."
+              placeholder={t("profile.bioPlaceholder")}
               multiline
               numberOfLines={4}
               textAlignVertical="top"
@@ -211,7 +219,7 @@ export default function EditProfile() {
             disabled={loading}
           >
             <Text style={styles.saveButtonText}>
-              {loading ? "Saving..." : "Save Changes"}
+              {loading ? t("profile.saving") : t("profile.saveChanges")}
             </Text>
           </TouchableOpacity>
         </View>

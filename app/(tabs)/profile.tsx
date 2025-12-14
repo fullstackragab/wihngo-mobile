@@ -8,6 +8,7 @@ import { User } from "@/types/user";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Image,
   ScrollView,
@@ -18,6 +19,7 @@ import {
 } from "react-native";
 
 export default function Profile() {
+  const { t } = useTranslation();
   const { user, logout, isAuthenticated, updateUser } = useAuth();
   const { addNotification } = useNotifications();
   const router = useRouter();
@@ -173,17 +175,17 @@ export default function Profile() {
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
           <Text style={styles.statValue}>{lovedBirds.length}</Text>
-          <Text style={styles.statLabel}>Loved</Text>
+          <Text style={styles.statLabel}>{t("bird.lovedBy")}</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
           <Text style={styles.statValue}>{supportedBirds.length}</Text>
-          <Text style={styles.statLabel}>Supported</Text>
+          <Text style={styles.statLabel}>{t("bird.supportedBy")}</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
           <Text style={styles.statValue}>{stats.storiesCount}</Text>
-          <Text style={styles.statLabel}>Stories</Text>
+          <Text style={styles.statLabel}>{t("tabs.stories")}</Text>
         </View>
       </View>
 
@@ -194,7 +196,7 @@ export default function Profile() {
           onPress={() => router.push("/my-stories")}
         >
           <FontAwesome6 name="book-open" size={18} color="#666" />
-          <Text style={styles.menuText}>My Stories</Text>
+          <Text style={styles.menuText}>{t("story.myStories")}</Text>
           <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
         </TouchableOpacity>
 
@@ -203,7 +205,7 @@ export default function Profile() {
           onPress={() => router.push("/my-birds")}
         >
           <FontAwesome6 name="dove" size={18} color="#666" />
-          <Text style={styles.menuText}>My Birds</Text>
+          <Text style={styles.menuText}>{t("bird.myBirds")}</Text>
           <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
         </TouchableOpacity>
 
@@ -212,7 +214,7 @@ export default function Profile() {
           onPress={() => router.push("/loved-birds")}
         >
           <FontAwesome6 name="heart" size={18} color="#666" />
-          <Text style={styles.menuText}>Loved Birds</Text>
+          <Text style={styles.menuText}>{t("bird.lovedBirds")}</Text>
           <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
         </TouchableOpacity>
 
@@ -221,7 +223,7 @@ export default function Profile() {
           onPress={() => router.push("/supported-birds")}
         >
           <FontAwesome6 name="hand-holding-heart" size={18} color="#666" />
-          <Text style={styles.menuText}>Supported Birds</Text>
+          <Text style={styles.menuText}>{t("bird.supportedBirds")}</Text>
           <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
         </TouchableOpacity>
 
@@ -232,7 +234,7 @@ export default function Profile() {
           onPress={() => router.push("/edit-profile")}
         >
           <FontAwesome6 name="pen" size={18} color="#666" />
-          <Text style={styles.menuText}>Edit Profile</Text>
+          <Text style={styles.menuText}>{t("settings.editProfile")}</Text>
           <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
         </TouchableOpacity>
       </View>
@@ -240,7 +242,7 @@ export default function Profile() {
       {/* Logout */}
       <View style={styles.logoutContainer}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Sign Out</Text>
+          <Text style={styles.logoutText}>{t("auth.logout")}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -307,7 +309,7 @@ const styles = StyleSheet.create({
   },
   settingsButton: {
     position: "absolute",
-    top: Spacing.lg,
+    top: Spacing.xl,
     right: Spacing.lg,
     width: 40,
     height: 40,

@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "view": "देखें",
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफलता",
+    "required": "आवश्यक",
+    "optional": "वैकल्पिक"
+  },
+  "tabs": {
+    "home": "होम",
+    "birds": "पक्षी",
+    "stories": "कहानियां",
+    "profile": "प्रोफ़ाइल"
+  },
+  "auth": {
+    "login": "लॉगिन",
+    "logout": "लॉगआउट",
+    "signUp": "साइन अप",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "forgotPassword": "पासवर्ड भूल गए?"
+  },
+  "bird": {
+    "addBird": "पक्षी जोड़ें",
+    "editBird": "पक्षी संपादित करें",
+    "myBirds": "मेरे पक्षी",
+    "birdName": "पक्षी का नाम",
+    "species": "प्रजाति",
+    "tagline": "टैगलाइन",
+    "description": "विवरण",
+    "age": "आयु",
+    "location": "स्थान",
+    "profileImage": "प्रोफ़ाइल फ़ोटो",
+    "coverImage": "कवर फ़ोटो",
+    "noBirds": "आपने अभी तक कोई पक्षी नहीं जोड़ा है",
+    "lovedBy": "द्वारा प्यार किया गया",
+    "supportedBy": "द्वारा समर्थित"
+  },
+  "story": {
+    "myStories": "मेरी कहानियां",
+    "addStory": "कहानी जोड़ें",
+    "editStory": "कहानी संपादित करें",
+    "noStories": "अभी तक कोई कहानी नहीं"
+  },
+  "settings": {
+    "settings": "सेटिंग्स",
+    "language": "भाषा",
+    "notifications": "सूचनाएं",
+    "privacy": "गोपनीयता",
+    "termsOfService": "सेवा की शर्तें",
+    "languageChangeError": "भाषा बदलने में विफल"
+  }
+}

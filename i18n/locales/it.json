@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "view": "Visualizza",
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "success": "Successo",
+    "required": "Obbligatorio",
+    "optional": "Facoltativo"
+  },
+  "tabs": {
+    "home": "Home",
+    "birds": "Uccelli",
+    "stories": "Storie",
+    "profile": "Profilo"
+  },
+  "auth": {
+    "login": "Accedi",
+    "logout": "Esci",
+    "signUp": "Registrati",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Password dimenticata?"
+  },
+  "bird": {
+    "addBird": "Aggiungi uccello",
+    "editBird": "Modifica uccello",
+    "myBirds": "I miei uccelli",
+    "birdName": "Nome uccello",
+    "species": "Specie",
+    "tagline": "Slogan",
+    "description": "Descrizione",
+    "age": "Età",
+    "location": "Posizione",
+    "profileImage": "Immagine profilo",
+    "coverImage": "Immagine copertina",
+    "noBirds": "Non hai ancora aggiunto uccelli",
+    "lovedBy": "Amato da",
+    "supportedBy": "Supportato da"
+  },
+  "story": {
+    "myStories": "Le mie storie",
+    "addStory": "Aggiungi storia",
+    "editStory": "Modifica storia",
+    "noStories": "Nessuna storia ancora"
+  },
+  "settings": {
+    "settings": "Impostazioni",
+    "language": "Lingua",
+    "notifications": "Notifiche",
+    "privacy": "Privacy",
+    "termsOfService": "Termini di servizio",
+    "languageChangeError": "Impossibile cambiare lingua"
+  }
+}

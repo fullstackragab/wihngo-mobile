@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "view": "Görüntüle",
+    "loading": "Yükleniyor...",
+    "error": "Hata",
+    "success": "Başarılı",
+    "required": "Gerekli",
+    "optional": "İsteğe bağlı"
+  },
+  "tabs": {
+    "home": "Ana Sayfa",
+    "birds": "Kuşlar",
+    "stories": "Hikayeler",
+    "profile": "Profil"
+  },
+  "auth": {
+    "login": "Giriş Yap",
+    "logout": "Çıkış Yap",
+    "signUp": "Kayıt Ol",
+    "email": "E-posta",
+    "password": "Şifre",
+    "forgotPassword": "Şifremi unuttum?"
+  },
+  "bird": {
+    "addBird": "Kuş ekle",
+    "editBird": "Kuşu düzenle",
+    "myBirds": "Kuşlarım",
+    "birdName": "Kuş adı",
+    "species": "Tür",
+    "tagline": "Slogan",
+    "description": "Açıklama",
+    "age": "Yaş",
+    "location": "Konum",
+    "profileImage": "Profil resmi",
+    "coverImage": "Kapak resmi",
+    "noBirds": "Henüz kuş eklemediniz",
+    "lovedBy": "Tarafından sevilen",
+    "supportedBy": "Tarafından desteklenen"
+  },
+  "story": {
+    "myStories": "Hikayelerim",
+    "addStory": "Hikaye ekle",
+    "editStory": "Hikayeyi düzenle",
+    "noStories": "Henüz hikaye yok"
+  },
+  "settings": {
+    "settings": "Ayarlar",
+    "language": "Dil",
+    "notifications": "Bildirimler",
+    "privacy": "Gizlilik",
+    "termsOfService": "Hizmet şartları",
+    "languageChangeError": "Dil değiştirilemedi"
+  }
+}

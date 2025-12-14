@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "view": "Ver",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "required": "Obrigatório",
+    "optional": "Opcional"
+  },
+  "tabs": {
+    "home": "Início",
+    "birds": "Pássaros",
+    "stories": "Histórias",
+    "profile": "Perfil"
+  },
+  "auth": {
+    "login": "Entrar",
+    "logout": "Sair",
+    "signUp": "Cadastrar",
+    "email": "E-mail",
+    "password": "Senha",
+    "forgotPassword": "Esqueceu a senha?"
+  },
+  "bird": {
+    "addBird": "Adicionar pássaro",
+    "editBird": "Editar pássaro",
+    "myBirds": "Meus pássaros",
+    "birdName": "Nome do pássaro",
+    "species": "Espécie",
+    "tagline": "Slogan",
+    "description": "Descrição",
+    "age": "Idade",
+    "location": "Localização",
+    "profileImage": "Foto de perfil",
+    "coverImage": "Foto de capa",
+    "noBirds": "Você ainda não adicionou nenhum pássaro",
+    "lovedBy": "Amado por",
+    "supportedBy": "Apoiado por"
+  },
+  "story": {
+    "myStories": "Minhas histórias",
+    "addStory": "Adicionar história",
+    "editStory": "Editar história",
+    "noStories": "Ainda não há histórias"
+  },
+  "settings": {
+    "settings": "Configurações",
+    "language": "Idioma",
+    "notifications": "Notificações",
+    "privacy": "Privacidade",
+    "termsOfService": "Termos de serviço",
+    "languageChangeError": "Falha ao alterar idioma"
+  }
+}

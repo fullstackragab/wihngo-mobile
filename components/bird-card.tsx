@@ -3,6 +3,7 @@ import { hasPremium } from "@/services/premium.service";
 import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { PremiumBadge } from "./premium-badge";
 
@@ -19,6 +20,7 @@ export default function BirdCard({
   onEdit,
   showActions,
 }: BirdCardProps) {
+  const { t } = useTranslation();
   const isPremium = hasPremium(bird);
 
   const CardContainer = showActions ? View : TouchableOpacity;
@@ -63,7 +65,7 @@ export default function BirdCard({
               onPress={() => onPress(bird)}
             >
               <FontAwesome6 name="eye" size={16} color="#4ECDC4" />
-              <Text style={styles.actionText}>View</Text>
+              <Text style={styles.actionText}>{t("common.view")}</Text>
             </TouchableOpacity>
             {onEdit && (
               <TouchableOpacity
@@ -71,7 +73,7 @@ export default function BirdCard({
                 onPress={() => onEdit(bird)}
               >
                 <FontAwesome6 name="pen" size={16} color="#666" />
-                <Text style={styles.actionText}>Edit</Text>
+                <Text style={styles.actionText}>{t("common.edit")}</Text>
               </TouchableOpacity>
             )}
           </View>

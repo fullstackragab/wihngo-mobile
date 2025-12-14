@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "view": "Lihat",
+    "loading": "Memuat...",
+    "error": "Kesalahan",
+    "success": "Berhasil",
+    "required": "Wajib",
+    "optional": "Opsional"
+  },
+  "tabs": {
+    "home": "Beranda",
+    "birds": "Burung",
+    "stories": "Cerita",
+    "profile": "Profil"
+  },
+  "auth": {
+    "login": "Masuk",
+    "logout": "Keluar",
+    "signUp": "Daftar",
+    "email": "Email",
+    "password": "Kata Sandi",
+    "forgotPassword": "Lupa kata sandi?"
+  },
+  "bird": {
+    "addBird": "Tambah burung",
+    "editBird": "Edit burung",
+    "myBirds": "Burung saya",
+    "birdName": "Nama burung",
+    "species": "Spesies",
+    "tagline": "Slogan",
+    "description": "Deskripsi",
+    "age": "Umur",
+    "location": "Lokasi",
+    "profileImage": "Foto profil",
+    "coverImage": "Foto sampul",
+    "noBirds": "Anda belum menambahkan burung",
+    "lovedBy": "Dicintai oleh",
+    "supportedBy": "Didukung oleh"
+  },
+  "story": {
+    "myStories": "Cerita saya",
+    "addStory": "Tambah cerita",
+    "editStory": "Edit cerita",
+    "noStories": "Belum ada cerita"
+  },
+  "settings": {
+    "settings": "Pengaturan",
+    "language": "Bahasa",
+    "notifications": "Notifikasi",
+    "privacy": "Privasi",
+    "termsOfService": "Ketentuan layanan",
+    "languageChangeError": "Gagal mengubah bahasa"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "required": "Requis",
+    "optional": "Facultatif"
+  },
+  "tabs": {
+    "home": "Accueil",
+    "birds": "Oiseaux",
+    "stories": "Histoires",
+    "profile": "Profil"
+  },
+  "auth": {
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "signUp": "S'inscrire",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié?"
+  },
+  "bird": {
+    "addBird": "Ajouter un oiseau",
+    "editBird": "Modifier l'oiseau",
+    "myBirds": "Mes oiseaux",
+    "birdName": "Nom de l'oiseau",
+    "species": "Espèce",
+    "tagline": "Slogan",
+    "description": "Description",
+    "age": "Âge",
+    "location": "Emplacement",
+    "profileImage": "Image de profil",
+    "coverImage": "Image de couverture",
+    "noBirds": "Vous n'avez pas encore ajouté d'oiseaux",
+    "lovedBy": "Aimé par",
+    "supportedBy": "Soutenu par"
+  },
+  "story": {
+    "myStories": "Mes histoires",
+    "addStory": "Ajouter une histoire",
+    "editStory": "Modifier l'histoire",
+    "noStories": "Pas encore d'histoires"
+  },
+  "settings": {
+    "settings": "Paramètres",
+    "language": "Langue",
+    "notifications": "Notifications",
+    "privacy": "Confidentialité",
+    "termsOfService": "Conditions d'utilisation",
+    "languageChangeError": "Impossible de changer la langue"
+  }
+}

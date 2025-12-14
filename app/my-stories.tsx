@@ -4,6 +4,7 @@ import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Stack, useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -16,6 +17,7 @@ import {
 } from "react-native";
 
 export default function MyStories() {
+  const { t } = useTranslation();
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const { user, isAuthenticated } = useAuth();
@@ -51,26 +53,26 @@ export default function MyStories() {
 
   const handleDeleteStory = async (storyId: string) => {
     Alert.alert(
-      "Delete Story",
-      "Are you sure you want to delete this story? This action cannot be undone. Media files will also be removed from storage.",
+      t("story.deleteConfirmTitle"),
+      t("story.deleteConfirmMessage"),
       [
-        { text: "Cancel", style: "cancel" },
+        { text: t("common.cancel"), style: "cancel" },
         {
-          text: "Delete",
+          text: t("common.delete"),
           style: "destructive",
           onPress: async () => {
             try {
               await storyService.deleteStory(storyId);
               setStories(stories.filter((s) => s.storyId !== storyId));
-              Alert.alert("Success", "Story deleted successfully");
+              Alert.alert(t("common.success"), t("story.deleteSuccess"));
             } catch (error: any) {
               console.error("❌ Failed to delete story:", error);
               const errorMessage =
                 error?.message?.includes("403") ||
                 error?.message?.includes("Forbidden")
-                  ? "You don't have permission to delete this story."
-                  : "Failed to delete story. Please try again.";
-              Alert.alert("Error", errorMessage);
+                  ? t("story.noPermission")
+                  : t("story.deleteFailed");
+              Alert.alert(t("common.error"), errorMessage);
             }
           },
         },
@@ -94,12 +96,12 @@ export default function MyStories() {
     return (
       <View style={styles.centerContainer}>
         <FontAwesome6 name="lock" size={48} color="#95A5A6" />
-        <Text style={styles.emptyText}>Please log in to view your stories</Text>
+        <Text style={styles.emptyText}>{t("common.notLoggedIn")}</Text>
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => router.push("/welcome")}
         >
-          <Text style={styles.loginButtonText}>Go to Login</Text>
+          <Text style={styles.loginButtonText}>{t("common.goToLogin")}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -109,18 +111,14 @@ export default function MyStories() {
     return (
       <View style={styles.centerContainer}>
         <FontAwesome6 name="book-open" size={64} color="#E8E8E8" />
-        <Text style={styles.emptyText}>
-          You haven&apos;t shared any stories yet
-        </Text>
-        <Text style={styles.emptySubtext}>
-          Share your bird experiences with the community
-        </Text>
+        <Text style={styles.emptyText}>{t("story.noStories")}</Text>
+        <Text style={styles.emptySubtext}>{t("story.noStoriesSubtext")}</Text>
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => router.push("/create-story")}
         >
           <FontAwesome6 name="plus" size={16} color="#fff" />
-          <Text style={styles.addButtonText}>Create Your First Story</Text>
+          <Text style={styles.addButtonText}>{t("story.addFirstStory")}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -153,21 +151,23 @@ export default function MyStories() {
             onPress={() => router.push(`/story/${item.storyId}`)}
           >
             <FontAwesome6 name="eye" size={16} color="#4ECDC4" />
-            <Text style={styles.actionText}>View</Text>
+            <Text style={styles.actionText}>{t("common.view")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.actionButton}
             onPress={() => handleEditStory(item.storyId)}
           >
             <FontAwesome6 name="pen" size={16} color="#666" />
-            <Text style={styles.actionText}>Edit</Text>
+            <Text style={styles.actionText}>{t("common.edit")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionButton, styles.deleteButton]}
             onPress={() => handleDeleteStory(item.storyId)}
           >
             <FontAwesome6 name="trash" size={16} color="#FF6B6B" />
-            <Text style={[styles.actionText, styles.deleteText]}>Delete</Text>
+            <Text style={[styles.actionText, styles.deleteText]}>
+              {t("common.delete")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -178,7 +178,7 @@ export default function MyStories() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: "My Stories",
+          title: t("story.myStories"),
           presentation: "card",
           headerRight: () => (
             <TouchableOpacity onPress={() => router.push("/create-story")}>

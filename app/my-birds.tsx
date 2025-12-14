@@ -6,6 +6,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useFocusEffect } from "@react-navigation/native";
 import { Stack, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -16,6 +17,7 @@ import {
 } from "react-native";
 
 export default function MyBirds() {
+  const { t } = useTranslation();
   const [birds, setBirds] = useState<Bird[]>([]);
   const [loading, setLoading] = useState(true);
   const { user, isAuthenticated } = useAuth();
@@ -58,12 +60,12 @@ export default function MyBirds() {
     return (
       <View style={styles.centerContainer}>
         <FontAwesome6 name="lock" size={48} color="#95A5A6" />
-        <Text style={styles.emptyText}>Please log in to view your birds</Text>
+        <Text style={styles.emptyText}>{t("common.notLoggedIn")}</Text>
         <TouchableOpacity
           style={styles.loginButton}
           onPress={() => router.push("/welcome")}
         >
-          <Text style={styles.loginButtonText}>Go to Login</Text>
+          <Text style={styles.loginButtonText}>{t("common.goToLogin")}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -73,18 +75,14 @@ export default function MyBirds() {
     return (
       <View style={styles.centerContainer}>
         <FontAwesome6 name="dove" size={64} color="#E8E8E8" />
-        <Text style={styles.emptyText}>
-          You haven&apos;t added any birds yet
-        </Text>
-        <Text style={styles.emptySubtext}>
-          Start adding birds to build your collection
-        </Text>
+        <Text style={styles.emptyText}>{t("bird.noBirds")}</Text>
+        <Text style={styles.emptySubtext}>{t("bird.noBirdsSubtext")}</Text>
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => router.push("/add-bird")}
         >
           <FontAwesome6 name="plus" size={16} color="#fff" />
-          <Text style={styles.addButtonText}>Add Your First Bird</Text>
+          <Text style={styles.addButtonText}>{t("bird.addFirstBird")}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -94,7 +92,7 @@ export default function MyBirds() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: "My Birds",
+          title: t("bird.myBirds"),
           presentation: "card",
           headerRight: () => (
             <TouchableOpacity onPress={() => router.push("/add-bird")}>

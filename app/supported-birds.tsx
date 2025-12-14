@@ -3,6 +3,7 @@ import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -12,6 +13,7 @@ import {
 } from "react-native";
 
 export default function SupportedBirds() {
+  const { t } = useTranslation();
   const [birds, setBirds] = useState<Bird[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,9 +46,9 @@ export default function SupportedBirds() {
     return (
       <View style={styles.centerContainer}>
         <FontAwesome6 name="hand-holding-heart" size={64} color="#90EE90" />
-        <Text style={styles.emptyText}>No supported birds yet</Text>
+        <Text style={styles.emptyText}>{t("bird.noSupportedBirds")}</Text>
         <Text style={styles.emptySubtext}>
-          Support birds to help them and see them here
+          {t("bird.noSupportedBirdsSubtext")}
         </Text>
       </View>
     );
@@ -55,7 +57,7 @@ export default function SupportedBirds() {
   return (
     <View style={styles.container}>
       <Stack.Screen
-        options={{ title: "Supported Birds", presentation: "card" }}
+        options={{ title: t("bird.supportedBirds"), presentation: "card" }}
       />
       <FlatList
         data={birds}

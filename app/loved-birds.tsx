@@ -3,6 +3,7 @@ import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -12,6 +13,7 @@ import {
 } from "react-native";
 
 export default function LovedBirds() {
+  const { t } = useTranslation();
   const [birds, setBirds] = useState<Bird[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,17 +46,17 @@ export default function LovedBirds() {
     return (
       <View style={styles.centerContainer}>
         <FontAwesome6 name="heart" size={64} color="#ffcccb" />
-        <Text style={styles.emptyText}>No loved birds yet</Text>
-        <Text style={styles.emptySubtext}>
-          Start loving birds to see them here
-        </Text>
+        <Text style={styles.emptyText}>{t("bird.noLovedBirds")}</Text>
+        <Text style={styles.emptySubtext}>{t("bird.noLovedBirdsSubtext")}</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: "Loved Birds", presentation: "card" }} />
+      <Stack.Screen
+        options={{ title: t("bird.lovedBirds"), presentation: "card" }}
+      />
       <FlatList
         data={birds}
         keyExtractor={(item) => item.birdId}

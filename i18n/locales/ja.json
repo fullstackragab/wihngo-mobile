@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "view": "表示",
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "required": "必須",
+    "optional": "任意"
+  },
+  "tabs": {
+    "home": "ホーム",
+    "birds": "鳥",
+    "stories": "ストーリー",
+    "profile": "プロフィール"
+  },
+  "auth": {
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "signUp": "サインアップ",
+    "email": "メール",
+    "password": "パスワード",
+    "forgotPassword": "パスワードをお忘れですか？"
+  },
+  "bird": {
+    "addBird": "鳥を追加",
+    "editBird": "鳥を編集",
+    "myBirds": "マイバード",
+    "birdName": "鳥の名前",
+    "species": "種",
+    "tagline": "キャッチフレーズ",
+    "description": "説明",
+    "age": "年齢",
+    "location": "場所",
+    "profileImage": "プロフィール画像",
+    "coverImage": "カバー画像",
+    "noBirds": "まだ鳥を追加していません",
+    "lovedBy": "に愛されている",
+    "supportedBy": "にサポートされている"
+  },
+  "story": {
+    "myStories": "マイストーリー",
+    "addStory": "ストーリーを追加",
+    "editStory": "ストーリーを編集",
+    "noStories": "まだストーリーはありません"
+  },
+  "settings": {
+    "settings": "設定",
+    "language": "言語",
+    "notifications": "通知",
+    "privacy": "プライバシー",
+    "termsOfService": "利用規約",
+    "languageChangeError": "言語の変更に失敗しました"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "common": {
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "view": "Zobacz",
+    "loading": "Ładowanie...",
+    "error": "Błąd",
+    "success": "Sukces",
+    "required": "Wymagane",
+    "optional": "Opcjonalne"
+  },
+  "tabs": {
+    "home": "Strona główna",
+    "birds": "Ptaki",
+    "stories": "Historie",
+    "profile": "Profil"
+  },
+  "auth": {
+    "login": "Zaloguj się",
+    "logout": "Wyloguj się",
+    "signUp": "Zarejestruj się",
+    "email": "Email",
+    "password": "Hasło",
+    "forgotPassword": "Nie pamiętasz hasła?"
+  },
+  "bird": {
+    "addBird": "Dodaj ptaka",
+    "editBird": "Edytuj ptaka",
+    "myBirds": "Moje ptaki",
+    "birdName": "Nazwa ptaka",
+    "species": "Gatunek",
+    "tagline": "Hasło",
+    "description": "Opis",
+    "age": "Wiek",
+    "location": "Lokalizacja",
+    "profileImage": "Zdjęcie profilowe",
+    "coverImage": "Zdjęcie okładki",
+    "noBirds": "Nie dodałeś jeszcze żadnych ptaków",
+    "lovedBy": "Kochany przez",
+    "supportedBy": "Wspierany przez"
+  },
+  "story": {
+    "myStories": "Moje historie",
+    "addStory": "Dodaj historię",
+    "editStory": "Edytuj historię",
+    "noStories": "Brak historii"
+  },
+  "settings": {
+    "settings": "Ustawienia",
+    "language": "Język",
+    "notifications": "Powiadomienia",
+    "privacy": "Prywatność",
+    "termsOfService": "Warunki usługi",
+    "languageChangeError": "Nie udało się zmienić języka"
+  }
+}

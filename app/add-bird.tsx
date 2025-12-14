@@ -14,6 +14,7 @@ import { CreateBirdDto } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -26,6 +27,7 @@ import {
 } from "react-native";
 
 export default function AddBird() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { birdId } = useLocalSearchParams<{ birdId?: string }>();
   const isEditMode = !!birdId;
@@ -278,18 +280,18 @@ export default function AddBird() {
           <Text style={styles.sectionTitle}>Basic Information</Text>
 
           <ValidatedTextInput
-            label="Bird Name"
+            label={t("bird.birdName")}
             value={name}
             onChangeText={setName}
             onBlur={() => setFieldTouched("name")}
             error={getFieldError("name")}
             touched={isFieldTouched("name")}
             required
-            placeholder="e.g., Charlie"
+            placeholder={t("bird.namePlaceholder")}
           />
 
           <SpeciesAutocomplete
-            label="Species"
+            label={t("bird.species")}
             value={species}
             onChangeText={setSpecies}
             onSpeciesSelected={handleSpeciesSelected}
@@ -297,27 +299,27 @@ export default function AddBird() {
             error={getFieldError("species")}
             touched={isFieldTouched("species")}
             required
-            placeholder="Search for a species..."
+            placeholder={t("bird.speciesPlaceholder")}
           />
 
           <ValidatedTextInput
-            label="Tagline"
+            label={t("bird.tagline")}
             value={tagline}
             onChangeText={setTagline}
             onBlur={() => setFieldTouched("tagline")}
             error={getFieldError("tagline")}
             touched={isFieldTouched("tagline")}
             required
-            placeholder="A short, catchy description"
+            placeholder={t("bird.taglinePlaceholder")}
             maxLength={100}
           />
           <Text style={styles.charCount}>{tagline.length}/100</Text>
 
           <ValidatedTextInput
-            label="Description"
+            label={t("bird.description")}
             value={description}
             onChangeText={setDescription}
-            placeholder="Tell us more about this bird..."
+            placeholder={t("bird.descriptionPlaceholder")}
             multiline
             numberOfLines={6}
             style={styles.textArea}
@@ -329,16 +331,16 @@ export default function AddBird() {
           <Text style={styles.sectionTitle}>Additional Details</Text>
 
           <ValidatedTextInput
-            label="Age"
+            label={t("bird.age")}
             value={age}
             onChangeText={setAge}
-            placeholder="e.g., 2 years"
+            placeholder={t("bird.agePlaceholder")}
           />
 
           <CityAutocomplete
             value={location}
             onCitySelected={setLocation}
-            placeholder="Search for a city..."
+            placeholder={t("bird.locationPlaceholder")}
           />
         </View>
 
@@ -347,8 +349,8 @@ export default function AddBird() {
           <Text style={styles.sectionTitle}>Images</Text>
 
           <ImagePickerButton
-            label="Profile Image"
-            placeholder="Tap to select a profile image"
+            label={t("bird.profileImage")}
+            placeholder={t("bird.profileImagePlaceholder")}
             initialUri={imageUri}
             onImageSelected={setImageUri}
             maxSizeMB={MEDIA_CONFIG.images.profile.maxSizeBytes / (1024 * 1024)}
@@ -359,8 +361,8 @@ export default function AddBird() {
           />
 
           <ImagePickerButton
-            label="Cover Image"
-            placeholder="Tap to select a cover image"
+            label={t("bird.coverImage")}
+            placeholder={t("bird.coverImagePlaceholder")}
             initialUri={coverImageUri}
             onImageSelected={setCoverImageUri}
             maxSizeMB={MEDIA_CONFIG.images.cover.maxSizeBytes / (1024 * 1024)}

@@ -1,7 +1,11 @@
+import { useLanguage } from "@/contexts/language-context";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
+  Alert,
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +15,49 @@ import {
 
 export default function Settings() {
   const router = useRouter();
+  const { language, setLanguage } = useLanguage();
+  const { t, i18n } = useTranslation();
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+
+  // Force re-render when language changes
+  console.log(
+    "🔍 Settings rendering with language:",
+    language,
+    "i18n:",
+    i18n.language
+  );
+  console.log("🔍 Sample translations:", {
+    language: t("settings.language"),
+    notifications: t("settings.notifications"),
+  });
+
+  const languages = [
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+    { code: "pt", name: "Português", flag: "🇧🇷" },
+    { code: "fr", name: "Français", flag: "🇫🇷" },
+    { code: "de", name: "Deutsch", flag: "🇩🇪" },
+    { code: "ar", name: "العربية", flag: "🇸🇦" },
+    { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+    { code: "id", name: "Bahasa Indonesia", flag: "🇮🇩" },
+    { code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
+    { code: "th", name: "ไทย", flag: "🇹🇭" },
+    { code: "ja", name: "日本語", flag: "🇯🇵" },
+    { code: "ko", name: "한국어", flag: "🇰🇷" },
+    { code: "zh", name: "简体中文", flag: "🇨🇳" },
+    { code: "it", name: "Italiano", flag: "🇮🇹" },
+    { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+    { code: "pl", name: "Polski", flag: "🇵🇱" },
+  ];
+
+  const handleLanguageChange = async (langCode: string) => {
+    try {
+      await setLanguage(langCode);
+      setShowLanguageModal(false);
+    } catch (error) {
+      Alert.alert(t("common.error"), t("settings.languageChangeError"));
+    }
+  };
 
   const SettingsItem = ({
     icon,
@@ -33,66 +80,108 @@ export default function Settings() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account</Text>
+        <Text style={styles.sectionTitle}>{t("settings.account")}</Text>
         {/* <SettingsItem
           icon="user-pen"
-          title="Edit Profile"
+          title={t("settings.editProfile")}
           onPress={() => router.push("/edit-profile")}
         /> */}
         <SettingsItem
           icon="bell"
-          title="Notifications"
+          title={t("settings.notifications")}
           onPress={() => router.push("/notifications-settings")}
         />
         <SettingsItem
           icon="lock"
-          title="Privacy"
+          title={t("settings.privacy")}
           onPress={() => router.push("/privacy-settings")}
         />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>App Settings</Text>
+        <Text style={styles.sectionTitle}>{t("settings.appSettings")}</Text>
         <SettingsItem
           icon="palette"
-          title="Theme"
+          title={t("settings.theme")}
           onPress={() => {
             // TODO: Implement theme toggle
           }}
         />
         <SettingsItem
           icon="language"
-          title="Language"
-          onPress={() => {
-            // TODO: Implement language settings
-          }}
+          title={t("settings.language")}
+          onPress={() => setShowLanguageModal(true)}
         />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Support</Text>
+        <Text style={styles.sectionTitle}>{t("settings.support")}</Text>
         <SettingsItem
           icon="circle-question"
-          title="Help & Support"
+          title={t("settings.helpSupport")}
           onPress={() => {
             // TODO: Implement help page
           }}
         />
         <SettingsItem
           icon="file-lines"
-          title="Terms of Service"
+          title={t("settings.termsOfService")}
           onPress={() => {
             // TODO: Implement terms page
           }}
         />
         <SettingsItem
           icon="shield-halved"
-          title="Privacy Policy"
+          title={t("settings.privacyPolicy")}
           onPress={() => {
             // TODO: Implement privacy policy page
           }}
         />
       </View>
+
+      <Modal
+        visible={showLanguageModal}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowLanguageModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>{t("settings.language")}</Text>
+              <TouchableOpacity onPress={() => setShowLanguageModal(false)}>
+                <FontAwesome6 name="xmark" size={20} color="#666" />
+              </TouchableOpacity>
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {languages.map((lang) => (
+                <TouchableOpacity
+                  key={lang.code}
+                  style={[
+                    styles.languageOption,
+                    language === lang.code && styles.languageOptionActive,
+                  ]}
+                  onPress={() => handleLanguageChange(lang.code)}
+                >
+                  <Text style={styles.languageFlag}>{lang.flag}</Text>
+                  <Text
+                    style={[
+                      styles.languageName,
+                      language === lang.code && styles.languageNameActive,
+                    ]}
+                    numberOfLines={1}
+                  >
+                    {lang.name}
+                  </Text>
+                  {language === lang.code && (
+                    <FontAwesome6 name="check" size={16} color="#4ECDC4" />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 }
@@ -132,5 +221,58 @@ const styles = StyleSheet.create({
   settingText: {
     fontSize: 16,
     color: "#333",
+    flex: 1,
+    flexWrap: "wrap",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    maxHeight: "70%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8E8E8",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  languageOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  languageOptionActive: {
+    backgroundColor: "#F0F9F8",
+  },
+  languageFlag: {
+    fontSize: 24,
+    marginRight: 12,
+  },
+  languageName: {
+    flex: 1,
+    fontSize: 16,
+    color: "#333",
+    flexWrap: "wrap",
+  },
+  languageNameActive: {
+    fontWeight: "600",
+    color: "#4ECDC4",
   },
 });

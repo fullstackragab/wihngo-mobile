@@ -3,6 +3,7 @@ import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -18,6 +19,7 @@ type SearchTab = "all" | "birds" | "stories";
 
 export default function Search() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [activeTab, setActiveTab] = useState<SearchTab>("all");
   const [loading, setLoading] = useState(false);
@@ -83,7 +85,9 @@ export default function Search() {
         <Text style={styles.resultTitle} numberOfLines={2}>
           {item.title}
         </Text>
-        <Text style={styles.resultSubtitle}>by {item.userName}</Text>
+        <Text style={styles.resultSubtitle}>
+          {t("home.by")} {item.userName}
+        </Text>
         <View style={styles.resultStats}>
           <View style={styles.resultStat}>
             <FontAwesome6 name="heart" size={12} color="#FF6B6B" />
@@ -123,7 +127,7 @@ export default function Search() {
         />
         <TextInput
           style={styles.searchInput}
-          placeholder="Search birds and stories..."
+          placeholder={t("search.searchPlaceholder")}
           placeholderTextColor="#95A5A6"
           value={query}
           onChangeText={(text) => {
@@ -151,7 +155,7 @@ export default function Search() {
               activeTab === "all" && styles.tabTextActive,
             ]}
           >
-            All
+            {t("search.all")}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -164,7 +168,7 @@ export default function Search() {
               activeTab === "birds" && styles.tabTextActive,
             ]}
           >
-            Birds ({birdResults.length})
+            {t("tabs.birds")} ({birdResults.length})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -177,7 +181,7 @@ export default function Search() {
               activeTab === "stories" && styles.tabTextActive,
             ]}
           >
-            Stories ({storyResults.length})
+            {t("tabs.stories")} ({storyResults.length})
           </Text>
         </TouchableOpacity>
       </View>
@@ -190,10 +194,8 @@ export default function Search() {
       ) : query.trim().length === 0 ? (
         <View style={styles.centerContainer}>
           <FontAwesome6 name="magnifying-glass" size={60} color="#BDC3C7" />
-          <Text style={styles.emptyTitle}>Search Wihngo</Text>
-          <Text style={styles.emptyText}>
-            Find birds, stories, and connect with other bird lovers
-          </Text>
+          <Text style={styles.emptyTitle}>{t("search.searchTitle")}</Text>
+          <Text style={styles.emptyText}>{t("search.searchDescription")}</Text>
         </View>
       ) : (
         <FlatList
@@ -226,9 +228,9 @@ export default function Search() {
                 size={60}
                 color="#BDC3C7"
               />
-              <Text style={styles.emptyTitle}>No Results</Text>
+              <Text style={styles.emptyTitle}>{t("search.noResults")}</Text>
               <Text style={styles.emptyText}>
-                Try searching with different keywords
+                {t("search.noResultsDescription")}
               </Text>
             </View>
           }

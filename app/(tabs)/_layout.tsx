@@ -1,6 +1,7 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Tabs } from "expo-router";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -8,6 +9,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <Tabs
@@ -34,7 +36,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: "Home",
+          title: t("tabs.home"),
           tabBarIcon: ({ color }) => (
             <FontAwesome6 name="house" size={20} color={color} />
           ),
@@ -44,7 +46,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="birds"
         options={{
-          title: "Birds",
+          title: t("tabs.birds"),
           tabBarIcon: ({ color }) => (
             <FontAwesome6 name="dove" size={20} color={color} />
           ),
@@ -54,7 +56,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="stories"
         options={{
-          title: "Stories",
+          title: t("tabs.stories"),
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="post" size={22} color={color} />
           ),
@@ -64,7 +66,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: t("tabs.profile"),
           tabBarIcon: ({ color }) => (
             <FontAwesome6 name="user" size={20} color={color} />
           ),

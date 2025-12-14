@@ -7,6 +7,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -20,6 +21,7 @@ import {
 } from "react-native";
 
 export default function Home() {
+  const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   const [featuredBirds, setFeaturedBirds] = useState<Bird[]>([]);
@@ -106,7 +108,7 @@ export default function Home() {
           {item.title}
         </Text>
         <Text style={styles.storyAuthor}>
-          by {item.userName}
+          {t("home.by")} {item.userName}
           {item.birdName && ` • ${item.birdName}`}
         </Text>
         <View style={styles.storyStats}>
@@ -127,7 +129,7 @@ export default function Home() {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#4ECDC4" />
-        <Text style={styles.loadingText}>Loading amazing birds...</Text>
+        <Text style={styles.loadingText}>{t("home.loadingBirds")}</Text>
       </View>
     );
   }
@@ -161,7 +163,7 @@ export default function Home() {
                 filter === "nearby" && styles.filterButtonTextActive,
               ]}
             >
-              Nearby
+              {t("home.nearby")}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -177,7 +179,7 @@ export default function Home() {
                 filter === "popular" && styles.filterButtonTextActive,
               ]}
             >
-              Popular
+              {t("home.popular")}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -193,7 +195,7 @@ export default function Home() {
                 filter === "new" && styles.filterButtonTextActive,
               ]}
             >
-              New
+              {t("home.new")}
             </Text>
           </TouchableOpacity>
         </View>
@@ -222,12 +224,14 @@ export default function Home() {
         ) : (
           <View style={styles.emptyState}>
             <FontAwesome6 name="dove" size={40} color="#E0E0E0" />
-            <Text style={styles.emptyText}>No birds yet</Text>
+            <Text style={styles.emptyText}>{t("home.noBirdsYet")}</Text>
             <TouchableOpacity
               style={styles.textButton}
               onPress={() => router.push("/(tabs)/birds")}
             >
-              <Text style={styles.textButtonLabel}>Explore Birds</Text>
+              <Text style={styles.textButtonLabel}>
+                {t("home.exploreBirds")}
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -237,9 +241,9 @@ export default function Home() {
       {trendingStories.length > 0 && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Stories</Text>
+            <Text style={styles.sectionTitle}>{t("home.stories")}</Text>
             <TouchableOpacity onPress={() => router.push("/(tabs)/stories")}>
-              <Text style={styles.seeAll}>View all</Text>
+              <Text style={styles.seeAll}>{t("home.viewAll")}</Text>
             </TouchableOpacity>
           </View>
           {trendingStories.map((story) => (
@@ -251,7 +255,7 @@ export default function Home() {
       {/* Recently Supported - Only show if authenticated and has data */}
       {isAuthenticated && recentlySupported.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Your birds</Text>
+          <Text style={styles.sectionTitle}>{t("home.yourBirds")}</Text>
           <FlatList
             horizontal
             data={recentlySupported}

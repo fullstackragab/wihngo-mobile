@@ -2,22 +2,24 @@ import { apiHelper } from "./api-helper";
 
 const MEDIA_ENDPOINT = "/api/media";
 
+/**
+ * Request for getting a pre-signed upload URL
+ * Based on backend API: POST /api/media/upload-url
+ */
 export interface UploadUrlRequest {
-  mediaType:
-    | "profile-image"
-    | "story-image"
-    | "story-video"
-    | "bird-profile-image"
-    | "bird-video";
-  fileExtension: string;
-  relatedId?: string;
+  fileName: string; // Original file name (e.g., "my-story-image.jpg")
+  contentType: string; // MIME type (e.g., "image/jpeg", "video/mp4")
+  category: "story" | "profile" | "bird"; // Media category
 }
 
+/**
+ * Response from upload URL endpoint
+ * Based on backend API: POST /api/media/upload-url
+ */
 export interface UploadUrlResponse {
-  uploadUrl: string;
-  s3Key: string;
-  expiresAt: string;
-  instructions: string;
+  uploadUrl: string; // Pre-signed S3 URL for uploading
+  s3Key: string; // S3 key to use when creating story
+  expiresInMinutes: number; // URL expiration (10 minutes)
 }
 
 export interface DownloadUrlRequest {
@@ -32,16 +34,32 @@ export interface DownloadUrlResponse {
 export const mediaService = {
   /**
    * Step 1: Get pre-signed upload URL from API
+   * @param fileName - Original file name (e.g., "photo.jpg")
+   * @param contentType - MIME type (e.g., "image/jpeg")
+   * @param category - Media category ("story", "profile", or "bird")
+   * @returns Upload URL, S3 key, and expiration info
    */
-  async getUploadUrl(request: UploadUrlRequest): Promise<UploadUrlResponse> {
+  async getUploadUrl(
+    fileName: string,
+    contentType: string,
+    category: "story" | "profile" | "bird"
+  ): Promise<UploadUrlResponse> {
     try {
+      const request: UploadUrlRequest = {
+        fileName,
+        contentType,
+        category,
+      };
       const response = await apiHelper.post<UploadUrlResponse>(
         `${MEDIA_ENDPOINT}/upload-url`,
         request
       );
+      console.log(
+        `✅ Got upload URL (expires in ${response.expiresInMinutes} minutes)`
+      );
       return response;
     } catch (error) {
-      console.error("Error getting upload URL:", error);
+      console.error("❌ Error getting upload URL:", error);
       throw error;
     }
   },
@@ -103,41 +121,42 @@ export const mediaService = {
 
   /**
    * Complete upload flow: Get upload URL and upload file
+   * @param fileUri - Local file URI
+   * @param category - Media category ("story", "profile", or "bird")
+   * @returns S3 key to use in API calls
    */
   async uploadFile(
     fileUri: string,
-    mediaType: UploadUrlRequest["mediaType"],
-    relatedId?: string
+    category: "story" | "profile" | "bird"
   ): Promise<string> {
     try {
-      console.log("📤 Starting S3 upload...");
+      console.log("📤 Starting media upload flow...");
 
-      // Determine file extension and MIME type
-      const extension = fileUri.split(".").pop()?.toLowerCase() || "jpg";
-      const fileExtension = `.${extension}`;
+      // Extract file name and extension
+      const fileName = fileUri.split("/").pop() || "file";
+      const extension = fileName.split(".").pop()?.toLowerCase() || "jpg";
 
       // Get Content-Type using helper function
-      const mimeType = getContentType(extension);
+      const contentType = getContentType(extension);
+
+      console.log(`📝 File: ${fileName}`);
+      console.log(`📝 Content-Type: ${contentType}`);
+      console.log(`📝 Category: ${category}`);
 
       // Step 1: Get upload URL from backend
-      console.log("📤 Step 1: Getting upload URL...");
-      console.log("📝 Media type:", mediaType);
-      console.log("📝 File extension:", fileExtension);
-      if (relatedId) console.log("📝 Related ID:", relatedId);
+      console.log("📤 Step 1: Requesting upload URL...");
+      const { uploadUrl, s3Key, expiresInMinutes } = await this.getUploadUrl(
+        fileName,
+        contentType,
+        category
+      );
 
-      const { uploadUrl, s3Key, instructions } = await this.getUploadUrl({
-        mediaType,
-        fileExtension,
-        relatedId,
-      });
-
-      console.log("✅ Got upload URL");
-      console.log("ℹ️ Instructions:", instructions);
-      console.log("🔑 S3 Key:", s3Key);
+      console.log(`🔑 S3 Key: ${s3Key}`);
+      console.log(`⏰ Upload URL expires in: ${expiresInMinutes} minutes`);
 
       // Step 2: Upload to S3
       console.log("📤 Step 2: Uploading to S3...");
-      await this.uploadToS3(uploadUrl, fileUri, mimeType);
+      await this.uploadToS3(uploadUrl, fileUri, contentType);
 
       console.log("✅ Upload complete! S3 Key:", s3Key);
       return s3Key;

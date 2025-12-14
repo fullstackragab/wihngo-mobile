@@ -1,6 +1,7 @@
 import { CUSTOM_THEMES } from "@/constants/premium-config";
 import { theme } from "@/constants/theme";
 import { useNotifications } from "@/contexts/notification-context";
+import { cacheUtils } from "@/lib/query-client";
 import { updateBirdPremiumStyle } from "@/services/premium.service";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -37,6 +38,9 @@ export function CustomThemeSelector({
       await updateBirdPremiumStyle(birdId, { themeId });
       setSelectedTheme(themeId);
       onThemeUpdate?.(themeId);
+      // Invalidate cache to refresh bird data
+      cacheUtils.invalidateBird(birdId);
+      cacheUtils.invalidateBirds();
       // Success - user sees updated theme
     } catch (error) {
       console.error("Failed to update theme:", error);

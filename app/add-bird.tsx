@@ -2,19 +2,20 @@ import CityAutocomplete from "@/components/ui/city-autocomplete";
 import ImagePickerButton from "@/components/ui/image-picker-button";
 import SpeciesAutocomplete from "@/components/ui/species-autocomplete";
 import ValidatedTextInput from "@/components/ui/validated-text-input";
-import VideoPickerButton from "@/components/ui/video-picker-button";
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import { useFormValidation } from "@/hooks/useFormValidation";
 import { BirdSpecies } from "@/lib/constants/bird-species";
 import { MEDIA_CONFIG } from "@/lib/constants/media";
+import { cacheUtils } from "@/lib/query-client";
 import { birdService } from "@/services/bird.service";
 import { mediaService } from "@/services/media.service";
 import { CreateBirdDto } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -26,6 +27,8 @@ import {
 
 export default function AddBird() {
   const router = useRouter();
+  const { birdId } = useLocalSearchParams<{ birdId?: string }>();
+  const isEditMode = !!birdId;
   const { user, isAuthenticated } = useAuth();
   const [name, setName] = useState("");
   const [species, setSpecies] = useState("");
@@ -37,7 +40,42 @@ export default function AddBird() {
   const [age, setAge] = useState("");
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(isEditMode);
   const { addNotification } = useNotifications();
+
+  // Load existing bird data in edit mode
+  useEffect(() => {
+    if (isEditMode && birdId) {
+      loadBirdData();
+    }
+  }, [birdId]);
+
+  const loadBirdData = async () => {
+    try {
+      setInitialLoading(true);
+      const bird = await birdService.getBirdById(birdId!);
+
+      // Populate form with existing data
+      setName(bird.name || "");
+      setSpecies(bird.species || "");
+      setTagline(bird.tagline || "");
+      setDescription(bird.description || "");
+      setAge(bird.age || "");
+      setLocation(bird.location || "");
+
+      // For images/video, we'll use the URLs from the bird object
+      // The user can change them by selecting new ones
+      if (bird.imageUrl) setImageUri(bird.imageUrl);
+      if (bird.coverImageUrl) setCoverImageUri(bird.coverImageUrl);
+      if (bird.videoUrl) setVideoUri(bird.videoUrl);
+    } catch (error) {
+      console.error("Error loading bird data:", error);
+      addNotification("recommendation", "Error", "Failed to load bird data");
+      router.back();
+    } finally {
+      setInitialLoading(false);
+    }
+  };
 
   const handleSpeciesSelected = (selectedSpecies: BirdSpecies) => {
     console.log("Species selected:", selectedSpecies);
@@ -54,7 +92,7 @@ export default function AddBird() {
         message: "Tagline is required (max 100 characters)",
       },
       imageUri: { required: true, message: "Profile image is required" },
-      videoUri: { required: true, message: "Bird video is required" },
+      videoUri: { required: false, message: "" },
     });
 
   const handleSubmit = async () => {
@@ -91,15 +129,6 @@ export default function AddBird() {
       return;
     }
 
-    if (!videoUri.trim()) {
-      addNotification(
-        "recommendation",
-        "Video Required",
-        "Please select or record a video"
-      );
-      return;
-    }
-
     setLoading(true);
     try {
       // Step 1: Upload profile image to S3 (required)
@@ -121,12 +150,15 @@ export default function AddBird() {
         console.log("✅ Cover image uploaded:", coverImageS3Key);
       }
 
-      // Step 3: Upload video to S3 (required)
-      console.log("📤 Uploading video...");
-      const videoS3Key = await mediaService.uploadFile(videoUri, "bird-video");
-      console.log("✅ Video uploaded:", videoS3Key);
+      // Step 3: Upload video to S3 (optional)
+      let videoS3Key: string | undefined;
+      if (videoUri.trim()) {
+        console.log("📤 Uploading video...");
+        videoS3Key = await mediaService.uploadFile(videoUri, "bird-video");
+        console.log("✅ Video uploaded:", videoS3Key);
+      }
 
-      // Step 4: Create bird with S3 keys
+      // Step 4: Prepare bird data
       const birdData: CreateBirdDto = {
         name: name.trim(),
         species: species.trim(),
@@ -134,23 +166,39 @@ export default function AddBird() {
         description: description.trim() || undefined,
         imageS3Key,
         coverImageS3Key,
-        videoS3Key,
+        videoS3Key: videoS3Key || undefined,
         age: age.trim() || undefined,
         location: location.trim() || undefined,
       };
 
-      console.log("💾 Creating bird with data:", birdData);
-      // Create bird through API (automatically associates with authenticated user)
-      const createdBird = await birdService.createBird(birdData);
-      console.log("Bird created successfully:", createdBird);
+      if (isEditMode && birdId) {
+        console.log("💾 Updating bird with data:", birdData);
+        await birdService.updateBird(birdId, birdData);
+        console.log("Bird updated successfully");
+      } else {
+        console.log("💾 Creating bird with data:", birdData);
+        const createdBird = await birdService.createBird(birdData);
+        console.log("Bird created successfully:", createdBird);
+      }
+
+      // Invalidate birds cache to refresh the list
+      cacheUtils.invalidateBirds();
+      if (user?.userId) {
+        cacheUtils.invalidateOwnedBirds(user.userId);
+      }
+      if (isEditMode && birdId) {
+        cacheUtils.invalidateBird(birdId);
+      }
 
       // Success - redirect back (no alert needed)
       router.back();
     } catch (error: any) {
-      console.error("Error adding bird:", error);
+      console.error(`Error ${isEditMode ? "updating" : "adding"} bird:`, error);
 
       // Provide user-friendly error messages
-      let errorMessage = "Failed to add bird. Please try again.";
+      let errorMessage = `Failed to ${
+        isEditMode ? "update" : "add"
+      } bird. Please try again.`;
 
       if (error.message?.includes("Session expired")) {
         errorMessage = "Your session has expired. Please log in again.";
@@ -164,11 +212,24 @@ export default function AddBird() {
         errorMessage = error.message;
       }
 
-      addNotification("recommendation", "Error Adding Bird", errorMessage);
+      addNotification(
+        "recommendation",
+        `Error ${isEditMode ? "Updating" : "Adding"} Bird`,
+        errorMessage
+      );
     } finally {
       setLoading(false);
     }
   };
+
+  if (initialLoading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color="#4ECDC4" />
+        <Text style={styles.loadingText}>Loading bird data...</Text>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -180,7 +241,9 @@ export default function AddBird() {
         <TouchableOpacity onPress={() => router.back()}>
           <FontAwesome6 name="xmark" size={24} color="#2C3E50" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Add New Bird</Text>
+        <Text style={styles.headerTitle}>
+          {isEditMode ? "Edit Bird" : "Add New Bird"}
+        </Text>
         <TouchableOpacity
           onPress={handleSubmit}
           disabled={
@@ -188,8 +251,7 @@ export default function AddBird() {
             !name.trim() ||
             !species.trim() ||
             !tagline.trim() ||
-            !imageUri.trim() ||
-            !videoUri.trim()
+            !imageUri.trim()
           }
         >
           <Text
@@ -199,7 +261,6 @@ export default function AddBird() {
                 !species.trim() ||
                 !tagline.trim() ||
                 !imageUri.trim() ||
-                !videoUri.trim() ||
                 loading) &&
                 styles.saveButtonDisabled,
             ]}
@@ -208,7 +269,10 @@ export default function AddBird() {
           </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.scrollContent}
+      >
         {/* Required Fields */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Basic Information</Text>
@@ -304,29 +368,9 @@ export default function AddBird() {
           />
         </View>
 
-        {/* Video (Required) */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Video</Text>
-
-          <VideoPickerButton
-            label="Bird Video"
-            placeholder="Tap to record or select a video"
-            initialUri={videoUri}
-            onVideoSelected={setVideoUri}
-            required={true}
-            showGuidelines={true}
-          />
-        </View>
-
         {/* Tips */}
         <View style={styles.tipsSection}>
           <Text style={styles.tipsTitle}>💡 Tips for listing your bird</Text>
-          <Text style={styles.tipsText}>
-            • Record a short video (max 1 min) showing your bird's personality
-          </Text>
-          <Text style={styles.tipsText}>
-            • Upload actual video files (.mp4, .mov) - no YouTube links
-          </Text>
           <Text style={styles.tipsText}>• Use clear, high-quality photos</Text>
           <Text style={styles.tipsText}>
             • Write a compelling tagline that captures personality
@@ -374,6 +418,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
+  },
+  scrollContent: {
+    paddingBottom: 100,
   },
   section: {
     marginBottom: 32,
@@ -436,5 +483,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#7F8C8D",
     marginBottom: 4,
+  },
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#7F8C8D",
   },
 });

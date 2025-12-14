@@ -17,8 +17,10 @@ import { NotificationProvider } from "@/contexts/notification-context";
 import { useAuthDeepLink } from "@/hooks/use-auth-deep-link";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { usePayPalDeepLink } from "@/hooks/use-paypal-deep-link";
+import { queryClient } from "@/lib/query-client";
 import { pushNotificationService } from "@/services/push-notification.service";
 import { AppKit, AppKitProvider } from "@reown/appkit-react-native";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -102,8 +104,6 @@ function RootLayoutNav() {
           options={{
             title: "Search",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -111,8 +111,6 @@ function RootLayoutNav() {
           options={{
             title: "Settings",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -120,8 +118,6 @@ function RootLayoutNav() {
           options={{
             title: "Edit Profile",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -129,8 +125,6 @@ function RootLayoutNav() {
           options={{
             title: "Notifications",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -138,8 +132,6 @@ function RootLayoutNav() {
           options={{
             title: "Privacy",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -147,8 +139,6 @@ function RootLayoutNav() {
           options={{
             title: "Payment Methods",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -156,8 +146,6 @@ function RootLayoutNav() {
           options={{
             title: "My Birds",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -165,8 +153,6 @@ function RootLayoutNav() {
           options={{
             title: "Loved Birds",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -174,8 +160,6 @@ function RootLayoutNav() {
           options={{
             title: "Supported Birds",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen
@@ -183,8 +167,6 @@ function RootLayoutNav() {
           options={{
             title: "Notifications",
             headerShown: true,
-            headerStyle: { backgroundColor: "#4ECDC4" },
-            headerTintColor: "#FFFFFF",
           }}
         />
         <Stack.Screen name="story/[id]" options={{ title: "Story" }} />
@@ -227,16 +209,24 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <AppKitProvider instance={appKit}>
-      <AuthProvider>
-        <NotificationProvider>
-          <RootLayoutNav />
-          {/* AppKit modal - wrapped in View for Android compatibility */}
-          <View style={{ position: "absolute", height: "100%", width: "100%" }}>
-            <AppKit />
-          </View>
-        </NotificationProvider>
-      </AuthProvider>
-    </AppKitProvider>
+    <QueryClientProvider client={queryClient}>
+      <AppKitProvider instance={appKit}>
+        <AuthProvider>
+          <NotificationProvider>
+            <RootLayoutNav />
+            {/* AppKit modal - wrapped in View for Android compatibility */}
+            <View
+              style={{
+                position: "absolute",
+                height: "100%",
+                width: "100%",
+              }}
+            >
+              <AppKit />
+            </View>
+          </NotificationProvider>
+        </AuthProvider>
+      </AppKitProvider>
+    </QueryClientProvider>
   );
 }

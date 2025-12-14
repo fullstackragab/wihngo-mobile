@@ -3,6 +3,7 @@
  * Handles push notifications for invoice/receipt events
  */
 
+import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { apiHelper } from "./api-helper";
@@ -42,7 +43,10 @@ export async function registerForDonationNotifications(): Promise<
 
     // Get Expo push token
     const tokenData = await Notifications.getExpoPushTokenAsync({
-      projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+      projectId:
+        Constants.expoConfig?.extra?.eas?.projectId ||
+        Constants.expoConfig?.extra?.projectId ||
+        "1f8be543-8a9c-49dc-ae05-8e8161b36f4c",
     });
 
     const expoPushToken = tokenData.data;

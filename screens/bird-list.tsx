@@ -3,10 +3,11 @@ import ErrorView from "@/components/ui/error-view";
 import ListEmptyState from "@/components/ui/list-empty-state";
 import LoadingScreen from "@/components/ui/loading-screen";
 import { BorderRadius, Spacing, Typography } from "@/constants/theme";
-import { getBirdsService } from "@/services/bird.service";
+import { useBirdsInfinite } from "@/hooks/useBirds";
 import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import React, { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   FlatList,
   RefreshControl,
@@ -24,43 +25,26 @@ export default function BirdList({
 }: {
   onPressBird: (bird: Bird) => void;
 }) {
-  const [birds, setBirds] = useState<Bird[]>([]);
-  const [filteredBirds, setFilteredBirds] = useState<Bird[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const {
+    data,
+    isLoading: loading,
+    error: queryError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useBirdsInfinite();
+
+  const birds = useMemo(() => {
+    return data?.pages.flatMap((page) => page.items) ?? [];
+  }, [data]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("name");
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    loadBirds();
-  }, []);
-
-  useEffect(() => {
-    applyFiltersAndSort();
-  }, [birds, searchQuery, sortBy]);
-
-  const loadBirds = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await getBirdsService();
-      setBirds(data);
-    } catch (err) {
-      setError("Failed to load birds. Please try again.");
-      console.error("Error loading birds:", err);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    loadBirds();
-  };
-
-  const applyFiltersAndSort = () => {
+  const filteredBirds = useMemo(() => {
     let result = [...birds];
 
     // Apply search
@@ -88,8 +72,20 @@ export default function BirdList({
         break;
     }
 
-    setFilteredBirds(result);
+    return result;
+  }, [birds, searchQuery, sortBy]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
   };
+
+  const onEndReached = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (loading) {
     return (
@@ -99,10 +95,13 @@ export default function BirdList({
     );
   }
 
-  if (error) {
+  if (queryError) {
     return (
       <View style={styles.container}>
-        <ErrorView message={error} onRetry={loadBirds} />
+        <ErrorView
+          message="Failed to load birds. Please try again."
+          onRetry={() => refetch()}
+        />
       </View>
     );
   }
@@ -195,8 +194,17 @@ export default function BirdList({
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
         ListEmptyComponent={
           <ListEmptyState title="No birds found" message="Start exploring" />
+        }
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <View style={styles.footer}>
+              <LoadingScreen message="Loading more birds..." />
+            </View>
+          ) : null
         }
       />
     </View>
@@ -260,5 +268,8 @@ const styles = StyleSheet.create({
   },
   row: {
     justifyContent: "space-between",
+  },
+  footer: {
+    paddingVertical: Spacing.lg,
   },
 });

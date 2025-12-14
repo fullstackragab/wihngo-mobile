@@ -149,10 +149,11 @@ export async function authenticatedGet<T>(url: string): Promise<T> {
 
   if (!response.ok) {
     let errorData;
+    const responseText = await response.text();
     try {
-      errorData = await response.json();
+      errorData = JSON.parse(responseText);
     } catch {
-      errorData = await response.text();
+      errorData = responseText;
     }
     throw new ApiError(response.status, response.statusText, errorData);
   }
@@ -176,11 +177,12 @@ export async function authenticatedPost<T>(url: string, data: any): Promise<T> {
 
   if (!response.ok) {
     let errorData;
+    const responseText = await response.text();
     try {
-      errorData = await response.json();
+      errorData = JSON.parse(responseText);
       console.log("❌ POST Error response data:", errorData);
     } catch {
-      errorData = await response.text();
+      errorData = responseText;
       console.log("❌ POST Error response text:", errorData);
     }
     throw new ApiError(response.status, response.statusText, errorData);
@@ -206,10 +208,11 @@ export async function authenticatedPut<T>(url: string, data: any): Promise<T> {
 
   if (!response.ok) {
     let errorData;
+    const responseText = await response.text();
     try {
-      errorData = await response.json();
+      errorData = JSON.parse(responseText);
     } catch {
-      errorData = await response.text();
+      errorData = responseText;
     }
     throw new ApiError(response.status, response.statusText, errorData);
   }
@@ -230,10 +233,11 @@ export async function authenticatedDelete<T>(url: string): Promise<T> {
 
   if (!response.ok) {
     let errorData;
+    const responseText = await response.text();
     try {
-      errorData = await response.json();
+      errorData = JSON.parse(responseText);
     } catch {
-      errorData = await response.text();
+      errorData = responseText;
     }
     throw new ApiError(response.status, response.statusText, errorData);
   }
@@ -261,10 +265,11 @@ export async function authenticatedPatch<T>(
 
   if (!response.ok) {
     let errorData;
+    const responseText = await response.text();
     try {
-      errorData = await response.json();
+      errorData = JSON.parse(responseText);
     } catch {
-      errorData = await response.text();
+      errorData = responseText;
     }
     throw new ApiError(response.status, response.statusText, errorData);
   }
@@ -336,10 +341,11 @@ export async function uploadFile<T>(
 
     if (!response.ok) {
       let errorData;
+      const responseText = await response.text();
       try {
-        errorData = await response.json();
+        errorData = JSON.parse(responseText);
       } catch {
-        errorData = await response.text();
+        errorData = responseText;
       }
       throw new ApiError(response.status, response.statusText, errorData);
     }

@@ -11,7 +11,7 @@ export default function Birds() {
       <Stack.Screen options={{ title: "Birds", headerShown: false }} />
       <BirdList
         onPressBird={(bird: Bird) => {
-          router.push(`/birds/${bird.birdId}`);
+          router.push(`/bird/${bird.birdId}`);
         }}
       />
 

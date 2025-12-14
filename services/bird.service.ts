@@ -41,7 +41,23 @@ export async function getBirdsService(): Promise<Bird[]> {
 
     const data = await response.json();
     console.log("Birds data received:", data?.length || 0, "items");
-    //console.log("First bird:", JSON.stringify(data[0]));
+
+    // Log first bird to check supportedBy field
+    if (data && data.length > 0) {
+      console.log("First bird sample:", {
+        birdId: data[0].birdId,
+        name: data[0].name,
+        lovedBy: data[0].lovedBy,
+        supportedBy: data[0].supportedBy,
+        totalSupport: data[0].totalSupport,
+      });
+
+      // NOTE: If supportedBy is 0 for all birds, this is a backend issue.
+      // The backend needs to calculate and return the support count by:
+      // 1. Counting support transactions for each bird
+      // 2. Aggregating the support data in the GET /birds endpoint
+      // 3. Ensuring the supportedBy field is populated correctly
+    }
 
     // Remove duplicates by birdId
     const uniqueBirds = Array.from(
@@ -96,6 +112,16 @@ export async function getBirdByIdService(birdId: string): Promise<Bird> {
 
 // Additional bird service methods
 export const birdService = {
+  // Get all birds
+  async getBirds(): Promise<Bird[]> {
+    return getBirdsService();
+  },
+
+  // Get bird by ID
+  async getBirdById(birdId: string): Promise<Bird> {
+    return getBirdByIdService(birdId);
+  },
+
   // Get featured birds
   async getFeaturedBirds(): Promise<Bird[]> {
     try {

@@ -1,6 +1,7 @@
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import { BorderRadius, FontSizes, Spacing } from "@/lib/constants/theme";
+import { storyService } from "@/services/story.service";
 import { userService } from "@/services/user.service";
 import { Bird } from "@/types/bird";
 import { User } from "@/types/user";
@@ -39,6 +40,7 @@ export default function Profile() {
     useCallback(() => {
       if (isAuthenticated) {
         refreshUserProfile();
+        loadUserData();
       }
     }, [isAuthenticated])
   );
@@ -62,13 +64,36 @@ export default function Profile() {
   };
 
   const loadUserData = async () => {
+    if (!user?.userId) return;
+
     try {
-      // TODO: Fetch user data from API
-      // const userData = await userService.getUserProfile(user.userId);
-      // setLovedBirds(userData.lovedBirds);
-      // setSupportedBirds(userData.supportedBirds);
-      // setOwnedBirds(userData.ownedBirds);
-      // setStats({ storiesCount: userData.storiesCount, totalSupport: userData.totalSupport });
+      // Fetch all user data in parallel
+      const [
+        lovedBirdsData,
+        supportedBirdsData,
+        ownedBirdsData,
+        myStoriesData,
+      ] = await Promise.all([
+        userService.getLovedBirds(user.userId),
+        userService.getSupportedBirds(user.userId),
+        userService.getOwnedBirds(user.userId),
+        storyService.getMyStories(1, 100), // Fetch first page to get count
+      ]);
+
+      setLovedBirds(lovedBirdsData);
+      setSupportedBirds(supportedBirdsData);
+      setOwnedBirds(ownedBirdsData);
+      setStats({
+        storiesCount: myStoriesData.totalCount,
+        totalSupport: supportedBirdsData.length,
+      });
+
+      console.log("✅ Profile data loaded:", {
+        loved: lovedBirdsData.length,
+        supported: supportedBirdsData.length,
+        owned: ownedBirdsData.length,
+        stories: myStoriesData.totalCount,
+      });
     } catch (error) {
       console.error("Error loading user data:", error);
     }
@@ -166,6 +191,15 @@ export default function Profile() {
       <View style={styles.menuContainer}>
         <TouchableOpacity
           style={styles.menuItem}
+          onPress={() => router.push("/my-stories")}
+        >
+          <FontAwesome6 name="book-open" size={18} color="#666" />
+          <Text style={styles.menuText}>My Stories</Text>
+          <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
           onPress={() => router.push("/my-birds")}
         >
           <FontAwesome6 name="dove" size={18} color="#666" />
@@ -199,15 +233,6 @@ export default function Profile() {
         >
           <FontAwesome6 name="pen" size={18} color="#666" />
           <Text style={styles.menuText}>Edit Profile</Text>
-          <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => router.push("/settings")}
-        >
-          <FontAwesome6 name="sliders" size={18} color="#666" />
-          <Text style={styles.menuText}>Settings</Text>
           <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
         </TouchableOpacity>
       </View>

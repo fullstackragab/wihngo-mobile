@@ -3,119 +3,208 @@ import {
   Story,
   StoryComment,
   StoryDetailDto,
+  StoryListResponse,
+  UpdateStoryDto,
 } from "@/types/story";
 import { apiHelper } from "./api-helper";
 
 const STORIES_ENDPOINT = "/api/stories";
 
 export const storyService = {
-  // Get all stories
-  async getStories(): Promise<Story[]> {
+  /**
+   * Get all stories (paginated)
+   * @param page - Page number (1-based)
+   * @param pageSize - Items per page (default: 10)
+   * @returns Paginated response with items, totalCount, page, pageSize
+   */
+  async getStories(
+    page: number = 1,
+    pageSize: number = 10
+  ): Promise<StoryListResponse> {
     try {
-      const response = await apiHelper.get<Story[]>(STORIES_ENDPOINT);
-      return response;
-    } catch (error) {
-      console.error("Error fetching stories:", error);
-      throw error;
-    }
-  },
-
-  // Get trending stories
-  async getTrendingStories(): Promise<Story[]> {
-    try {
-      const response = await apiHelper.get<Story[]>(
-        `${STORIES_ENDPOINT}/trending`
+      const response = await apiHelper.get<StoryListResponse>(
+        `${STORIES_ENDPOINT}?page=${page}&pageSize=${pageSize}`
       );
+      console.log(`✅ Fetched ${response.items.length} stories (page ${page})`);
       return response;
     } catch (error) {
-      console.error("Error fetching trending stories:", error);
-      throw error;
+      console.error("❌ Error fetching stories:", error);
+      // Return empty paginated response on error
+      return {
+        page: 1,
+        pageSize: pageSize,
+        totalCount: 0,
+        items: [],
+      };
     }
   },
 
-  // Get story detail
+  /**
+   * Get story detail by ID
+   * @param storyId - Story GUID
+   * @returns Full story detail with content, birds, and author
+   */
   async getStoryDetail(storyId: string): Promise<StoryDetailDto> {
     try {
       const response = await apiHelper.get<StoryDetailDto>(
         `${STORIES_ENDPOINT}/${storyId}`
       );
+      console.log(`✅ Fetched story detail: ${storyId}`);
       return response;
     } catch (error) {
-      console.error("Error fetching story detail:", error);
+      console.error("❌ Error fetching story detail:", error);
       throw error;
     }
   },
 
-  // Create story
-  async createStory(data: CreateStoryDto): Promise<Story> {
+  /**
+   * Get stories by user ID (paginated)
+   * @param userId - User GUID
+   * @param page - Page number (1-based)
+   * @param pageSize - Items per page (default: 10)
+   * @returns Paginated response with user's stories
+   */
+  async getUserStories(
+    userId: string,
+    page: number = 1,
+    pageSize: number = 10
+  ): Promise<StoryListResponse> {
     try {
-      const response = await apiHelper.post<Story>(STORIES_ENDPOINT, data);
+      const response = await apiHelper.get<StoryListResponse>(
+        `${STORIES_ENDPOINT}/user/${userId}?page=${page}&pageSize=${pageSize}`
+      );
+      console.log(`✅ Fetched user stories for ${userId} (page ${page})`);
       return response;
     } catch (error) {
-      console.error("Error creating story:", error);
+      console.error("❌ Error fetching user stories:", error);
+      return {
+        page: 1,
+        pageSize: pageSize,
+        totalCount: 0,
+        items: [],
+      };
+    }
+  },
+
+  /**
+   * Get current authenticated user's stories (paginated)
+   * @param page - Page number (1-based)
+   * @param pageSize - Items per page (default: 10)
+   * @returns Paginated response with current user's stories
+   */
+  async getMyStories(
+    page: number = 1,
+    pageSize: number = 10
+  ): Promise<StoryListResponse> {
+    try {
+      const response = await apiHelper.get<StoryListResponse>(
+        `${STORIES_ENDPOINT}/my-stories?page=${page}&pageSize=${pageSize}`
+      );
+      console.log(`✅ Fetched my stories (page ${page})`);
+      return response;
+    } catch (error) {
+      console.error("❌ Error fetching my stories:", error);
+      return {
+        page: 1,
+        pageSize: pageSize,
+        totalCount: 0,
+        items: [],
+      };
+    }
+  },
+
+  /**
+   * Create a new story
+   * @param data - Story content, bird IDs, optional mood and media
+   * @returns Created story detail
+   * @throws Error if validation fails (no content, no birds, or both media types)
+   */
+  async createStory(data: CreateStoryDto): Promise<StoryDetailDto> {
+    try {
+      const response = await apiHelper.post<StoryDetailDto>(
+        STORIES_ENDPOINT,
+        data
+      );
+      console.log("✅ Story created successfully");
+      return response;
+    } catch (error) {
+      console.error("❌ Error creating story:", error);
       throw error;
     }
   },
 
-  // Like story
+  /**
+   * Update an existing story (partial updates supported)
+   * @param storyId - Story GUID
+   * @param data - Fields to update (all optional)
+   * @throws Error if user is not the author (403) or story not found (404)
+   */
+  async updateStory(storyId: string, data: UpdateStoryDto): Promise<void> {
+    try {
+      // API returns 204 No Content on success
+      await apiHelper.put(`${STORIES_ENDPOINT}/${storyId}`, data);
+      console.log("✅ Story updated successfully");
+    } catch (error) {
+      console.error("❌ Error updating story:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Delete a story
+   * @param storyId - Story GUID
+   * @throws Error if user is not the author (403) or story not found (404)
+   * Note: Automatically deletes associated media files from S3
+   */
+  async deleteStory(storyId: string): Promise<void> {
+    try {
+      // API returns 204 No Content on success
+      await apiHelper.delete(`${STORIES_ENDPOINT}/${storyId}`);
+      console.log(
+        "✅ Story deleted successfully (media files removed from S3)"
+      );
+    } catch (error) {
+      console.error("❌ Error deleting story:", error);
+      throw error;
+    }
+  },
+
+  // ========== FEATURES NOT YET IMPLEMENTED BY BACKEND ==========
+  // The following methods are placeholders for future implementation
+
+  /**
+   * Like a story (NOT YET IMPLEMENTED)
+   * @deprecated This endpoint is not available yet
+   */
   async likeStory(storyId: string): Promise<void> {
-    try {
-      await apiHelper.post(`${STORIES_ENDPOINT}/${storyId}/like`, {
-        like: true,
-      });
-    } catch (error) {
-      console.error("Error liking story:", error);
-      throw error;
-    }
+    console.warn("⚠️ Like functionality not yet implemented by backend");
+    throw new Error("Like functionality not yet implemented");
   },
 
-  // Unlike story
+  /**
+   * Unlike a story (NOT YET IMPLEMENTED)
+   * @deprecated This endpoint is not available yet
+   */
   async unlikeStory(storyId: string): Promise<void> {
-    try {
-      await apiHelper.delete(`${STORIES_ENDPOINT}/${storyId}/like`);
-    } catch (error) {
-      console.error("Error unliking story:", error);
-      throw error;
-    }
+    console.warn("⚠️ Unlike functionality not yet implemented by backend");
+    throw new Error("Unlike functionality not yet implemented");
   },
 
-  // Add comment
+  /**
+   * Add a comment to a story (NOT YET IMPLEMENTED)
+   * @deprecated This endpoint is not available yet
+   */
   async addComment(storyId: string, content: string): Promise<StoryComment> {
-    try {
-      const response = await apiHelper.post<StoryComment>(
-        `${STORIES_ENDPOINT}/${storyId}/comments`,
-        { content }
-      );
-      return response;
-    } catch (error) {
-      console.error("Error adding comment:", error);
-      throw error;
-    }
+    console.warn("⚠️ Comment functionality not yet implemented by backend");
+    throw new Error("Comment functionality not yet implemented");
   },
 
-  // Get bird stories
+  /**
+   * Get stories by bird ID (NOT YET IMPLEMENTED)
+   * @deprecated This endpoint is not available yet - use getUserStories instead
+   */
   async getBirdStories(birdId: string): Promise<Story[]> {
-    try {
-      const response = await apiHelper.get<Story[]>(
-        `${STORIES_ENDPOINT}/bird/${birdId}`
-      );
-      return response;
-    } catch (error) {
-      console.error("Error fetching bird stories:", error);
-      throw error;
-    }
-  },
-
-  // Get user stories
-  async getUserStories(userId: string): Promise<Story[]> {
-    try {
-      const response = await apiHelper.get<Story[]>(
-        `${STORIES_ENDPOINT}/user/${userId}`
-      );
-      return response;
-    } catch (error) {
-      console.error("Error fetching user stories:", error);
-      throw error;
-    }
+    console.warn("⚠️ Bird stories endpoint not yet implemented by backend");
+    throw new Error("Bird stories endpoint not yet implemented");
   },
 };

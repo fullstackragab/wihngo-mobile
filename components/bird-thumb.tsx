@@ -35,7 +35,9 @@ export default function BirdThumb({ bird, onPress }: BirdThumbProps) {
           {bird.name}
         </Text>
         <View style={styles.statsRow}>
-          <Text style={styles.stats}>❤️ {bird.lovedBy}</Text>
+          <Text style={styles.stats}>❤️ {bird.lovedBy || 0}</Text>
+          <Text style={styles.statsSeparator}>•</Text>
+          <Text style={styles.stats}>💎 {bird.supportedBy || 0}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -48,15 +50,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.md,
-    overflow: "hidden",
+    overflow: "visible",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   image: {
     width: "100%",
     height: CARD_WIDTH * 1.1,
     backgroundColor: "#F0F0F0",
+    borderTopLeftRadius: BorderRadius.md,
+    borderTopRightRadius: BorderRadius.md,
   },
   info: {
     padding: Spacing.sm,
+    backgroundColor: "#fff",
+    borderBottomLeftRadius: BorderRadius.md,
+    borderBottomRightRadius: BorderRadius.md,
   },
   name: {
     fontWeight: "500",
@@ -66,9 +78,15 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.xs,
   },
   stats: {
     fontSize: Typography.tiny,
     color: "#999",
+  },
+  statsSeparator: {
+    fontSize: Typography.tiny,
+    color: "#DDD",
   },
 });

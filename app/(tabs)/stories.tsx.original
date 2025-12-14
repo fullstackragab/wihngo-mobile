@@ -1,11 +1,10 @@
 import StoryCardWithVideo from "@/components/story-card-with-video";
-import { VideoPreloader } from "@/components/video-preloader";
 import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { useStories } from "@/hooks/useStories";
 import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -21,7 +20,7 @@ const PAGE_SIZE = 10;
 export default function Stories() {
   const router = useRouter();
   const [visibleStoryId, setVisibleStoryId] = useState<string | null>(null);
-
+  
   // Use React Query hook for automatic caching and background updates
   const {
     data,
@@ -35,35 +34,10 @@ export default function Stories() {
 
   // Flatten all pages into a single array of stories
   const stories = data?.pages.flatMap((page) => page.items) ?? [];
-
-  // Preload next 2 and previous 1 videos for smooth transitions
-  const videosToPreload = useMemo(() => {
-    if (!visibleStoryId || stories.length === 0) return [];
-
-    const currentIndex = stories.findIndex((s) => s.storyId === visibleStoryId);
-    if (currentIndex === -1) return [];
-
-    const preloadUrls: string[] = [];
-
-    // Preload previous video
-    if (currentIndex > 0 && stories[currentIndex - 1].videoUrl) {
-      preloadUrls.push(stories[currentIndex - 1].videoUrl);
-    }
-
-    // Preload next 2 videos
-    for (let i = 1; i <= 2; i++) {
-      const nextIndex = currentIndex + i;
-      if (nextIndex < stories.length && stories[nextIndex].videoUrl) {
-        preloadUrls.push(stories[nextIndex].videoUrl);
-      }
-    }
-
-    return preloadUrls;
-  }, [visibleStoryId, stories]);
-
+  
   const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 70, // 70% of item must be visible
-    minimumViewTime: 100, // Faster detection for immediate playback
+    itemVisiblePercentThreshold: 60, // 60% of item must be visible
+    minimumViewTime: 300,
   });
 
   const onViewableItemsChanged = useRef(
@@ -92,7 +66,65 @@ export default function Stories() {
     console.warn("⚠️ Like functionality not yet implemented");
   };
 
+  const renderStoryItem = ({ item }: { item: Story }) => (
+    <TouchableOpacity
+      style={styles.storyCard}
+      onPress={() => router.push(`./story/${item.storyId}`)}
+      activeOpacity={0.9}
+    >
+      {item.imageUrl && (
+        <Image source={{ uri: item.imageUrl }} style={styles.storyImage} />
+      )}
+
+      <Text style={styles.title} numberOfLines={2}>
+        {item.title}
+      </Text>
+      <Text style={styles.content} numberOfLines={3}>
+        {item.content}
+      </Text>
+
+      <View style={styles.footer}>
+        <View style={styles.userInfo}>
+          <View style={styles.avatar}>
+            {item.userAvatar ? (
+              <Image
+                source={{ uri: item.userAvatar }}
+                style={styles.avatarImage}
+              />
+            ) : (
+              <FontAwesome6 name="user" size={14} color="#999" />
+            )}
+          </View>
+          <Text style={styles.userName}>{item.userName}</Text>
+        </View>
+
+        <View style={styles.actions}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={(e) => {
+              e.stopPropagation();
+              handleLike(item.storyId);
+            }}
   if (isLoading && !stories.length) {
+            <FontAwesome6
+              name="heart"
+              size={16}
+              color={item.isLiked ? "#FF6B6B" : "#CCC"}
+              solid={item.isLiked}
+            />
+            <Text style={styles.actionText}>{item.likes}</Text>
+          </TouchableOpacity>
+
+          <View style={styles.actionButton}>
+            <FontAwesome6 name="comment" size={16} color="#CCC" />
+            <Text style={styles.actionText}>{item.commentsCount}</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  if (loading) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#4ECDC4" />
@@ -107,11 +139,6 @@ export default function Stories() {
         <Text style={styles.headerTitle}>Stories</Text>
       </View>
 
-      {/* Preload adjacent videos for smooth playback */}
-      {videosToPreload.map((url) => (
-        <VideoPreloader key={url} videoUrl={url} />
-      ))}
-
       {/* Stories List */}
       {stories.length > 0 ? (
         <FlatList
@@ -119,7 +146,7 @@ export default function Stories() {
           renderItem={({ item }) => (
             <StoryCardWithVideo
               story={item}
-              onPress={() => router.push(`/story/${item.storyId}`)}
+              onPress={() => router.push(`./story/${item.storyId}`)}
               onLike={handleLike}
               shouldPlay={visibleStoryId === item.storyId}
             />
@@ -193,6 +220,76 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.sm,
     paddingBottom: Spacing.xl,
+  },
+  storyCard: {
+    backgroundColor: "#FAFAFA",
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  storyImage: {
+    width: "100%",
+    height: 180,
+    borderRadius: BorderRadius.sm,
+    backgroundColor: "#F0F0F0",
+    marginBottom: Spacing.md,
+  },
+  title: {
+    fontSize: Typography.h3,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    marginBottom: Spacing.xs,
+    lineHeight: 22,
+  },
+  content: {
+    fontSize: Typography.body,
+    color: "#666",
+    lineHeight: 20,
+    marginBottom: Spacing.md,
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: Spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
+  },
+  userInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  avatar: {
+    width: 28,
+    height: 28,
+    borderRadius: BorderRadius.full,
+    backgroundColor: "#F0F0F0",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+  },
+  userName: {
+    fontSize: Typography.small,
+    fontWeight: "500",
+    color: "#666",
+  },
+  actions: {
+    flexDirection: "row",
+    gap: Spacing.md,
+  },
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  actionText: {
+    fontSize: Typography.small,
+    color: "#999",
   },
   emptyContainer: {
     flex: 1,

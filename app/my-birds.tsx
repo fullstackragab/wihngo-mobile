@@ -4,7 +4,7 @@ import { userService } from "@/services/user.service";
 import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useFocusEffect } from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
@@ -92,22 +92,31 @@ export default function MyBirds() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Birds</Text>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => router.push("/add-bird")}
-        >
-          <FontAwesome6 name="plus" size={20} color="#4ECDC4" />
-        </TouchableOpacity>
-      </View>
+      <Stack.Screen
+        options={{
+          title: "My Birds",
+          presentation: "card",
+          headerRight: () => (
+            <TouchableOpacity onPress={() => router.push("/add-bird")}>
+              <FontAwesome6
+                name="plus"
+                size={20}
+                color="#007AFF"
+                style={{ marginRight: 16 }}
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
       <FlatList
         data={birds}
         keyExtractor={(item) => item.birdId}
         renderItem={({ item }) => (
           <BirdCard
             bird={item}
-            onPress={() => router.push(`/bird/${item.birdId}` as any)}
+            onPress={() => router.push(`/bird/${item.birdId}`)}
+            onEdit={(bird) => router.push(`/add-bird?birdId=${bird.birdId}`)}
+            showActions={true}
           />
         )}
         contentContainerStyle={styles.listContent}
@@ -155,6 +164,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 16,
+    paddingBottom: 24,
   },
   emptyText: {
     fontSize: 18,

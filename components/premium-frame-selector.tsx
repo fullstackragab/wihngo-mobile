@@ -1,5 +1,6 @@
 import { theme } from "@/constants/theme";
 import { useNotifications } from "@/contexts/notification-context";
+import { cacheUtils } from "@/lib/query-client";
 import { updateBirdPremiumStyle } from "@/services/premium.service";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -42,6 +43,9 @@ export function PremiumFrameSelector({
       await updateBirdPremiumStyle(birdId, { frameId });
       setSelectedFrame(frameId);
       onFrameUpdate?.(frameId);
+      // Invalidate cache to refresh bird data
+      cacheUtils.invalidateBird(birdId);
+      cacheUtils.invalidateBirds();
       // Success - user sees updated frame
     } catch (error) {
       console.error("Failed to update frame:", error);

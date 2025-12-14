@@ -1,5 +1,6 @@
 import LoveThisBirdButton from "@/components/love-this-bird-button";
 import { PremiumBadge } from "@/components/premium-badge";
+import ShareButton from "@/components/share-button";
 import SupportButton from "@/components/support-button";
 import AnimatedCard from "@/components/ui/animated-card";
 import { useAuth } from "@/contexts/auth-context";
@@ -89,52 +90,45 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
         {/* Bird Info */}
         <View style={styles.content}>
           <View style={styles.titleRow}>
-            <Text style={styles.title}>
-              {bird?.name || "Anna's Hummingbird"}
-            </Text>
+            <Text style={styles.title}>{bird?.name}</Text>
             {isPremiumBird && <PremiumBadge size="medium" />}
+            {bird?.species && (
+              <TouchableOpacity
+                onPress={() =>
+                  Alert.alert("Species", bird.species, [{ text: "OK" }])
+                }
+                style={styles.infoIcon}
+              >
+                <Ionicons
+                  name="information-circle-outline"
+                  size={24}
+                  color="#7F8C8D"
+                />
+              </TouchableOpacity>
+            )}
           </View>
-          <Text style={styles.subtitle}>
-            {bird?.scientificName || "Calypte anna"}
-          </Text>
-          {bird?.species && (
-            <View style={styles.speciesTag}>
-              <FontAwesome6 name="dove" size={14} color="#4ECDC4" />
-              <Text style={styles.speciesText}>{bird.species}</Text>
-            </View>
+          <Text style={styles.highlight}>{bird?.tagline}</Text>
+          {bird?.description && (
+            <Text style={styles.description}>{bird.description}</Text>
           )}
-          <Text style={styles.highlight}>
-            {bird?.tagline || "A tiny jewel that brings wonder year-round"}
-          </Text>
-          <Text style={styles.description}>
-            {bird?.description ||
-              "Named after Anna Masséna, Duchess of Rivoli, this remarkable hummingbird is known for its iridescent rose-pink crown and throat. Unlike most hummingbirds, Anna's are year-round residents along the Pacific Coast."}
-          </Text>
 
           {/* Additional Info */}
-          <View style={styles.infoGrid}>
-            {bird?.age && (
-              <View style={styles.infoItem}>
-                <FontAwesome6 name="calendar" size={14} color="#7F8C8D" />
-                <Text style={styles.infoLabel}>Age:</Text>
-                <Text style={styles.infoValue}>{bird.age}</Text>
-              </View>
-            )}
-            {bird?.location && (
-              <View style={styles.infoItem}>
-                <FontAwesome6 name="location-dot" size={14} color="#7F8C8D" />
-                <Text style={styles.infoLabel}>Location:</Text>
-                <Text style={styles.infoValue}>{bird.location}</Text>
-              </View>
-            )}
-            {bird?.ownerName && (
-              <View style={styles.infoItem}>
-                <FontAwesome6 name="user" size={14} color="#7F8C8D" />
-                <Text style={styles.infoLabel}>Owner:</Text>
-                <Text style={styles.infoValue}>{bird.ownerName}</Text>
-              </View>
-            )}
-          </View>
+          {(bird?.age || bird?.location) && (
+            <View style={styles.infoGrid}>
+              {bird?.age && (
+                <View style={styles.infoItem}>
+                  <FontAwesome6 name="calendar" size={14} color="#7F8C8D" />
+                  <Text style={styles.infoValue}>{bird.age}</Text>
+                </View>
+              )}
+              {bird?.location && (
+                <View style={styles.infoItem}>
+                  <FontAwesome6 name="location-dot" size={14} color="#7F8C8D" />
+                  <Text style={styles.infoValue}>{bird.location}</Text>
+                </View>
+              )}
+            </View>
+          )}
         </View>
 
         {/* Stats */}
@@ -142,32 +136,36 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
           <View style={[styles.statPill, { backgroundColor: "#fee2e2" }]}>
             <Ionicons name="heart" size={18} color="#ef4444" />
             <Text style={styles.statValue}>{loveCount}</Text>
-            <Text style={styles.statLabel}>Loves</Text>
           </View>
           <View style={[styles.statPill, { backgroundColor: "#dcfce7" }]}>
             <Ionicons name="sparkles" size={18} color="#10b981" />
-            <Text style={styles.statValue}>{bird?.supportedBy || 423}</Text>
-            <Text style={styles.statLabel}>Supporters</Text>
+            <Text style={styles.statValue}>{bird?.supportedBy || 0}</Text>
           </View>
+          <ShareButton
+            title={`Check out ${bird?.name}!`}
+            message={`${bird?.tagline || "Amazing bird on Wihngo!"}`}
+            variant="icon"
+            iconSize={20}
+            iconColor="#7F8C8D"
+            style={styles.statPill}
+          />
         </View>
 
         {/* Actions */}
         <View style={styles.content}>
+          {isOwner && (
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => router.push(`/add-bird?birdId=${bird?.birdId}`)}
+            >
+              <Ionicons name="pencil" size={18} color="#fff" />
+              <Text style={styles.editButtonText}>Edit Bird</Text>
+            </TouchableOpacity>
+          )}
           <View style={styles.actions}>
             {bird?.birdId && (
               <LoveThisBirdButton
                 birdId={bird.birdId}
-                initialIsLoved={bird.isLoved || false}
-                initialLoveCount={loveCount}
-                onLoveChange={handleLoveChange}
-                variant="pill"
-                style={{ flex: 1 }}
-              />
-            )}
-            {!bird?.isMemorial && (
-              <TouchableOpacity
-                style={styles.supportButton}
-                onPress={handleSupport}
                 initialIsLoved={bird.isLoved || false}
                 initialLoveCount={loveCount}
                 onLoveChange={handleLoveChange}
@@ -185,23 +183,7 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
               />
             )}
           </View>
-        </View>   ownerId={bird?.ownerId || ""}
-                  onStatusChange={handlePremiumUpdate}
-                />
-                <PremiumFrameSelector
-                  birdId={bird?.birdId || ""}
-                  currentFrameId={bird?.premiumStyle?.frameId}
-                  onFrameUpdate={handlePremiumUpdate}
-                />
-                <StoryHighlights
-                  birdId={bird?.birdId || ""}
-                  stories={stories}
-                  onUpdate={handlePremiumUpdate}
-                />
-              </>
-            )}
-          </View>
-        )}
+        </View>
 
         {/* Support Transparency */}
         {!bird?.isMemorial && bird?.totalSupport && bird.totalSupport > 0 && (
@@ -268,42 +250,66 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
           </View>
           {stories.length > 0 ? (
             <>
-              {displayedStories.map((story) => (
-                <TouchableOpacity
-                  key={story.storyId}
-                  style={styles.storyCard}
-                  onPress={() => router.push(`/story/${story.storyId}`)}
-                >
-                  {story.imageUrl && (
-                    <Image
-                      source={{ uri: story.imageUrl }}
-                      style={styles.storyThumb}
-                    />
-                  )}
-                  <View style={styles.storyContent}>
-                    <Text style={styles.storyTitle} numberOfLines={2}>
-                      {story.title}
-                    </Text>
-                    <Text style={styles.storyAuthor}>by {story.userName}</Text>
-                    <View style={styles.storyStats}>
-                      <View style={styles.storyStat}>
-                        <FontAwesome6 name="heart" size={12} color="#FF6B6B" />
-                        <Text style={styles.storyStatText}>{story.likes}</Text>
-                      </View>
-                      <View style={styles.storyStat}>
-                        <FontAwesome6
-                          name="comment"
-                          size={12}
-                          color="#95A5A6"
-                        />
-                        <Text style={styles.storyStatText}>
-                          {story.commentsCount}
-                        </Text>
-                      </View>
+              {displayedStories.map((story) => {
+                // Handle both new API structure (preview) and legacy (title/content)
+                const previewText =
+                  story.preview || story.content || "No content";
+                const dateText =
+                  story.date ||
+                  (story.createdAt
+                    ? new Date(story.createdAt).toLocaleDateString()
+                    : "");
+
+                return (
+                  <TouchableOpacity
+                    key={story.storyId}
+                    style={styles.storyCard}
+                    onPress={() => router.push(`/story/${story.storyId}`)}
+                  >
+                    {story.imageUrl && (
+                      <Image
+                        source={{ uri: story.imageUrl }}
+                        style={styles.storyThumb}
+                      />
+                    )}
+                    <View style={styles.storyContent}>
+                      <Text style={styles.storyTitle} numberOfLines={3}>
+                        {previewText}
+                      </Text>
+                      <Text style={styles.storyDate}>{dateText}</Text>
+                      {(story.likes !== undefined ||
+                        story.commentsCount !== undefined) && (
+                        <View style={styles.storyStats}>
+                          {story.likes !== undefined && (
+                            <View style={styles.storyStat}>
+                              <FontAwesome6
+                                name="heart"
+                                size={12}
+                                color="#FF6B6B"
+                              />
+                              <Text style={styles.storyStatText}>
+                                {story.likes}
+                              </Text>
+                            </View>
+                          )}
+                          {story.commentsCount !== undefined && (
+                            <View style={styles.storyStat}>
+                              <FontAwesome6
+                                name="comment"
+                                size={12}
+                                color="#95A5A6"
+                              />
+                              <Text style={styles.storyStatText}>
+                                {story.commentsCount}
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                      )}
                     </View>
-                  </View>
-                </TouchableOpacity>
-              ))}
+                  </TouchableOpacity>
+                );
+              })}
               {stories.length > 3 && !showAllStories && (
                 <TouchableOpacity
                   style={styles.showMoreButton}
@@ -381,6 +387,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "800",
     color: "#2C3E50",
+  },
+  infoIcon: {
+    marginLeft: 4,
   },
   subtitle: {
     fontSize: 14,
@@ -605,6 +614,11 @@ const styles = StyleSheet.create({
     color: "#7F8C8D",
     marginBottom: 8,
   },
+  storyDate: {
+    fontSize: 12,
+    color: "#95A5A6",
+    marginBottom: 8,
+  },
   storyStats: {
     flexDirection: "row",
     gap: 12,
@@ -639,6 +653,22 @@ const styles = StyleSheet.create({
     color: "#95A5A6",
     marginTop: 12,
     marginBottom: 16,
+  },
+  editButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: "#007AFF",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  editButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
   createStoryButton: {
     flexDirection: "row",

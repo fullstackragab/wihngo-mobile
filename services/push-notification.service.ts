@@ -4,13 +4,17 @@
  * Uses expo-notifications for cross-platform support
  */
 
+import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { notificationService } from "./notification.service";
 
-// Expo Project ID - Update this with your actual project ID
-const EXPO_PROJECT_ID = "wihngo";
+// Expo Project ID from app config
+const EXPO_PROJECT_ID =
+  Constants.expoConfig?.extra?.eas?.projectId ||
+  Constants.expoConfig?.extra?.projectId ||
+  "1f8be543-8a9c-49dc-ae05-8e8161b36f4c";
 
 // Configure notification behavior when app is in foreground
 Notifications.setNotificationHandler({
@@ -51,12 +55,27 @@ export const pushNotificationService = {
       // Get push token
       const token = await this.getPushToken();
       if (token) {
-        // Register device with backend
+        // Register device with backend (non-blocking)
         const deviceType = Platform.OS as "ios" | "android";
         const deviceName =
           Device.modelName || Device.osName || "Unknown Device";
-        await notificationService.registerDevice(token, deviceType, deviceName);
-        console.log("Device registered for push notifications:", token);
+
+        // Try to register, but don't fail if backend endpoint isn't ready
+        try {
+          await notificationService.registerDevice(
+            token,
+            deviceType,
+            deviceName
+          );
+          console.log("Device registered for push notifications:", token);
+        } catch (registerError: any) {
+          // Log the error but don't throw - backend might not have this endpoint yet
+          console.warn(
+            "Could not register device with backend:",
+            registerError?.message || registerError
+          );
+          console.log("Push token obtained:", token);
+        }
       }
 
       // Set up notification listeners

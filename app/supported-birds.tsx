@@ -1,6 +1,7 @@
 import BirdCard from "@/components/bird-card";
 import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -53,6 +54,9 @@ export default function SupportedBirds() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{ title: "Supported Birds", presentation: "card" }}
+      />
       <FlatList
         data={birds}
         keyExtractor={(item) => item.birdId}
@@ -76,6 +80,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 16,
+    paddingBottom: 24,
   },
   emptyText: {
     fontSize: 16,

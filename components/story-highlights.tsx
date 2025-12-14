@@ -135,6 +135,12 @@ function HighlightedStoryCard({
   onRemove,
   disabled,
 }: HighlightedStoryCardProps) {
+  // Get preview text (new API structure) or fall back to legacy content
+  const previewText = story.preview || story.content || "No content";
+  const dateText =
+    story.date ||
+    (story.createdAt ? new Date(story.createdAt).toLocaleDateString() : "");
+
   return (
     <View style={styles.card}>
       {story.imageUrl ? (
@@ -150,12 +156,10 @@ function HighlightedStoryCard({
       )}
 
       <View style={styles.cardContent}>
-        <Text style={styles.cardTitle} numberOfLines={2}>
-          {story.title}
+        <Text style={styles.cardTitle} numberOfLines={3}>
+          {previewText}
         </Text>
-        <Text style={styles.cardDate}>
-          {new Date(story.createdAt).toLocaleDateString()}
-        </Text>
+        <Text style={styles.cardDate}>{dateText}</Text>
       </View>
 
       <Pressable

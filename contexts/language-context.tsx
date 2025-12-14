@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { Alert, I18nManager } from "react-native";
+import { I18nManager } from "react-native";
 import { saveLanguage } from "../i18n";
 
 interface LanguageContextType {
@@ -62,13 +62,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         I18nManager.allowRTL(shouldBeRTL);
         setIsRTL(shouldBeRTL);
         console.log("✅ RTL toggled to:", shouldBeRTL);
-
-        // Notify user to restart app for RTL changes
-        Alert.alert(
-          "Language Changed",
-          "Please restart the app to apply the new language layout.",
-          [{ text: "OK" }]
-        );
       } else {
         setIsRTL(shouldBeRTL);
         console.log("✅ RTL state updated without restart:", shouldBeRTL);

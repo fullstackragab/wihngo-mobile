@@ -54,5 +54,20 @@
     "privacy": "Datenschutz",
     "termsOfService": "Nutzungsbedingungen",
     "languageChangeError": "Sprache konnte nicht geändert werden"
+  },
+  "welcome": {
+    "appTitle": "Whingo",
+    "appSubtitle": "Wo Herzen und Flügel zusammenkommen",
+    "welcomeBack": "Willkommen zurück!",
+    "emailPlaceholder": "E-Mail",
+    "passwordPlaceholder": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "signIn": "Anmelden",
+    "noAccount": "Noch kein Konto?",
+    "signUp": "Registrieren",
+    "loginFailed": "Anmeldung fehlgeschlagen",
+    "loginFailedMessage": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.",
+    "languageChanged": "Sprache geändert",
+    "restartApp": "Bitte starten Sie die App neu, um das neue Sprachlayout anzuwenden."
   }
 }

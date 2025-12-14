@@ -54,5 +54,20 @@
     "privacy": "Quyền riêng tư",
     "termsOfService": "Điều khoản dịch vụ",
     "languageChangeError": "Không thể thay đổi ngôn ngữ"
+  },
+  "welcome": {
+    "appTitle": "Whingo",
+    "appSubtitle": "Nơi Trái Tim và Đôi Cánh Hội Tụ",
+    "welcomeBack": "Chào mừng trở lại!",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Mật khẩu",
+    "forgotPassword": "Quên mật khẩu?",
+    "signIn": "Đăng nhập",
+    "noAccount": "Chưa có tài khoản?",
+    "signUp": "Đăng ký",
+    "loginFailed": "Đăng nhập thất bại",
+    "loginFailedMessage": "Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập của bạn.",
+    "languageChanged": "Đã thay đổi ngôn ngữ",
+    "restartApp": "Vui lòng khởi động lại ứng dụng để áp dụng bố cục ngôn ngữ mới."
   }
 }

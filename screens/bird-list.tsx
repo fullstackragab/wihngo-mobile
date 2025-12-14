@@ -8,6 +8,7 @@ import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   RefreshControl,
@@ -25,6 +26,7 @@ export default function BirdList({
 }: {
   onPressBird: (bird: Bird) => void;
 }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const {
     data,
@@ -90,7 +92,7 @@ export default function BirdList({
   if (loading) {
     return (
       <View style={styles.container}>
-        <LoadingScreen message="Loading birds..." />
+        <LoadingScreen message={t("messages.loadingBirds")} />
       </View>
     );
   }
@@ -99,7 +101,7 @@ export default function BirdList({
     return (
       <View style={styles.container}>
         <ErrorView
-          message="Failed to load birds. Please try again."
+          message={t("messages.failedLoadBirds")}
           onRetry={() => refetch()}
         />
       </View>
@@ -119,7 +121,7 @@ export default function BirdList({
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search birds..."
+            placeholder={t("messages.searchBirdsPlaceholder")}
             placeholderTextColor="#999"
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -144,7 +146,7 @@ export default function BirdList({
               sortBy === "name" && styles.sortPillTextActive,
             ]}
           >
-            A-Z
+            {t("messages.sortAZ")}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -160,7 +162,7 @@ export default function BirdList({
               sortBy === "popular" && styles.sortPillTextActive,
             ]}
           >
-            Popular
+            {t("messages.sortPopular")}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -176,7 +178,7 @@ export default function BirdList({
               sortBy === "supported" && styles.sortPillTextActive,
             ]}
           >
-            Supported
+            {t("messages.sortSupported")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -197,12 +199,15 @@ export default function BirdList({
         onEndReached={onEndReached}
         onEndReachedThreshold={0.5}
         ListEmptyComponent={
-          <ListEmptyState title="No birds found" message="Start exploring" />
+          <ListEmptyState
+            title={t("messages.noBirdsFound")}
+            message={t("messages.startExploring")}
+          />
         }
         ListFooterComponent={
           isFetchingNextPage ? (
             <View style={styles.footer}>
-              <LoadingScreen message="Loading more birds..." />
+              <LoadingScreen message={t("messages.loadingMoreBirds")} />
             </View>
           ) : null
         }

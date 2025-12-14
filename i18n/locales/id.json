@@ -54,5 +54,20 @@
     "privacy": "Privasi",
     "termsOfService": "Ketentuan layanan",
     "languageChangeError": "Gagal mengubah bahasa"
+  },
+  "welcome": {
+    "appTitle": "Whingo",
+    "appSubtitle": "Tempat Hati dan Sayap Berkumpul",
+    "welcomeBack": "Selamat datang kembali!",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Kata sandi",
+    "forgotPassword": "Lupa kata sandi?",
+    "signIn": "Masuk",
+    "noAccount": "Belum punya akun?",
+    "signUp": "Daftar",
+    "loginFailed": "Login Gagal",
+    "loginFailedMessage": "Login gagal. Silakan periksa kredensial Anda.",
+    "languageChanged": "Bahasa Diubah",
+    "restartApp": "Silakan restart aplikasi untuk menerapkan tata letak bahasa baru."
   }
 }

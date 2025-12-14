@@ -54,5 +54,20 @@
     "privacy": "ความเป็นส่วนตัว",
     "termsOfService": "เงื่อนไขการให้บริการ",
     "languageChangeError": "ไม่สามารถเปลี่ยนภาษาได้"
+  },
+  "welcome": {
+    "appTitle": "วิงโก",
+    "appSubtitle": "ที่ซึ่งหัวใจและปีกมารวมกัน",
+    "welcomeBack": "ยินดีต้อนรับกลับมา!",
+    "emailPlaceholder": "อีเมล",
+    "passwordPlaceholder": "รหัสผ่าน",
+    "forgotPassword": "ลืมรหัสผ่าน?",
+    "signIn": "เข้าสู่ระบบ",
+    "noAccount": "ยังไม่มีบัญชี?",
+    "signUp": "สมัครสมาชิก",
+    "loginFailed": "เข้าสู่ระบบล้มเหลว",
+    "loginFailedMessage": "เข้าสู่ระบบล้มเหลว กรุณาตรวจสอบข้อมูลประจำตัวของคุณ",
+    "languageChanged": "เปลี่ยนภาษาแล้ว",
+    "restartApp": "กรุณารีสตาร์ทแอปเพื่อใช้เลย์เอาต์ภาษาใหม่"
   }
 }

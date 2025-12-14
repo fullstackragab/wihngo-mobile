@@ -54,5 +54,20 @@
     "privacy": "Gizlilik",
     "termsOfService": "Hizmet şartları",
     "languageChangeError": "Dil değiştirilemedi"
+  },
+  "welcome": {
+    "appTitle": "Whingo",
+    "appSubtitle": "Kalplerin ve Kanatların Buluştuğu Yer",
+    "welcomeBack": "Tekrar hoş geldiniz!",
+    "emailPlaceholder": "E-posta",
+    "passwordPlaceholder": "Şifre",
+    "forgotPassword": "Şifrenizi mi unuttunuz?",
+    "signIn": "Giriş Yap",
+    "noAccount": "Hesabınız yok mu?",
+    "signUp": "Kaydol",
+    "loginFailed": "Giriş Başarısız",
+    "loginFailedMessage": "Giriş başarısız. Lütfen kimlik bilgilerinizi kontrol edin.",
+    "languageChanged": "Dil Değiştirildi",
+    "restartApp": "Yeni dil düzenini uygulamak için lütfen uygulamayı yeniden başlatın."
   }
 }

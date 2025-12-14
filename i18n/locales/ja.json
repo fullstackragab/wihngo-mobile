@@ -54,5 +54,20 @@
     "privacy": "プライバシー",
     "termsOfService": "利用規約",
     "languageChangeError": "言語の変更に失敗しました"
+  },
+  "welcome": {
+    "appTitle": "ウィンゴ",
+    "appSubtitle": "心と翼が集まる場所",
+    "welcomeBack": "おかえりなさい！",
+    "emailPlaceholder": "メール",
+    "passwordPlaceholder": "パスワード",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "signIn": "サインイン",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "signUp": "登録",
+    "loginFailed": "ログイン失敗",
+    "loginFailedMessage": "ログインに失敗しました。認証情報を確認してください。",
+    "languageChanged": "言語が変更されました",
+    "restartApp": "新しい言語レイアウトを適用するには、アプリを再起動してください。"
   }
 }

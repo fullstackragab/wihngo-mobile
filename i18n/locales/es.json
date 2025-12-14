@@ -54,5 +54,20 @@
     "privacy": "Privacidad",
     "termsOfService": "Términos de servicio",
     "languageChangeError": "Error al cambiar el idioma"
+  },
+  "welcome": {
+    "appTitle": "Whingo",
+    "appSubtitle": "Donde se Reúnen Corazones y Alas",
+    "welcomeBack": "¡Bienvenido de nuevo!",
+    "emailPlaceholder": "Correo electrónico",
+    "passwordPlaceholder": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "signIn": "Iniciar sesión",
+    "noAccount": "¿No tienes una cuenta?",
+    "signUp": "Regístrate",
+    "loginFailed": "Error de inicio de sesión",
+    "loginFailedMessage": "Error al iniciar sesión. Por favor verifica tus credenciales.",
+    "languageChanged": "Idioma cambiado",
+    "restartApp": "Por favor reinicia la aplicación para aplicar el nuevo diseño de idioma."
   }
 }

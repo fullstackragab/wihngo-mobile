@@ -54,5 +54,20 @@
     "privacy": "गोपनीयता",
     "termsOfService": "सेवा की शर्तें",
     "languageChangeError": "भाषा बदलने में विफल"
+  },
+  "welcome": {
+    "appTitle": "विंगो",
+    "appSubtitle": "जहां दिल और पंख मिलते हैं",
+    "welcomeBack": "वापसी पर स्वागत है!",
+    "emailPlaceholder": "ईमेल",
+    "passwordPlaceholder": "पासवर्ड",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "signIn": "साइन इन करें",
+    "noAccount": "खाता नहीं है?",
+    "signUp": "साइन अप करें",
+    "loginFailed": "लॉगिन विफल",
+    "loginFailedMessage": "लॉगिन विफल रहा। कृपया अपनी साख की जांच करें।",
+    "languageChanged": "भाषा बदल गई",
+    "restartApp": "कृपया नई भाषा लेआउट लागू करने के लिए ऐप को पुनरारंभ करें।"
   }
 }

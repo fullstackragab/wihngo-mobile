@@ -54,5 +54,20 @@
     "privacy": "Prywatność",
     "termsOfService": "Warunki usługi",
     "languageChangeError": "Nie udało się zmienić języka"
+  },
+  "welcome": {
+    "appTitle": "Whingo",
+    "appSubtitle": "Gdzie Spotykają Się Serca i Skrzydła",
+    "welcomeBack": "Witaj ponownie!",
+    "emailPlaceholder": "E-mail",
+    "passwordPlaceholder": "Hasło",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "signIn": "Zaloguj się",
+    "noAccount": "Nie masz konta?",
+    "signUp": "Zarejestruj się",
+    "loginFailed": "Logowanie nie powiodło się",
+    "loginFailedMessage": "Logowanie nie powiodło się. Sprawdź swoje dane uwierzytelniające.",
+    "languageChanged": "Język zmieniony",
+    "restartApp": "Uruchom ponownie aplikację, aby zastosować nowy układ języka."
   }
 }

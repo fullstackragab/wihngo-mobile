@@ -54,5 +54,20 @@
     "privacy": "隐私",
     "termsOfService": "服务条款",
     "languageChangeError": "无法更改语言"
+  },
+  "welcome": {
+    "appTitle": "温戈",
+    "appSubtitle": "心灵与翅膀汇聚之地",
+    "welcomeBack": "欢迎回来！",
+    "emailPlaceholder": "邮箱",
+    "passwordPlaceholder": "密码",
+    "forgotPassword": "忘记密码？",
+    "signIn": "登录",
+    "noAccount": "还没有账户？",
+    "signUp": "注册",
+    "loginFailed": "登录失败",
+    "loginFailedMessage": "登录失败。请检查您的凭据。",
+    "languageChanged": "语言已更改",
+    "restartApp": "请重启应用以应用新的语言布局。"
   }
 }

@@ -4,6 +4,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -18,6 +19,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ForgotPassword() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -28,8 +30,8 @@ export default function ForgotPassword() {
     if (!email.trim()) {
       addNotification(
         "recommendation",
-        "Error",
-        "Please enter your email address"
+        t("forgotPassword.error"),
+        t("forgotPassword.enterEmail")
       );
       return;
     }
@@ -38,8 +40,8 @@ export default function ForgotPassword() {
     if (!emailRegex.test(email)) {
       addNotification(
         "recommendation",
-        "Error",
-        "Please enter a valid email address"
+        t("forgotPassword.error"),
+        t("forgotPassword.enterValidEmail")
       );
       return;
     }
@@ -51,13 +53,17 @@ export default function ForgotPassword() {
       setIsSuccess(true);
       addNotification(
         "recommendation",
-        "Email Sent 📧",
-        "Password reset instructions have been sent to your email."
+        t("forgotPassword.emailSent"),
+        t("forgotPassword.emailSentMessage")
       );
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to send reset email";
-      addNotification("recommendation", "Error", errorMessage);
+        err instanceof Error ? err.message : t("forgotPassword.sendFailed");
+      addNotification(
+        "recommendation",
+        t("forgotPassword.error"),
+        errorMessage
+      );
     } finally {
       setIsLoading(false);
     }
@@ -92,10 +98,9 @@ export default function ForgotPassword() {
               </View>
 
               {/* Title */}
-              <Text style={styles.title}>Forgot Password?</Text>
+              <Text style={styles.title}>{t("forgotPassword.title")}</Text>
               <Text style={styles.subtitle}>
-                Enter your email address and we&apos;ll send you instructions to
-                reset your password.
+                {t("forgotPassword.subtitle")}
               </Text>
 
               {/* Email Input */}
@@ -108,7 +113,7 @@ export default function ForgotPassword() {
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="Email"
+                  placeholder={t("welcome.emailPlaceholder")}
                   placeholderTextColor="#95A5A6"
                   value={email}
                   onChangeText={setEmail}
@@ -134,7 +139,9 @@ export default function ForgotPassword() {
                   {isLoading ? (
                     <ActivityIndicator color="#FFFFFF" />
                   ) : (
-                    <Text style={styles.buttonText}>Send Reset Link</Text>
+                    <Text style={styles.buttonText}>
+                      {t("forgotPassword.sendResetLink")}
+                    </Text>
                   )}
                 </LinearGradient>
               </TouchableOpacity>
@@ -142,10 +149,10 @@ export default function ForgotPassword() {
               {/* Back to Login */}
               <View style={styles.linkContainer}>
                 <Text style={styles.linkTextGray}>
-                  Remember your password?{" "}
+                  {t("forgotPassword.rememberPassword")}{" "}
                 </Text>
                 <TouchableOpacity onPress={() => router.back()}>
-                  <Text style={styles.linkText}>Sign In</Text>
+                  <Text style={styles.linkText}>{t("welcome.signIn")}</Text>
                 </TouchableOpacity>
               </View>
             </>
@@ -157,26 +164,28 @@ export default function ForgotPassword() {
               </View>
 
               {/* Success Message */}
-              <Text style={styles.title}>Check Your Email 📧</Text>
+              <Text style={styles.title}>{t("forgotPassword.checkEmail")}</Text>
               <Text style={styles.successText}>
-                We&apos;ve sent password reset instructions to:
+                {t("forgotPassword.sentInstructions")}
               </Text>
               <Text style={styles.emailText}>{email}</Text>
               <Text style={styles.successText}>
-                The link will expire in 1 hour for security reasons.
+                {t("forgotPassword.linkExpires")}
               </Text>
 
               {/* Instructions */}
               <View style={styles.instructionsContainer}>
-                <Text style={styles.instructionsTitle}>Next Steps:</Text>
-                <Text style={styles.instructionsText}>
-                  1. Check your inbox (and spam folder)
+                <Text style={styles.instructionsTitle}>
+                  {t("forgotPassword.nextSteps")}
                 </Text>
                 <Text style={styles.instructionsText}>
-                  2. Click the reset link in the email
+                  {t("forgotPassword.step1")}
                 </Text>
                 <Text style={styles.instructionsText}>
-                  3. Create a new password
+                  {t("forgotPassword.step2")}
+                </Text>
+                <Text style={styles.instructionsText}>
+                  {t("forgotPassword.step3")}
                 </Text>
               </View>
 
@@ -186,14 +195,18 @@ export default function ForgotPassword() {
                   onPress={() => setIsSuccess(false)}
                   style={styles.resendButton}
                 >
-                  <Text style={styles.linkText}>Didn&apos;t receive it?</Text>
+                  <Text style={styles.linkText}>
+                    {t("forgotPassword.didntReceive")}
+                  </Text>
                 </TouchableOpacity>
               </View>
 
               {/* Back to Login */}
               <View style={styles.linkContainer}>
                 <TouchableOpacity onPress={() => router.replace("/welcome")}>
-                  <Text style={styles.linkText}>Back to Login</Text>
+                  <Text style={styles.linkText}>
+                    {t("forgotPassword.backToLogin")}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </>

@@ -54,5 +54,20 @@
     "privacy": "Confidentialité",
     "termsOfService": "Conditions d'utilisation",
     "languageChangeError": "Impossible de changer la langue"
+  },
+  "welcome": {
+    "appTitle": "Whingo",
+    "appSubtitle": "Où les Cœurs et les Ailes se Rassemblent",
+    "welcomeBack": "Bon retour !",
+    "emailPlaceholder": "E-mail",
+    "passwordPlaceholder": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se connecter",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "signUp": "S'inscrire",
+    "loginFailed": "Échec de la connexion",
+    "loginFailedMessage": "Échec de la connexion. Veuillez vérifier vos identifiants.",
+    "languageChanged": "Langue modifiée",
+    "restartApp": "Veuillez redémarrer l'application pour appliquer la nouvelle disposition linguistique."
   }
 }

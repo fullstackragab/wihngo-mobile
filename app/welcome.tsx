@@ -1,14 +1,17 @@
 import { useAuth } from "@/contexts/auth-context";
+import { useLanguage } from "@/contexts/language-context";
 import { useNotifications } from "@/contexts/notification-context";
 import { loginService } from "@/lib/api";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
   KeyboardAvoidingView,
+  Modal,
   Platform,
   ScrollView,
   StyleSheet,
@@ -20,10 +23,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Welcome() {
+  const { t } = useTranslation();
+  const { language, setLanguage } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showLanguagePicker, setShowLanguagePicker] = useState(false);
   const { login: authLogin, isAuthenticated } = useAuth();
   const { addNotification } = useNotifications();
   const router = useRouter();
@@ -58,8 +64,8 @@ export default function Welcome() {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Login failed. Please check your credentials.";
-      addNotification("recommendation", "Login Failed", errorMessage);
+          : t("welcome.loginFailedMessage");
+      addNotification("recommendation", t("welcome.loginFailed"), errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -82,9 +88,35 @@ export default function Welcome() {
               source={require("../assets/images/splash-icon.png")}
               style={styles.logo}
             />
-            <Text style={styles.appTitle}>Whingo</Text>
-            <Text style={styles.appSubtitle}>Where Hearts & Wings Gather</Text>
-            <Text style={styles.welcomeText}>Welcome back!</Text>
+            <Text style={styles.appTitle}>{t("welcome.appTitle")}</Text>
+            <Text style={styles.appSubtitle}>{t("welcome.appSubtitle")}</Text>
+            <Text style={styles.welcomeText}>{t("welcome.welcomeBack")}</Text>
+
+            {/* Language Picker Button */}
+            <TouchableOpacity
+              style={styles.languageButton}
+              onPress={() => setShowLanguagePicker(true)}
+            >
+              <FontAwesome6 name="globe" size={16} color="#4ECDC4" />
+              <Text style={styles.languageButtonText}>
+                {language === "en" && "English"}
+                {language === "ar" && "العربية"}
+                {language === "es" && "Español"}
+                {language === "pt" && "Português"}
+                {language === "fr" && "Français"}
+                {language === "de" && "Deutsch"}
+                {language === "hi" && "हिन्दी"}
+                {language === "id" && "Bahasa Indonesia"}
+                {language === "vi" && "Tiếng Việt"}
+                {language === "th" && "ไทย"}
+                {language === "ja" && "日本語"}
+                {language === "ko" && "한국어"}
+                {language === "zh" && "中文"}
+                {language === "it" && "Italiano"}
+                {language === "tr" && "Türkçe"}
+                {language === "pl" && "Polski"}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Login Form */}
@@ -98,7 +130,7 @@ export default function Welcome() {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Email"
+                placeholder={t("welcome.emailPlaceholder")}
                 placeholderTextColor="#95A5A6"
                 value={email}
                 onChangeText={setEmail}
@@ -118,7 +150,7 @@ export default function Welcome() {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Password"
+                placeholder={t("welcome.passwordPlaceholder")}
                 placeholderTextColor="#95A5A6"
                 secureTextEntry={!showPassword}
                 value={password}
@@ -144,7 +176,9 @@ export default function Welcome() {
               style={styles.forgotPassword}
               onPress={() => router.push("/auth/forgot-password")}
             >
-              <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+              <Text style={styles.forgotPasswordText}>
+                {t("welcome.forgotPassword")}
+              </Text>
             </TouchableOpacity>
 
             {/* Login Button */}
@@ -165,25 +199,88 @@ export default function Welcome() {
                 {isLoading ? (
                   <ActivityIndicator color="#FFFFFF" />
                 ) : (
-                  <Text style={styles.loginButtonText}>Sign In</Text>
+                  <Text style={styles.loginButtonText}>
+                    {t("welcome.signIn")}
+                  </Text>
                 )}
               </LinearGradient>
             </TouchableOpacity>
 
             {/* Sign Up Link */}
             <View style={styles.signupContainer}>
-              <Text style={styles.signupText}>
-                Don&apos;t have an account?{" "}
-              </Text>
+              <Text style={styles.signupText}>{t("welcome.noAccount")} </Text>
               <Link href="/signup" asChild>
                 <TouchableOpacity>
-                  <Text style={styles.signupLink}>Sign Up</Text>
+                  <Text style={styles.signupLink}>{t("welcome.signUp")}</Text>
                 </TouchableOpacity>
               </Link>
             </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      {/* Language Picker Modal */}
+      <Modal
+        visible={showLanguagePicker}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowLanguagePicker(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Choose Language</Text>
+              <TouchableOpacity onPress={() => setShowLanguagePicker(false)}>
+                <FontAwesome6 name="xmark" size={24} color="#333" />
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.languageList}>
+              {[
+                { code: "en", name: "English" },
+                { code: "ar", name: "العربية" },
+                { code: "es", name: "Español" },
+                { code: "pt", name: "Português" },
+                { code: "fr", name: "Français" },
+                { code: "de", name: "Deutsch" },
+                { code: "hi", name: "हिन्दी" },
+                { code: "id", name: "Bahasa Indonesia" },
+                { code: "vi", name: "Tiếng Việt" },
+                { code: "th", name: "ไทย" },
+                { code: "ja", name: "日本語" },
+                { code: "ko", name: "한국어" },
+                { code: "zh", name: "中文" },
+                { code: "it", name: "Italiano" },
+                { code: "tr", name: "Türkçe" },
+                { code: "pl", name: "Polski" },
+              ].map((lang) => (
+                <TouchableOpacity
+                  key={lang.code}
+                  style={[
+                    styles.languageOption,
+                    language === lang.code && styles.languageOptionActive,
+                  ]}
+                  onPress={async () => {
+                    await setLanguage(lang.code);
+                    setShowLanguagePicker(false);
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.languageOptionText,
+                      language === lang.code && styles.languageOptionTextActive,
+                    ]}
+                  >
+                    {lang.name}
+                  </Text>
+                  {language === lang.code && (
+                    <FontAwesome6 name="check" size={20} color="#4ECDC4" />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -296,5 +393,73 @@ const styles = StyleSheet.create({
     color: "#4ECDC4",
     fontSize: 13,
     fontWeight: "bold",
+  },
+  languageButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: "#F0F9FF",
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#4ECDC4",
+  },
+  languageButtonText: {
+    color: "#4ECDC4",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    maxHeight: "70%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: "#333",
+  },
+  languageList: {
+    padding: 8,
+  },
+  languageOption: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    marginVertical: 4,
+    marginHorizontal: 8,
+    borderRadius: 12,
+    backgroundColor: "#F8F9FA",
+  },
+  languageOptionActive: {
+    backgroundColor: "#E8F5F4",
+    borderWidth: 2,
+    borderColor: "#4ECDC4",
+  },
+  languageOptionText: {
+    fontSize: 16,
+    color: "#333",
+    fontWeight: "500",
+  },
+  languageOptionTextActive: {
+    color: "#4ECDC4",
+    fontWeight: "700",
   },
 });

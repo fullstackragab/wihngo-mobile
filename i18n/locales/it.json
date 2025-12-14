@@ -54,5 +54,20 @@
     "privacy": "Privacy",
     "termsOfService": "Termini di servizio",
     "languageChangeError": "Impossibile cambiare lingua"
+  },
+  "welcome": {
+    "appTitle": "Whingo",
+    "appSubtitle": "Dove i Cuori e le Ali si Incontrano",
+    "welcomeBack": "Bentornato!",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "forgotPassword": "Password dimenticata?",
+    "signIn": "Accedi",
+    "noAccount": "Non hai un account?",
+    "signUp": "Registrati",
+    "loginFailed": "Accesso Fallito",
+    "loginFailedMessage": "Accesso fallito. Controlla le tue credenziali.",
+    "languageChanged": "Lingua Cambiata",
+    "restartApp": "Riavvia l'app per applicare il nuovo layout della lingua."
   }
 }

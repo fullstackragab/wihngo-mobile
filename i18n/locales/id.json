@@ -23,7 +23,20 @@
     "signUp": "Daftar",
     "email": "Email",
     "password": "Kata Sandi",
-    "forgotPassword": "Lupa kata sandi?"
+    "forgotPassword": "Lupa kata sandi?",
+    "invalidEmailOrPassword": "Email atau kata sandi tidak valid",
+    "emailAlreadyRegistered": "Email sudah terdaftar",
+    "sessionExpired": "Sesi kedaluwarsa. Silakan login kembali.",
+    "tokenExpired": "Token konfirmasi kedaluwarsa. Silakan minta yang baru.",
+    "invalidToken": "Token konfirmasi tidak valid.",
+    "emailAlreadyConfirmed": "Email sudah dikonfirmasi.",
+    "resetTokenExpired": "Token reset kedaluwarsa. Silakan minta yang baru.",
+    "invalidResetToken": "Token reset tidak valid.",
+    "testFailed": "Tes Gagal",
+    "failedToSendTest": "Gagal mengirim notifikasi tes",
+    "permissionDenied": "Izin Ditolak",
+    "enableNotifications": "Silakan aktifkan notifikasi di pengaturan perangkat Anda",
+    "loadingPreferences": "Memuat preferensi..."
   },
   "bird": {
     "addBird": "Tambah burung",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "Login gagal. Silakan periksa kredensial Anda.",
     "languageChanged": "Bahasa Diubah",
     "restartApp": "Silakan restart aplikasi untuk menerapkan tata letak bahasa baru."
+  },
+  "notifications": {
+    "title": "Notifikasi",
+    "all": "Semua",
+    "unread": "Belum dibaca",
+    "markAllRead": "Tandai semua sudah dibaca",
+    "clearAll": "Hapus semua",
+    "noNotifications": "Tidak ada notifikasi",
+    "allCaughtUp": "Anda sudah melihat semua!",
+    "noNotificationsYet": "Anda akan melihat notifikasi di sini saat menerimanya",
+    "justNow": "Baru saja",
+    "minutesAgo": "{{count}}m yang lalu",
+    "hoursAgo": "{{count}}j yang lalu",
+    "daysAgo": "{{count}}h yang lalu"
   }
 }

@@ -23,7 +23,20 @@
     "signUp": "Zarejestruj się",
     "email": "Email",
     "password": "Hasło",
-    "forgotPassword": "Nie pamiętasz hasła?"
+    "forgotPassword": "Zapomniałeś hasła?",
+    "invalidEmailOrPassword": "Nieprawidłowy e-mail lub hasło",
+    "emailAlreadyRegistered": "E-mail już zarejestrowany",
+    "sessionExpired": "Sesja wygasła. Zaloguj się ponownie.",
+    "tokenExpired": "Token potwierdzenia wygasł. Poprosi o nowy.",
+    "invalidToken": "Nieprawidłowy token potwierdzenia.",
+    "emailAlreadyConfirmed": "E-mail jest już potwierdzony.",
+    "resetTokenExpired": "Token resetowania wygasł. Poprosi o nowy.",
+    "invalidResetToken": "Nieprawidłowy token resetowania.",
+    "testFailed": "Test nie powiódł się",
+    "failedToSendTest": "Nie udało się wysłać powiadomienia testowego",
+    "permissionDenied": "Uprawnienie odrzucone",
+    "enableNotifications": "Włącz powiadomienia w ustawieniach urządzenia",
+    "loadingPreferences": "Ładowanie preferencji..."
   },
   "bird": {
     "addBird": "Dodaj ptaka",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "Logowanie nie powiodło się. Sprawdź swoje dane uwierzytelniające.",
     "languageChanged": "Język zmieniony",
     "restartApp": "Uruchom ponownie aplikację, aby zastosować nowy układ języka."
+  },
+  "notifications": {
+    "title": "Powiadomienia",
+    "all": "Wszystkie",
+    "unread": "Nieprzeczytane",
+    "markAllRead": "Oznacz wszystkie jako przeczytane",
+    "clearAll": "Wyczyść wszystkie",
+    "noNotifications": "Brak powiadomień",
+    "allCaughtUp": "Jesteś na bieżąco!",
+    "noNotificationsYet": "Zobaczysz tu powiadomienia, gdy je otrzymasz",
+    "justNow": "Przed chwilą",
+    "minutesAgo": "{{count}}m temu",
+    "hoursAgo": "{{count}}h temu",
+    "daysAgo": "{{count}}d temu"
   }
 }

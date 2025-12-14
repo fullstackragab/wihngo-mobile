@@ -8,6 +8,7 @@ import { Notification } from "@/types/notification";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   StyleSheet,
@@ -27,6 +28,7 @@ export default function NotificationsScreen() {
   } = useNotifications();
   const router = useRouter();
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const { t } = useTranslation();
 
   const filteredNotifications =
     filter === "unread"
@@ -137,10 +139,10 @@ export default function NotificationsScreen() {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    if (minutes < 1) return "Just now";
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    if (days < 7) return `${days}d ago`;
+    if (minutes < 1) return t("notifications.justNow");
+    if (minutes < 60) return t("notifications.minutesAgo", { count: minutes });
+    if (hours < 24) return t("notifications.hoursAgo", { count: hours });
+    if (days < 7) return t("notifications.daysAgo", { count: days });
     return date.toLocaleDateString();
   };
 
@@ -162,7 +164,7 @@ export default function NotificationsScreen() {
                 filter === "all" && styles.activeFilterText,
               ]}
             >
-              All ({notifications.length})
+              {t("notifications.all")} ({notifications.length})
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -178,7 +180,7 @@ export default function NotificationsScreen() {
                 filter === "unread" && styles.activeFilterText,
               ]}
             >
-              Unread ({unreadCount})
+              {t("notifications.unread")} ({unreadCount})
             </Text>
           </TouchableOpacity>
         </View>
@@ -191,7 +193,9 @@ export default function NotificationsScreen() {
                 onPress={markAllAsRead}
               >
                 <FontAwesome6 name="check-double" size={14} color="#4ECDC4" />
-                <Text style={styles.actionButtonText}>Mark all read</Text>
+                <Text style={styles.actionButtonText}>
+                  {t("notifications.markAllRead")}
+                </Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity
@@ -200,7 +204,7 @@ export default function NotificationsScreen() {
             >
               <FontAwesome6 name="trash" size={14} color="#ef4444" />
               <Text style={[styles.actionButtonText, styles.clearButtonText]}>
-                Clear all
+                {t("notifications.clearAll")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -211,11 +215,13 @@ export default function NotificationsScreen() {
       {filteredNotifications.length === 0 ? (
         <View style={styles.emptyContainer}>
           <FontAwesome6 name="bell-slash" size={64} color="#d1d5db" />
-          <Text style={styles.emptyTitle}>No notifications</Text>
+          <Text style={styles.emptyTitle}>
+            {t("notifications.noNotifications")}
+          </Text>
           <Text style={styles.emptyText}>
             {filter === "unread"
-              ? "You're all caught up!"
-              : "You'll see notifications here when you receive them"}
+              ? t("notifications.allCaughtUp")
+              : t("notifications.noNotificationsYet")}
           </Text>
         </View>
       ) : (

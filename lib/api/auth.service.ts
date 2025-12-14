@@ -1,3 +1,4 @@
+import i18n from "@/i18n";
 import { API_CONFIG } from "@/lib/constants";
 import { AuthResponseDto, LoginDto, UserCreateDto } from "@/types/user";
 import { Platform } from "react-native";
@@ -46,7 +47,7 @@ export async function register(
       console.error("Register error response:", errorText);
 
       if (response.status === 409) {
-        throw new Error("Email already registered");
+        throw new Error(i18n.t("auth.emailAlreadyRegistered"));
       }
 
       throw new Error(
@@ -91,7 +92,7 @@ export async function login(credentials: LoginDto): Promise<AuthResponseDto> {
       console.error("Login error response:", errorText);
 
       if (response.status === 401) {
-        throw new Error("Invalid email or password");
+        throw new Error(i18n.t("auth.invalidEmailOrPassword"));
       }
 
       throw new Error(
@@ -162,13 +163,11 @@ export async function confirmEmail(
 
       if (response.status === 400) {
         if (errorData.code === "TOKEN_EXPIRED") {
-          throw new Error(
-            "Confirmation token has expired. Please request a new one."
-          );
+          throw new Error(i18n.t("auth.tokenExpired"));
         } else if (errorData.code === "INVALID_TOKEN") {
-          throw new Error("Invalid confirmation token.");
+          throw new Error(i18n.t("auth.invalidToken"));
         } else if (errorData.code === "EMAIL_ALREADY_CONFIRMED") {
-          throw new Error("Email is already confirmed.");
+          throw new Error(i18n.t("auth.emailAlreadyConfirmed"));
         }
       }
 
@@ -294,9 +293,9 @@ export async function resetPassword(
 
       if (response.status === 400) {
         if (errorData.code === "TOKEN_EXPIRED") {
-          throw new Error("Reset token has expired. Please request a new one.");
+          throw new Error(i18n.t("auth.resetTokenExpired"));
         } else if (errorData.code === "INVALID_TOKEN") {
-          throw new Error("Invalid reset token.");
+          throw new Error(i18n.t("auth.invalidResetToken"));
         }
       }
 

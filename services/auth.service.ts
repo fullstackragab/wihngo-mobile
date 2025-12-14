@@ -6,6 +6,7 @@
  * import { authService, loginService, registerService } from '@/lib/api';
  */
 
+import i18n from "@/i18n";
 import { AuthResponseDto, LoginDto, UserCreateDto } from "@/types/user";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
@@ -96,7 +97,7 @@ export async function loginService(
       console.error("Login error response:", errorText);
 
       if (response.status === 401) {
-        throw new Error("Invalid email or password");
+        throw new Error(i18n.t("auth.invalidEmailOrPassword"));
       }
 
       throw new Error(

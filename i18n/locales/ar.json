@@ -52,7 +52,20 @@
     "alreadyHaveAccount": "لديك حساب بالفعل؟",
     "emailPlaceholder": "البريد الإلكتروني",
     "passwordPlaceholder": "كلمة المرور",
-    "namePlaceholder": "الاسم الكامل"
+    "namePlaceholder": "الاسم الكامل",
+    "invalidEmailOrPassword": "بريد إلكتروني أو كلمة مرور غير صالحة",
+    "emailAlreadyRegistered": "البريد الإلكتروني مسجل بالفعل",
+    "sessionExpired": "انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى.",
+    "tokenExpired": "انتهت صلاحية رمز التأكيد. يرجى طلب رمز جديد.",
+    "invalidToken": "رمز تأكيد غير صالح.",
+    "emailAlreadyConfirmed": "تم تأكيد البريد الإلكتروني بالفعل.",
+    "resetTokenExpired": "انتهت صلاحية رمز إعادة التعيين. يرجى طلب رمز جديد.",
+    "invalidResetToken": "رمز إعادة تعيين غير صالح.",
+    "testFailed": "فشل الاختبار",
+    "failedToSendTest": "فشل إرسال إشعار الاختبار",
+    "permissionDenied": "تم رفض الإذن",
+    "enableNotifications": "يرجى تفعيل الإشعاراة في إعدادات جهازك",
+    "loadingPreferences": "جارٍ تحميل التفضيلات..."
   },
   "bird": {
     "addBird": "إضافة طائر جديد",
@@ -228,5 +241,19 @@
     "amountPlaceholder": "0.00",
     "messagePlaceholder": "شارك كلمات التشجيع...",
     "transactionHashPlaceholder": "رمز المعاملة (0x... أو base58)"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "all": "الكل",
+    "unread": "غير مقروءة",
+    "markAllRead": "وضع علامة مقروء على الكل",
+    "clearAll": "مسح الكل",
+    "noNotifications": "لا توجد إشعارات",
+    "allCaughtUp": "أنت على اطلاع بكل شيء!",
+    "noNotificationsYet": "سترى الإشعارات هنا عندما تستلمها",
+    "justNow": "الآن",
+    "minutesAgo": "منذ {{count}} د",
+    "hoursAgo": "منذ {{count}} س",
+    "daysAgo": "منذ {{count}} ي"
   }
 }

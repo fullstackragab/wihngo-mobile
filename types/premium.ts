@@ -102,3 +102,44 @@ export type UpdatePremiumStyleDto = {
   themeId?: string;
   coverImageUrl?: string;
 };
+
+export type CharityImpact = {
+  totalContributed: number;
+  birdsHelped: number;
+  sheltersSupported: number;
+  conservationProjects: number;
+};
+
+export type GlobalCharityImpact = {
+  totalContributed: number;
+  totalSubscribers: number;
+  birdsHelped: number;
+  sheltersSupported: number;
+  conservationProjects: number;
+};
+
+export type CharityPartner = {
+  name: string;
+  description: string;
+  website: string;
+};
+
+export type SubscriptionResponse = {
+  subscriptionId: string;
+  status: string;
+  plan: string;
+  currentPeriodEnd: string;
+  message: string;
+};
+
+export type PremiumStyleResponse = {
+  id: string;
+  birdId: string;
+  frameId?: string;
+  badgeId?: string;
+  highlightColor?: string;
+  themeId?: string;
+  coverImageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+};

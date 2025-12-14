@@ -1,17 +1,20 @@
 import LoveThisBirdButton from "@/components/love-this-bird-button";
 import { PremiumBadge } from "@/components/premium-badge";
+import PremiumManagementCard from "@/components/premium-management-card";
+import PremiumUpsellModal from "@/components/premium-upsell-modal";
 import ShareButton from "@/components/share-button";
 import SupportButton from "@/components/support-button";
 import AnimatedCard from "@/components/ui/animated-card";
 import { useAuth } from "@/contexts/auth-context";
-import { hasPremium } from "@/services/premium.service";
+import { getPremiumStatus, hasPremium } from "@/services/premium.service";
 import { Bird, BirdHealthLog } from "@/types/bird";
+import { PremiumStatusResponse } from "@/types/premium";
 import { Story } from "@/types/story";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Image,
@@ -33,25 +36,37 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
   const [stories, setStories] = useState<Story[]>([]);
   const [healthLogs, setHealthLogs] = useState<BirdHealthLog[]>([]);
   const [showAllStories, setShowAllStories] = useState(false);
+  const [showUpsellModal, setShowUpsellModal] = useState(false);
+  const [premiumStatus, setPremiumStatus] =
+    useState<PremiumStatusResponse | null>(null);
 
   const isPremiumBird = hasPremium(bird || {});
   const isOwner = user?.userId === bird?.ownerId;
 
+  useEffect(() => {
+    if (bird?.birdId) {
+      loadPremiumStatus();
+    }
+  }, [bird?.birdId]);
+
+  const loadPremiumStatus = async () => {
+    if (!bird?.birdId) return;
+    try {
+      const status = await getPremiumStatus(bird.birdId);
+      setPremiumStatus(status);
+    } catch (error) {
+      console.error("Error loading premium status:", error);
+    }
+  };
+
   const handlePremiumUpgrade = () => {
-    // Navigate to subscription flow or open payment modal
-    Alert.alert(
-      "Upgrade to Premium",
-      "This will redirect you to the subscription page.",
-      [
-        { text: "Cancel", style: "cancel" },
-        { text: "Continue", onPress: () => console.log("Navigate to payment") },
-      ]
-    );
+    if (!bird?.birdId || !bird?.name) return;
+    setShowUpsellModal(true);
   };
 
   const handlePremiumUpdate = () => {
-    // Refresh bird data after premium status change
-    console.log("Premium status updated, refresh bird data");
+    // Refresh premium status after subscription change
+    loadPremiumStatus();
   };
 
   const handleLoveChange = (isLoved: boolean, newCount: number) => {
@@ -184,6 +199,17 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
             )}
           </View>
         </View>
+
+        {/* Premium Management */}
+        {bird?.birdId && (
+          <View style={styles.premiumSection}>
+            <PremiumManagementCard
+              birdId={bird.birdId}
+              isOwner={isOwner}
+              onSubscriptionChange={handlePremiumUpdate}
+            />
+          </View>
+        )}
 
         {/* Support Transparency */}
         {!bird?.isMemorial && bird?.totalSupport && bird.totalSupport > 0 && (
@@ -337,6 +363,16 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
           )}
         </View>
       </AnimatedCard>
+
+      {/* Premium Upsell Modal */}
+      {bird?.birdId && bird?.name && (
+        <PremiumUpsellModal
+          visible={showUpsellModal}
+          birdId={bird.birdId}
+          birdName={bird.name}
+          onClose={() => setShowUpsellModal(false)}
+        />
+      )}
     </ScrollView>
   );
 }
@@ -498,6 +534,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "600",
     fontSize: 14,
+  },
+  premiumSection: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   transparencySection: {
     paddingHorizontal: 20,

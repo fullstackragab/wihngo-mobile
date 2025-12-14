@@ -23,7 +23,20 @@
     "signUp": "สมัครสมาชิก",
     "email": "อีเมล",
     "password": "รหัสผ่าน",
-    "forgotPassword": "ลืมรหัสผ่าน?"
+    "forgotPassword": "ลืมรหัสผ่าน?",
+    "invalidEmailOrPassword": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "emailAlreadyRegistered": "อีเมลถูกลงทะเบียนแล้ว",
+    "sessionExpired": "เซสชันหมดอายุ กรุณาเข้าสู่ระบบอีกครั้ง",
+    "tokenExpired": "โทเค็นยืนยันหมดอายุแล้ว กรุณาขอโทเค็นใหม่",
+    "invalidToken": "โทเค็นยืนยันไม่ถูกต้อง",
+    "emailAlreadyConfirmed": "อีเมลได้รับการยืนยันแล้ว",
+    "resetTokenExpired": "โทเค็นรีเซ็ตหมดอายุแล้ว กรุณาขอโทเค็นใหม่",
+    "invalidResetToken": "โทเค็นรีเซ็ตไม่ถูกต้อง",
+    "testFailed": "ทดสอบล้มเหลว",
+    "failedToSendTest": "ส่งการแจ้งเตือนทดสอบไม่สำเร็จ",
+    "permissionDenied": "ไม่ได้รับอนุญาต",
+    "enableNotifications": "กรุณาเปิดใช้งานการแจ้งเตือนในการตั้งค่าอุปกรณ์ของคุณ",
+    "loadingPreferences": "กำลังโหลดค่าการตั้งค่า..."
   },
   "bird": {
     "addBird": "เพิ่มนก",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "เข้าสู่ระบบล้มเหลว กรุณาตรวจสอบข้อมูลประจำตัวของคุณ",
     "languageChanged": "เปลี่ยนภาษาแล้ว",
     "restartApp": "กรุณารีสตาร์ทแอปเพื่อใช้เลย์เอาต์ภาษาใหม่"
+  },
+  "notifications": {
+    "title": "การแจ้งเตือน",
+    "all": "ทั้งหมด",
+    "unread": "ยังไม่ได้อ่าน",
+    "markAllRead": "ทำเครื่องหมายอ่านแล้วทั้งหมด",
+    "clearAll": "ล้างทั้งหมด",
+    "noNotifications": "ไม่มีการแจ้งเตือน",
+    "allCaughtUp": "คุณทันสมัยแล้ว!",
+    "noNotificationsYet": "คุณจะเห็นการแจ้งเตือนที่นี่เมื่อได้รับ",
+    "justNow": "เดี๋ยวนี้",
+    "minutesAgo": "{{count}}นาทีที่แล้ว",
+    "hoursAgo": "{{count}}ชั่วโมงที่แล้ว",
+    "daysAgo": "{{count}}วันที่แล้ว"
   }
 }

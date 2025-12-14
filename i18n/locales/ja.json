@@ -23,7 +23,20 @@
     "signUp": "サインアップ",
     "email": "メール",
     "password": "パスワード",
-    "forgotPassword": "パスワードをお忘れですか？"
+    "forgotPassword": "パスワードをお忘れですか？",
+    "invalidEmailOrPassword": "メールアドレスまたはパスワードが無効です",
+    "emailAlreadyRegistered": "メールアドレスは既に登録されています",
+    "sessionExpired": "セッションの有効期限が切れました。再度ログインしてください。",
+    "tokenExpired": "確認トークンの有効期限が切れました。新しいトークンをリクエストしてください。",
+    "invalidToken": "無効な確認トークンです。",
+    "emailAlreadyConfirmed": "メールアドレスは既に確認されています。",
+    "resetTokenExpired": "リセットトークンの有効期限が切れました。新しいトークンをリクエストしてください。",
+    "invalidResetToken": "無効なリセットトークンです。",
+    "testFailed": "テスト失敗",
+    "failedToSendTest": "テスト通知の送信に失敗しました",
+    "permissionDenied": "許可が拒否されました",
+    "enableNotifications": "デバイスの設定で通知を有効にしてください",
+    "loadingPreferences": "設定を読み込んでいます..."
   },
   "bird": {
     "addBird": "鳥を追加",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "ログインに失敗しました。認証情報を確認してください。",
     "languageChanged": "言語が変更されました",
     "restartApp": "新しい言語レイアウトを適用するには、アプリを再起動してください。"
+  },
+  "notifications": {
+    "title": "通知",
+    "all": "すべて",
+    "unread": "未読",
+    "markAllRead": "すべて既読にする",
+    "clearAll": "すべてクリア",
+    "noNotifications": "通知はありません",
+    "allCaughtUp": "最新の状態です！",
+    "noNotificationsYet": "通知を受け取ると、ここに表示されます",
+    "justNow": "ただ今",
+    "minutesAgo": "{{count}}分前",
+    "hoursAgo": "{{count}}時間前",
+    "daysAgo": "{{count}}日前"
   }
 }

@@ -23,7 +23,20 @@
     "signUp": "साइन अप",
     "email": "ईमेल",
     "password": "पासवर्ड",
-    "forgotPassword": "पासवर्ड भूल गए?"
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "invalidEmailOrPassword": "अमान्य ईमेल या पासवर्ड",
+    "emailAlreadyRegistered": "ईमेल पहले से पंजीकृत है",
+    "sessionExpired": "सत्र समाप्त हो गया। कृपया पुनः लॉगिन करें।",
+    "tokenExpired": "पुष्टि टोकन समाप्त हो गया है। कृपया नया अनुरोध करें।",
+    "invalidToken": "अमान्य पुष्टि टोकन।",
+    "emailAlreadyConfirmed": "ईमेल पहले से पुष्टि की जा चुकी है।",
+    "resetTokenExpired": "रीसेट टोकन समाप्त हो गया है। कृपया नया अनुरोध करें।",
+    "invalidResetToken": "अमान्य रीसेट टोकन।",
+    "testFailed": "परीक्षण विफल",
+    "failedToSendTest": "परीक्षण सूचना भेजने में विफल",
+    "permissionDenied": "अनुमति अस्वीकृत",
+    "enableNotifications": "कृपया अपने डिवाइस की सेटिंग्स में सूचनाएं सक्षम करें",
+    "loadingPreferences": "पसंदें लोड हो रही हैं..."
   },
   "bird": {
     "addBird": "पक्षी जोड़ें",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "लॉगिन विफल रहा। कृपया अपनी साख की जांच करें।",
     "languageChanged": "भाषा बदल गई",
     "restartApp": "कृपया नई भाषा लेआउट लागू करने के लिए ऐप को पुनरारंभ करें।"
+  },
+  "notifications": {
+    "title": "सूचनाएं",
+    "all": "सभी",
+    "unread": "अपठित",
+    "markAllRead": "सभी को पठित चिह्नित करें",
+    "clearAll": "सभी साफ़ करें",
+    "noNotifications": "कोई सूचना नहीं",
+    "allCaughtUp": "आप अपडेट हैं!",
+    "noNotificationsYet": "जब आपको सूचनाएं मिलेंगी तो आप उन्हें यहां देखेंगे",
+    "justNow": "अभी अभी",
+    "minutesAgo": "{{count}}मि पहले",
+    "hoursAgo": "{{count}}घं पहले",
+    "daysAgo": "{{count}}दि पहले"
   }
 }

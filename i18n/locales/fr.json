@@ -23,7 +23,20 @@
     "signUp": "S'inscrire",
     "email": "Email",
     "password": "Mot de passe",
-    "forgotPassword": "Mot de passe oublié?"
+    "forgotPassword": "Mot de passe oublié ?",
+    "invalidEmailOrPassword": "E-mail ou mot de passe invalide",
+    "emailAlreadyRegistered": "E-mail déjà enregistré",
+    "sessionExpired": "Session expirée. Veuillez vous reconnecter.",
+    "tokenExpired": "Le jeton de confirmation a expiré. Veuillez en demander un nouveau.",
+    "invalidToken": "Jeton de confirmation invalide.",
+    "emailAlreadyConfirmed": "L'e-mail est déjà confirmé.",
+    "resetTokenExpired": "Le jeton de réinitialisation a expiré. Veuillez en demander un nouveau.",
+    "invalidResetToken": "Jeton de réinitialisation invalide.",
+    "testFailed": "Test échoué",
+    "failedToSendTest": "Échec de l'envoi de la notification de test",
+    "permissionDenied": "Permission refusée",
+    "enableNotifications": "Veuillez activer les notifications dans les paramètres de votre appareil",
+    "loadingPreferences": "Chargement des préférences..."
   },
   "bird": {
     "addBird": "Ajouter un oiseau",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "Échec de la connexion. Veuillez vérifier vos identifiants.",
     "languageChanged": "Langue modifiée",
     "restartApp": "Veuillez redémarrer l'application pour appliquer la nouvelle disposition linguistique."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "all": "Toutes",
+    "unread": "Non lues",
+    "markAllRead": "Tout marquer comme lu",
+    "clearAll": "Tout effacer",
+    "noNotifications": "Aucune notification",
+    "allCaughtUp": "Vous êtes à jour !",
+    "noNotificationsYet": "Vous verrez les notifications ici lorsque vous les recevrez",
+    "justNow": "À l'instant",
+    "minutesAgo": "il y a {{count}}m",
+    "hoursAgo": "il y a {{count}}h",
+    "daysAgo": "il y a {{count}}j"
   }
 }

@@ -23,7 +23,20 @@
     "signUp": "가입하기",
     "email": "이메일",
     "password": "비밀번호",
-    "forgotPassword": "비밀번호를 잊으셨나요?"
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "invalidEmailOrPassword": "유효하지 않은 이메일 또는 비밀번호",
+    "emailAlreadyRegistered": "이미 등록된 이메일",
+    "sessionExpired": "세션이 만료되었습니다. 다시 로그인하세요.",
+    "tokenExpired": "확인 토큰이 만료되었습니다. 새 토큰을 요청하세요.",
+    "invalidToken": "유효하지 않은 확인 토큰입니다.",
+    "emailAlreadyConfirmed": "이미 확인된 이메일입니다.",
+    "resetTokenExpired": "재설정 토큰이 만료되었습니다. 새 토큰을 요청하세요.",
+    "invalidResetToken": "유효하지 않은 재설정 토큰입니다.",
+    "testFailed": "테스트 실패",
+    "failedToSendTest": "테스트 알림 전송 실패",
+    "permissionDenied": "권한 거부됨",
+    "enableNotifications": "기기 설정에서 알림을 활성화하세요",
+    "loadingPreferences": "환경 설정 로드 중..."
   },
   "bird": {
     "addBird": "새 추가",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "로그인에 실패했습니다. 자격 증명을 확인하세요.",
     "languageChanged": "언어가 변경되었습니다",
     "restartApp": "새 언어 레이아웃을 적용하려면 앱을 다시 시작하세요."
+  },
+  "notifications": {
+    "title": "알림",
+    "all": "모두",
+    "unread": "읽지 않음",
+    "markAllRead": "모두 읽음으로 표시",
+    "clearAll": "모두 지우기",
+    "noNotifications": "알림 없음",
+    "allCaughtUp": "모두 확인했습니다!",
+    "noNotificationsYet": "알림을 받으면 여기에 표시됩니다",
+    "justNow": "방금",
+    "minutesAgo": "{{count}}분 전",
+    "hoursAgo": "{{count}}시간 전",
+    "daysAgo": "{{count}}일 전"
   }
 }

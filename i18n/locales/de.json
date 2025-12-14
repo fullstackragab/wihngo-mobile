@@ -23,7 +23,20 @@
     "signUp": "Registrieren",
     "email": "E-Mail",
     "password": "Passwort",
-    "forgotPassword": "Passwort vergessen?"
+    "forgotPassword": "Passwort vergessen?",
+    "invalidEmailOrPassword": "Ungültige E-Mail oder Passwort",
+    "emailAlreadyRegistered": "E-Mail bereits registriert",
+    "sessionExpired": "Sitzung abgelaufen. Bitte erneut anmelden.",
+    "tokenExpired": "Bestätigungstoken ist abgelaufen. Bitte fordern Sie einen neuen an.",
+    "invalidToken": "Ungültiges Bestätigungstoken.",
+    "emailAlreadyConfirmed": "E-Mail ist bereits bestätigt.",
+    "resetTokenExpired": "Zurücksetzungstoken ist abgelaufen. Bitte fordern Sie einen neuen an.",
+    "invalidResetToken": "Ungültiges Zurücksetzungstoken.",
+    "testFailed": "Test fehlgeschlagen",
+    "failedToSendTest": "Testbenachrichtigung konnte nicht gesendet werden",
+    "permissionDenied": "Berechtigung verweigert",
+    "enableNotifications": "Bitte aktivieren Sie Benachrichtigungen in Ihren Geräteeinstellungen",
+    "loadingPreferences": "Einstellungen werden geladen..."
   },
   "bird": {
     "addBird": "Vogel hinzufügen",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten.",
     "languageChanged": "Sprache geändert",
     "restartApp": "Bitte starten Sie die App neu, um das neue Sprachlayout anzuwenden."
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "all": "Alle",
+    "unread": "Ungelesen",
+    "markAllRead": "Alle als gelesen markieren",
+    "clearAll": "Alle löschen",
+    "noNotifications": "Keine Benachrichtigungen",
+    "allCaughtUp": "Du bist auf dem neuesten Stand!",
+    "noNotificationsYet": "Du siehst Benachrichtigungen hier, wenn du sie erhältst",
+    "justNow": "Gerade eben",
+    "minutesAgo": "vor {{count}}m",
+    "hoursAgo": "vor {{count}}h",
+    "daysAgo": "vor {{count}}T"
   }
 }

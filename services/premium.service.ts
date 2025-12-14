@@ -1,7 +1,13 @@
 import {
   BirdPremiumSubscription,
+  CharityImpact,
+  CharityPartner,
+  GlobalCharityImpact,
+  PremiumPlanDetails,
   PremiumStatusResponse,
+  PremiumStyleResponse,
   SubscribeDto,
+  SubscriptionResponse,
   UpdatePremiumStyleDto,
 } from "@/types/premium";
 import Constants from "expo-constants";
@@ -94,4 +100,89 @@ export function getPremiumFeatures(isPremium: boolean) {
     premiumBadge: isPremium,
     visualBoost: isPremium,
   };
+}
+
+/**
+ * Get available premium plans
+ */
+export async function getPremiumPlans(): Promise<PremiumPlanDetails[]> {
+  const endpoint = `${API_URL}premium/plans`;
+  return apiHelper.get<PremiumPlanDetails[]>(endpoint);
+}
+
+/**
+ * Subscribe bird to premium (NEW API)
+ */
+export async function subscribeToPremium(
+  dto: SubscribeDto
+): Promise<SubscriptionResponse> {
+  const endpoint = `${API_URL}premium/subscribe`;
+  return apiHelper.post<SubscriptionResponse>(endpoint, dto);
+}
+
+/**
+ * Get premium status (NEW API)
+ */
+export async function getPremiumStatus(
+  birdId: string
+): Promise<PremiumStatusResponse> {
+  const endpoint = `${API_URL}premium/status/${birdId}`;
+  return apiHelper.get<PremiumStatusResponse>(endpoint);
+}
+
+/**
+ * Cancel subscription (NEW API)
+ */
+export async function cancelSubscription(
+  birdId: string
+): Promise<{ message: string }> {
+  const endpoint = `${API_URL}premium/cancel/${birdId}`;
+  return apiHelper.post<{ message: string }>(endpoint, {});
+}
+
+/**
+ * Update premium style (NEW API)
+ */
+export async function updatePremiumStyle(
+  birdId: string,
+  style: UpdatePremiumStyleDto
+): Promise<PremiumStyleResponse> {
+  const endpoint = `${API_URL}premium/style/${birdId}`;
+  return apiHelper.put<PremiumStyleResponse>(endpoint, style);
+}
+
+/**
+ * Get premium style (NEW API)
+ */
+export async function getPremiumStyle(
+  birdId: string
+): Promise<PremiumStyleResponse> {
+  const endpoint = `${API_URL}premium/style/${birdId}`;
+  return apiHelper.get<PremiumStyleResponse>(endpoint);
+}
+
+/**
+ * Get bird charity impact
+ */
+export async function getBirdCharityImpact(
+  birdId: string
+): Promise<CharityImpact> {
+  const endpoint = `${API_URL}charity/impact/${birdId}`;
+  return apiHelper.get<CharityImpact>(endpoint);
+}
+
+/**
+ * Get global charity impact
+ */
+export async function getGlobalCharityImpact(): Promise<GlobalCharityImpact> {
+  const endpoint = `${API_URL}charity/impact/global`;
+  return apiHelper.get<GlobalCharityImpact>(endpoint);
+}
+
+/**
+ * Get charity partners
+ */
+export async function getCharityPartners(): Promise<CharityPartner[]> {
+  const endpoint = `${API_URL}charity/partners`;
+  return apiHelper.get<CharityPartner[]>(endpoint);
 }

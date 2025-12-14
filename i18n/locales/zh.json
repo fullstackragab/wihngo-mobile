@@ -23,7 +23,20 @@
     "signUp": "注册",
     "email": "邮箱",
     "password": "密码",
-    "forgotPassword": "忘记密码？"
+    "forgotPassword": "忘记密码？",
+    "invalidEmailOrPassword": "邮箱或密码无效",
+    "emailAlreadyRegistered": "邮箱已注册",
+    "sessionExpired": "会话已过期。请重新登录。",
+    "tokenExpired": "确认令牌已过期。请申请新的令牌。",
+    "invalidToken": "无效的确认令牌。",
+    "emailAlreadyConfirmed": "邮箱已确认。",
+    "resetTokenExpired": "重置令牌已过期。请申请新的令牌。",
+    "invalidResetToken": "无效的重置令牌。",
+    "testFailed": "测试失败",
+    "failedToSendTest": "发送测试通知失败",
+    "permissionDenied": "权限被拒绝",
+    "enableNotifications": "请在设备设置中启用通知",
+    "loadingPreferences": "加载偏好设置..."
   },
   "bird": {
     "addBird": "添加鸟类",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "登录失败。请检查您的凭据。",
     "languageChanged": "语言已更改",
     "restartApp": "请重启应用以应用新的语言布局。"
+  },
+  "notifications": {
+    "title": "通知",
+    "all": "全部",
+    "unread": "未读",
+    "markAllRead": "全部标记为已读",
+    "clearAll": "清空全部",
+    "noNotifications": "无通知",
+    "allCaughtUp": "您已查看所有通知！",
+    "noNotificationsYet": "收到通知时，您会在这里看到它们",
+    "justNow": "刚刚",
+    "minutesAgo": "{{count}}分钟前",
+    "hoursAgo": "{{count}}小时前",
+    "daysAgo": "{{count}}天前"
   }
 }

@@ -3,6 +3,7 @@ import { useNotificationPreferences } from "@/hooks/useNotificationPreferences";
 import { notificationService } from "@/services/notification.service";
 import { pushNotificationService } from "@/services/push-notification.service";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   ScrollView,
@@ -17,6 +18,7 @@ export default function NotificationsSettings() {
   const { preferences, loading, saving, updatePreference } =
     useNotificationPreferences();
   const { addNotification } = useNotifications();
+  const { t } = useTranslation();
 
   const handleTestNotification = async () => {
     try {
@@ -25,8 +27,8 @@ export default function NotificationsSettings() {
     } catch (error) {
       addNotification(
         "recommendation",
-        "Test Failed",
-        "Failed to send test notification"
+        t("auth.testFailed"),
+        t("auth.failedToSendTest")
       );
     }
   };
@@ -39,8 +41,8 @@ export default function NotificationsSettings() {
     } else {
       addNotification(
         "recommendation",
-        "Permission Denied",
-        "Please enable notifications in your device settings"
+        t("auth.permissionDenied"),
+        t("auth.enableNotifications")
       );
     }
   };
@@ -49,7 +51,7 @@ export default function NotificationsSettings() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#4ECDC4" />
-        <Text style={styles.loadingText}>Loading preferences...</Text>
+        <Text style={styles.loadingText}>{t("auth.loadingPreferences")}</Text>
       </View>
     );
   }

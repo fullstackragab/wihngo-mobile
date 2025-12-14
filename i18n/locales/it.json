@@ -23,7 +23,20 @@
     "signUp": "Registrati",
     "email": "Email",
     "password": "Password",
-    "forgotPassword": "Password dimenticata?"
+    "forgotPassword": "Password dimenticata?",
+    "invalidEmailOrPassword": "Email o password non validi",
+    "emailAlreadyRegistered": "Email già registrata",
+    "sessionExpired": "Sessione scaduta. Effettua nuovamente l'accesso.",
+    "tokenExpired": "Il token di conferma è scaduto. Richiedine uno nuovo.",
+    "invalidToken": "Token di conferma non valido.",
+    "emailAlreadyConfirmed": "L'email è già confermata.",
+    "resetTokenExpired": "Il token di ripristino è scaduto. Richiedine uno nuovo.",
+    "invalidResetToken": "Token di ripristino non valido.",
+    "testFailed": "Test fallito",
+    "failedToSendTest": "Invio della notifica di test non riuscito",
+    "permissionDenied": "Autorizzazione negata",
+    "enableNotifications": "Abilita le notifiche nelle impostazioni del dispositivo",
+    "loadingPreferences": "Caricamento preferenze..."
   },
   "bird": {
     "addBird": "Aggiungi uccello",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "Accesso fallito. Controlla le tue credenziali.",
     "languageChanged": "Lingua Cambiata",
     "restartApp": "Riavvia l'app per applicare il nuovo layout della lingua."
+  },
+  "notifications": {
+    "title": "Notifiche",
+    "all": "Tutte",
+    "unread": "Non lette",
+    "markAllRead": "Segna tutte come lette",
+    "clearAll": "Cancella tutte",
+    "noNotifications": "Nessuna notifica",
+    "allCaughtUp": "Sei aggiornato!",
+    "noNotificationsYet": "Vedrai le notifiche qui quando le riceverai",
+    "justNow": "Proprio ora",
+    "minutesAgo": "{{count}}m fa",
+    "hoursAgo": "{{count}}h fa",
+    "daysAgo": "{{count}}g fa"
   }
 }

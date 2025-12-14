@@ -23,7 +23,20 @@
     "signUp": "Registrarse",
     "email": "Correo electrónico",
     "password": "Contraseña",
-    "forgotPassword": "¿Olvidaste tu contraseña?"
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "invalidEmailOrPassword": "Correo electrónico o contraseña inválidos",
+    "emailAlreadyRegistered": "Correo electrónico ya registrado",
+    "sessionExpired": "Sesión expirada. Por favor, inicia sesión de nuevo.",
+    "tokenExpired": "El token de confirmación ha expirado. Por favor, solicita uno nuevo.",
+    "invalidToken": "Token de confirmación inválido.",
+    "emailAlreadyConfirmed": "El correo electrónico ya está confirmado.",
+    "resetTokenExpired": "El token de restablecimiento ha expirado. Por favor, solicita uno nuevo.",
+    "invalidResetToken": "Token de restablecimiento inválido.",
+    "testFailed": "Prueba fallida",
+    "failedToSendTest": "Error al enviar notificación de prueba",
+    "permissionDenied": "Permiso denegado",
+    "enableNotifications": "Por favor, habilita las notificaciones en la configuración de tu dispositivo",
+    "loadingPreferences": "Cargando preferencias..."
   },
   "bird": {
     "addBird": "Agregar pájaro nuevo",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "Error al iniciar sesión. Por favor verifica tus credenciales.",
     "languageChanged": "Idioma cambiado",
     "restartApp": "Por favor reinicia la aplicación para aplicar el nuevo diseño de idioma."
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "all": "Todas",
+    "unread": "No leídas",
+    "markAllRead": "Marcar todas como leídas",
+    "clearAll": "Borrar todas",
+    "noNotifications": "Sin notificaciones",
+    "allCaughtUp": "¡Estás al día!",
+    "noNotificationsYet": "Verás las notificaciones aquí cuando las recibas",
+    "justNow": "Justo ahora",
+    "minutesAgo": "{{count}}m atrás",
+    "hoursAgo": "{{count}}h atrás",
+    "daysAgo": "{{count}}d atrás"
   }
 }

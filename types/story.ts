@@ -96,6 +96,8 @@ export type Story = {
   imageUrl?: string | null;
   videoS3Key?: string | null;
   videoUrl?: string | null;
+  likeCount?: number; // Number of likes on the story
+  commentCount?: number; // Number of top-level comments
 };
 
 export type StoryComment = {
@@ -141,7 +143,8 @@ export type StoryDetailDto = {
     userId: string;
     name: string; // Author name (no avatar available yet)
   };
-  // Note: likes, commentsCount, isLiked, comments are NOT implemented yet
+  likeCount?: number; // Number of likes on the story
+  commentCount?: number; // Number of top-level comments
 };
 
 // Paginated response

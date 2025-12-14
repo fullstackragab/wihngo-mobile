@@ -23,7 +23,20 @@
     "signUp": "Đăng ký",
     "email": "Email",
     "password": "Mật khẩu",
-    "forgotPassword": "Quên mật khẩu?"
+    "forgotPassword": "Quên mật khẩu?",
+    "invalidEmailOrPassword": "Email hoặc mật khẩu không hợp lệ",
+    "emailAlreadyRegistered": "Email đã đăng ký",
+    "sessionExpired": "Phiên đã hết hạn. Vui lòng đăng nhập lại.",
+    "tokenExpired": "Token xác nhận đã hết hạn. Vui lòng yêu cầu token mới.",
+    "invalidToken": "Token xác nhận không hợp lệ.",
+    "emailAlreadyConfirmed": "Email đã được xác nhận.",
+    "resetTokenExpired": "Token đặt lại đã hết hạn. Vui lòng yêu cầu token mới.",
+    "invalidResetToken": "Token đặt lại không hợp lệ.",
+    "testFailed": "Kiểm tra thất bại",
+    "failedToSendTest": "Gửi thông báo thử nghiệm thất bại",
+    "permissionDenied": "Quyền bị từ chối",
+    "enableNotifications": "Vui lòng bật thông báo trong cài đặt thiết bị",
+    "loadingPreferences": "Đang tải tùy chọn..."
   },
   "bird": {
     "addBird": "Thêm chim",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập của bạn.",
     "languageChanged": "Đã thay đổi ngôn ngữ",
     "restartApp": "Vui lòng khởi động lại ứng dụng để áp dụng bố cục ngôn ngữ mới."
+  },
+  "notifications": {
+    "title": "Thông báo",
+    "all": "Tất cả",
+    "unread": "Chưa đọc",
+    "markAllRead": "Đánh dấu tất cả đã đọc",
+    "clearAll": "Xóa tất cả",
+    "noNotifications": "Không có thông báo",
+    "allCaughtUp": "Bạn đã xem hết!",
+    "noNotificationsYet": "Bạn sẽ thấy thông báo ở đây khi nhận được",
+    "justNow": "Vừa xong",
+    "minutesAgo": "{{count}} phút trước",
+    "hoursAgo": "{{count}} giờ trước",
+    "daysAgo": "{{count}} ngày trước"
   }
 }

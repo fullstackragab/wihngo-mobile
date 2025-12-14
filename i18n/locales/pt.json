@@ -23,7 +23,20 @@
     "signUp": "Cadastrar",
     "email": "E-mail",
     "password": "Senha",
-    "forgotPassword": "Esqueceu a senha?"
+    "forgotPassword": "Esqueceu a senha?",
+    "invalidEmailOrPassword": "E-mail ou senha inválidos",
+    "emailAlreadyRegistered": "E-mail já registrado",
+    "sessionExpired": "Sessão expirada. Por favor, faça login novamente.",
+    "tokenExpired": "O token de confirmação expirou. Por favor, solicite um novo.",
+    "invalidToken": "Token de confirmação inválido.",
+    "emailAlreadyConfirmed": "E-mail já confirmado.",
+    "resetTokenExpired": "O token de redefinição expirou. Por favor, solicite um novo.",
+    "invalidResetToken": "Token de redefinição inválido.",
+    "testFailed": "Teste falhou",
+    "failedToSendTest": "Falha ao enviar notificação de teste",
+    "permissionDenied": "Permissão negada",
+    "enableNotifications": "Por favor, ative as notificações nas configurações do dispositivo",
+    "loadingPreferences": "Carregando preferências..."
   },
   "bird": {
     "addBird": "Adicionar pássaro",
@@ -69,5 +82,19 @@
     "loginFailedMessage": "Falha no login. Por favor, verifique suas credenciais.",
     "languageChanged": "Idioma alterado",
     "restartApp": "Por favor, reinicie o aplicativo para aplicar o novo layout de idioma."
+  },
+  "notifications": {
+    "title": "Notificações",
+    "all": "Todas",
+    "unread": "Não lidas",
+    "markAllRead": "Marcar todas como lidas",
+    "clearAll": "Limpar todas",
+    "noNotifications": "Sem notificações",
+    "allCaughtUp": "Você está em dia!",
+    "noNotificationsYet": "Você verá as notificações aqui quando as receber",
+    "justNow": "Agora mesmo",
+    "minutesAgo": "{{count}}m atrás",
+    "hoursAgo": "{{count}}h atrás",
+    "daysAgo": "{{count}}d atrás"
   }
 }

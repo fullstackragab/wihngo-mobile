@@ -1,3 +1,4 @@
+import i18n from "@/i18n";
 import { getAuthToken } from "@/lib/auth/auth-manager";
 import { STORAGE_KEYS } from "@/lib/constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -48,7 +49,7 @@ export async function authenticatedFetch(
       if (authErrorHandler) {
         authErrorHandler();
       }
-      throw new Error("Session expired. Please login again.");
+      throw new Error(i18n.t("auth.sessionExpired"));
     }
 
     // Set up headers with authorization
@@ -71,7 +72,7 @@ export async function authenticatedFetch(
       if (authErrorHandler) {
         authErrorHandler();
       }
-      throw new Error("Session expired. Please login again.");
+      throw new Error(i18n.t("auth.sessionExpired"));
     }
 
     return response;

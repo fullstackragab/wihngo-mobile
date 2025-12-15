@@ -1,8 +1,10 @@
 import { Spacing, Typography } from "@/constants/theme";
 import { useAuth } from "@/contexts/auth-context";
+import { payoutService } from "@/services/payout.service";
 import { PayoutHistoryItem } from "@/types/payout";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -13,11 +15,13 @@ import {
 } from "react-native";
 
 export default function PayoutHistory() {
+  const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [transactions, setTransactions] = useState<PayoutHistoryItem[]>([]);
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
@@ -30,21 +34,21 @@ export default function PayoutHistory() {
     try {
       setLoading(pageNum === 1);
 
-      // TODO: Uncomment when backend is ready
-      // const response = await payoutService.getPayoutHistory(pageNum, 20);
-      // if (pageNum === 1) {
-      //   setTransactions(response.items);
-      // } else {
-      //   setTransactions(prev => [...prev, ...response.items]);
-      // }
-      // setHasMore(pageNum < response.totalPages);
-      // setPage(pageNum);
+      const response = await payoutService.getPayoutHistory(pageNum, 20);
 
-      // Mock data for now
-      setTransactions([]);
-      setHasMore(false);
+      if (pageNum === 1) {
+        setTransactions(response.items);
+      } else {
+        setTransactions((prev) => [...prev, ...response.items]);
+      }
+
+      setHasMore(pageNum < response.totalPages);
+      setTotalPages(response.totalPages);
+      setPage(pageNum);
     } catch (error) {
       console.error("Failed to load payout history:", error);
+      setTransactions([]);
+      setHasMore(false);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -105,12 +109,12 @@ export default function PayoutHistory() {
 
   const formatMethodType = (type: string): string => {
     const typeMap: Record<string, string> = {
-      iban: "IBAN/SEPA",
-      paypal: "PayPal",
-      "usdc-solana": "USDC (Solana)",
-      "eurc-solana": "EURC (Solana)",
-      "usdc-base": "USDC (Base)",
-      "eurc-base": "EURC (Base)",
+      BankTransfer: "Bank Transfer",
+      PayPal: "PayPal",
+      Wise: "Wise",
+      Solana: "Solana",
+      Base: "Base",
+      Crypto: "Crypto",
     };
     return typeMap[type] || type;
   };
@@ -133,7 +137,8 @@ export default function PayoutHistory() {
           </View>
           <View style={styles.transactionInfo}>
             <Text style={styles.transactionAmount}>
-              €{item.netAmount.toFixed(2)}
+              {item.currency === "EUR" ? "€" : "$"}
+              {item.amount.toFixed(2)}
             </Text>
             <Text style={styles.transactionMethod}>
               {formatMethodType(item.methodType)}
@@ -152,48 +157,48 @@ export default function PayoutHistory() {
             </Text>
           </View>
           <Text style={styles.transactionDate}>
-            {formatDate(item.completedAt || item.scheduledAt)}
+            {formatDate(
+              item.completedAt || item.processedAt || item.requestedAt
+            )}
           </Text>
         </View>
       </View>
 
       <View style={styles.transactionDetails}>
         <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Gross amount:</Text>
-          <Text style={styles.detailValue}>€{item.amount.toFixed(2)}</Text>
+          <Text style={styles.detailLabel}>{t("payout.requestedDate")}:</Text>
+          <Text style={styles.detailValue}>{formatDate(item.requestedAt)}</Text>
         </View>
-        <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Platform fee (5%):</Text>
-          <Text style={styles.detailValue}>
-            -€{item.platformFee.toFixed(2)}
-          </Text>
-        </View>
-        {item.providerFee > 0 && (
+        {item.processedAt && (
           <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Provider fee:</Text>
+            <Text style={styles.detailLabel}>{t("payout.processedDate")}:</Text>
             <Text style={styles.detailValue}>
-              -€{item.providerFee.toFixed(2)}
+              {formatDate(item.processedAt)}
             </Text>
           </View>
         )}
-        <View style={[styles.detailRow, styles.detailRowTotal]}>
-          <Text style={styles.detailLabelTotal}>Net amount:</Text>
-          <Text style={styles.detailValueTotal}>
-            €{item.netAmount.toFixed(2)}
-          </Text>
-        </View>
+        {item.completedAt && (
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>{t("payout.completedDate")}:</Text>
+            <Text style={styles.detailValue}>
+              {formatDate(item.completedAt)}
+            </Text>
+          </View>
+        )}
       </View>
 
-      {item.transactionId && (
+      {item.providerTransactionId && (
         <View style={styles.transactionFooter}>
-          <Text style={styles.transactionId}>ID: {item.transactionId}</Text>
+          <Text style={styles.transactionId}>
+            ID: {item.providerTransactionId}
+          </Text>
         </View>
       )}
 
-      {item.status === "failed" && item.failureReason && (
+      {item.status === "failed" && (
         <View style={styles.errorCard}>
           <Ionicons name="warning" size={16} color="#E74C3C" />
-          <Text style={styles.errorText}>{item.failureReason}</Text>
+          <Text style={styles.errorText}>{t("payout.payoutFailed")}</Text>
         </View>
       )}
     </View>
@@ -202,10 +207,8 @@ export default function PayoutHistory() {
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <Ionicons name="document-text-outline" size={64} color="#BDC3C7" />
-      <Text style={styles.emptyText}>No payout history yet</Text>
-      <Text style={styles.emptySubtext}>
-        Your payout transactions will appear here
-      </Text>
+      <Text style={styles.emptyText}>{t("payout.noHistory")}</Text>
+      <Text style={styles.emptySubtext}>{t("payout.noHistorySubtext")}</Text>
     </View>
   );
 
@@ -213,9 +216,7 @@ export default function PayoutHistory() {
     return (
       <View style={styles.centerContainer}>
         <Ionicons name="lock-closed-outline" size={48} color="#BDC3C7" />
-        <Text style={styles.emptyText}>
-          Please log in to view payout history
-        </Text>
+        <Text style={styles.emptyText}>{t("payout.pleaseLogin")}</Text>
       </View>
     );
   }

@@ -1,9 +1,10 @@
 import { Spacing, Typography } from "@/constants/theme";
 import { useAuth } from "@/contexts/auth-context";
+import { payoutService } from "@/services/payout.service";
 import { PayoutMethod, PayoutMethodType } from "@/types/payout";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -26,8 +27,10 @@ export default function PayoutSettings() {
   const [balance, setBalance] = useState({
     available: 0,
     pending: 0,
+    totalEarned: 0,
+    totalPaidOut: 0,
     nextPayoutDate: "",
-    minimumReached: false,
+    minimumPayout: 25,
   });
 
   useEffect(() => {
@@ -36,29 +39,31 @@ export default function PayoutSettings() {
     }
   }, [isAuthenticated]);
 
+  // Reload data when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      if (isAuthenticated) {
+        loadPayoutData();
+      }
+    }, [isAuthenticated])
+  );
+
   const loadPayoutData = async () => {
     setLoading(true);
     try {
-      // TODO: Uncomment when backend is ready
-      // const methods = await payoutService.getPayoutMethods();
-      // const balanceData = await payoutService.getBalance();
-      // setPayoutMethods(methods);
-      // setBalance({
-      //   available: balanceData.availableBalance,
-      //   pending: balanceData.pendingBalance,
-      //   nextPayoutDate: balanceData.nextPayoutDate,
-      //   minimumReached: balanceData.minimumReached,
-      // });
+      const [methods, balanceData] = await Promise.all([
+        payoutService.getPayoutMethods(),
+        payoutService.getBalance(),
+      ]);
 
-      // Mock data for now
-      setPayoutMethods([]);
+      setPayoutMethods(methods);
       setBalance({
-        available: 0,
-        pending: 0,
-        nextPayoutDate: new Date(
-          Date.now() + 15 * 24 * 60 * 60 * 1000
-        ).toISOString(),
-        minimumReached: false,
+        available: balanceData.availableBalance,
+        pending: balanceData.pendingBalance,
+        totalEarned: balanceData.totalEarned,
+        totalPaidOut: balanceData.totalPaidOut,
+        nextPayoutDate: balanceData.nextPayoutDate || "",
+        minimumPayout: balanceData.minimumPayout,
       });
     } catch (error) {
       console.error("Failed to load payout data:", error);
@@ -70,14 +75,14 @@ export default function PayoutSettings() {
 
   const getMethodIcon = (type: PayoutMethodType): string => {
     switch (type) {
-      case "iban":
+      case "BankTransfer":
+      case "Wise":
         return "card-outline";
-      case "paypal":
+      case "PayPal":
         return "logo-paypal";
-      case "usdc-solana":
-      case "eurc-solana":
-      case "usdc-base":
-      case "eurc-base":
+      case "Solana":
+      case "Base":
+      case "Crypto":
         return "wallet-outline";
       default:
         return "cash-outline";
@@ -86,18 +91,23 @@ export default function PayoutSettings() {
 
   const getMethodLabel = (method: PayoutMethod): string => {
     switch (method.methodType) {
-      case "iban":
+      case "BankTransfer":
+      case "Wise":
         return `IBAN •••• ${method.iban?.slice(-4) || "****"}`;
-      case "paypal":
-        return method.paypalEmail || "PayPal";
-      case "usdc-solana":
-        return `USDC (Solana) •••${method.walletAddress?.slice(-4) || "****"}`;
-      case "eurc-solana":
-        return `EURC (Solana) •••${method.walletAddress?.slice(-4) || "****"}`;
-      case "usdc-base":
-        return `USDC (Base) •••${method.walletAddress?.slice(-4) || "****"}`;
-      case "eurc-base":
-        return `EURC (Base) •••${method.walletAddress?.slice(-4) || "****"}`;
+      case "PayPal":
+        return method.payPalEmail || "PayPal";
+      case "Solana":
+        return `${method.currency || "USDC"} (Solana) •••${
+          method.walletAddress?.slice(-4) || "****"
+        }`;
+      case "Base":
+        return `${method.currency || "USDC"} (Base) •••${
+          method.walletAddress?.slice(-4) || "****"
+        }`;
+      case "Crypto":
+        return `${method.currency || "Crypto"} •••${
+          method.walletAddress?.slice(-4) || "****"
+        }`;
       default:
         return "Unknown";
     }
@@ -115,11 +125,11 @@ export default function PayoutSettings() {
         style: "destructive",
         onPress: async () => {
           try {
-            // TODO: Uncomment when backend is ready
-            // await payoutService.deletePayoutMethod(methodId);
+            await payoutService.deletePayoutMethod(methodId);
             await loadPayoutData();
             Alert.alert(t("payout.success"), t("payout.methodDeleted"));
           } catch (error) {
+            console.error("Failed to delete method:", error);
             Alert.alert(t("payout.error"), t("payout.deleteFailed"));
           }
         },
@@ -129,11 +139,11 @@ export default function PayoutSettings() {
 
   const handleSetDefault = async (methodId: string) => {
     try {
-      // TODO: Uncomment when backend is ready
-      // await payoutService.setDefaultPayoutMethod(methodId);
+      await payoutService.setDefaultPayoutMethod(methodId);
       await loadPayoutData();
       Alert.alert(t("payout.success"), t("payout.defaultUpdated"));
     } catch (error) {
+      console.error("Failed to set default method:", error);
       Alert.alert(t("payout.error"), t("payout.updateFailed"));
     }
   };
@@ -171,21 +181,41 @@ export default function PayoutSettings() {
       <View style={styles.balanceCard}>
         <Text style={styles.balanceTitle}>{t("payout.yourBalance")}</Text>
         <Text style={styles.balanceAmount}>
-          €{balance.available.toFixed(2)}
+          ${balance.available.toFixed(2)}
         </Text>
         <Text style={styles.balanceSubtext}>
           {balance.pending > 0 &&
-            `€${balance.pending.toFixed(2)} ${t("payout.pending")} • `}
-          {t("payout.nextPayout")}: {formatDate(balance.nextPayoutDate)}
+            `$${balance.pending.toFixed(2)} ${t("payout.pending")} • `}
+          {balance.nextPayoutDate &&
+            `${t("payout.nextPayout")}: ${formatDate(balance.nextPayoutDate)}`}
         </Text>
-        {!balance.minimumReached && (
+
+        {/* Stats Row */}
+        <View style={styles.statsRow}>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>{t("payout.totalEarned")}</Text>
+            <Text style={styles.statValue}>
+              ${balance.totalEarned.toFixed(2)}
+            </Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statLabel}>{t("payout.totalPaidOut")}</Text>
+            <Text style={styles.statValue}>
+              ${balance.totalPaidOut.toFixed(2)}
+            </Text>
+          </View>
+        </View>
+
+        {balance.available < balance.minimumPayout && (
           <View style={styles.minimumNotice}>
             <Ionicons
               name="information-circle-outline"
               size={16}
               color="#F39C12"
             />
-            <Text style={styles.minimumText}>{t("payout.minimumPayout")}</Text>
+            <Text style={styles.minimumText}>
+              {t("payout.minimumPayout")}: ${balance.minimumPayout.toFixed(2)}
+            </Text>
           </View>
         )}
         <TouchableOpacity
@@ -372,6 +402,27 @@ const styles = StyleSheet.create({
     color: "#F39C12",
     flex: 1,
     textAlign: isRTL ? "right" : "left",
+  },
+  statsRow: {
+    flexDirection: isRTL ? "row-reverse" : "row",
+    justifyContent: "space-around",
+    marginTop: Spacing.md,
+    paddingTop: Spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: "#ECF0F1",
+  },
+  statItem: {
+    alignItems: "center",
+  },
+  statLabel: {
+    fontSize: Typography.small,
+    color: "#7F8C8D",
+    marginBottom: Spacing.xs,
+  },
+  statValue: {
+    fontSize: Typography.body,
+    fontWeight: "600",
+    color: "#2C3E50",
   },
   historyButton: {
     flexDirection: isRTL ? "row-reverse" : "row",

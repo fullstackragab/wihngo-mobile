@@ -7,7 +7,8 @@ import {
 import { CryptoPaymentMethod } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   ScrollView,
@@ -18,6 +19,7 @@ import {
 } from "react-native";
 
 export default function PaymentMethods() {
+  const { t } = useTranslation();
   const [cryptoWallets, setCryptoWallets] = useState<CryptoPaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
   const { addNotification } = useNotifications();
@@ -55,8 +57,8 @@ export default function PaymentMethods() {
     } catch (error) {
       addNotification(
         "recommendation",
-        "Removal Failed",
-        "Failed to remove wallet"
+        t("paymentMethods.removalFailed"),
+        t("paymentMethods.removeWalletError")
       );
     }
   };
@@ -68,8 +70,8 @@ export default function PaymentMethods() {
     } catch (error) {
       addNotification(
         "recommendation",
-        "Update Failed",
-        "Failed to set default wallet"
+        t("paymentMethods.updateFailed"),
+        t("paymentMethods.setDefaultError")
       );
     }
   };
@@ -78,12 +80,14 @@ export default function PaymentMethods() {
     <ScrollView style={styles.container}>
       {/* Credit Cards */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Credit & Debit Cards</Text>
+        <Text style={styles.sectionTitle}>
+          {t("paymentMethods.creditCards")}
+        </Text>
 
         {paymentMethods.length === 0 ? (
           <View style={styles.emptyState}>
             <FontAwesome6 name="credit-card" size={48} color="#ccc" />
-            <Text style={styles.emptyText}>No cards added</Text>
+            <Text style={styles.emptyText}>{t("paymentMethods.noCards")}</Text>
           </View>
         ) : (
           paymentMethods.map((method) => (
@@ -94,12 +98,16 @@ export default function PaymentMethods() {
                   <Text style={styles.cardBrand}>
                     {method.brand} •••• {method.last4}
                   </Text>
-                  <Text style={styles.cardExpiry}>Expires {method.expiry}</Text>
+                  <Text style={styles.cardExpiry}>
+                    {t("paymentMethods.expires")} {method.expiry}
+                  </Text>
                 </View>
               </View>
               {method.isDefault && (
                 <View style={styles.defaultBadge}>
-                  <Text style={styles.defaultText}>Default</Text>
+                  <Text style={styles.defaultText}>
+                    {t("paymentMethods.default")}
+                  </Text>
                 </View>
               )}
             </View>
@@ -108,17 +116,23 @@ export default function PaymentMethods() {
 
         <TouchableOpacity style={styles.addButton}>
           <FontAwesome6 name="plus" size={16} color="#007AFF" />
-          <Text style={styles.addButtonText}>Add Card</Text>
+          <Text style={styles.addButtonText}>
+            {t("paymentMethods.addCard")}
+          </Text>
         </TouchableOpacity>
       </View>
 
       {/* Crypto Wallets */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Crypto Wallets</Text>
+          <Text style={styles.sectionTitle}>
+            {t("paymentMethods.cryptoWallets")}
+          </Text>
           <View style={styles.cryptoBadge}>
             <FontAwesome6 name="bitcoin-sign" size={12} color="#F7931A" />
-            <Text style={styles.cryptoBadgeText}>NEW</Text>
+            <Text style={styles.cryptoBadgeText}>
+              {t("paymentMethods.newBadge")}
+            </Text>
           </View>
         </View>
 
@@ -127,9 +141,11 @@ export default function PaymentMethods() {
         ) : cryptoWallets.length === 0 ? (
           <View style={styles.emptyState}>
             <FontAwesome6 name="wallet" size={48} color="#ccc" />
-            <Text style={styles.emptyText}>No crypto wallets saved</Text>
+            <Text style={styles.emptyText}>
+              {t("paymentMethods.noWallets")}
+            </Text>
             <Text style={styles.emptySubtext}>
-              Pay with USDT, USDC, ETH and BNB
+              {t("paymentMethods.walletsSubtext")}
             </Text>
           </View>
         ) : (
@@ -150,7 +166,9 @@ export default function PaymentMethods() {
               <View style={styles.walletActions}>
                 {wallet.isDefault && (
                   <View style={styles.defaultBadge}>
-                    <Text style={styles.defaultText}>Default</Text>
+                    <Text style={styles.defaultText}>
+                      {t("paymentMethods.default")}
+                    </Text>
                   </View>
                 )}
                 <TouchableOpacity
@@ -170,7 +188,7 @@ export default function PaymentMethods() {
         >
           <FontAwesome6 name="bitcoin-sign" size={16} color="#F7931A" />
           <Text style={[styles.addButtonText, styles.cryptoButtonText]}>
-            Pay with Crypto
+            {t("paymentMethods.payWithCrypto")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -178,19 +196,17 @@ export default function PaymentMethods() {
       {/* Info Sections */}
       <View style={styles.infoSection}>
         <FontAwesome6 name="shield-halved" size={20} color="#28a745" />
-        <Text style={styles.infoText}>
-          All payment information is encrypted and secure
-        </Text>
+        <Text style={styles.infoText}>{t("paymentMethods.securityInfo")}</Text>
       </View>
 
       <View style={styles.cryptoInfoSection}>
         <FontAwesome6 name="circle-info" size={20} color="#007AFF" />
         <View style={styles.cryptoInfoContent}>
-          <Text style={styles.cryptoInfoTitle}>About Crypto Payments</Text>
+          <Text style={styles.cryptoInfoTitle}>
+            {t("paymentMethods.cryptoInfoTitle")}
+          </Text>
           <Text style={styles.cryptoInfoText}>
-            Pay instantly with USDT, USDC, ETH, and BNB. Your payments are
-            processed securely on the blockchain. USDT on Tron recommended for
-            lowest fees.
+            {t("paymentMethods.cryptoInfoText")}
           </Text>
         </View>
       </View>

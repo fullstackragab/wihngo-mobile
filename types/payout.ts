@@ -1,15 +1,16 @@
 /**
  * Payout Types
  * Multi-payout strategy for Wihngo
+ * Updated to match backend API documentation
  */
 
 export type PayoutMethodType =
-  | "iban"
-  | "paypal"
-  | "usdc-solana"
-  | "eurc-solana"
-  | "usdc-base"
-  | "eurc-base";
+  | "BankTransfer"
+  | "PayPal"
+  | "Wise"
+  | "Solana"
+  | "Base"
+  | "Crypto";
 
 export type PayoutMethod = {
   id?: string;
@@ -19,17 +20,17 @@ export type PayoutMethod = {
   isVerified: boolean;
   createdAt?: string;
   updatedAt?: string;
-  // IBAN/SEPA specific
+  // Bank Transfer/IBAN/SEPA specific
   accountHolderName?: string;
   iban?: string;
   bic?: string;
   bankName?: string;
   // PayPal specific
-  paypalEmail?: string;
-  // Crypto specific
+  payPalEmail?: string;
+  // Crypto specific (Solana/Base)
   walletAddress?: string;
-  network?: "solana" | "base";
-  currency?: "usdc" | "eurc";
+  network?: string; // e.g., "solana-mainnet", "base-mainnet", "solana-devnet", "base-testnet"
+  currency?: string; // e.g., "USDC", "EURC", "SOL", "ETH"
 };
 
 export type PayoutSettings = {
@@ -45,46 +46,45 @@ export type PayoutHistoryItem = {
   userId: string;
   amount: number;
   currency: string;
-  method: PayoutMethodType;
   status: "pending" | "processing" | "completed" | "failed" | "cancelled";
-  platformFee: number; // 5%
-  providerFee: number;
-  netAmount: number;
-  scheduledAt: string;
+  methodType: PayoutMethodType;
+  requestedAt: string;
   processedAt?: string;
-  failureReason?: string;
-  transactionId?: string;
+  completedAt?: string;
+  providerTransactionId?: string;
 };
 
 export type PayoutBalance = {
   userId: string;
   availableBalance: number;
   pendingBalance: number;
+  totalEarned: number;
+  totalPaidOut: number;
   currency: string;
-  nextPayoutDate: string;
-  minimumReached: boolean;
+  minimumPayout: number;
+  nextPayoutDate?: string;
+  lastPayoutDate?: string;
+  lastPayoutAmount?: number;
 };
 
 export type AddPayoutMethodDto = {
   methodType: PayoutMethodType;
-  isDefault: boolean;
-  // IBAN/SEPA
+  isDefault?: boolean;
+  // Bank Transfer/IBAN/SEPA
   accountHolderName?: string;
   iban?: string;
   bic?: string;
   bankName?: string;
   // PayPal
-  paypalEmail?: string;
-  // Crypto
+  payPalEmail?: string;
+  // Crypto (Solana/Base)
   walletAddress?: string;
-  network?: "solana" | "base";
-  currency?: "usdc" | "eurc";
+  network?: string;
+  currency?: string;
 };
 
 export type UpdatePayoutMethodDto = {
-  methodId: string;
   isDefault?: boolean;
-  // Update capability for non-sensitive fields
 };
 
 export type PayoutSummary = {

@@ -1,5 +1,6 @@
 import { Spacing, Typography } from "@/constants/theme";
 import { useAuth } from "@/contexts/auth-context";
+import { payoutService } from "@/services/payout.service";
 import { PayoutMethodType } from "@/types/payout";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -17,70 +18,39 @@ import {
 export default function AddCryptoMethod() {
   const router = useRouter();
   const { user } = useAuth();
-  const { methodType } = useLocalSearchParams<{
-    methodType: PayoutMethodType;
+  const params = useLocalSearchParams<{
+    methodType: string;
+    currency: string;
+    network: string;
   }>();
   const [loading, setLoading] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
 
+  const methodType = params.methodType as PayoutMethodType;
+  const currency = params.currency || "USDC";
+  const network = params.network || "solana-mainnet";
+
   const getMethodConfig = () => {
-    switch (methodType) {
-      case "usdc-solana":
-        return {
-          title: "USDC on Solana",
-          currency: "USDC",
-          network: "Solana",
-          icon: "💵",
-          color: "#14F195",
-          addressLength: 44,
-          addressPrefix: "",
-          description: "Circle USD Coin on Solana network",
-        };
-      case "eurc-solana":
-        return {
-          title: "EURC on Solana",
-          currency: "EURC",
-          network: "Solana",
-          icon: "💶",
-          color: "#14F195",
-          addressLength: 44,
-          addressPrefix: "",
-          description: "Circle Euro Coin on Solana network",
-        };
-      case "usdc-base":
-        return {
-          title: "USDC on Base",
-          currency: "USDC",
-          network: "Base",
-          icon: "💵",
-          color: "#0052FF",
-          addressLength: 42,
-          addressPrefix: "0x",
-          description: "Circle USD Coin on Base network (Ethereum L2)",
-        };
-      case "eurc-base":
-        return {
-          title: "EURC on Base",
-          currency: "EURC",
-          network: "Base",
-          icon: "💶",
-          color: "#0052FF",
-          addressLength: 42,
-          addressPrefix: "0x",
-          description: "Circle Euro Coin on Base network (Ethereum L2)",
-        };
-      default:
-        return {
-          title: "Crypto",
-          currency: "CRYPTO",
-          network: "Unknown",
-          icon: "💰",
-          color: "#4ECDC4",
-          addressLength: 42,
-          addressPrefix: "",
-          description: "Cryptocurrency wallet",
-        };
-    }
+    const isSolana = methodType === "Solana" || network.includes("solana");
+    const isBase = methodType === "Base" || network.includes("base");
+
+    return {
+      title: `${currency} on ${
+        isSolana ? "Solana" : isBase ? "Base" : "Crypto"
+      }`,
+      currency,
+      network: isSolana ? "Solana" : isBase ? "Base" : "Crypto",
+      networkId: network,
+      icon: currency === "EURC" ? "💶" : "💵",
+      color: isSolana ? "#14F195" : isBase ? "#0052FF" : "#4ECDC4",
+      addressLength: isSolana ? 44 : 42,
+      addressPrefix: isSolana ? "" : "0x",
+      description: isSolana
+        ? `Circle ${currency} Coin on Solana network`
+        : isBase
+        ? `Circle ${currency} Coin on Base network (Ethereum L2)`
+        : "Cryptocurrency wallet",
+    };
   };
 
   const config = getMethodConfig();
@@ -120,14 +90,13 @@ export default function AddCryptoMethod() {
 
     setLoading(true);
     try {
-      // TODO: Uncomment when backend is ready
-      // await payoutService.addPayoutMethod({
-      //   methodType: methodType as PayoutMethodType,
-      //   walletAddress: walletAddress.trim(),
-      //   network: config.network.toLowerCase() as 'solana' | 'base',
-      //   currency: config.currency.toLowerCase() as 'usdc' | 'eurc',
-      //   isDefault: true,
-      // });
+      await payoutService.addPayoutMethod({
+        methodType: methodType as PayoutMethodType,
+        walletAddress: walletAddress.trim(),
+        network: config.networkId,
+        currency: config.currency,
+        isDefault: true,
+      });
 
       Alert.alert(
         "Success",
@@ -135,13 +104,20 @@ export default function AddCryptoMethod() {
         [
           {
             text: "OK",
-            onPress: () => router.back(),
+            onPress: () => {
+              router.back();
+              router.back(); // Go back twice to return to payout settings
+            },
           },
         ]
       );
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to add crypto method:", error);
-      Alert.alert("Error", "Failed to add payment method. Please try again.");
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to add payment method. Please try again.";
+      Alert.alert("Error", errorMessage);
     } finally {
       setLoading(false);
     }

@@ -128,7 +128,7 @@
     "paymentMethods": "支付方式",
     "addMethod": "添加方式",
     "noMethods": "未添加支付方式",
-    "addMethodPrompt": "添加支付方式以接收您的收入",
+    "addMethodPrompt": "添加支付方式以接收您的资金",
     "addPaymentMethod": "添加支付方式",
     "default": "默认",
     "verified": "已验证",
@@ -145,7 +145,97 @@
     "updateFailed": "更新默认支付方式失败",
     "loadFailed": "加载支付设置失败",
     "legalInfo": "法律信息",
-    "legalNotice": "Wihngo不是支付机构。Wihngo促进支付并将支持资金转移给鸟类主人。鸟类主人负责提供正确的支付详细信息并处理适用税收。"
+    "legalNotice": "Wihngo不是支付机构。Wihngo促进支付并将支持资金转移给鸟类主人。鸟类主人负责提供正确的支付详细信息并处理适用税收。",
+    "totalEarned": "总收入",
+    "totalPaidOut": "总支出",
+    "requestedDate": "请求日期",
+    "processedDate": "处理日期",
+    "completedDate": "完成日期",
+    "payoutFailed": "支付失败",
+    "noHistory": "还没有支付历史",
+    "noHistorySubtext": "您的支付交易将显示在这里"
+  },
+  "paymentMethods": {
+    "title": "支付方式",
+    "creditCards": "信用卡和借记卡",
+    "cryptoWallets": "加密钱包",
+    "noCards": "尚未添加卡片",
+    "noWallets": "没有保存的加密钱包",
+    "walletsSubtext": "使用USDT、USDC、ETH和BNB支付",
+    "addCard": "添加卡片",
+    "payWithCrypto": "使用加密货币支付",
+    "default": "默认",
+    "expires": "到期",
+    "newBadge": "新",
+    "securityInfo": "所有支付信息均已加密并安全",
+    "cryptoInfoTitle": "关于加密货币支付",
+    "cryptoInfoText": "使用USDT、USDC、ETH和BNB即时支付。您的支付在区块链上安全处理。建议使用Tron上的USDT以获得更低的费用。",
+    "removalFailed": "删除失败",
+    "removeWalletError": "无法删除钱包",
+    "updateFailed": "更新失败",
+    "setDefaultError": "无法设置默认钱包"
+  },
+  "addPayoutMethod": {
+    "title": "选择支付方式",
+    "subtitle": "选择你希望如何从你的鸟儿那里收到支持",
+    "platformFee": "Wihngo收取5%的平台费",
+    "yourShare": "95%的支持属于你",
+    "providerFees": "可能适用支付提供商费用",
+    "recommended": "推荐",
+    "continue": "继续",
+    "selectMethod": "选择方式",
+    "pleaseSelect": "请选择一种支付方式",
+    "legalNotice": "你有责任提供正确的支付详情并处理适用的税款。Wihngo不是支付机构。",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "银行转账 • 最适合欧盟用户",
+        "feature1": "适用于所有欧盟国家",
+        "feature2": "SEPA费用：€0-€1",
+        "feature3": "处理时间：1-3个工作日",
+        "feature4": "需要IBAN + 账户持有人姓名"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "即时转账 • 全球",
+        "feature1": "全球可用",
+        "feature2": "即时转账",
+        "feature3": "PayPal费用：~2-3%",
+        "feature4": "需要已验证的PayPal账户"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "稳定币 • 低费用",
+        "feature1": "加密货币（与美元挂钩）",
+        "feature2": "Solana网络费用：<$0.01",
+        "feature3": "快速结算",
+        "feature4": "需要Solana钱包"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "稳定币 • 低费用",
+        "feature1": "加密货币（与欧元挂钩）",
+        "feature2": "Solana网络费用：<$0.01",
+        "feature3": "快速结算",
+        "feature4": "需要Solana钱包"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "稳定币 • 第2层",
+        "feature1": "加密货币（与美元挂钩）",
+        "feature2": "Base网络费用：~$0.01",
+        "feature3": "以太坊第2层",
+        "feature4": "需要兼容Base的钱包"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "稳定币 • 第2层",
+        "feature1": "加密货币（与欧元挂钩）",
+        "feature2": "Base网络费用：~$0.01",
+        "feature3": "以太坊第2层",
+        "feature4": "需要兼容Base的钱包"
+      }
+    }
   },
   "settings": {
     "settings": "设置",

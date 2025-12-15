@@ -128,7 +128,7 @@
     "paymentMethods": "Phương thức thanh toán",
     "addMethod": "Thêm phương thức",
     "noMethods": "Chưa có phương thức thanh toán nào",
-    "addMethodPrompt": "Thêm phương thức thanh toán để nhận tiền",
+    "addMethodPrompt": "Thêm phương thức thanh toán để nhận tiền của bạn",
     "addPaymentMethod": "Thêm phương thức thanh toán",
     "default": "Mặc định",
     "verified": "Đã xác minh",
@@ -145,7 +145,97 @@
     "updateFailed": "Cập nhật phương thức thanh toán mặc định thất bại",
     "loadFailed": "Tải cài đặt thanh toán thất bại",
     "legalInfo": "Thông tin pháp lý",
-    "legalNotice": "Wihngo không phải là tổ chức tài chính. Wihngo tạo điều kiện thanh toán và chuyển tiền hỗ trợ cho chủ mới. Chủ mới chịu trách nhiệm cung cấp thông tin thanh toán chính xác và xử lý các khoản thuế hiện hành."
+    "legalNotice": "Wihngo không phải là tổ chức tài chính. Wihngo tạo điều kiện thanh toán và chuyển tiền hỗ trợ cho chủ mới. Chủ mới chịu trách nhiệm cung cấp thông tin thanh toán chính xác và xử lý các khoản thuế hiện hành.",
+    "totalEarned": "Tổng thu nhập",
+    "totalPaidOut": "Tổng đã thanh toán",
+    "requestedDate": "Ngày yêu cầu",
+    "processedDate": "Ngày xử lý",
+    "completedDate": "Ngày hoàn thành",
+    "payoutFailed": "Thanh toán thất bại",
+    "noHistory": "Chưa có lịch sử thanh toán",
+    "noHistorySubtext": "Các giao dịch thanh toán của bạn sẽ xuất hiện ở đây"
+  },
+  "paymentMethods": {
+    "title": "Phương Thức Thanh Toán",
+    "creditCards": "Thẻ Tín Dụng và Ghi Nợ",
+    "cryptoWallets": "Ví Crypto",
+    "noCards": "Chưa thêm thẻ nào",
+    "noWallets": "Chưa có ví crypto nào được lưu",
+    "walletsSubtext": "Thanh toán bằng USDT, USDC, ETH và BNB",
+    "addCard": "Thêm Thẻ",
+    "payWithCrypto": "Thanh Toán Bằng Crypto",
+    "default": "Mặc Định",
+    "expires": "Hết hạn",
+    "newBadge": "MỚI",
+    "securityInfo": "Tất cả thông tin thanh toán được mã hóa và bảo mật",
+    "cryptoInfoTitle": "Về Thanh Toán Crypto",
+    "cryptoInfoText": "Thanh toán ngay lập tức bằng USDT, USDC, ETH và BNB. Thanh toán của bạn được xử lý an toàn trên blockchain. Khuyến nghị USDT trên Tron để có phí thấp hơn.",
+    "removalFailed": "Xóa Thất Bại",
+    "removeWalletError": "Không thể xóa ví",
+    "updateFailed": "Cập Nhật Thất Bại",
+    "setDefaultError": "Không thể đặt ví mặc định"
+  },
+  "addPayoutMethod": {
+    "title": "Chọn Phương thức Thanh toán",
+    "subtitle": "Chọn cách bạn muốn nhận hỗ trợ từ các con chim của bạn",
+    "platformFee": "Wihngo tính phí nền tảng 5%",
+    "yourShare": "95% hỗ trợ thuộc về bạn",
+    "providerFees": "Có thể áp dụng phí nhà cung cấp thanh toán",
+    "recommended": "Đề xuất",
+    "continue": "Tiếp tục",
+    "selectMethod": "Chọn Phương thức",
+    "pleaseSelect": "Vui lòng chọn một phương thức thanh toán",
+    "legalNotice": "Bạn chịu trách nhiệm cung cấp thông tin thanh toán chính xác và xử lý thuế áp dụng. Wihngo không phải là tổ chức thanh toán.",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "Chuyển khoản ngân hàng • Tốt nhất cho người dùng EU",
+        "feature1": "Hoạt động ở tất cả các quốc gia EU",
+        "feature2": "Phí SEPA: €0-€1",
+        "feature3": "Xử lý: 1-3 ngày làm việc",
+        "feature4": "Yêu cầu IBAN + tên chủ tài khoản"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "Chuyển khoản tức thì • Toàn cầu",
+        "feature1": "Có sẵn trên toàn thế giới",
+        "feature2": "Chuyển khoản tức thì",
+        "feature3": "Phí PayPal: ~2-3%",
+        "feature4": "Yêu cầu tài khoản PayPal đã xác minh"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "Stablecoin • Phí thấp",
+        "feature1": "Tiền điện tử (gắn với USD)",
+        "feature2": "Phí mạng Solana: <$0.01",
+        "feature3": "Thanh toán nhanh",
+        "feature4": "Yêu cầu ví Solana"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "Stablecoin • Phí thấp",
+        "feature1": "Tiền điện tử (gắn với EUR)",
+        "feature2": "Phí mạng Solana: <$0.01",
+        "feature3": "Thanh toán nhanh",
+        "feature4": "Yêu cầu ví Solana"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "Stablecoin • Lớp 2",
+        "feature1": "Tiền điện tử (gắn với USD)",
+        "feature2": "Phí mạng Base: ~$0.01",
+        "feature3": "Lớp 2 Ethereum",
+        "feature4": "Yêu cầu ví tương thích Base"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "Stablecoin • Lớp 2",
+        "feature1": "Tiền điện tử (gắn với EUR)",
+        "feature2": "Phí mạng Base: ~$0.01",
+        "feature3": "Lớp 2 Ethereum",
+        "feature4": "Yêu cầu ví tương thích Base"
+      }
+    }
   },
   "settings": {
     "settings": "Cài đặt",

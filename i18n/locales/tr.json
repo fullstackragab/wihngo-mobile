@@ -128,7 +128,7 @@
     "paymentMethods": "Ödeme yöntemleri",
     "addMethod": "Yöntem ekle",
     "noMethods": "Eklenen ödeme yöntemi yok",
-    "addMethodPrompt": "Kazanç almak için bir ödeme yöntemi ekleyin",
+    "addMethodPrompt": "Fonlarınızı almak için bir ödeme yöntemi ekleyin",
     "addPaymentMethod": "Ödeme yöntemi ekle",
     "default": "Varsayılan",
     "verified": "Doğrulandı",
@@ -145,7 +145,97 @@
     "updateFailed": "Varsayılan ödeme yöntemi güncellenemedi",
     "loadFailed": "Ödeme ayarları yüklenemedi",
     "legalInfo": "Yasal bilgiler",
-    "legalNotice": "Wihngo bir finans kuruluşu değildir. Wihngo ödemeleri kolaylaştırır ve destek fonlarını yeni sahibine aktarır. Yeni sahip, doğru ödeme bilgilerini sağlamaktan ve geçerli vergileri yönetmekten sorumludur."
+    "legalNotice": "Wihngo bir ödeme kurumu değildir. Wihngo ödemeleri kolaylaştırır ve destek fonlarını kuş sahiplerine aktarır. Kuş sahipleri doğru ödeme bilgilerini sağlamak ve geçerli vergileri işlemekten sorumludur.",
+    "totalEarned": "Toplam Kazanc",
+    "totalPaidOut": "Toplam Ödenen",
+    "requestedDate": "Talep Edilen",
+    "processedDate": "İşlenen",
+    "completedDate": "Tamamlanan",
+    "payoutFailed": "Ödeme başarısız",
+    "noHistory": "Henüz ödeme geçmişi yok",
+    "noHistorySubtext": "Ödeme işlemleriniz burada görünecek"
+  },
+  "paymentMethods": {
+    "title": "Ödeme Yöntemleri",
+    "creditCards": "Kredi ve Banka Kartları",
+    "cryptoWallets": "Kripto Cüzdanlar",
+    "noCards": "Eklenmiş kart yok",
+    "noWallets": "Kaydedilmiş kripto cüzdan yok",
+    "walletsSubtext": "USDT, USDC, ETH ve BNB ile ödeyin",
+    "addCard": "Kart Ekle",
+    "payWithCrypto": "Kripto ile Öde",
+    "default": "Varsayılan",
+    "expires": "Son kullanma",
+    "newBadge": "YENİ",
+    "securityInfo": "Tüm ödeme bilgileri şifrelenmiş ve güvenlidir",
+    "cryptoInfoTitle": "Kripto Ödemeler Hakkında",
+    "cryptoInfoText": "USDT, USDC, ETH ve BNB ile anında ödeme yapın. Ödemeleriniz blok zincirinde güvenli bir şekilde işlenir. Daha düşük ücretler için Tron üzerinde USDT önerilir.",
+    "removalFailed": "Kaldırma Başarısız",
+    "removeWalletError": "Cüzdan kaldırılamadı",
+    "updateFailed": "Güncelleme Başarısız",
+    "setDefaultError": "Varsayılan cüzdan ayarlanamadı"
+  },
+  "addPayoutMethod": {
+    "title": "Ödeme Yöntemi Seçin",
+    "subtitle": "Kuşlarınızdan nasıl destek almak istediğinizi seçin",
+    "platformFee": "Wihngo %5 platform ücreti alır",
+    "yourShare": "Desteğin %95'i size aittir",
+    "providerFees": "Ödeme sağlayıcısı ücretleri geçerli olabilir",
+    "recommended": "Önerilen",
+    "continue": "Devam Et",
+    "selectMethod": "Yöntem Seçin",
+    "pleaseSelect": "Lütfen bir ödeme yöntemi seçin",
+    "legalNotice": "Doğru ödeme bilgilerini sağlamak ve geçerli vergileri işlemekten siz sorumlusunuz. Wihngo bir ödeme kurumu değildir.",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "Banka havalesi • AB kullanıcıları için en iyisi",
+        "feature1": "Tüm AB ülkelerinde çalışır",
+        "feature2": "SEPA ücreti: €0-€1",
+        "feature3": "İşleme: 1-3 iş günü",
+        "feature4": "IBAN + hesap sahibi adı gerektirir"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "Anlık transfer • Dünya çapında",
+        "feature1": "Dünya çapında kullanılabilir",
+        "feature2": "Anlık transferler",
+        "feature3": "PayPal ücreti: ~%2-3",
+        "feature4": "Doğrulanmış PayPal hesabı gerektirir"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "Stablecoin • Düşük ücretler",
+        "feature1": "Kripto para (USD'ye sabitlenmiş)",
+        "feature2": "Solana ağ ücretleri: <$0.01",
+        "feature3": "Hızlı ödeme",
+        "feature4": "Solana cüzdanı gerektirir"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "Stablecoin • Düşük ücretler",
+        "feature1": "Kripto para (EUR'ye sabitlenmiş)",
+        "feature2": "Solana ağ ücretleri: <$0.01",
+        "feature3": "Hızlı ödeme",
+        "feature4": "Solana cüzdanı gerektirir"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "Stablecoin • Katman 2",
+        "feature1": "Kripto para (USD'ye sabitlenmiş)",
+        "feature2": "Base ağ ücretleri: ~$0.01",
+        "feature3": "Katman 2 Ethereum",
+        "feature4": "Base uyumlu cüzdan gerektirir"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "Stablecoin • Katman 2",
+        "feature1": "Kripto para (EUR'ye sabitlenmiş)",
+        "feature2": "Base ağ ücretleri: ~$0.01",
+        "feature3": "Katman 2 Ethereum",
+        "feature4": "Base uyumlu cüzdan gerektirir"
+      }
+    }
   },
   "settings": {
     "settings": "Ayarlar",

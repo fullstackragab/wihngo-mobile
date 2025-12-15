@@ -128,7 +128,7 @@
     "paymentMethods": "Métodos de Pagamento",
     "addMethod": "Adicionar Método",
     "noMethods": "Nenhum método de pagamento adicionado",
-    "addMethodPrompt": "Adicione um método de pagamento para receber seus ganhos",
+    "addMethodPrompt": "Adicione um método de pagamento para receber seus fundos",
     "addPaymentMethod": "Adicionar Método de Pagamento",
     "default": "Padrão",
     "verified": "Verificado",
@@ -145,7 +145,97 @@
     "updateFailed": "Falha ao atualizar o método de pagamento padrão",
     "loadFailed": "Falha ao carregar configurações de pagamento",
     "legalInfo": "Informações Legais",
-    "legalNotice": "Wihngo não é uma instituição de pagamento. Wihngo facilita pagamentos e transfere fundos de suporte para proprietários de pássaros. Os proprietários de pássaros são responsáveis por fornecer detalhes de pagamento corretos e lidar com impostos aplicáveis."
+    "legalNotice": "Wihngo não é uma instituição de pagamento. Wihngo facilita pagamentos e transfere fundos de apoio aos proprietários de pássaros. Os proprietários de pássaros são responsáveis por fornecer detalhes de pagamento corretos e lidar com os impostos aplicáveis.",
+    "totalEarned": "Total ganho",
+    "totalPaidOut": "Total pago",
+    "requestedDate": "Solicitado",
+    "processedDate": "Processado",
+    "completedDate": "Concluído",
+    "payoutFailed": "Pagamento falhou",
+    "noHistory": "Ainda sem histórico de pagamentos",
+    "noHistorySubtext": "Suas transações de pagamento aparecerão aqui"
+  },
+  "paymentMethods": {
+    "title": "Métodos de Pagamento",
+    "creditCards": "Cartões de Crédito e Débito",
+    "cryptoWallets": "Carteiras Crypto",
+    "noCards": "Nenhum cartão adicionado",
+    "noWallets": "Nenhuma carteira crypto salva",
+    "walletsSubtext": "Pague com USDT, USDC, ETH e BNB",
+    "addCard": "Adicionar Cartão",
+    "payWithCrypto": "Pagar com Crypto",
+    "default": "Padrão",
+    "expires": "Expira",
+    "newBadge": "NOVO",
+    "securityInfo": "Todas as informações de pagamento são criptografadas e seguras",
+    "cryptoInfoTitle": "Sobre Pagamentos Crypto",
+    "cryptoInfoText": "Pague instantaneamente com USDT, USDC, ETH e BNB. Seus pagamentos são processados com segurança na blockchain. USDT no Tron recomendado para taxas mais baixas.",
+    "removalFailed": "Remoção Falhou",
+    "removeWalletError": "Falha ao remover carteira",
+    "updateFailed": "Atualização Falhou",
+    "setDefaultError": "Falha ao definir carteira padrão"
+  },
+  "addPayoutMethod": {
+    "title": "Escolher Método de Pagamento",
+    "subtitle": "Selecione como deseja receber apoio de seus pássaros",
+    "platformFee": "Wihngo cobra uma taxa de plataforma de 5%",
+    "yourShare": "95% do apoio pertence a você",
+    "providerFees": "Taxas do provedor de pagamento podem ser aplicadas",
+    "recommended": "Recomendado",
+    "continue": "Continuar",
+    "selectMethod": "Selecionar Método",
+    "pleaseSelect": "Por favor selecione um método de pagamento",
+    "legalNotice": "Você é responsável por fornecer detalhes de pagamento corretos e lidar com impostos aplicáveis. Wihngo não é uma instituição de pagamento.",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "Transferência bancária • Melhor para usuários da UE",
+        "feature1": "Funciona em todos os países da UE",
+        "feature2": "Taxa SEPA: €0-€1",
+        "feature3": "Processamento: 1-3 dias úteis",
+        "feature4": "Requer IBAN + nome do titular"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "Transferência instantânea • Mundial",
+        "feature1": "Disponível mundialmente",
+        "feature2": "Transferências instantâneas",
+        "feature3": "Taxa PayPal: ~2-3%",
+        "feature4": "Requer conta PayPal verificada"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "Stablecoin • Taxas baixas",
+        "feature1": "Criptomoeda (atrelada ao USD)",
+        "feature2": "Taxas de rede Solana: <$0.01",
+        "feature3": "Liquidação rápida",
+        "feature4": "Requer carteira Solana"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "Stablecoin • Taxas baixas",
+        "feature1": "Criptomoeda (atrelada ao EUR)",
+        "feature2": "Taxas de rede Solana: <$0.01",
+        "feature3": "Liquidação rápida",
+        "feature4": "Requer carteira Solana"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "Stablecoin • Camada 2",
+        "feature1": "Criptomoeda (atrelada ao USD)",
+        "feature2": "Taxas de rede Base: ~$0.01",
+        "feature3": "Camada 2 Ethereum",
+        "feature4": "Requer carteira compatível com Base"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "Stablecoin • Camada 2",
+        "feature1": "Criptomoeda (atrelada ao EUR)",
+        "feature2": "Taxas de rede Base: ~$0.01",
+        "feature3": "Camada 2 Ethereum",
+        "feature4": "Requer carteira compatível com Base"
+      }
+    }
   },
   "settings": {
     "settings": "Configurações",

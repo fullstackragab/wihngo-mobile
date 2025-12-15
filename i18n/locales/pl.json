@@ -128,7 +128,7 @@
     "paymentMethods": "Metody płatności",
     "addMethod": "Dodaj metodę",
     "noMethods": "Nie dodano metod płatności",
-    "addMethodPrompt": "Dodaj metodę płatności, aby otrzymywać zarobki",
+    "addMethodPrompt": "Dodaj metodę płatności, aby otrzymywać środki",
     "addPaymentMethod": "Dodaj metodę płatności",
     "default": "Domyślna",
     "verified": "Zweryfikowana",
@@ -145,7 +145,97 @@
     "updateFailed": "Nie udało się zaktualizować domyślnej metody płatności",
     "loadFailed": "Nie udało się załadować ustawień wypłat",
     "legalInfo": "Informacje prawne",
-    "legalNotice": "Wihngo nie jest instytucją finansową. Wihngo ułatwia płatności i przekazuje środki wsparcia nowemu właścicielowi. Nowy właściciel jest odpowiedzialny za podanie dokładnych danych płatności i rozliczenie obowiązujących podatków."
+    "legalNotice": "Wihngo nie jest instytucją finansową. Wihngo ułatwia płatności i przekazuje środki wsparcia nowemu właścicielowi. Nowy właściciel jest odpowiedzialny za podanie dokładnych danych płatności i rozliczenie obowiązujących podatków.",
+    "totalEarned": "Całkowite zarobki",
+    "totalPaidOut": "Całkowite wypłaty",
+    "requestedDate": "Zażądano",
+    "processedDate": "Przetworzono",
+    "completedDate": "Zakończono",
+    "payoutFailed": "Wypłata nie powiodła się",
+    "noHistory": "Brak historii wypłat",
+    "noHistorySubtext": "Twoje transakcje wypłat pojawią się tutaj"
+  },
+  "paymentMethods": {
+    "title": "Metody Płatności",
+    "creditCards": "Karty Kredytowe i Debetowe",
+    "cryptoWallets": "Portfele Kryptowalut",
+    "noCards": "Nie dodano żadnych kart",
+    "noWallets": "Brak zapisanych portfeli kryptowalut",
+    "walletsSubtext": "Płać za pomocą USDT, USDC, ETH i BNB",
+    "addCard": "Dodaj Kartę",
+    "payWithCrypto": "Płać Kryptowalutą",
+    "default": "Domyślny",
+    "expires": "Wygasa",
+    "newBadge": "NOWY",
+    "securityInfo": "Wszystkie informacje o płatnościach są szyfrowane i bezpieczne",
+    "cryptoInfoTitle": "O Płatnościach Kryptowalutowych",
+    "cryptoInfoText": "Płać natychmiast za pomocą USDT, USDC, ETH i BNB. Twoje płatności są bezpiecznie przetwarzane na blockchainie. USDT na Tron zalecany dla niższych opłat.",
+    "removalFailed": "Usunięcie Nie Powiodło Się",
+    "removeWalletError": "Nie udało się usunąć portfela",
+    "updateFailed": "Aktualizacja Nie Powiodła Się",
+    "setDefaultError": "Nie udało się ustawić domyślnego portfela"
+  },
+  "addPayoutMethod": {
+    "title": "Wybierz metodę wypłaty",
+    "subtitle": "Wybierz, jak chcesz otrzymywać wsparcie od swoich ptaków",
+    "platformFee": "Wihngo pobiera 5% opłaty platformy",
+    "yourShare": "95% wsparcia należy do Ciebie",
+    "providerFees": "Mogą obowiązywać opłaty dostawcy płatności",
+    "recommended": "Zalecane",
+    "continue": "Kontynuuj",
+    "selectMethod": "Wybierz metodę",
+    "pleaseSelect": "Wybierz metodę wypłaty",
+    "legalNotice": "Jesteś odpowiedzialny za podanie prawidłowych danych wypłaty i rozliczenie obowiązujących podatków. Wihngo nie jest instytucją płatniczą.",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "Przelew bankowy • Najlepszy dla użytkowników UE",
+        "feature1": "Działa we wszystkich krajach UE",
+        "feature2": "Opłata SEPA: €0-€1",
+        "feature3": "Przetwarzanie: 1-3 dni robocze",
+        "feature4": "Wymaga IBAN + imię i nazwisko właściciela konta"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "Natychmiastowy przelew • Na całym świecie",
+        "feature1": "Dostępny na całym świecie",
+        "feature2": "Natychmiastowe przelewy",
+        "feature3": "Opłata PayPal: ~2-3%",
+        "feature4": "Wymaga zweryfikowanego konta PayPal"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "Stablecoin • Niskie opłaty",
+        "feature1": "Kryptowaluta (powiązana z USD)",
+        "feature2": "Opłaty sieci Solana: <$0.01",
+        "feature3": "Szybkie rozliczenie",
+        "feature4": "Wymaga portfela Solana"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "Stablecoin • Niskie opłaty",
+        "feature1": "Kryptowaluta (powiązana z EUR)",
+        "feature2": "Opłaty sieci Solana: <$0.01",
+        "feature3": "Szybkie rozliczenie",
+        "feature4": "Wymaga portfela Solana"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "Stablecoin • Warstwa 2",
+        "feature1": "Kryptowaluta (powiązana z USD)",
+        "feature2": "Opłaty sieci Base: ~$0.01",
+        "feature3": "Warstwa 2 Ethereum",
+        "feature4": "Wymaga portfela kompatybilnego z Base"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "Stablecoin • Warstwa 2",
+        "feature1": "Kryptowaluta (powiązana z EUR)",
+        "feature2": "Opłaty sieci Base: ~$0.01",
+        "feature3": "Warstwa 2 Ethereum",
+        "feature4": "Wymaga portfela kompatybilnego z Base"
+      }
+    }
   },
   "settings": {
     "settings": "Ustawienia",

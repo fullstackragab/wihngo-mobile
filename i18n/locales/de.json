@@ -128,7 +128,7 @@
     "paymentMethods": "Zahlungsmethoden",
     "addMethod": "Methode Hinzufügen",
     "noMethods": "Keine Zahlungsmethoden hinzugefügt",
-    "addMethodPrompt": "Fügen Sie eine Zahlungsmethode hinzu, um Ihre Einnahmen zu erhalten",
+    "addMethodPrompt": "Fügen Sie eine Zahlungsmethode hinzu, um Ihre Guthaben zu erhalten",
     "addPaymentMethod": "Zahlungsmethode Hinzufügen",
     "default": "Standard",
     "verified": "Verifiziert",
@@ -145,7 +145,97 @@
     "updateFailed": "Fehler beim Aktualisieren der Standard-Zahlungsmethode",
     "loadFailed": "Fehler beim Laden der Auszahlungseinstellungen",
     "legalInfo": "Rechtliche Informationen",
-    "legalNotice": "Wihngo ist kein Zahlungsinstitut. Wihngo erleichtert Zahlungen und überweist Unterstützungsgelder an Vogelbesitzer. Vogelbesitzer sind dafür verantwortlich, korrekte Auszahlungsdetails anzugeben und anfallende Steuern zu bearbeiten."
+    "legalNotice": "Wihngo ist kein Zahlungsinstitut. Wihngo erleichtert Zahlungen und überweist Unterstützungsgelder an Vogelbesitzer. Vogelbesitzer sind dafür verantwortlich, korrekte Auszahlungsdetails anzugeben und anfallende Steuern zu bearbeiten.",
+    "totalEarned": "Gesamt verdient",
+    "totalPaidOut": "Gesamt ausgezahlt",
+    "requestedDate": "Angefordert",
+    "processedDate": "Verarbeitet",
+    "completedDate": "Abgeschlossen",
+    "payoutFailed": "Auszahlung fehlgeschlagen",
+    "noHistory": "Noch keine Auszahlungshistorie",
+    "noHistorySubtext": "Ihre Auszahlungstransaktionen werden hier angezeigt"
+  },
+  "paymentMethods": {
+    "title": "Zahlungsmethoden",
+    "creditCards": "Kredit- & Debitkarten",
+    "cryptoWallets": "Krypto-Wallets",
+    "noCards": "Keine Karten hinzugefügt",
+    "noWallets": "Keine Krypto-Wallets gespeichert",
+    "walletsSubtext": "Bezahlen Sie mit USDT, USDC, ETH und BNB",
+    "addCard": "Karte hinzufügen",
+    "payWithCrypto": "Mit Krypto bezahlen",
+    "default": "Standard",
+    "expires": "Läuft ab",
+    "newBadge": "NEU",
+    "securityInfo": "Alle Zahlungsinformationen sind verschlüsselt und sicher",
+    "cryptoInfoTitle": "Über Krypto-Zahlungen",
+    "cryptoInfoText": "Zahlen Sie sofort mit USDT, USDC, ETH und BNB. Ihre Zahlungen werden sicher auf der Blockchain verarbeitet. USDT auf Tron wird für die niedrigsten Gebühren empfohlen.",
+    "removalFailed": "Entfernung fehlgeschlagen",
+    "removeWalletError": "Wallet konnte nicht entfernt werden",
+    "updateFailed": "Aktualisierung fehlgeschlagen",
+    "setDefaultError": "Standard-Wallet konnte nicht festgelegt werden"
+  },
+  "addPayoutMethod": {
+    "title": "Auszahlungsmethode wählen",
+    "subtitle": "Wählen Sie, wie Sie Unterstützung von Ihren Vögeln erhalten möchten",
+    "platformFee": "Wihngo erhebt eine Plattformgebühr von 5%",
+    "yourShare": "95% der Unterstützung gehört Ihnen",
+    "providerFees": "Zahlungsanbietergebühren können anfallen",
+    "recommended": "Empfohlen",
+    "continue": "Weiter",
+    "selectMethod": "Methode wählen",
+    "pleaseSelect": "Bitte wählen Sie eine Auszahlungsmethode",
+    "legalNotice": "Sie sind verantwortlich für die Angabe korrekter Auszahlungsdetails und die Behandlung anfallender Steuern. Wihngo ist kein Zahlungsinstitut.",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "Banküberweisung • Am besten für EU-Nutzer",
+        "feature1": "Funktioniert in allen EU-Ländern",
+        "feature2": "SEPA-Gebühr: €0-€1",
+        "feature3": "Bearbeitung: 1-3 Werktage",
+        "feature4": "Benötigt IBAN + Kontoinhaber"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "Sofortüberweisung • Weltweit",
+        "feature1": "Weltweit verfügbar",
+        "feature2": "Sofortüberweisungen",
+        "feature3": "PayPal-Gebühr: ~2-3%",
+        "feature4": "Benötigt verifiziertes PayPal-Konto"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "Stablecoin • Niedrige Gebühren",
+        "feature1": "Kryptowährung (an USD gekoppelt)",
+        "feature2": "Solana-Netzwerkgebühren: <$0.01",
+        "feature3": "Schnelle Abwicklung",
+        "feature4": "Benötigt Solana-Wallet"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "Stablecoin • Niedrige Gebühren",
+        "feature1": "Kryptowährung (an EUR gekoppelt)",
+        "feature2": "Solana-Netzwerkgebühren: <$0.01",
+        "feature3": "Schnelle Abwicklung",
+        "feature4": "Benötigt Solana-Wallet"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "Stablecoin • Layer 2",
+        "feature1": "Kryptowährung (an USD gekoppelt)",
+        "feature2": "Base-Netzwerkgebühren: ~$0.01",
+        "feature3": "Layer 2 Ethereum",
+        "feature4": "Benötigt Base-kompatibles Wallet"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "Stablecoin • Layer 2",
+        "feature1": "Kryptowährung (an EUR gekoppelt)",
+        "feature2": "Base-Netzwerkgebühren: ~$0.01",
+        "feature3": "Layer 2 Ethereum",
+        "feature4": "Benötigt Base-kompatibles Wallet"
+      }
+    }
   },
   "settings": {
     "settings": "Einstellungen",

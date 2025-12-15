@@ -128,7 +128,7 @@
     "paymentMethods": "Metode pembayaran",
     "addMethod": "Tambah metode",
     "noMethods": "Belum ada metode pembayaran",
-    "addMethodPrompt": "Tambahkan metode pembayaran untuk menerima penghasilan",
+    "addMethodPrompt": "Tambahkan metode pembayaran untuk menerima dana",
     "addPaymentMethod": "Tambah metode pembayaran",
     "default": "Default",
     "verified": "Terverifikasi",
@@ -145,7 +145,97 @@
     "updateFailed": "Gagal memperbarui metode pembayaran default",
     "loadFailed": "Gagal memuat pengaturan pembayaran",
     "legalInfo": "Informasi hukum",
-    "legalNotice": "Wihngo bukan lembaga keuangan. Wihngo memfasilitasi pembayaran dan mentransfer dana dukungan kepada pemilik baru. Pemilik baru bertanggung jawab untuk memberikan detail pembayaran yang akurat dan menangani pajak yang berlaku."
+    "legalNotice": "Wihngo bukan lembaga pembayaran. Wihngo memfasilitasi pembayaran dan mentransfer dana dukungan kepada pemilik burung. Pemilik burung bertanggung jawab untuk memberikan detail pembayaran yang benar dan menangani pajak yang berlaku.",
+    "totalEarned": "Total Diperoleh",
+    "totalPaidOut": "Total Dibayarkan",
+    "requestedDate": "Diminta",
+    "processedDate": "Diproses",
+    "completedDate": "Selesai",
+    "payoutFailed": "Pembayaran gagal",
+    "noHistory": "Belum ada riwayat pembayaran",
+    "noHistorySubtext": "Transaksi pembayaran Anda akan muncul di sini"
+  },
+  "paymentMethods": {
+    "title": "Metode Pembayaran",
+    "creditCards": "Kartu Kredit dan Debit",
+    "cryptoWallets": "Dompet Crypto",
+    "noCards": "Belum ada kartu yang ditambahkan",
+    "noWallets": "Belum ada dompet crypto yang disimpan",
+    "walletsSubtext": "Bayar dengan USDT, USDC, ETH dan BNB",
+    "addCard": "Tambah Kartu",
+    "payWithCrypto": "Bayar dengan Crypto",
+    "default": "Default",
+    "expires": "Kedaluwarsa",
+    "newBadge": "BARU",
+    "securityInfo": "Semua informasi pembayaran dienkripsi dan aman",
+    "cryptoInfoTitle": "Tentang Pembayaran Crypto",
+    "cryptoInfoText": "Bayar secara instan dengan USDT, USDC, ETH dan BNB. Pembayaran Anda diproses dengan aman di blockchain. USDT di Tron direkomendasikan untuk biaya lebih rendah.",
+    "removalFailed": "Penghapusan Gagal",
+    "removeWalletError": "Gagal menghapus dompet",
+    "updateFailed": "Pembaruan Gagal",
+    "setDefaultError": "Gagal menyetel dompet default"
+  },
+  "addPayoutMethod": {
+    "title": "Pilih Metode Pembayaran",
+    "subtitle": "Pilih bagaimana Anda ingin menerima dukungan dari burung Anda",
+    "platformFee": "Wihngo mengenakan biaya platform 5%",
+    "yourShare": "95% dukungan adalah milik Anda",
+    "providerFees": "Biaya penyedia pembayaran mungkin berlaku",
+    "recommended": "Direkomendasikan",
+    "continue": "Lanjutkan",
+    "selectMethod": "Pilih Metode",
+    "pleaseSelect": "Silakan pilih metode pembayaran",
+    "legalNotice": "Anda bertanggung jawab untuk memberikan detail pembayaran yang benar dan menangani pajak yang berlaku. Wihngo bukan lembaga pembayaran.",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "Transfer bank • Terbaik untuk pengguna UE",
+        "feature1": "Bekerja di semua negara UE",
+        "feature2": "Biaya SEPA: €0-€1",
+        "feature3": "Pemrosesan: 1-3 hari kerja",
+        "feature4": "Memerlukan IBAN + nama pemegang rekening"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "Transfer instan • Seluruh dunia",
+        "feature1": "Tersedia di seluruh dunia",
+        "feature2": "Transfer instan",
+        "feature3": "Biaya PayPal: ~2-3%",
+        "feature4": "Memerlukan akun PayPal terverifikasi"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "Stablecoin • Biaya rendah",
+        "feature1": "Cryptocurrency (dipatok ke USD)",
+        "feature2": "Biaya jaringan Solana: <$0.01",
+        "feature3": "Penyelesaian cepat",
+        "feature4": "Memerlukan dompet Solana"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "Stablecoin • Biaya rendah",
+        "feature1": "Cryptocurrency (dipatok ke EUR)",
+        "feature2": "Biaya jaringan Solana: <$0.01",
+        "feature3": "Penyelesaian cepat",
+        "feature4": "Memerlukan dompet Solana"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "Stablecoin • Layer 2",
+        "feature1": "Cryptocurrency (dipatok ke USD)",
+        "feature2": "Biaya jaringan Base: ~$0.01",
+        "feature3": "Layer 2 Ethereum",
+        "feature4": "Memerlukan dompet yang kompatibel dengan Base"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "Stablecoin • Layer 2",
+        "feature1": "Cryptocurrency (dipatok ke EUR)",
+        "feature2": "Biaya jaringan Base: ~$0.01",
+        "feature3": "Layer 2 Ethereum",
+        "feature4": "Memerlukan dompet yang kompatibel dengan Base"
+      }
+    }
   },
   "settings": {
     "settings": "Pengaturan",

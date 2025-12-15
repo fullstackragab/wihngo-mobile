@@ -281,7 +281,7 @@
     "paymentMethods": "طرق الدفع",
     "addMethod": "إضافة طريقة",
     "noMethods": "لا توجد طرق دفع مضافة",
-    "addMethodPrompt": "قم بإضافة طريقة دفع لتلقي الأرباح",
+    "addMethodPrompt": "قم بإضافة طريقة دفع لتلقي الأموال",
     "addPaymentMethod": "إضافة طريقة دفع",
     "default": "افتراضي",
     "verified": "تم التحقق",
@@ -298,7 +298,97 @@
     "updateFailed": "فشل تحديث طريقة الدفع الافتراضية",
     "loadFailed": "فشل تحميل إعدادات الدفع",
     "legalInfo": "معلومات قانونية",
-    "legalNotice": "Wihngo ليست مؤسسة مالية. Wihngo تسهل المدفوعات وتنقل أموال الدعم إلى المالك الجديد. المالك الجديد مسؤول عن تقديم تفاصيل دفع دقيقة والتعامل مع الضرائب المطبقة."
+    "legalNotice": "Wihngo ليست مؤسسة مالية. Wihngo تسهل المدفوعات وتنقل أموال الدعم إلى المالك الجديد. المالك الجديد مسؤول عن تقديم تفاصيل دفع دقيقة والتعامل مع الضرائب المطبقة.",
+    "totalEarned": "إجمالي الأرباح",
+    "totalPaidOut": "إجمالي المدفوعات",
+    "requestedDate": "تاريخ الطلب",
+    "processedDate": "تاريخ المعالجة",
+    "completedDate": "تاريخ الإنجاز",
+    "payoutFailed": "فشل الدفع",
+    "noHistory": "لا يوجد سجل دفع بعد",
+    "noHistorySubtext": "ستظهر معاملات الدفع الخاصة بك هنا"
+  },
+  "paymentMethods": {
+    "title": "طرق الدفع",
+    "creditCards": "البطاقات الائتمانية والبطاقات الخصم",
+    "cryptoWallets": "محافظ العملات المشفرة",
+    "noCards": "لم تتم إضافة بطاقات",
+    "noWallets": "لم يتم حفظ محافظ رقمية",
+    "walletsSubtext": "الدفع باستخدام USDT و USDC و ETH و BNB",
+    "addCard": "إضافة بطاقة",
+    "payWithCrypto": "الدفع بالعملات المشفرة",
+    "default": "افتراضي",
+    "expires": "تنتهي في",
+    "newBadge": "جديد",
+    "securityInfo": "جميع معلومات الدفع مشفرة وآمنة",
+    "cryptoInfoTitle": "حول مدفوعات العملات المشفرة",
+    "cryptoInfoText": "ادفع فورًا باستخدام USDT و USDC و ETH و BNB. تتم معالجة مدفوعاتك بأمان على blockchain. يوصى باستخدام USDT على Tron للحصول على أقل الرسوم.",
+    "removalFailed": "فشلت الإزالة",
+    "removeWalletError": "فشل في إزالة المحفظة",
+    "updateFailed": "فشل التحديث",
+    "setDefaultError": "فشل تعيين المحفظة الافتراضية"
+  },
+  "addPayoutMethod": {
+    "title": "اختر طريقة الدفع",
+    "subtitle": "اختر كيف تريد استلام الدعم من طيورك",
+    "platformFee": "تفرض Wihngo رسوم منصة 5%",
+    "yourShare": "95% من الدعم يعود لك",
+    "providerFees": "قد تطبق رسوم مزود الدفع",
+    "recommended": "موصى به",
+    "continue": "متابعة",
+    "selectMethod": "اختر الطريقة",
+    "pleaseSelect": "الرجاء اختيار طريقة دفع",
+    "legalNotice": "أنت مسؤول عن تقديم تفاصيل دفع صحيحة والتعامل مع الضرائب المطبقة. Wihngo ليست مؤسسة مالية.",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "تحويل بنكي • الأفضل لمستخدمي الاتحاد الأوروبي",
+        "feature1": "يعمل في جميع دول الاتحاد الأوروبي",
+        "feature2": "رسوم SEPA: €0-€1",
+        "feature3": "المعالجة: 1-3 أيام عمل",
+        "feature4": "يتطلب IBAN + اسم صاحب الحساب"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "تحويل فوري • في جميع أنحاء العالم",
+        "feature1": "متوفر في جميع أنحاء العالم",
+        "feature2": "تحويلات فورية",
+        "feature3": "رسوم PayPal: ~2-3%",
+        "feature4": "يتطلب حساب PayPal موثق"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "عملة مستقرة • رسوم منخفضة",
+        "feature1": "عملة مشفرة (مرتبطة بالدولار الأمريكي)",
+        "feature2": "رسوم شبكة Solana: <$0.01",
+        "feature3": "تسوية سريعة",
+        "feature4": "يتطلب محفظة Solana"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "عملة مستقرة • رسوم منخفضة",
+        "feature1": "عملة مشفرة (مرتبطة باليورو)",
+        "feature2": "رسوم شبكة Solana: <$0.01",
+        "feature3": "تسوية سريعة",
+        "feature4": "يتطلب محفظة Solana"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "عملة مستقرة • الطبقة الثانية",
+        "feature1": "عملة مشفرة (مرتبطة بالدولار الأمريكي)",
+        "feature2": "رسوم شبكة Base: ~$0.01",
+        "feature3": "إيثيريوم الطبقة الثانية",
+        "feature4": "يتطلب محفظة متوافقة مع Base"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "عملة مستقرة • الطبقة الثانية",
+        "feature1": "عملة مشفرة (مرتبطة باليورو)",
+        "feature2": "رسوم شبكة Base: ~$0.01",
+        "feature3": "إيثيريوم الطبقة الثانية",
+        "feature4": "يتطلب محفظة متوافقة مع Base"
+      }
+    }
   },
   "settings": {
     "settings": "الإعدادات",

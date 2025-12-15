@@ -1,5 +1,6 @@
 import { Spacing, Typography } from "@/constants/theme";
 import { useAuth } from "@/contexts/auth-context";
+import { payoutService } from "@/services/payout.service";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -70,25 +71,31 @@ export default function AddIbanMethod() {
 
     setLoading(true);
     try {
-      // TODO: Uncomment when backend is ready
-      // await payoutService.addPayoutMethod({
-      //   methodType: 'iban',
-      //   accountHolderName: formData.accountHolderName,
-      //   iban: cleanIban,
-      //   bic: formData.bic || undefined,
-      //   bankName: formData.bankName || undefined,
-      //   isDefault: true,
-      // });
+      await payoutService.addPayoutMethod({
+        methodType: "BankTransfer",
+        accountHolderName: formData.accountHolderName.trim(),
+        iban: cleanIban,
+        bic: formData.bic.trim() || undefined,
+        bankName: formData.bankName.trim() || undefined,
+        isDefault: true,
+      });
 
       Alert.alert("Success", "IBAN payment method added successfully", [
         {
           text: "OK",
-          onPress: () => router.back(),
+          onPress: () => {
+            router.back();
+            router.back(); // Go back twice to return to payout settings
+          },
         },
       ]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to add IBAN method:", error);
-      Alert.alert("Error", "Failed to add payment method. Please try again.");
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to add payment method. Please try again.";
+      Alert.alert("Error", errorMessage);
     } finally {
       setLoading(false);
     }

@@ -128,7 +128,7 @@
     "paymentMethods": "支払い方法",
     "addMethod": "方法を追加",
     "noMethods": "支払い方法が追加されていません",
-    "addMethodPrompt": "収益を受け取るために支払い方法を追加してください",
+    "addMethodPrompt": "資金を受け取るために支払い方法を追加してください",
     "addPaymentMethod": "支払い方法を追加",
     "default": "デフォルト",
     "verified": "確認済み",
@@ -145,7 +145,97 @@
     "updateFailed": "デフォルトの支払い方法の更新に失敗しました",
     "loadFailed": "支払い設定の読み込みに失敗しました",
     "legalInfo": "法的情報",
-    "legalNotice": "Wihngoは決済機関ではありません。Wihngoは支払いを促進し、鳥の所有者にサポート資金を送金します。鳥の所有者は、正しい支払い詳細を提供し、適用される税金を処理する責任があります。"
+    "legalNotice": "Wihngoは支払い機関ではありません。Wihngoは支払いを容易にし、鳥の所有者にサポート資金を送金します。鳥の所有者は、正しい支払い詳細を提供し、適用される税金を処理する責任があります。",
+    "totalEarned": "総収入",
+    "totalPaidOut": "総支払い",
+    "requestedDate": "リクエスト日",
+    "processedDate": "処理日",
+    "completedDate": "完了日",
+    "payoutFailed": "支払い失敗",
+    "noHistory": "まだ支払い履歴がありません",
+    "noHistorySubtext": "あなたの支払い取引がここに表示されます"
+  },
+  "paymentMethods": {
+    "title": "支払い方法",
+    "creditCards": "クレジットカードとデビットカード",
+    "cryptoWallets": "暗号ウォレット",
+    "noCards": "カードが追加されていません",
+    "noWallets": "保存された暗号ウォレットはありません",
+    "walletsSubtext": "USDT、USDC、ETH、BNBで支払う",
+    "addCard": "カードを追加",
+    "payWithCrypto": "暗号で支払う",
+    "default": "デフォルト",
+    "expires": "有効期限",
+    "newBadge": "新規",
+    "securityInfo": "すべての支払い情報は暗号化され、安全です",
+    "cryptoInfoTitle": "暗号支払いについて",
+    "cryptoInfoText": "USDT、USDC、ETH、BNBで即座に支払います。お支払いはブロックチェーン上で安全に処理されます。より低い手数料のため、Tron上のUSDTを推奨します。",
+    "removalFailed": "削除失敗",
+    "removeWalletError": "ウォレットの削除に失敗しました",
+    "updateFailed": "更新失敗",
+    "setDefaultError": "デフォルトウォレットの設定に失敗しました"
+  },
+  "addPayoutMethod": {
+    "title": "支払い方法を選択",
+    "subtitle": "鳥からのサポートを受け取る方法を選択してください",
+    "platformFee": "Wihngoは5%のプラットフォーム手数料を請求します",
+    "yourShare": "サポートの95%はあなたのものです",
+    "providerFees": "支払いプロバイダーの手数料が適用される場合があります",
+    "recommended": "おすすめ",
+    "continue": "続ける",
+    "selectMethod": "方法を選択",
+    "pleaseSelect": "支払い方法を選択してください",
+    "legalNotice": "正確な支払い詳細を提供し、該当する税金を処理する責任があります。Wihngoは決済機関ではありません。",
+    "methods": {
+      "iban": {
+        "title": "IBAN (SEPA)",
+        "subtitle": "銀行振込 • EUユーザーに最適",
+        "feature1": "すべてのEU諸国で利用可能",
+        "feature2": "SEPA手数料: €0-€1",
+        "feature3": "処理: 1-3営業日",
+        "feature4": "IBAN + 口座名義人が必要"
+      },
+      "paypal": {
+        "title": "PayPal",
+        "subtitle": "即時送金 • 世界中",
+        "feature1": "世界中で利用可能",
+        "feature2": "即時送金",
+        "feature3": "PayPal手数料: ~2-3%",
+        "feature4": "認証済みPayPalアカウントが必要"
+      },
+      "usdcSolana": {
+        "title": "USDC (Solana)",
+        "subtitle": "ステーブルコイン • 低手数料",
+        "feature1": "暗号通貨（USDにペッグ）",
+        "feature2": "Solanaネットワーク手数料: <$0.01",
+        "feature3": "高速決済",
+        "feature4": "Solanaウォレットが必要"
+      },
+      "eurcSolana": {
+        "title": "EURC (Solana)",
+        "subtitle": "ステーブルコイン • 低手数料",
+        "feature1": "暗号通貨（EURにペッグ）",
+        "feature2": "Solanaネットワーク手数料: <$0.01",
+        "feature3": "高速決済",
+        "feature4": "Solanaウォレットが必要"
+      },
+      "usdcBase": {
+        "title": "USDC (Base)",
+        "subtitle": "ステーブルコイン • レイヤー2",
+        "feature1": "暗号通貨（USDにペッグ）",
+        "feature2": "Baseネットワーク手数料: ~$0.01",
+        "feature3": "レイヤー2 Ethereum",
+        "feature4": "Base対応ウォレットが必要"
+      },
+      "eurcBase": {
+        "title": "EURC (Base)",
+        "subtitle": "ステーブルコイン • レイヤー2",
+        "feature1": "暗号通貨（EURにペッグ）",
+        "feature2": "Baseネットワーク手数料: ~$0.01",
+        "feature3": "レイヤー2 Ethereum",
+        "feature4": "Base対応ウォレットが必要"
+      }
+    }
   },
   "settings": {
     "settings": "設定",

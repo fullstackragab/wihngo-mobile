@@ -42,6 +42,21 @@ export const payoutService = {
   },
 
   /**
+   * Get a single payout method by ID
+   */
+  async getPayoutMethod(methodId: string): Promise<PayoutMethod> {
+    try {
+      const response = await apiHelper.get<PayoutMethod>(
+        `${PAYOUT_ENDPOINT}/methods/${methodId}`
+      );
+      return response;
+    } catch (error) {
+      console.error("Error fetching payout method:", error);
+      throw error;
+    }
+  },
+
+  /**
    * Add a new payout method
    */
   async addPayoutMethod(data: AddPayoutMethodDto): Promise<PayoutMethod> {

@@ -1,6 +1,7 @@
 import { STORY_MOODS, StoryMode } from "@/types/story";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Modal,
   ScrollView,
@@ -23,7 +24,22 @@ export function MoodSelector({
   onSelect,
   onClose,
 }: MoodSelectorProps) {
+  const { t } = useTranslation();
   const [expandedMood, setExpandedMood] = useState<StoryMode | null>(null);
+
+  const getMoodKey = (value: StoryMode): string => {
+    const keyMap: Record<StoryMode, string> = {
+      [StoryMode.LoveAndBond]: "loveAndBond",
+      [StoryMode.NewBeginning]: "newBeginning",
+      [StoryMode.ProgressAndWins]: "progressAndWins",
+      [StoryMode.FunnyMoment]: "funnyMoment",
+      [StoryMode.PeacefulMoment]: "peacefulMoment",
+      [StoryMode.LossAndMemory]: "lossAndMemory",
+      [StoryMode.CareAndHealth]: "careAndHealth",
+      [StoryMode.DailyLife]: "dailyLife",
+    };
+    return keyMap[value];
+  };
 
   const handleSelectMood = (mood: StoryMode) => {
     onSelect(mood);
@@ -46,8 +62,8 @@ export function MoodSelector({
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <Text style={styles.title}>Choose a mood</Text>
-            <Text style={styles.subtitle}>Optional - skip if you prefer</Text>
+            <Text style={styles.title}>{t("createStory.chooseMood")}</Text>
+            <Text style={styles.subtitle}>{t("createStory.moodSubtitle")}</Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Ionicons name="close" size={24} color="#2C3E50" />
@@ -80,7 +96,7 @@ export function MoodSelector({
                         isSelected && styles.moodLabelSelected,
                       ]}
                     >
-                      {mood.label}
+                      {t(`moods.${getMoodKey(mood.value)}.label`)}
                     </Text>
                     {isSelected && (
                       <View style={styles.checkmark}>
@@ -93,9 +109,11 @@ export function MoodSelector({
                   {isExpanded && (
                     <View style={styles.descriptionCard}>
                       <Text style={styles.descriptionText}>
-                        {mood.description}
+                        {t(`moods.${getMoodKey(mood.value)}.description`)}
                       </Text>
-                      <Text style={styles.exampleText}>{mood.example}</Text>
+                      <Text style={styles.exampleText}>
+                        {t(`moods.${getMoodKey(mood.value)}.example`)}
+                      </Text>
                     </View>
                   )}
                 </View>
@@ -107,7 +125,7 @@ export function MoodSelector({
           <View style={styles.infoBox}>
             <Ionicons name="information-circle" size={20} color="#4ECDC4" />
             <Text style={styles.infoText}>
-              Long press any mood to see details and examples
+              {t("createStory.longPressMoodInfo")}
             </Text>
           </View>
         </ScrollView>
@@ -115,7 +133,9 @@ export function MoodSelector({
         {/* Skip Button */}
         <View style={styles.footer}>
           <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-            <Text style={styles.skipButtonText}>Skip / No Mood</Text>
+            <Text style={styles.skipButtonText}>
+              {t("createStory.skipNoMood")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

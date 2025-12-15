@@ -212,13 +212,6 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>
-          {t("bird.locationCity")}
-          {required && <Text style={styles.required}> *</Text>}
-        </Text>
-      </View>
-
       <View style={[styles.inputWrapper, showError && styles.inputError]}>
         <FontAwesome6
           name="location-dot"

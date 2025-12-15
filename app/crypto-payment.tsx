@@ -779,7 +779,7 @@ export default function CryptoPaymentScreen() {
         >
           <FontAwesome6 name="arrow-left" size={20} color="#333" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Pay with Crypto</Text>
+        <Text style={styles.headerTitle}>{t("headers.payWithCrypto")}</Text>
         <View style={styles.headerSpacer} />
       </View>
 

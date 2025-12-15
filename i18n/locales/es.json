@@ -55,17 +55,20 @@
     "title": "Crear Historia",
     "post": "Publicar",
     "posting": "Publicando...",
-    "placeholder": "Comparte tu historia...",
+    "placeholder": "Escribe tu historia aquí... (máx. 5000 caracteres)",
     "characterCount": "{{count}}/5000",
     "tagBird": "Etiquetar Pájaro",
     "required": "*",
     "optional": "(Opcional)",
-    "selectBird": "Seleccionar un pájaro",
+    "selectBird": "Selecciona un pájaro para etiquetar (requerido)",
     "change": "Cambiar",
     "mood": "Estado de Ánimo",
     "chooseMood": "Elegir un estado de ánimo",
-    "addPhoto": "Agregar Foto",
-    "addVideo": "Agregar Video",
+    "moodSubtitle": "Opcional - omitir si prefieres",
+    "longPressMoodInfo": "Mantén presionado cualquier estado de ánimo para ver detalles y ejemplos",
+    "skipNoMood": "Omitir / Sin Estado de Ánimo",
+    "addPhoto": "Agregar Foto (opcional, o video)",
+    "addVideo": "Agregar Video (opcional, o foto)",
     "chooseOption": "Elige una opción",
     "takePhoto": "Tomar Foto",
     "recordVideo": "Grabar Video",
@@ -98,8 +101,50 @@
     "tip1": "• Sé auténtico y comparte tus experiencias",
     "tip2": "• Etiqueta un pájaro (requerido)",
     "tip3": "• Agrega un estado de ánimo para expresar tus sentimientos (opcional)",
-    "tip4": "• Agrega fotos o videos para hacerla más atractiva",
+    "tip4": "• Agrega una foto o video (no ambos) para hacerla más atractiva",
     "tip5": "• Videos: Máx 60 segundos, 200MB"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "Amor y Vínculo",
+      "description": "Afecto, confianza, abrazos, apego",
+      "example": "\"Finalmente durmió en mi hombro…\""
+    },
+    "newBeginning": {
+      "label": "Nuevo Comienzo",
+      "description": "Nueva ave, adopción, rescate, primer día",
+      "example": "\"Bienvenida a casa, Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "Progreso y Logros",
+      "description": "Éxito en entrenamiento, mejora de salud, hitos",
+      "example": "\"¡Aprendió a decir su nombre hoy!\""
+    },
+    "funnyMoment": {
+      "label": "Momento Divertido",
+      "description": "Comportamiento gracioso, acciones inesperadas",
+      "example": "\"Robó mis llaves otra vez…\""
+    },
+    "peacefulMoment": {
+      "label": "Momento Tranquilo",
+      "description": "Calma, hermoso, silencio emocional",
+      "example": "\"Solo viéndolo disfrutar del sol…\""
+    },
+    "lossAndMemory": {
+      "label": "Pérdida y Recuerdo",
+      "description": "Fallecimiento, recordatorio, duelo",
+      "example": "\"Siempre estarás conmigo…\""
+    },
+    "careAndHealth": {
+      "label": "Cuidado y Salud",
+      "description": "Visitas al veterinario, recuperación, consejos, conciencia",
+      "example": "\"Actualización post-cirugía…\""
+    },
+    "dailyLife": {
+      "label": "Vida Cotidiana",
+      "description": "Rutinas normales, momentos cotidianos",
+      "example": "\"Nuestra mañana habitual juntos\""
+    }
   },
   "stories": {
     "title": "Historias",
@@ -130,7 +175,15 @@
     "tipsCompellingTagline": "• Escribe un lema atractivo que capture la personalidad",
     "tipsIncludeDetails": "• Incluye detalles sobre cuidado, comportamiento y necesidades",
     "tipsBeHonest": "• Sé honesto y transparente con los seguidores",
-    "loadingBirdData": "Cargando datos del pájaro..."
+    "loadingBirdData": "Cargando datos del pájaro...",
+    "namePlaceholder": "Ingresa el nombre del pájaro (requerido, ej: Charlie)",
+    "speciesPlaceholder": "Busca y selecciona la especie (requerido)",
+    "taglinePlaceholder": "Una descripción breve y atractiva",
+    "descriptionPlaceholder": "Describe este pájaro (opcional - personalidad, hábitos, etc.)",
+    "agePlaceholder": "Ingresa la edad (opcional, ej: 2 años)",
+    "locationPlaceholder": "Busca una ciudad (opcional)",
+    "profileImagePlaceholder": "Toca para seleccionar imagen de perfil (requerido)",
+    "coverImagePlaceholder": "Toca para seleccionar imagen de portada (opcional)"
   },
   "birdProfile": {
     "loadingBird": "Cargando pájaro...",
@@ -401,7 +454,24 @@
     "daysAgo": "{{count}}d atrás"
   },
   "headers": {
-    "supportBird": "Apoyar Pájaro"
+    "search": "Buscar",
+    "settings": "Configuración",
+    "editProfile": "Editar Perfil",
+    "notifications": "Notificaciones",
+    "privacy": "Privacidad",
+    "paymentMethods": "Métodos de Pago",
+    "payoutSettings": "Configuración de Pagos",
+    "myBirds": "Mis Pájaros",
+    "lovedBirds": "Pájaros Amados",
+    "supportedBirds": "Pájaros Apoyados",
+    "story": "Historia",
+    "support": "Apoyar",
+    "supportBird": "Apoyar Pájaro",
+    "privacyPolicy": "Política de Privacidad",
+    "termsOfService": "Términos de Servicio",
+    "faq": "Preguntas Frecuentes",
+    "editStory": "Editar Historia",
+    "payWithCrypto": "Pagar con Cripto"
   },
   "support": {
     "selectAmount": "Seleccionar Monto",
@@ -429,5 +499,62 @@
     "duration": "Duración: {{duration}}",
     "size": "Tamaño: {{size}}"
   },
-  "chooseLanguage": "Elegir Idioma"
+  "chooseLanguage": "Elegir Idioma",
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "subtitle": "Todo lo que necesitas saber sobre Wihngo",
+    "payouts": {
+      "title": "Pagos y Ganancias",
+      "whenDoIGetPaid": "¿Cuándo me pagan?",
+      "whenDoIGetPaidAnswer": "Los pagos se realizan una vez al mes, generalmente entre el 1 y el 5 de cada mes. Recibirás un pago cuando tu saldo alcance el umbral mínimo de €20.",
+      "whyMinimum": "¿Por qué hay un mínimo de €20?",
+      "whyMinimumAnswer": "El umbral mínimo de pago ayuda a reducir las tarifas de transacción y los costos de procesamiento. Esto asegura que tanto tú como Wihngo puedan operar de manera eficiente. Si no alcanzas €20 en un mes, tu saldo se transferirá al mes siguiente.",
+      "whatIfNeverReach": "¿Qué pasa si nunca alcanzo €20?",
+      "whatIfNeverReachAnswer": "Tu saldo se acumula cada mes hasta que alcances el umbral de €20. Una vez que lo alcances, recibirás un pago en la próxima fecha de pago programada. Tus fondos nunca caducan.",
+      "platformFee": "¿Qué es la tarifa de la plataforma?",
+      "platformFeeAnswer": "Wihngo cobra una tarifa de plataforma del 5% sobre todo el apoyo recibido. Esta tarifa nos ayuda a mantener la plataforma, procesar pagos y seguir mejorando Wihngo. El 95% de cada pago de apoyo va directamente a ti.",
+      "payoutMethods": "¿Qué métodos de pago están disponibles?",
+      "payoutMethodsAnswer": "Puedes recibir pagos a través de transferencia bancaria (SEPA/IBAN), PayPal o criptomoneda (USDC/EURC en Solana). Elige el método que mejor te funcione en tu configuración de pagos."
+    },
+    "support": {
+      "title": "Apoyo a los Pájaros",
+      "howToSupport": "¿Cómo apoyo a un pájaro?",
+      "howToSupportAnswer": "Toca el botón 'Apoyar' en el perfil de cualquier pájaro, selecciona una cantidad, elige tu método de pago (PayPal o cripto) y completa el pago. El apoyo es voluntario y va directamente a ayudar a cuidar al pájaro.",
+      "whatIsSupport": "¿Para qué se utiliza el apoyo?",
+      "whatIsSupportAnswer": "El apoyo ayuda a los dueños de pájaros con comida, atención veterinaria, alojamiento y otros gastos. Es una forma para que la comunidad se una y ayude a los pájaros necesitados.",
+      "canICancel": "¿Puedo cancelar o reembolsar mi apoyo?",
+      "canICancelAnswer": "Todo el apoyo es voluntario y final. Wihngo no procesa reembolsos. Asegúrate de que deseas apoyar a un pájaro antes de completar tu pago."
+    },
+    "crypto": {
+      "title": "Pagos Cripto",
+      "whichCrypto": "¿Qué criptomonedas se admiten?",
+      "whichCryptoAnswer": "Wihngo admite USDC y EURC en la red Solana. Estas son stablecoins, lo que significa que su valor está vinculado al dólar estadounidense y al euro respectivamente.",
+      "whySolana": "¿Por qué Solana?",
+      "whySolanaAnswer": "Solana ofrece tarifas de transacción extremadamente bajas (generalmente menos de $0.01) y tiempos de confirmación rápidos, lo que la hace ideal para pagos de apoyo pequeños a medianos.",
+      "isCryptoSafe": "¿Las criptomonedas son seguras?",
+      "isCryptoSafeAnswer": "Las transacciones de criptomonedas son irreversibles y requieren atención cuidadosa. Siempre verifica dos veces la dirección de la billetera y la red antes de enviar. Wihngo no custodia tus criptomonedas y no puede revertir transacciones.",
+      "wrongNetwork": "¿Qué pasa si envío en la red equivocada?",
+      "wrongNetworkAnswer": "Enviar criptomonedas a la red equivocada resultará en la pérdida permanente de fondos. Siempre confirma que estás enviando en la red correcta (Solana). Wihngo no puede recuperar fondos enviados a la red equivocada.",
+      "cryptoPayoutVolatility": "¿Qué pasa con la volatilidad de los pagos cripto?",
+      "cryptoPayoutVolatilityAnswer": "Si eliges recibir pagos en cripto, aceptas el riesgo de volatilidad del mercado. El valor de tu pago puede cambiar entre cuándo se calcula y cuándo lo recibes. Wihngo no garantiza ningún valor específico."
+    },
+    "account": {
+      "title": "Cuenta y Privacidad",
+      "howToDeleteAccount": "¿Cómo elimino mi cuenta?",
+      "howToDeleteAccountAnswer": "Ve a Configuración > Configuración de Privacidad > Eliminar Cuenta. Ten en cuenta que eliminar tu cuenta es permanente y no se puede deshacer.",
+      "isDataSafe": "¿Mis datos están seguros?",
+      "isDataSafeAnswer": "Sí. Wihngo sigue las regulaciones GDPR y utiliza cifrado para proteger tus datos. Nunca vendemos tu información personal.",
+      "canIChangeEmail": "¿Puedo cambiar mi dirección de correo electrónico?",
+      "canIChangeEmailAnswer": "Actualmente, los cambios de correo electrónico deben solicitarse a través de support@wihngo.com. Estamos trabajando para agregar esta función directamente en la aplicación."
+    },
+    "legal": {
+      "title": "Legal y Cumplimiento",
+      "isWihngoRegulated": "¿Wihngo es una institución financiera regulada?",
+      "isWihngoRegulatedAnswer": "No. Wihngo es una plataforma comunitaria, no un banco o institución financiera. Facilitamos el apoyo voluntario entre usuarios. Wihngo retiene temporalmente fondos para pagos mensuales pero no ofrece servicios financieros.",
+      "taxResponsibility": "¿Quién es responsable de los impuestos?",
+      "taxResponsibilityAnswer": "Los dueños de pájaros son responsables de declarar y pagar cualquier impuesto aplicable sobre el apoyo recibido a través de Wihngo. Recomendamos consultar con un profesional de impuestos en tu jurisdicción.",
+      "whereIsWihngoRegistered": "¿Dónde está registrado Wihngo?",
+      "whereIsWihngoRegisteredAnswer": "Wihngo está en proceso de registro en Estonia y opera dentro de la Unión Europea."
+    }
+  }
 }

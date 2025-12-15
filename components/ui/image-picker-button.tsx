@@ -88,13 +88,6 @@ export default function ImagePickerButton({
 
   return (
     <View style={[styles.container, style]}>
-      {label && (
-        <Text style={styles.label}>
-          {label}
-          {required && <Text style={styles.required}> *</Text>}
-        </Text>
-      )}
-
       <TouchableOpacity
         style={styles.button}
         onPress={handlePress}

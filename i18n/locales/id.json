@@ -55,17 +55,20 @@
     "title": "Buat Cerita",
     "post": "Posting",
     "posting": "Memposting...",
-    "placeholder": "Bagikan cerita Anda...",
+    "placeholder": "Tulis cerita Anda di sini... (maks 5000 karakter)",
     "characterCount": "{{count}}/5000",
     "tagBird": "Tandai Burung",
     "required": "*",
     "optional": "(Opsional)",
-    "selectBird": "Pilih burung",
+    "selectBird": "Pilih burung untuk ditandai (wajib)",
     "change": "Ubah",
     "mood": "Suasana Hati",
     "chooseMood": "Pilih suasana hati",
-    "addPhoto": "Tambah Foto",
-    "addVideo": "Tambah Video",
+    "moodSubtitle": "Opsional - lewati jika Anda mau",
+    "longPressMoodInfo": "Tekan lama suasana hati apa pun untuk melihat detail dan contoh",
+    "skipNoMood": "Lewati / Tanpa Suasana Hati",
+    "addPhoto": "Tambah Foto (opsional, atau video)",
+    "addVideo": "Tambah Video (opsional, atau foto)",
     "chooseOption": "Pilih opsi",
     "takePhoto": "Ambil Foto",
     "recordVideo": "Rekam Video",
@@ -98,8 +101,50 @@
     "tip1": "• Jadilah autentik dan bagikan pengalaman Anda",
     "tip2": "• Tandai burung (wajib)",
     "tip3": "• Tambahkan suasana hati untuk mengekspresikan perasaan Anda (opsional)",
-    "tip4": "• Tambahkan foto atau video untuk membuatnya lebih menarik",
+    "tip4": "• Tambahkan foto atau video (bukan keduanya) untuk membuatnya lebih menarik",
     "tip5": "• Video: Maks 60 detik, 200MB"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "Cinta & Ikatan",
+      "description": "Kasih sayang, kepercayaan, pelukan, kelekatan",
+      "example": "\"Dia akhirnya tidur di bahu saya…\""
+    },
+    "newBeginning": {
+      "label": "Awal Baru",
+      "description": "Burung baru, adopsi, penyelamatan, hari pertama",
+      "example": "\"Selamat datang di rumah, Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "Kemajuan & Kemenangan",
+      "description": "Keberhasilan pelatihan, perbaikan kesehatan, pencapaian",
+      "example": "\"Dia belajar menyebut namanya hari ini!\""
+    },
+    "funnyMoment": {
+      "label": "Momen Lucu",
+      "description": "Perilaku konyol, tindakan tak terduga",
+      "example": "\"Dia mencuri kunci saya lagi…\""
+    },
+    "peacefulMoment": {
+      "label": "Momen Damai",
+      "description": "Tenang, indah, keheningan emosional",
+      "example": "\"Hanya menonton dia menikmati matahari…\""
+    },
+    "lossAndMemory": {
+      "label": "Kehilangan & Kenangan",
+      "description": "Meninggal, pengenangan, duka",
+      "example": "\"Kamu akan selalu bersamaku…\""
+    },
+    "careAndHealth": {
+      "label": "Perawatan & Kesehatan",
+      "description": "Kunjungan dokter hewan, pemulihan, saran, kesadaran",
+      "example": "\"Pembaruan pasca operasi…\""
+    },
+    "dailyLife": {
+      "label": "Kehidupan Sehari-hari",
+      "description": "Rutinitas normal, momen sehari-hari",
+      "example": "\"Pagi biasa kami bersama\""
+    }
   },
   "stories": {
     "title": "Cerita",
@@ -130,7 +175,15 @@
     "tipsCompellingTagline": "• Tulis tagline yang menarik yang menangkap kepribadian",
     "tipsIncludeDetails": "• Sertakan detail tentang perawatan, perilaku, dan kebutuhan",
     "tipsBeHonest": "• Jujur dan transparan dengan pendukung",
-    "loadingBirdData": "Memuat data burung..."
+    "loadingBirdData": "Memuat data burung...",
+    "namePlaceholder": "Masukkan nama burung (wajib, contoh: Charlie)",
+    "speciesPlaceholder": "Cari dan pilih spesies (wajib)",
+    "taglinePlaceholder": "Deskripsi singkat yang menarik",
+    "descriptionPlaceholder": "Jelaskan burung ini (opsional - kepribadian, kebiasaan, dll.)",
+    "agePlaceholder": "Masukkan umur (opsional, contoh: 2 tahun)",
+    "locationPlaceholder": "Cari kota (opsional)",
+    "profileImagePlaceholder": "Ketuk untuk memilih foto profil (wajib)",
+    "coverImagePlaceholder": "Ketuk untuk memilih foto sampul (opsional)"
   },
   "birdProfile": {
     "loadingBird": "Memuat burung...",
@@ -301,11 +354,11 @@
     "payoutSettings": "Pengaturan Pembayaran",
     "termsOfService": "Ketentuan layanan",
     "languageChangeError": "Gagal mengubah bahasa",
-    "appSettings": "App Settings",
-    "theme": "Theme",
-    "support": "Support",
-    "helpSupport": "Help & Support",
-    "privacyPolicy": "Privacy Policy"
+    "appSettings": "Pengaturan Aplikasi",
+    "theme": "Tema",
+    "support": "Dukungan",
+    "helpSupport": "Bantuan & Dukungan",
+    "privacyPolicy": "Kebijakan Privasi"
   },
   "welcome": {
     "appTitle": "Whingo",
@@ -337,7 +390,24 @@
     "daysAgo": "{{count}}h yang lalu"
   },
   "headers": {
-    "supportBird": "Dukung {{birdName}}"
+    "search": "Cari",
+    "settings": "Pengaturan",
+    "editProfile": "Edit Profil",
+    "notifications": "Notifikasi",
+    "privacy": "Privasi",
+    "paymentMethods": "Metode Pembayaran",
+    "payoutSettings": "Pengaturan Pembayaran",
+    "myBirds": "Burung Saya",
+    "lovedBirds": "Burung Favorit",
+    "supportedBirds": "Burung yang Didukung",
+    "story": "Cerita",
+    "support": "Dukung",
+    "supportBird": "Dukung {{birdName}}",
+    "privacyPolicy": "Kebijakan Privasi",
+    "termsOfService": "Ketentuan Layanan",
+    "faq": "Pertanyaan yang Sering Diajukan",
+    "editStory": "Edit Cerita",
+    "payWithCrypto": "Bayar dengan Kripto"
   },
   "support": {
     "selectAmount": "Pilih jumlah",
@@ -367,37 +437,37 @@
   },
   "chooseLanguage": "Pilih bahasa",
   "legal": {
-    "lastUpdated": "Last updated: December 15, 2025",
+    "lastUpdated": "Terakhir diperbarui: 15 Desember 2025",
     "privacy": {
-      "intro": "Wihngo respects your privacy and is committed to protecting your personal data.",
-      "whoWeAre": "Who we are",
-      "whoWeAreContent": "Wihngo is a love-centric community platform for people who care about birds. The platform is operated in the European Union and is in the process of registration in Estonia.",
-      "whatDataWeCollect": "What data we collect",
-      "whatDataWeCollectIntro": "When you use the Wihngo app, we may collect:",
-      "dataAccountInfo": "Account information (name, email, password)",
-      "dataBirdInfo": "Bird information you share (species, name, photos, stories)",
-      "dataUserContent": "User-generated content (posts, comments, likes)",
-      "dataPaymentInfo": "Payment information for support transactions",
-      "dataTechnicalInfo": "Technical data (device type, OS version, IP address)",
-      "dataUsageInfo": "Usage data and analytics",
-      "whyWeCollectData": "Why we collect this data",
-      "whyWeCollectDataIntro": "We collect this data to:",
-      "reasonProvideService": "Provide and maintain the Wihngo service",
-      "reasonConnectUsers": "Connect people who care about birds",
-      "reasonProcessPayments": "Process support payments and donations",
-      "reasonImproveApp": "Improve app performance and user experience",
-      "reasonMaintainSecurity": "Maintain security and prevent fraud",
-      "legalBasis": "Legal basis",
-      "legalBasisContent": "Data is processed under the General Data Protection Regulation (GDPR) based on legitimate interest and contractual necessity.",
-      "dataSharing": "Data sharing",
-      "dataSharingContent": "We do not sell your data. Some data may be processed by trusted service providers (such as payment processors, cloud hosting, and analytics services). All providers are required to protect your data.",
-      "dataRetention": "Data retention",
-      "dataRetentionContent": "Data is kept only as long as necessary for the purposes described above, or as required by law.",
-      "yourRights": "Your rights",
-      "yourRightsContent": "Under GDPR, you have the right to access, correct, delete, or export your personal data. You can also object to processing or request restriction.",
-      "contact": "Contact",
-      "contactIntro": "For privacy-related questions or to exercise your rights, contact:",
-      "footer": "Wihngo is committed to transparency and protecting your personal information in accordance with EU data protection laws."
+      "intro": "Wihngo menghormati privasi Anda dan berkomitmen untuk melindungi data pribadi Anda.",
+      "whoWeAre": "Siapa kami",
+      "whoWeAreContent": "Wihngo adalah platform komunitas yang berpusat pada cinta untuk orang-orang yang peduli terhadap burung. Platform ini dioperasikan di Uni Eropa dan sedang dalam proses pendaftaran di Estonia.",
+      "whatDataWeCollect": "Data yang kami kumpulkan",
+      "whatDataWeCollectIntro": "Saat Anda menggunakan aplikasi Wihngo, kami dapat mengumpulkan:",
+      "dataAccountInfo": "Informasi akun (nama, email, kata sandi)",
+      "dataBirdInfo": "Informasi burung yang Anda bagikan (spesies, nama, foto, cerita)",
+      "dataUserContent": "Konten yang dibuat pengguna (postingan, komentar, suka)",
+      "dataPaymentInfo": "Informasi pembayaran untuk transaksi dukungan",
+      "dataTechnicalInfo": "Data teknis (jenis perangkat, versi OS, alamat IP)",
+      "dataUsageInfo": "Data penggunaan dan analitik",
+      "whyWeCollectData": "Mengapa kami mengumpulkan data ini",
+      "whyWeCollectDataIntro": "Kami mengumpulkan data ini untuk:",
+      "reasonProvideService": "Menyediakan dan memelihara layanan Wihngo",
+      "reasonConnectUsers": "Menghubungkan orang-orang yang peduli terhadap burung",
+      "reasonProcessPayments": "Memproses pembayaran dukungan dan donasi",
+      "reasonImproveApp": "Meningkatkan kinerja aplikasi dan pengalaman pengguna",
+      "reasonMaintainSecurity": "Menjaga keamanan dan mencegah penipuan",
+      "legalBasis": "Dasar hukum",
+      "legalBasisContent": "Data diproses berdasarkan Peraturan Perlindungan Data Umum (GDPR) berdasarkan kepentingan yang sah dan kebutuhan kontraktual.",
+      "dataSharing": "Berbagi data",
+      "dataSharingContent": "Kami tidak menjual data Anda. Beberapa data mungkin diproses oleh penyedia layanan terpercaya (seperti pemroses pembayaran, hosting cloud, dan layanan analitik). Semua penyedia diwajibkan untuk melindungi data Anda.",
+      "dataRetention": "Penyimpanan data",
+      "dataRetentionContent": "Data hanya disimpan selama diperlukan untuk tujuan yang dijelaskan di atas, atau sebagaimana diwajibkan oleh hukum.",
+      "yourRights": "Hak Anda",
+      "yourRightsContent": "Berdasarkan GDPR, Anda memiliki hak untuk mengakses, memperbaiki, menghapus, atau mengekspor data pribadi Anda. Anda juga dapat keberatan terhadap pemrosesan atau meminta pembatasan.",
+      "contact": "Kontak",
+      "contactIntro": "Untuk pertanyaan terkait privasi atau untuk menggunakan hak Anda, hubungi:",
+      "footer": "Wihngo berkomitmen untuk transparansi dan melindungi informasi pribadi Anda sesuai dengan undang-undang perlindungan data UE."
     },
     "terms": {
       "intro": "By using the Wihngo app, you agree to the following terms.",
@@ -428,6 +498,63 @@
       "contact": "Contact",
       "contactIntro": "For questions or support, contact:",
       "footer": "Thank you for being part of the Wihngo community and caring about birds."
+    }
+  },
+  "faq": {
+    "title": "Pertanyaan yang Sering Diajukan",
+    "subtitle": "Semua yang perlu Anda ketahui tentang Wihngo",
+    "payouts": {
+      "title": "Pembayaran & Pendapatan",
+      "whenDoIGetPaid": "Kapan saya dibayar?",
+      "whenDoIGetPaidAnswer": "Pembayaran dilakukan sebulan sekali, biasanya pada tanggal 1-5 setiap bulan. Anda akan menerima pembayaran ketika saldo Anda mencapai ambang batas minimum €20.",
+      "whyMinimum": "Mengapa ada minimum €20?",
+      "whyMinimumAnswer": "Ambang batas pembayaran minimum membantu mengurangi biaya transaksi dan biaya pemrosesan. Ini memastikan bahwa Anda dan Wihngo dapat beroperasi secara efisien. Jika Anda tidak mencapai €20 dalam sebulan, saldo Anda akan dialihkan ke bulan berikutnya.",
+      "whatIfNeverReach": "Apa yang terjadi jika saya tidak pernah mencapai €20?",
+      "whatIfNeverReachAnswer": "Saldo Anda terakumulasi setiap bulan hingga Anda mencapai ambang batas €20. Setelah Anda mencapainya, Anda akan menerima pembayaran pada tanggal pembayaran terjadwal berikutnya. Dana Anda tidak pernah kedaluwarsa.",
+      "platformFee": "Apa itu biaya platform?",
+      "platformFeeAnswer": "Wihngo mengenakan biaya platform 5% pada semua dukungan yang diterima. Biaya ini membantu kami memelihara platform, memproses pembayaran, dan terus meningkatkan Wihngo. 95% dari setiap pembayaran dukungan langsung masuk ke Anda.",
+      "payoutMethods": "Metode pembayaran apa saja yang tersedia?",
+      "payoutMethodsAnswer": "Anda dapat menerima pembayaran melalui transfer bank (SEPA/IBAN), PayPal, atau cryptocurrency (USDC/EURC di Solana). Pilih metode yang paling sesuai untuk Anda di pengaturan pembayaran Anda."
+    },
+    "support": {
+      "title": "Mendukung Burung",
+      "howToSupport": "Bagaimana cara mendukung seekor burung?",
+      "howToSupportAnswer": "Ketuk tombol 'Dukungan' pada profil burung mana pun, pilih jumlah, pilih metode pembayaran Anda (PayPal atau crypto), dan selesaikan pembayaran. Dukungan bersifat sukarela dan langsung untuk membantu merawat burung.",
+      "whatIsSupport": "Untuk apa dukungan digunakan?",
+      "whatIsSupportAnswer": "Dukungan membantu pemilik burung dengan makanan, perawatan hewan, perumahan, dan pengeluaran lainnya. Ini adalah cara bagi komunitas untuk berkumpul dan membantu burung yang membutuhkan.",
+      "canICancel": "Bisakah saya membatalkan atau mengembalikan dana dukungan saya?",
+      "canICancelAnswer": "Semua dukungan bersifat sukarela dan final. Wihngo tidak memproses pengembalian dana. Pastikan Anda ingin mendukung seekor burung sebelum menyelesaikan pembayaran Anda."
+    },
+    "crypto": {
+      "title": "Pembayaran Kripto",
+      "whichCrypto": "Cryptocurrency mana yang didukung?",
+      "whichCryptoAnswer": "Wihngo mendukung USDC dan EURC di jaringan Solana. Ini adalah stablecoin, artinya nilainya dipatok ke Dolar AS dan Euro masing-masing.",
+      "whySolana": "Mengapa Solana?",
+      "whySolanaAnswer": "Solana menawarkan biaya transaksi yang sangat rendah (biasanya kurang dari $0,01) dan waktu konfirmasi yang cepat, menjadikannya ideal untuk pembayaran dukungan kecil hingga menengah.",
+      "isCryptoSafe": "Apakah crypto aman?",
+      "isCryptoSafeAnswer": "Transaksi crypto tidak dapat dibalik dan memerlukan perhatian yang cermat. Selalu periksa kembali alamat dompet dan jaringan sebelum mengirim. Wihngo tidak menyimpan crypto Anda dan tidak dapat membalikkan transaksi.",
+      "wrongNetwork": "Bagaimana jika saya mengirim di jaringan yang salah?",
+      "wrongNetworkAnswer": "Mengirim crypto ke jaringan yang salah akan mengakibatkan kehilangan dana permanen. Selalu konfirmasi bahwa Anda mengirim di jaringan yang benar (Solana). Wihngo tidak dapat memulihkan dana yang dikirim ke jaringan yang salah.",
+      "cryptoPayoutVolatility": "Bagaimana dengan volatilitas pembayaran crypto?",
+      "cryptoPayoutVolatilityAnswer": "Jika Anda memilih untuk menerima pembayaran dalam crypto, Anda menerima risiko volatilitas pasar. Nilai pembayaran Anda dapat berubah antara saat dihitung dan saat Anda menerimanya. Wihngo tidak menjamin nilai tertentu."
+    },
+    "account": {
+      "title": "Akun & Privasi",
+      "howToDeleteAccount": "Bagaimana cara menghapus akun saya?",
+      "howToDeleteAccountAnswer": "Buka Pengaturan > Pengaturan Privasi > Hapus Akun. Harap dicatat bahwa menghapus akun Anda bersifat permanen dan tidak dapat dibatalkan.",
+      "isDataSafe": "Apakah data saya aman?",
+      "isDataSafeAnswer": "Ya. Wihngo mengikuti peraturan GDPR dan menggunakan enkripsi untuk melindungi data Anda. Kami tidak pernah menjual informasi pribadi Anda.",
+      "canIChangeEmail": "Bisakah saya mengubah alamat email saya?",
+      "canIChangeEmailAnswer": "Saat ini, perubahan email harus diminta melalui support@wihngo.com. Kami sedang mengerjakan untuk menambahkan fitur ini langsung ke aplikasi."
+    },
+    "legal": {
+      "title": "Hukum & Kepatuhan",
+      "isWihngoRegulated": "Apakah Wihngo lembaga keuangan yang diatur?",
+      "isWihngoRegulatedAnswer": "Tidak. Wihngo adalah platform komunitas, bukan bank atau lembaga keuangan. Kami memfasilitasi dukungan sukarela antara pengguna. Wihngo menyimpan dana sementara untuk pembayaran bulanan tetapi tidak menawarkan layanan keuangan.",
+      "taxResponsibility": "Siapa yang bertanggung jawab atas pajak?",
+      "taxResponsibilityAnswer": "Pemilik burung bertanggung jawab untuk melaporkan dan membayar pajak yang berlaku atas dukungan yang diterima melalui Wihngo. Kami merekomendasikan untuk berkonsultasi dengan profesional pajak di yurisdiksi Anda.",
+      "whereIsWihngoRegistered": "Di mana Wihngo terdaftar?",
+      "whereIsWihngoRegisteredAnswer": "Wihngo sedang dalam proses pendaftaran di Estonia dan beroperasi di dalam Uni Eropa."
     }
   }
 }

@@ -55,17 +55,20 @@
     "title": "Tạo Câu Chuyện",
     "post": "Đăng",
     "posting": "Đang đăng...",
-    "placeholder": "Chia sẻ câu chuyện của bạn...",
+    "placeholder": "Viết câu chuyện của bạn ở đây... (tối đa 5000 ký tự)",
     "characterCount": "{{count}}/5000",
     "tagBird": "Gắn Thẻ Chim",
     "required": "*",
     "optional": "(Tùy chọn)",
-    "selectBird": "Chọn một con chim",
+    "selectBird": "Chọn con chim để gắn thẻ (bắt buộc)",
     "change": "Thay đổi",
     "mood": "Tâm Trạng",
     "chooseMood": "Chọn tâm trạng",
-    "addPhoto": "Thêm Ảnh",
-    "addVideo": "Thêm Video",
+    "moodSubtitle": "Tùy chọn - bỏ qua nếu bạn muốn",
+    "longPressMoodInfo": "Nhấn giữ bất kỳ tâm trạng nào để xem chi tiết và ví dụ",
+    "skipNoMood": "Bỏ qua / Không có Tâm Trạng",
+    "addPhoto": "Thêm Ảnh (tùy chọn, hoặc video)",
+    "addVideo": "Thêm Video (tùy chọn, hoặc ảnh)",
     "chooseOption": "Chọn một tùy chọn",
     "takePhoto": "Chụp Ảnh",
     "recordVideo": "Quay Video",
@@ -98,8 +101,50 @@
     "tip1": "• Hãy chân thực và chia sẻ trải nghiệm của bạn",
     "tip2": "• Gắn thẻ một con chim (bắt buộc)",
     "tip3": "• Thêm tâm trạng để thể hiện cảm xúc của bạn (tùy chọn)",
-    "tip4": "• Thêm ảnh hoặc video để làm cho nó hấp dẫn hơn",
+    "tip4": "• Thêm một ảnh hoặc video (không phải cả hai) để làm cho nó hấp dẫn hơn",
     "tip5": "• Video: Tối đa 60 giây, 200MB"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "Tình Yêu và Gắn Kết",
+      "description": "Tình cảm, niềm tin, ôm ấp, gắn bó",
+      "example": "\"Cuối cùng nó ngủ trên vai tôi…\""
+    },
+    "newBeginning": {
+      "label": "Khởi Đầu Mới",
+      "description": "Chim mới, nhận nuôi, giải cứu, ngày đầu tiên",
+      "example": "\"Chào mừng về nhà, Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "Tiến Bộ và Thành Công",
+      "description": "Thành công trong huấn luyện, cải thiện sức khỏe, cốt mốc",
+      "example": "\"Hôm nay nó đã học được cách nói tên của mình!\""
+    },
+    "funnyMoment": {
+      "label": "Khoảnh Khắc Hài Hước",
+      "description": "Hành vi ngốc nghếch, hành động bất ngờ",
+      "example": "\"Nó lại đánh cắp chìa khóa của tôi…\""
+    },
+    "peacefulMoment": {
+      "label": "Khoảnh Khắc Yên Bình",
+      "description": "Bình yên, đẹp đẽ, sự im lặng cảm xúc",
+      "example": "\"Chỉ nhìn nó tận hưởng ánh nắng…\""
+    },
+    "lossAndMemory": {
+      "label": "Mất Mát và Kỷ Niệm",
+      "description": "Qua đời, tưởng nhớ, thương tiếc",
+      "example": "\"Bạn sẽ mãi mãi ở bên tôi…\""
+    },
+    "careAndHealth": {
+      "label": "Chăm Sóc và Sức Khỏe",
+      "description": "Khám thú y, phục hồi, lời khuyên, nhận thức",
+      "example": "\"Cập nhật sau phẫu thuật…\""
+    },
+    "dailyLife": {
+      "label": "Cuộc Sống Hàng Ngày",
+      "description": "Thói quen bình thường, khoảnh khắc hàng ngày",
+      "example": "\"Buổi sáng thường ngày của chúng tôi cùng nhau\""
+    }
   },
   "stories": {
     "title": "Câu Chuyện",
@@ -130,7 +175,15 @@
     "tipsCompellingTagline": "• Viết một slogan hấp dẫn thể hiện cá tính",
     "tipsIncludeDetails": "• Bao gồm thông tin chi tiết về chăm sóc, hành vi và nhu cầu",
     "tipsBeHonest": "• Trung thực và minh bạch với những người ủng hộ",
-    "loadingBirdData": "Đang tải dữ liệu chim..."
+    "loadingBirdData": "Đang tải dữ liệu chim...",
+    "namePlaceholder": "Nhập tên chim (bắt buộc, ví dụ: Charlie)",
+    "speciesPlaceholder": "Tìm kiếm và chọn loài (bắt buộc)",
+    "taglinePlaceholder": "Một mô tả ngắn gọn, hấp dẫn",
+    "descriptionPlaceholder": "Mô tả con chim này (tùy chọn - tính cách, thói quen, v.v.)",
+    "agePlaceholder": "Nhập tuổi (tùy chọn, ví dụ: 2 tuổi)",
+    "locationPlaceholder": "Tìm kiếm thành phố (tùy chọn)",
+    "profileImagePlaceholder": "Nhấn để chọn ảnh đại diện (bắt buộc)",
+    "coverImagePlaceholder": "Nhấn để chọn ảnh bìa (tùy chọn)"
   },
   "birdProfile": {
     "loadingBird": "Đang tải chim...",
@@ -301,11 +354,11 @@
     "payoutSettings": "Cài đặt thanh toán",
     "termsOfService": "Điều khoản dịch vụ",
     "languageChangeError": "Không thể thay đổi ngôn ngữ",
-    "appSettings": "App Settings",
-    "theme": "Theme",
-    "support": "Support",
-    "helpSupport": "Help & Support",
-    "privacyPolicy": "Privacy Policy"
+    "appSettings": "Cài Đặt Ứng Dụng",
+    "theme": "Giao Diện",
+    "support": "Hỗ Trợ",
+    "helpSupport": "Trợ Giúp và Hỗ Trợ",
+    "privacyPolicy": "Chính Sách Bảo Mật"
   },
   "welcome": {
     "appTitle": "Whingo",
@@ -337,7 +390,24 @@
     "daysAgo": "{{count}} ngày trước"
   },
   "headers": {
-    "supportBird": "Hỗ trợ {{birdName}}"
+    "search": "Tìm kiếm",
+    "settings": "Cài đặt",
+    "editProfile": "Chỉnh sửa Hồ sơ",
+    "notifications": "Thông báo",
+    "privacy": "Quyền riêng tư",
+    "paymentMethods": "Phương thức Thanh toán",
+    "payoutSettings": "Cài đặt Thanh toán",
+    "myBirds": "Chim của tôi",
+    "lovedBirds": "Chim yêu thích",
+    "supportedBirds": "Chim được hỗ trợ",
+    "story": "Câu chuyện",
+    "support": "Hỗ trợ",
+    "supportBird": "Hỗ trợ {{birdName}}",
+    "privacyPolicy": "Chính sách Bảo mật",
+    "termsOfService": "Điều khoản Dịch vụ",
+    "faq": "Câu hỏi Thường gặp",
+    "editStory": "Chỉnh sửa Câu chuyện",
+    "payWithCrypto": "Thanh toán bằng Crypto"
   },
   "support": {
     "selectAmount": "Chọn số tiền",
@@ -367,37 +437,37 @@
   },
   "chooseLanguage": "Chọn ngôn ngữ",
   "legal": {
-    "lastUpdated": "Last updated: December 15, 2025",
+    "lastUpdated": "Cập nhật lần cuối: 15 tháng 12 năm 2025",
     "privacy": {
-      "intro": "Wihngo respects your privacy and is committed to protecting your personal data.",
-      "whoWeAre": "Who we are",
-      "whoWeAreContent": "Wihngo is a love-centric community platform for people who care about birds. The platform is operated in the European Union and is in the process of registration in Estonia.",
-      "whatDataWeCollect": "What data we collect",
-      "whatDataWeCollectIntro": "When you use the Wihngo app, we may collect:",
-      "dataAccountInfo": "Account information (name, email, password)",
-      "dataBirdInfo": "Bird information you share (species, name, photos, stories)",
-      "dataUserContent": "User-generated content (posts, comments, likes)",
-      "dataPaymentInfo": "Payment information for support transactions",
-      "dataTechnicalInfo": "Technical data (device type, OS version, IP address)",
-      "dataUsageInfo": "Usage data and analytics",
-      "whyWeCollectData": "Why we collect this data",
-      "whyWeCollectDataIntro": "We collect this data to:",
-      "reasonProvideService": "Provide and maintain the Wihngo service",
-      "reasonConnectUsers": "Connect people who care about birds",
-      "reasonProcessPayments": "Process support payments and donations",
-      "reasonImproveApp": "Improve app performance and user experience",
-      "reasonMaintainSecurity": "Maintain security and prevent fraud",
-      "legalBasis": "Legal basis",
-      "legalBasisContent": "Data is processed under the General Data Protection Regulation (GDPR) based on legitimate interest and contractual necessity.",
-      "dataSharing": "Data sharing",
-      "dataSharingContent": "We do not sell your data. Some data may be processed by trusted service providers (such as payment processors, cloud hosting, and analytics services). All providers are required to protect your data.",
-      "dataRetention": "Data retention",
-      "dataRetentionContent": "Data is kept only as long as necessary for the purposes described above, or as required by law.",
-      "yourRights": "Your rights",
-      "yourRightsContent": "Under GDPR, you have the right to access, correct, delete, or export your personal data. You can also object to processing or request restriction.",
-      "contact": "Contact",
-      "contactIntro": "For privacy-related questions or to exercise your rights, contact:",
-      "footer": "Wihngo is committed to transparency and protecting your personal information in accordance with EU data protection laws."
+      "intro": "Wihngo tôn trọng quyền riêng tư của bạn và cam kết bảo vệ dữ liệu cá nhân của bạn.",
+      "whoWeAre": "Chúng tôi là ai",
+      "whoWeAreContent": "Wihngo là một nền tảng cộng đồng lấy tình yêu làm trung tâm dành cho những người quan tâm đến chim. Nền tảng hoạt động tại Liên minh Châu Âu và đang trong quá trình đăng ký tại Estonia.",
+      "whatDataWeCollect": "Dữ liệu chúng tôi thu thập",
+      "whatDataWeCollectIntro": "Khi bạn sử dụng ứng dụng Wihngo, chúng tôi có thể thu thập:",
+      "dataAccountInfo": "Thông tin tài khoản (tên, email, mật khẩu)",
+      "dataBirdInfo": "Thông tin về chim mà bạn chia sẻ (loài, tên, ảnh, câu chuyện)",
+      "dataUserContent": "Nội dung do người dùng tạo (bài viết, bình luận, lượt thích)",
+      "dataPaymentInfo": "Thông tin thanh toán cho các giao dịch hỗ trợ",
+      "dataTechnicalInfo": "Dữ liệu kỹ thuật (loại thiết bị, phiên bản hệ điều hành, địa chỉ IP)",
+      "dataUsageInfo": "Dữ liệu sử dụng và phân tích",
+      "whyWeCollectData": "Tại sao chúng tôi thu thập dữ liệu này",
+      "whyWeCollectDataIntro": "Chúng tôi thu thập dữ liệu này để:",
+      "reasonProvideService": "Cung cấp và duy trì dịch vụ Wihngo",
+      "reasonConnectUsers": "Kết nối những người quan tâm đến chim",
+      "reasonProcessPayments": "Xử lý thanh toán hỗ trợ và quyên góp",
+      "reasonImproveApp": "Cải thiện hiệu suất ứng dụng và trải nghiệm người dùng",
+      "reasonMaintainSecurity": "uy trì bảo mật và ngăn chặn gian lận",
+      "legalBasis": "Cơ sở pháp lý",
+      "legalBasisContent": "Dữ liệu được xử lý theo Quy định Bảo vệ Dữ liệu Chung (GDPR) dựa trên lợi ích hợp pháp và sự cần thiết theo hợp đồng.",
+      "dataSharing": "Chia sẻ dữ liệu",
+      "dataSharingContent": "Chúng tôi không bán dữ liệu của bạn. Một số dữ liệu có thể được xử lý bởi các nhà cung cấp dịch vụ đáng tin cậy (chẳng hạn như bên xử lý thanh toán, lưu trữ đám mây và dịch vụ phân tích). Tất cả các nhà cung cấp đều bắt buộc phải bảo vệ dữ liệu của bạn.",
+      "dataRetention": "Lưu giữ dữ liệu",
+      "dataRetentionContent": "Dữ liệu chỉ được giữ trong khoảng thời gian cần thiết cho các mục đích đã mô tả ở trên hoặc theo yêu cầu của pháp luật.",
+      "yourRights": "Quyền của bạn",
+      "yourRightsContent": "Theo GDPR, bạn có quyền truy cập, sửa chữa, xóa hoặc xuất dữ liệu cá nhân của mình. Bạn cũng có thể phản đối việc xử lý hoặc yêu cầu hạn chế.",
+      "contact": "Liên hệ",
+      "contactIntro": "Để đặt câu hỏi liên quan đến quyền riêng tư hoặc thực hiện quyền của bạn, vui lòng liên hệ:",
+      "footer": "Wihngo cam kết minh bạch và bảo vệ thông tin cá nhân của bạn theo luật bảo vệ dữ liệu của EU."
     },
     "terms": {
       "intro": "By using the Wihngo app, you agree to the following terms.",
@@ -428,6 +498,63 @@
       "contact": "Contact",
       "contactIntro": "For questions or support, contact:",
       "footer": "Thank you for being part of the Wihngo community and caring about birds."
+    }
+  },
+  "faq": {
+    "title": "Câu Hỏi Thường Gặp",
+    "subtitle": "Mọi thứ bạn cần biết về Wihngo",
+    "payouts": {
+      "title": "Thanh Toán và Thu Nhập",
+      "whenDoIGetPaid": "Khi nào tôi được thanh toán?",
+      "whenDoIGetPaidAnswer": "Thanh toán diễn ra mỗi tháng một lần, thường vào ngày 1-5 mỗi tháng. Bạn sẽ nhận được thanh toán khi số dư của bạn đạt ngưỡng tối thiểu €20.",
+      "whyMinimum": "Tại sao có mức tối thiểu €20?",
+      "whyMinimumAnswer": "Ngưỡng thanh toán tối thiểu giúp giảm phí giao dịch và chi phí xử lý. Điều này đảm bảo rằng cả bạn và Wihngo đều có thể hoạt động hiệu quả. Nếu bạn không đạt €20 trong một tháng, số dư của bạn sẽ được chuyển sang tháng tiếp theo.",
+      "whatIfNeverReach": "Điều gì xảy ra nếu tôi không bao giờ đạt €20?",
+      "whatIfNeverReachAnswer": "Số dư của bạn tích lũy mỗi tháng cho đến khi bạn đạt ngưỡng €20. Khi bạn đạt được, bạn sẽ nhận được thanh toán vào ngày thanh toán đã lên lịch tiếp theo. Tiền của bạn không bao giờ hết hạn.",
+      "platformFee": "Phí nền tảng là gì?",
+      "platformFeeAnswer": "Wihngo tính phí nền tảng 5% trên tất cả hỗ trợ nhận được. Phí này giúp chúng tôi duy trì nền tảng, xử lý thanh toán và tiếp tục cải thiện Wihngo. 95% mỗi khoản thanh toán hỗ trợ đi trực tiếp đến bạn.",
+      "payoutMethods": "Có những phương thức thanh toán nào?",
+      "payoutMethodsAnswer": "Bạn có thể nhận thanh toán qua chuyển khoản ngân hàng (SEPA/IBAN), PayPal hoặc tiền điện tử (USDC/EURC trên Solana). Chọn phương thức hoạt động tốt nhất cho bạn trong cài đặt thanh toán của bạn."
+    },
+    "support": {
+      "title": "Hỗ Trợ Chim",
+      "howToSupport": "Làm thế nào để hỗ trợ một con chim?",
+      "howToSupportAnswer": "Nhấn nút 'Hỗ trợ' trên hồ sơ của bất kỳ con chim nào, chọn số tiền, chọn phương thức thanh toán của bạn (PayPal hoặc crypto) và hoàn tất thanh toán. Hỗ trợ là tự nguyện và trực tiếp giúp chăm sóc chim.",
+      "whatIsSupport": "Hỗ trợ được sử dụng để làm gì?",
+      "whatIsSupportAnswer": "Hỗ trợ giúp chủ chim với thức ăn, chăm sóc thú y, nhà ở và các chi phí khác. Đó là cách để cộng đồng đoàn kết và giúp đỡ những con chim cần giúp đỡ.",
+      "canICancel": "Tôi có thể hủy hoặc hoàn tiền hỗ trợ của mình không?",
+      "canICancelAnswer": "Tất cả hỗ trợ đều là tự nguyện và cuối cùng. Wihngo không xử lý hoàn tiền. Vui lòng đảm bảo bạn muốn hỗ trợ một con chim trước khi hoàn tất thanh toán của bạn."
+    },
+    "crypto": {
+      "title": "Thanh Toán Crypto",
+      "whichCrypto": "Những loại tiền điện tử nào được hỗ trợ?",
+      "whichCryptoAnswer": "Wihngo hỗ trợ USDC và EURC trên mạng Solana. Đây là các stablecoin, có nghĩa là giá trị của chúng được gắn với Đô la Mỹ và Euro tương ứng.",
+      "whySolana": "Tại sao lại là Solana?",
+      "whySolanaAnswer": "Solana cung cấp phí giao dịch cực kỳ thấp (thường dưới $0.01) và thời gian xác nhận nhanh, làm cho nó lý tưởng cho các khoản thanh toán hỗ trợ nhỏ đến trung bình.",
+      "isCryptoSafe": "Crypto có an toàn không?",
+      "isCryptoSafeAnswer": "Giao dịch crypto không thể đảo ngược và yêu cầu sự chú ý cẩn thận. Luôn kiểm tra kỹ địa chỉ ví và mạng trước khi gửi. Wihngo không giữ crypto của bạn và không thể đảo ngược giao dịch.",
+      "wrongNetwork": "Điều gì xảy ra nếu tôi gửi nhầm mạng?",
+      "wrongNetworkAnswer": "Gửi crypto đến nhầm mạng sẽ dẫn đến mất tiền vĩnh viễn. Luôn xác nhận rằng bạn đang gửi trên đúng mạng (Solana). Wihngo không thể khôi phục tiền được gửi đến nhầm mạng.",
+      "cryptoPayoutVolatility": "Còn về sự biến động thanh toán crypto thì sao?",
+      "cryptoPayoutVolatilityAnswer": "Nếu bạn chọn nhận thanh toán bằng crypto, bạn chấp nhận rủi ro biến động thị trường. Giá trị thanh toán của bạn có thể thay đổi giữa khi nó được tính toán và khi bạn nhận được nó. Wihngo không đảm bảo bất kỳ giá trị cụ thể nào."
+    },
+    "account": {
+      "title": "Tài Khoản và Bảo Mật",
+      "howToDeleteAccount": "Làm thế nào để xóa tài khoản của tôi?",
+      "howToDeleteAccountAnswer": "Đi đến Cài đặt > Cài đặt Bảo mật > Xóa Tài khoản. Xin lưu ý rằng việc xóa tài khoản của bạn là vĩnh viễn và không thể hoàn tác.",
+      "isDataSafe": "Dữ liệu của tôi có an toàn không?",
+      "isDataSafeAnswer": "Có. Wihngo tuân theo các quy định GDPR và sử dụng mã hóa để bảo vệ dữ liệu của bạn. Chúng tôi không bao giờ bán thông tin cá nhân của bạn.",
+      "canIChangeEmail": "Tôi có thể thay đổi địa chỉ email của mình không?",
+      "canIChangeEmailAnswer": "Hiện tại, thay đổi email phải được yêu cầu thông qua support@wihngo.com. Chúng tôi đang làm việc để thêm tính năng này trực tiếp vào ứng dụng."
+    },
+    "legal": {
+      "title": "Pháp Lý và Tuân Thủ",
+      "isWihngoRegulated": "Wihngo có phải là tổ chức tài chính được quản lý không?",
+      "isWihngoRegulatedAnswer": "Không. Wihngo là một nền tảng cộng đồng, không phải ngân hàng hay tổ chức tài chính. Chúng tôi tạo điều kiện hỗ trợ tự nguyện giữa người dùng. Wihngo tạm giữ tiền cho các khoản thanh toán hàng tháng nhưng không cung cấp dịch vụ tài chính.",
+      "taxResponsibility": "Ai chịu trách nhiệm về thuế?",
+      "taxResponsibilityAnswer": "Chủ chim chịu trách nhiệm báo cáo và trả bất kỳ loại thuế áp dụng nào về hỗ trợ nhận được thông qua Wihngo. Chúng tôi khuyên bạn nên tham khảo ý kiến chuyên gia thuế trong khu vực pháp lý của bạn.",
+      "whereIsWihngoRegistered": "Wihngo được đăng ký ở đâu?",
+      "whereIsWihngoRegisteredAnswer": "Wihngo đang trong quá trình đăng ký tại Estonia và hoạt động trong Liên minh Châu Âu."
     }
   }
 }

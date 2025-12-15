@@ -1,5 +1,6 @@
 import { STORY_MOODS, StoryMode } from "@/types/story";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
 type MoodBadgeProps = {
@@ -9,11 +10,27 @@ type MoodBadgeProps = {
 };
 
 export function MoodBadge({ mode, size = "small", style }: MoodBadgeProps) {
+  const { t } = useTranslation();
+
   // Don't render anything if no mood
   if (!mode) return null;
 
   const moodInfo = STORY_MOODS.find((m) => m.value === mode);
   if (!moodInfo) return null;
+
+  const getMoodKey = (value: StoryMode): string => {
+    const keyMap: Record<StoryMode, string> = {
+      [StoryMode.LoveAndBond]: "loveAndBond",
+      [StoryMode.NewBeginning]: "newBeginning",
+      [StoryMode.ProgressAndWins]: "progressAndWins",
+      [StoryMode.FunnyMoment]: "funnyMoment",
+      [StoryMode.PeacefulMoment]: "peacefulMoment",
+      [StoryMode.LossAndMemory]: "lossAndMemory",
+      [StoryMode.CareAndHealth]: "careAndHealth",
+      [StoryMode.DailyLife]: "dailyLife",
+    };
+    return keyMap[value];
+  };
 
   const sizeStyles = {
     small: styles.containerSmall,
@@ -39,7 +56,7 @@ export function MoodBadge({ mode, size = "small", style }: MoodBadgeProps) {
         {moodInfo.emoji}
       </Text>
       <Text style={[styles.label, labelSizeStyles[size]]}>
-        {moodInfo.label}
+        {t(`moods.${getMoodKey(mode)}.label`)}
       </Text>
     </View>
   );

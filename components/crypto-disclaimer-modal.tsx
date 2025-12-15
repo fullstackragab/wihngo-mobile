@@ -57,9 +57,12 @@ export default function CryptoDisclaimerModal({
             {network && walletAddress && (
               <View style={styles.addressBox}>
                 <Text style={styles.addressLabel}>
-                  Network: <Text style={styles.networkText}>{network}</Text>
+                  {t("crypto.networkLabel")}{" "}
+                  <Text style={styles.networkText}>{network}</Text>
                 </Text>
-                <Text style={styles.addressLabel}>Address:</Text>
+                <Text style={styles.addressLabel}>
+                  {t("crypto.addressLabel")}
+                </Text>
                 <Text style={styles.addressText}>{walletAddress}</Text>
               </View>
             )}
@@ -71,7 +74,9 @@ export default function CryptoDisclaimerModal({
               </Text>
             </View>
 
-            <Text style={styles.sectionTitle}>Important Disclaimers:</Text>
+            <Text style={styles.sectionTitle}>
+              {t("crypto.importantDisclaimers")}
+            </Text>
 
             <View style={styles.disclaimerList}>
               <View style={styles.disclaimerItem}>
@@ -129,7 +134,7 @@ export default function CryptoDisclaimerModal({
                 )}
               </View>
               <Text style={styles.checkboxLabel}>
-                {t("crypto.iUnderstand")} and accept all risks
+                {t("crypto.iUnderstand")} {t("crypto.andAcceptAllRisks")}
               </Text>
             </TouchableOpacity>
 

@@ -303,12 +303,6 @@ export default function CreateStory() {
 
         {/* Select Bird */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>
-            {t("createStory.tagBird")}{" "}
-            <Text style={styles.requiredLabel}>
-              {t("createStory.required")}
-            </Text>
-          </Text>
           {selectedBird ? (
             <View style={styles.selectedBirdCard}>
               <Image
@@ -350,12 +344,6 @@ export default function CreateStory() {
 
         {/* Mood Selection (Optional) */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>
-            {t("createStory.mood")}{" "}
-            <Text style={styles.optionalLabel}>
-              {t("createStory.optional")}
-            </Text>
-          </Text>
           {selectedMood ? (
             <View style={styles.moodSelectedContainer}>
               <MoodBadge mode={selectedMood} size="medium" />
@@ -394,12 +382,6 @@ export default function CreateStory() {
 
         {/* Image Upload */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>
-            {t("createStory.addPhoto")}{" "}
-            <Text style={styles.optionalLabel}>
-              {t("createStory.optional")}
-            </Text>
-          </Text>
           {imageUri ? (
             <View>
               <Image
@@ -432,12 +414,6 @@ export default function CreateStory() {
 
         {/* Video Upload */}
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>
-            {t("createStory.addVideo")}{" "}
-            <Text style={styles.optionalLabel}>
-              {t("createStory.optional")}
-            </Text>
-          </Text>
           {videoUri ? (
             <View>
               <View style={styles.videoPreview}>

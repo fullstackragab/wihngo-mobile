@@ -298,7 +298,7 @@ export default function EditStory() {
           <TouchableOpacity onPress={() => router.back()}>
             <FontAwesome6 name="xmark" size={24} color="#2C3E50" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Edit Story</Text>
+          <Text style={styles.headerTitle}>{t("headers.editStory")}</Text>
           <TouchableOpacity
             onPress={handleSave}
             disabled={saving || !content.trim() || !selectedBird}

@@ -132,12 +132,6 @@ export default function SpeciesAutocomplete({
 
   return (
     <View style={[styles.container, style]}>
-      {/* Label */}
-      <Text style={styles.label}>
-        {label}
-        {required && <Text style={styles.required}> *</Text>}
-      </Text>
-
       {/* Input */}
       <TextInput
         style={[

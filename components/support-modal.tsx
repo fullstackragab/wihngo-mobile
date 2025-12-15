@@ -21,6 +21,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
@@ -89,6 +90,7 @@ export default function SupportModal({
   const { user, logout } = useAuth();
   const { addNotification } = useNotifications();
   const router = useRouter();
+  const { t } = useTranslation();
   const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
     null
   );
@@ -481,14 +483,19 @@ export default function SupportModal({
 
     return (
       <View>
-        <Text style={styles.selectorTitle}>Select Cryptocurrency</Text>
-        <Text style={styles.selectorSubtitle}>Amount: ${selectedAmount}</Text>
+        <Text style={styles.selectorTitle}>
+          {t("support.selectCryptocurrency")}
+        </Text>
+        <Text style={styles.selectorSubtitle}>
+          {t("support.amountLabel", { amount: selectedAmount })}
+        </Text>
 
         <View style={styles.infoBox}>
           <FontAwesome6 name="circle-info" size={14} color="#007AFF" />
           <Text style={styles.infoBoxText}>
-            ✅ Supported: USDC, EURC{"\n"}
-            💡 Solana & Stellar recommended (lowest fees ~$0.0003)
+            {t("support.supportedCurrencies")}
+            {"\n"}
+            {t("support.lowestFees")}
           </Text>
         </View>
 
@@ -526,10 +533,14 @@ export default function SupportModal({
               onPress={() => setSelectedCurrency(null)}
             >
               <Feather name="arrow-left" size={20} color="#007AFF" />
-              <Text style={styles.backButtonText}>Back to currencies</Text>
+              <Text style={styles.backButtonText}>
+                {t("support.backToCurrencies")}
+              </Text>
             </TouchableOpacity>
 
-            <Text style={styles.networkTitle}>Select Network</Text>
+            <Text style={styles.networkTitle}>
+              {t("support.selectNetwork")}
+            </Text>
             <View style={styles.networkList}>
               {currencies
                 .find((c) => c.code === selectedCurrency)
@@ -563,7 +574,9 @@ export default function SupportModal({
         <View style={styles.modalContainer}>
           <View style={styles.header}>
             <Text style={styles.title}>
-              {isPlatformSupport ? "Support Wihngo" : `Support ${birdName}`}
+              {isPlatformSupport
+                ? t("support.support") + " Wihngo"
+                : t("support.support") + ` ${birdName}`}
             </Text>
             <TouchableOpacity
               onPress={() => {
@@ -589,7 +602,9 @@ export default function SupportModal({
                   onPress={resetPaymentState}
                 >
                   <Feather name="arrow-left" size={20} color="#007AFF" />
-                  <Text style={styles.backButtonText}>Back to amounts</Text>
+                  <Text style={styles.backButtonText}>
+                    {t("support.backToAmounts")}
+                  </Text>
                 </TouchableOpacity>
 
                 <CryptoPaymentQR
@@ -626,30 +641,28 @@ export default function SupportModal({
                   </View>
 
                   <Text style={styles.confirmationTitle}>
-                    ⚠️ Network Warning
+                    {t("support.confirmNetworkWarning")}
                   </Text>
 
                   <Text style={styles.confirmationText}>
-                    Crypto transactions are irreversible. Please make sure you
-                    are sending on the correct network.
+                    {t("support.confirmNetworkText")}
                   </Text>
 
                   <Text style={styles.confirmationWarning}>
-                    Sending on the wrong network will result in permanent loss
-                    of funds. Wihngo cannot recover lost or incorrectly sent
-                    funds.
+                    {t("support.transfersCannotBeRecovered")}
                   </Text>
 
                   <View style={styles.disclaimerBox}>
                     <Text style={styles.disclaimerText}>
-                      • Wihngo is not a wallet{"\n"}• Wihngo does not guarantee
-                      delivery{"\n"}• Crypto support is peer-to-peer{"\n"}• All
-                      transactions are final
+                      • {t("crypto.wihngoNotWallet")}
+                      {"\n"}• {t("crypto.wihngoNoGuarantee")}
+                      {"\n"}• {t("crypto.cryptoPeerToPeer")}
+                      {"\n"}• {t("common.ok")}
                     </Text>
                   </View>
 
                   <Text style={styles.confirmationQuestion}>
-                    Do you understand and want to continue?
+                    {t("support.doYouUnderstand")}
                   </Text>
 
                   <TouchableOpacity
@@ -668,7 +681,9 @@ export default function SupportModal({
                         <FontAwesome6 name="check" size={14} color="#fff" />
                       )}
                     </View>
-                    <Text style={styles.checkboxLabel}>Do not show again</Text>
+                    <Text style={styles.checkboxLabel}>
+                      {t("support.doNotShowAgain")}
+                    </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -690,7 +705,7 @@ export default function SupportModal({
                     }}
                   >
                     <Text style={styles.confirmButtonText}>
-                      I Understand - Show Address
+                      {t("support.iUnderstandShowAddress")}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -709,13 +724,15 @@ export default function SupportModal({
                 >
                   <Feather name="arrow-left" size={20} color="#007AFF" />
                   <Text style={styles.backButtonText}>
-                    Back to payment methods
+                    {t("support.backToPaymentMethods")}
                   </Text>
                 </TouchableOpacity>
 
-                <Text style={styles.selectorTitle}>Select Network</Text>
+                <Text style={styles.selectorTitle}>
+                  {t("support.selectNetwork")}
+                </Text>
                 <Text style={styles.selectorSubtitle}>
-                  Choose the blockchain network you prefer
+                  {t("support.chooseBlockchainNetwork")}
                 </Text>
 
                 <View style={styles.networkList}>
@@ -754,13 +771,15 @@ export default function SupportModal({
                   <Text style={styles.backButtonText}>Back to networks</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.selectorTitle}>Select Currency</Text>
+                <Text style={styles.selectorTitle}>
+                  {t("support.selectCurrency")}
+                </Text>
                 <Text style={styles.selectorSubtitle}>
-                  Available on{" "}
-                  {
-                    NETWORK_OPTIONS.find((n) => n.network === cryptoNetwork)
-                      ?.name
-                  }
+                  {t("support.availableOn", {
+                    network: NETWORK_OPTIONS.find(
+                      (n) => n.network === cryptoNetwork
+                    )?.name,
+                  })}
                 </Text>
 
                 <View style={styles.currencyList}>
@@ -808,7 +827,7 @@ export default function SupportModal({
                   ) : (
                     <View style={styles.emptyState}>
                       <Text style={styles.emptyStateText}>
-                        Please select a network first
+                        {t("support.pleaseSelectNetwork")}
                       </Text>
                     </View>
                   )}
@@ -818,8 +837,8 @@ export default function SupportModal({
               <>
                 <Text style={styles.subtitle}>
                   {isPlatformSupport
-                    ? "Help us keep Wihngo running and support bird conservation!"
-                    : "Choose your payment method to support this amazing bird"}
+                    ? t("support.platformSubtitle")
+                    : t("support.birdSubtitle")}
                 </Text>
 
                 {/* Payment Method Selection - Show First */}
@@ -839,14 +858,14 @@ export default function SupportModal({
                         await Linking.openURL(paypalUrl);
                         addNotification(
                           "recommendation",
-                          "Opening PayPal",
-                          "Complete your donation on PayPal"
+                          t("support.openingPayPal"),
+                          t("support.completeYourDonation")
                         );
                       } else {
                         addNotification(
                           "recommendation",
-                          "Cannot Open PayPal",
-                          "Unable to open PayPal. Please try again later."
+                          t("support.cannotOpenPayPal"),
+                          t("support.unableToOpenPayPal")
                         );
                       }
                     }}
@@ -861,7 +880,7 @@ export default function SupportModal({
                           PayPal
                         </Text>
                         <Text style={styles.paymentMethodDescription}>
-                          Quick & secure payment
+                          {t("support.quickSecurePayment")}
                         </Text>
                       </>
                     )}
@@ -888,7 +907,7 @@ export default function SupportModal({
                           Crypto
                         </Text>
                         <Text style={styles.paymentMethodDescription}>
-                          USDC, EURC
+                          {t("support.cryptoCurrencies")}
                         </Text>
                       </>
                     )}
@@ -899,10 +918,10 @@ export default function SupportModal({
                   <View style={styles.platformSupportSection}>
                     <View style={styles.divider} />
                     <Text style={styles.platformSupportTitle}>
-                      ❤️ Also Support Wihngo Platform
+                      {t("support.platformSupportTitle")}
                     </Text>
                     <Text style={styles.platformSupportText}>
-                      Help us continue building features for bird lovers!
+                      {t("support.platformSupportText")}
                     </Text>
                     <TouchableOpacity
                       style={styles.supportWihngoButton}
@@ -916,8 +935,8 @@ export default function SupportModal({
                           await Linking.openURL(wihngoPaypalUrl);
                           addNotification(
                             "recommendation",
-                            "Opening PayPal",
-                            "Thank you for supporting Wihngo!"
+                            t("support.openingPayPal"),
+                            t("support.thankYouForSupport")
                           );
                         } else {
                           addNotification(
@@ -930,7 +949,7 @@ export default function SupportModal({
                     >
                       <FontAwesome6 name="heart" size={14} color="#fff" />
                       <Text style={styles.supportWihngoButtonText}>
-                        Support Wihngo via PayPal
+                        {t("support.supportWihngoViaPayPal")}
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -939,7 +958,7 @@ export default function SupportModal({
             ) : (
               <>
                 <Text style={styles.subtitle}>
-                  This fallback should not appear. Please go back.
+                  {t("support.fallbackMessage")}
                 </Text>
               </>
             )}

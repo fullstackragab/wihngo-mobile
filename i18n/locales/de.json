@@ -55,17 +55,20 @@
     "title": "Geschichte Erstellen",
     "post": "Veröffentlichen",
     "posting": "Wird veröffentlicht...",
-    "placeholder": "Teilen Sie Ihre Geschichte...",
+    "placeholder": "Schreiben Sie Ihre Geschichte hier... (max. 5000 Zeichen)",
     "characterCount": "{{count}}/5000",
     "tagBird": "Vogel Markieren",
     "required": "*",
     "optional": "(Optional)",
-    "selectBird": "Vogel auswählen",
+    "selectBird": "Vogel zum Markieren auswählen (erforderlich)",
     "change": "Ändern",
     "mood": "Stimmung",
     "chooseMood": "Stimmung wählen",
-    "addPhoto": "Foto Hinzufügen",
-    "addVideo": "Video Hinzufügen",
+    "moodSubtitle": "Optional - überspringen, wenn Sie möchten",
+    "longPressMoodInfo": "Halten Sie eine Stimmung gedrückt, um Details und Beispiele zu sehen",
+    "skipNoMood": "Überspringen / Keine Stimmung",
+    "addPhoto": "Foto Hinzufügen (optional, oder Video)",
+    "addVideo": "Video Hinzufügen (optional, oder Foto)",
     "chooseOption": "Option wählen",
     "takePhoto": "Foto Aufnehmen",
     "recordVideo": "Video Aufnehmen",
@@ -98,8 +101,50 @@
     "tip1": "• Seien Sie authentisch und teilen Sie Ihre Erfahrungen",
     "tip2": "• Markieren Sie einen Vogel (erforderlich)",
     "tip3": "• Fügen Sie eine Stimmung hinzu, um Ihre Gefühle auszudrücken (optional)",
-    "tip4": "• Fügen Sie Fotos oder Videos hinzu, um sie ansprechender zu machen",
+    "tip4": "• Fügen Sie ein Foto oder Video hinzu (nicht beides), um sie ansprechender zu machen",
     "tip5": "• Videos: Max 60 Sekunden, 200MB"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "Liebe & Bindung",
+      "description": "Zuneigung, Vertrauen, Kuscheln, Bindung",
+      "example": "\"Sie hat endlich auf meiner Schulter geschlafen…\""
+    },
+    "newBeginning": {
+      "label": "Neuer Anfang",
+      "description": "Neuer Vogel, Adoption, Rettung, erster Tag",
+      "example": "\"Willkommen zu Hause, Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "Fortschritt & Erfolge",
+      "description": "Trainingserfolg, Gesundheitsverbesserung, Meilensteine",
+      "example": "\"Er hat heute gelernt, seinen Namen zu sagen!\""
+    },
+    "funnyMoment": {
+      "label": "Lustiger Moment",
+      "description": "Albernes Verhalten, unerwartete Aktionen",
+      "example": "\"Er hat wieder meine Schlüssel gestohlen…\""
+    },
+    "peacefulMoment": {
+      "label": "Friedlicher Moment",
+      "description": "Ruhig, schön, emotionale Stille",
+      "example": "\"Ich schaue ihm einfach zu, wie er die Sonne genießt…\""
+    },
+    "lossAndMemory": {
+      "label": "Verlust & Erinnerung",
+      "description": "Tod, Gedenken, Trauer",
+      "example": "\"Du wirst immer bei mir sein…\""
+    },
+    "careAndHealth": {
+      "label": "Pflege & Gesundheit",
+      "description": "Tierarztbesuche, Genesung, Ratschläge, Bewusstsein",
+      "example": "\"Update nach der Operation…\""
+    },
+    "dailyLife": {
+      "label": "Alltag",
+      "description": "Normale Routinen, alltägliche Momente",
+      "example": "\"Unser üblicher Morgen zusammen\""
+    }
   },
   "stories": {
     "title": "Geschichten",
@@ -130,7 +175,15 @@
     "tipsCompellingTagline": "• Schreiben Sie einen überzeugenden Slogan, der die Persönlichkeit einfängt",
     "tipsIncludeDetails": "• Geben Sie Details zu Pflege, Verhalten und Bedürfnissen an",
     "tipsBeHonest": "• Seien Sie ehrlich und transparent gegenüber Unterstützern",
-    "loadingBirdData": "Vogeldaten werden geladen..."
+    "loadingBirdData": "Vogeldaten werden geladen...",
+    "namePlaceholder": "Vogelnamen eingeben (erforderlich, z.B. Charlie)",
+    "speciesPlaceholder": "Art suchen und auswählen (erforderlich)",
+    "taglinePlaceholder": "Eine kurze, einprägsame Beschreibung",
+    "descriptionPlaceholder": "Beschreiben Sie diesen Vogel (optional - Persönlichkeit, Gewohnheiten, usw.)",
+    "agePlaceholder": "Alter eingeben (optional, z.B. 2 Jahre alt)",
+    "locationPlaceholder": "Nach einer Stadt suchen (optional)",
+    "profileImagePlaceholder": "Tippen, um Profilbild auszuwählen (erforderlich)",
+    "coverImagePlaceholder": "Tippen, um Titelbild auszuwählen (optional)"
   },
   "birdProfile": {
     "loadingBird": "Vogel wird geladen...",
@@ -301,11 +354,11 @@
     "payoutSettings": "Auszahlungseinstellungen",
     "termsOfService": "Nutzungsbedingungen",
     "languageChangeError": "Sprache konnte nicht geändert werden",
-    "appSettings": "App Settings",
-    "theme": "Theme",
-    "support": "Support",
-    "helpSupport": "Help & Support",
-    "privacyPolicy": "Privacy Policy"
+    "appSettings": "App-Einstellungen",
+    "theme": "Design",
+    "support": "Unterstützung",
+    "helpSupport": "Hilfe & Unterstützung",
+    "privacyPolicy": "Datenschutzerklärung"
   },
   "welcome": {
     "appTitle": "Whingo",
@@ -337,7 +390,24 @@
     "daysAgo": "vor {{count}}T"
   },
   "headers": {
-    "supportBird": "Vogel Unterstützen"
+    "search": "Suchen",
+    "settings": "Einstellungen",
+    "editProfile": "Profil Bearbeiten",
+    "notifications": "Benachrichtigungen",
+    "privacy": "Datenschutz",
+    "paymentMethods": "Zahlungsmethoden",
+    "payoutSettings": "Auszahlungseinstellungen",
+    "myBirds": "Meine Vögel",
+    "lovedBirds": "Geliebte Vögel",
+    "supportedBirds": "Unterstützte Vögel",
+    "story": "Geschichte",
+    "support": "Unterstützen",
+    "supportBird": "Vogel Unterstützen",
+    "privacyPolicy": "Datenschutzerklärung",
+    "termsOfService": "Nutzungsbedingungen",
+    "faq": "Häufig gestellte Fragen",
+    "editStory": "Geschichte Bearbeiten",
+    "payWithCrypto": "Mit Krypto Bezahlen"
   },
   "support": {
     "selectAmount": "Betrag Auswählen",
@@ -367,37 +437,37 @@
   },
   "chooseLanguage": "Sprache Wählen",
   "legal": {
-    "lastUpdated": "Last updated: December 15, 2025",
+    "lastUpdated": "Zuletzt aktualisiert: 15. Dezember 2025",
     "privacy": {
-      "intro": "Wihngo respects your privacy and is committed to protecting your personal data.",
-      "whoWeAre": "Who we are",
-      "whoWeAreContent": "Wihngo is a love-centric community platform for people who care about birds. The platform is operated in the European Union and is in the process of registration in Estonia.",
-      "whatDataWeCollect": "What data we collect",
-      "whatDataWeCollectIntro": "When you use the Wihngo app, we may collect:",
-      "dataAccountInfo": "Account information (name, email, password)",
-      "dataBirdInfo": "Bird information you share (species, name, photos, stories)",
-      "dataUserContent": "User-generated content (posts, comments, likes)",
-      "dataPaymentInfo": "Payment information for support transactions",
-      "dataTechnicalInfo": "Technical data (device type, OS version, IP address)",
-      "dataUsageInfo": "Usage data and analytics",
-      "whyWeCollectData": "Why we collect this data",
-      "whyWeCollectDataIntro": "We collect this data to:",
-      "reasonProvideService": "Provide and maintain the Wihngo service",
-      "reasonConnectUsers": "Connect people who care about birds",
-      "reasonProcessPayments": "Process support payments and donations",
-      "reasonImproveApp": "Improve app performance and user experience",
-      "reasonMaintainSecurity": "Maintain security and prevent fraud",
-      "legalBasis": "Legal basis",
-      "legalBasisContent": "Data is processed under the General Data Protection Regulation (GDPR) based on legitimate interest and contractual necessity.",
-      "dataSharing": "Data sharing",
-      "dataSharingContent": "We do not sell your data. Some data may be processed by trusted service providers (such as payment processors, cloud hosting, and analytics services). All providers are required to protect your data.",
-      "dataRetention": "Data retention",
-      "dataRetentionContent": "Data is kept only as long as necessary for the purposes described above, or as required by law.",
-      "yourRights": "Your rights",
-      "yourRightsContent": "Under GDPR, you have the right to access, correct, delete, or export your personal data. You can also object to processing or request restriction.",
-      "contact": "Contact",
-      "contactIntro": "For privacy-related questions or to exercise your rights, contact:",
-      "footer": "Wihngo is committed to transparency and protecting your personal information in accordance with EU data protection laws."
+      "intro": "Wihngo respektiert Ihre Privatsphäre und verpflichtet sich, Ihre persönlichen Daten zu schützen.",
+      "whoWeAre": "Wer wir sind",
+      "whoWeAreContent": "Wihngo ist eine liebesorientierte Community-Plattform für Menschen, die sich um Vögel kümmern. Die Plattform wird in der Europäischen Union betrieben und befindet sich im Registrierungsprozess in Estland.",
+      "whatDataWeCollect": "Welche Daten wir sammeln",
+      "whatDataWeCollectIntro": "Wenn Sie die Wihngo-App verwenden, können wir Folgendes erfassen:",
+      "dataAccountInfo": "Kontoinformationen (Name, E-Mail, Passwort)",
+      "dataBirdInfo": "Vogelinformationen, die Sie teilen (Arten, Name, Fotos, Geschichten)",
+      "dataUserContent": "Nutzergenerierte Inhalte (Beiträge, Kommentare, Likes)",
+      "dataPaymentInfo": "Zahlungsinformationen für Unterstützungstransaktionen",
+      "dataTechnicalInfo": "Technische Daten (Gerätetyp, Betriebssystemversion, IP-Adresse)",
+      "dataUsageInfo": "Nutzungsdaten und Analysen",
+      "whyWeCollectData": "Warum wir diese Daten sammeln",
+      "whyWeCollectDataIntro": "Wir sammeln diese Daten, um:",
+      "reasonProvideService": "Den Wihngo-Dienst bereitzustellen und zu pflegen",
+      "reasonConnectUsers": "Menschen zu verbinden, die sich um Vögel kümmern",
+      "reasonProcessPayments": "Unterstützungszahlungen und Spenden zu verarbeiten",
+      "reasonImproveApp": "App-Leistung und Benutzererfahrung zu verbessern",
+      "reasonMaintainSecurity": "Sicherheit zu gewährleisten und Betrug zu verhindern",
+      "legalBasis": "Rechtsgrundlage",
+      "legalBasisContent": "Daten werden gemäß der Datenschutz-Grundverordnung (GDPR) auf der Grundlage berechtigter Interessen und vertraglicher Notwendigkeit verarbeitet.",
+      "dataSharing": "Datenweitergabe",
+      "dataSharingContent": "Wir verkaufen Ihre Daten nicht. Einige Daten können von vertrauenswürdigen Dienstleistern (wie Zahlungsabwicklern, Cloud-Hosting und Analysediensten) verarbeitet werden. Alle Anbieter sind verpflichtet, Ihre Daten zu schützen.",
+      "dataRetention": "Datenspeicherung",
+      "dataRetentionContent": "Daten werden nur so lange aufbewahrt, wie es für die oben beschriebenen Zwecke erforderlich ist oder gesetzlich vorgeschrieben.",
+      "yourRights": "Ihre Rechte",
+      "yourRightsContent": "Gemäß GDPR haben Sie das Recht, auf Ihre personenbezogenen Daten zuzugreifen, diese zu korrigieren, zu löschen oder zu exportieren. Sie können auch der Verarbeitung widersprechen oder eine Einschränkung beantragen.",
+      "contact": "Kontakt",
+      "contactIntro": "Für datenschutzbezogene Fragen oder zur Ausübung Ihrer Rechte kontaktieren Sie:",
+      "footer": "Wihngo verpflichtet sich zu Transparenz und zum Schutz Ihrer persönlichen Informationen gemäß den EU-Datenschutzgesetzen."
     },
     "terms": {
       "intro": "By using the Wihngo app, you agree to the following terms.",
@@ -428,6 +498,63 @@
       "contact": "Contact",
       "contactIntro": "For questions or support, contact:",
       "footer": "Thank you for being part of the Wihngo community and caring about birds."
+    }
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen",
+    "subtitle": "Alles, was Sie über Wihngo wissen müssen",
+    "payouts": {
+      "title": "Auszahlungen & Einnahmen",
+      "whenDoIGetPaid": "Wann werde ich bezahlt?",
+      "whenDoIGetPaidAnswer": "Auszahlungen erfolgen einmal pro Monat, in der Regel zwischen dem 1. und 5. des Monats. Sie erhalten eine Auszahlung, wenn Ihr Guthaben die Mindestschwelle von 20 € erreicht.",
+      "whyMinimum": "Warum gibt es ein Minimum von 20 €?",
+      "whyMinimumAnswer": "Die Mindestauszahlungsschwelle hilft, Transaktionsgebühren und Bearbeitungskosten zu reduzieren. Dadurch können sowohl Sie als auch Wihngo effizient arbeiten. Wenn Sie in einem Monat keine 20 € erreichen, wird Ihr Guthaben auf den nächsten Monat übertragen.",
+      "whatIfNeverReach": "Was passiert, wenn ich nie 20 € erreiche?",
+      "whatIfNeverReachAnswer": "Ihr Guthaben wird jeden Monat akkumuliert, bis Sie die Schwelle von 20 € erreichen. Sobald Sie diese erreichen, erhalten Sie am nächsten geplanten Auszahlungsdatum eine Auszahlung. Ihr Guthaben verfällt nie.",
+      "platformFee": "Was ist die Plattformgebühr?",
+      "platformFeeAnswer": "Wihngo erhebt eine Plattformgebühr von 5 % auf alle erhaltenen Unterstützungen. Diese Gebühr hilft uns, die Plattform zu pflegen, Zahlungen zu verarbeiten und Wihngo weiter zu verbessern. 95 % jeder Unterstützungszahlung gehen direkt an Sie.",
+      "payoutMethods": "Welche Auszahlungsmethoden sind verfügbar?",
+      "payoutMethodsAnswer": "Sie können Auszahlungen per Banküberweisung (SEPA/IBAN), PayPal oder Kryptowährung (USDC/EURC auf Solana) erhalten. Wählen Sie die Methode, die für Sie am besten geeignet ist, in Ihren Auszahlungseinstellungen."
+    },
+    "support": {
+      "title": "Vögel unterstützen",
+      "howToSupport": "Wie unterstütze ich einen Vogel?",
+      "howToSupportAnswer": "Tippen Sie auf die Schaltfläche 'Unterstützen' im Profil eines Vogels, wählen Sie einen Betrag, wählen Sie Ihre Zahlungsmethode (PayPal oder Krypto) und schließen Sie die Zahlung ab. Die Unterstützung ist freiwillig und hilft direkt bei der Pflege des Vogels.",
+      "whatIsSupport": "Wofür wird die Unterstützung verwendet?",
+      "whatIsSupportAnswer": "Die Unterstützung hilft Vogelbesitzern bei Futter, tierärztlicher Versorgung, Unterkunft und anderen Ausgaben. Es ist eine Möglichkeit für die Gemeinschaft, zusammenzukommen und Vögeln in Not zu helfen.",
+      "canICancel": "Kann ich meine Unterstützung stornieren oder zurückerstatten?",
+      "canICancelAnswer": "Alle Unterstützungen sind freiwillig und endgültig. Wihngo bearbeitet keine Rückerstattungen. Bitte stellen Sie sicher, dass Sie einen Vogel unterstützen möchten, bevor Sie Ihre Zahlung abschließen."
+    },
+    "crypto": {
+      "title": "Kryptowährungszahlungen",
+      "whichCrypto": "Welche Kryptowährungen werden unterstützt?",
+      "whichCryptoAnswer": "Wihngo unterstützt USDC und EURC im Solana-Netzwerk. Dies sind Stablecoins, was bedeutet, dass ihr Wert an den US-Dollar bzw. Euro gekoppelt ist.",
+      "whySolana": "Warum Solana?",
+      "whySolanaAnswer": "Solana bietet extrem niedrige Transaktionsgebühren (typischerweise unter 0,01 $) und schnelle Bestätigungszeiten, was es ideal für kleine bis mittlere Unterstützungszahlungen macht.",
+      "isCryptoSafe": "Ist Krypto sicher?",
+      "isCryptoSafeAnswer": "Krypto-Transaktionen sind irreversibel und erfordern sorgfältige Aufmerksamkeit. Überprüfen Sie immer die Wallet-Adresse und das Netzwerk, bevor Sie senden. Wihngo verwahrt Ihre Kryptowährung nicht und kann Transaktionen nicht rückgängig machen.",
+      "wrongNetwork": "Was passiert, wenn ich im falschen Netzwerk sende?",
+      "wrongNetworkAnswer": "Das Senden von Kryptowährung an das falsche Netzwerk führt zum dauerhaften Verlust der Mittel. Bestätigen Sie immer, dass Sie im richtigen Netzwerk (Solana) senden. Wihngo kann keine Mittel wiederherstellen, die an das falsche Netzwerk gesendet wurden.",
+      "cryptoPayoutVolatility": "Was ist mit der Volatilität von Krypto-Auszahlungen?",
+      "cryptoPayoutVolatilityAnswer": "Wenn Sie sich dafür entscheiden, Auszahlungen in Krypto zu erhalten, akzeptieren Sie das Risiko der Marktvolatilität. Der Wert Ihrer Auszahlung kann sich zwischen der Berechnung und dem Erhalt ändern. Wihngo garantiert keinen bestimmten Wert."
+    },
+    "account": {
+      "title": "Konto & Datenschutz",
+      "howToDeleteAccount": "Wie lösche ich mein Konto?",
+      "howToDeleteAccountAnswer": "Gehen Sie zu Einstellungen > Datenschutzeinstellungen > Konto löschen. Bitte beachten Sie, dass das Löschen Ihres Kontos dauerhaft ist und nicht rückgängig gemacht werden kann.",
+      "isDataSafe": "Sind meine Daten sicher?",
+      "isDataSafeAnswer": "Ja. Wihngo befolgt die DSGVO-Vorschriften und verwendet Verschlüsselung zum Schutz Ihrer Daten. Wir verkaufen niemals Ihre persönlichen Informationen.",
+      "canIChangeEmail": "Kann ich meine E-Mail-Adresse ändern?",
+      "canIChangeEmailAnswer": "Derzeit müssen E-Mail-Änderungen über support@wihngo.com angefordert werden. Wir arbeiten daran, diese Funktion direkt in die App zu integrieren."
+    },
+    "legal": {
+      "title": "Rechtliches & Compliance",
+      "isWihngoRegulated": "Ist Wihngo ein reguliertes Finanzinstitut?",
+      "isWihngoRegulatedAnswer": "Nein. Wihngo ist eine Community-Plattform, keine Bank oder Finanzinstitut. Wir ermöglichen freiwillige Unterstützung zwischen Nutzern. Wihngo hält vorübergehend Mittel für monatliche Auszahlungen, bietet aber keine Finanzdienstleistungen an.",
+      "taxResponsibility": "Wer ist für Steuern verantwortlich?",
+      "taxResponsibilityAnswer": "Vogelbesitzer sind für die Meldung und Zahlung aller anfallenden Steuern auf über Wihngo erhaltene Unterstützungen verantwortlich. Wir empfehlen, einen Steuerberater in Ihrem Zuständigkeitsbereich zu konsultieren.",
+      "whereIsWihngoRegistered": "Wo ist Wihngo registriert?",
+      "whereIsWihngoRegisteredAnswer": "Wihngo befindet sich im Registrierungsprozess in Estland und operiert innerhalb der Europäischen Union."
     }
   }
 }

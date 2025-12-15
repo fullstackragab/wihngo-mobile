@@ -55,17 +55,20 @@
     "title": "Créer une Histoire",
     "post": "Publier",
     "posting": "Publication...",
-    "placeholder": "Partagez votre histoire...",
+    "placeholder": "Écrivez votre histoire ici... (max 5000 caractères)",
     "characterCount": "{{count}}/5000",
     "tagBird": "Marquer un Oiseau",
     "required": "*",
     "optional": "(Facultatif)",
-    "selectBird": "Sélectionner un oiseau",
+    "selectBird": "Sélectionnez un oiseau à marquer (requis)",
     "change": "Modifier",
     "mood": "Humeur",
     "chooseMood": "Choisir une humeur",
-    "addPhoto": "Ajouter une Photo",
-    "addVideo": "Ajouter une Vidéo",
+    "moodSubtitle": "Optionnel - passer si vous préférez",
+    "longPressMoodInfo": "Appuyez longuement sur une humeur pour voir les détails et les exemples",
+    "skipNoMood": "Passer / Aucune Humeur",
+    "addPhoto": "Ajouter une Photo (facultatif, ou vidéo)",
+    "addVideo": "Ajouter une Vidéo (facultatif, ou photo)",
     "chooseOption": "Choisir une option",
     "takePhoto": "Prendre une Photo",
     "recordVideo": "Enregistrer une Vidéo",
@@ -98,8 +101,50 @@
     "tip1": "• Soyez authentique et partagez vos expériences",
     "tip2": "• Marquez un oiseau (requis)",
     "tip3": "• Ajoutez une humeur pour exprimer vos sentiments (facultatif)",
-    "tip4": "• Ajoutez des photos ou des vidéos pour rendre votre histoire plus engageante",
+    "tip4": "• Ajoutez une photo ou une vidéo (pas les deux) pour rendre votre histoire plus engageante",
     "tip5": "• Vidéos: Max 60 secondes, 200 Mo"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "Amour et Lien",
+      "description": "Affection, confiance, câlins, attachement",
+      "example": "\"Elle a finalement dormi sur mon épaule…\""
+    },
+    "newBeginning": {
+      "label": "Nouveau Départ",
+      "description": "Nouvel oiseau, adoption, sauvetage, premier jour",
+      "example": "\"Bienvenue à la maison, Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "Progrès et Réussites",
+      "description": "Succès d'entraînement, amélioration de la santé, jalons",
+      "example": "\"Il a appris à dire son nom aujourd'hui!\""
+    },
+    "funnyMoment": {
+      "label": "Moment Amusant",
+      "description": "Comportement drôle, actions inattendues",
+      "example": "\"Il a encore volé mes clés…\""
+    },
+    "peacefulMoment": {
+      "label": "Moment Paisible",
+      "description": "Calme, beau, silence émotionnel",
+      "example": "\"Je le regarde simplement profiter du soleil…\""
+    },
+    "lossAndMemory": {
+      "label": "Perte et Mémoire",
+      "description": "Décès, souvenir, deuil",
+      "example": "\"Tu seras toujours avec moi…\""
+    },
+    "careAndHealth": {
+      "label": "Soins et Santé",
+      "description": "Visites vétérinaires, récupération, conseils, sensibilisation",
+      "example": "\"Mise à jour post-chirurgie…\""
+    },
+    "dailyLife": {
+      "label": "Vie Quotidienne",
+      "description": "Routines normales, moments quotidiens",
+      "example": "\"Notre matin habituel ensemble\""
+    }
   },
   "stories": {
     "title": "Histoires",
@@ -130,7 +175,15 @@
     "tipsCompellingTagline": "• Rédigez un slogan convaincant qui capture la personnalité",
     "tipsIncludeDetails": "• Incluez des détails sur les soins, le comportement et les besoins",
     "tipsBeHonest": "• Soyez honnête et transparent avec les supporters",
-    "loadingBirdData": "Chargement des données de l'oiseau..."
+    "loadingBirdData": "Chargement des données de l'oiseau...",
+    "namePlaceholder": "Entrez le nom de l'oiseau (requis, ex: Charlie)",
+    "speciesPlaceholder": "Recherchez et sélectionnez l'espèce (requis)",
+    "taglinePlaceholder": "Un slogan court et accrocheur",
+    "descriptionPlaceholder": "Décrivez cet oiseau (facultatif - personnalité, habitudes, etc.)",
+    "agePlaceholder": "Entrez l'âge (facultatif, ex: 2 ans)",
+    "locationPlaceholder": "Recherchez une ville (facultatif)",
+    "profileImagePlaceholder": "Appuyez pour sélectionner l'image de profil (requis)",
+    "coverImagePlaceholder": "Appuyez pour sélectionner l'image de couverture (facultatif)"
   },
   "birdProfile": {
     "loadingBird": "Chargement de l'oiseau...",
@@ -401,7 +454,24 @@
     "daysAgo": "il y a {{count}}j"
   },
   "headers": {
-    "supportBird": "Soutenir l'Oiseau"
+    "search": "Rechercher",
+    "settings": "Paramètres",
+    "editProfile": "Modifier le Profil",
+    "notifications": "Notifications",
+    "privacy": "Confidentialité",
+    "paymentMethods": "Méthodes de Paiement",
+    "payoutSettings": "Paramètres de Paiement",
+    "myBirds": "Mes Oiseaux",
+    "lovedBirds": "Oiseaux Aimés",
+    "supportedBirds": "Oiseaux Soutenus",
+    "story": "Histoire",
+    "support": "Soutenir",
+    "supportBird": "Soutenir l'Oiseau",
+    "privacyPolicy": "Politique de Confidentialité",
+    "termsOfService": "Conditions d'Utilisation",
+    "faq": "FAQ",
+    "editStory": "Modifier l'Histoire",
+    "payWithCrypto": "Payer avec Crypto"
   },
   "support": {
     "selectAmount": "Sélectionner le Montant",
@@ -429,5 +499,62 @@
     "duration": "Durée: {{duration}}",
     "size": "Taille: {{size}}"
   },
-  "chooseLanguage": "Choisir la Langue"
+  "chooseLanguage": "Choisir la Langue",
+  "faq": {
+    "title": "Questions Fréquentes",
+    "subtitle": "Tout ce que vous devez savoir sur Wihngo",
+    "payouts": {
+      "title": "Paiements et Revenus",
+      "whenDoIGetPaid": "Quand suis-je payé ?",
+      "whenDoIGetPaidAnswer": "Les paiements ont lieu une fois par mois, généralement entre le 1er et le 5 de chaque mois. Vous recevrez un paiement lorsque votre solde atteindra le seuil minimum de 20 €.",
+      "whyMinimum": "Pourquoi y a-t-il un minimum de 20 € ?",
+      "whyMinimumAnswer": "Le seuil de paiement minimum aide à réduire les frais de transaction et les coûts de traitement. Cela garantit que vous et Wihngo puissiez fonctionner efficacement. Si vous n'atteignez pas 20 € en un mois, votre solde sera reporté au mois suivant.",
+      "whatIfNeverReach": "Que se passe-t-il si je n'atteins jamais 20 € ?",
+      "whatIfNeverReachAnswer": "Votre solde s'accumule chaque mois jusqu'à ce que vous atteigniez le seuil de 20 €. Une fois atteint, vous recevrez un paiement à la prochaine date de paiement prévue. Vos fonds n'expirent jamais.",
+      "platformFee": "Qu'est-ce que les frais de plateforme ?",
+      "platformFeeAnswer": "Wihngo facture des frais de plateforme de 5 % sur tous les soutiens reçus. Ces frais nous aident à maintenir la plateforme, traiter les paiements et continuer à améliorer Wihngo. 95 % de chaque paiement de soutien va directement à vous.",
+      "payoutMethods": "Quelles méthodes de paiement sont disponibles ?",
+      "payoutMethodsAnswer": "Vous pouvez recevoir des paiements par virement bancaire (SEPA/IBAN), PayPal ou crypto-monnaie (USDC/EURC sur Solana). Choisissez la méthode qui vous convient le mieux dans vos paramètres de paiement."
+    },
+    "support": {
+      "title": "Soutenir les Oiseaux",
+      "howToSupport": "Comment soutenir un oiseau ?",
+      "howToSupportAnswer": "Appuyez sur le bouton 'Soutenir' sur n'importe quel profil d'oiseau, sélectionnez un montant, choisissez votre méthode de paiement (PayPal ou crypto) et effectuez le paiement. Le soutien est volontaire et sert directement à aider à prendre soin de l'oiseau.",
+      "whatIsSupport": "À quoi sert le soutien ?",
+      "whatIsSupportAnswer": "Le soutien aide les propriétaires d'oiseaux avec la nourriture, les soins vétérinaires, le logement et d'autres dépenses. C'est un moyen pour la communauté de se rassembler et d'aider les oiseaux dans le besoin.",
+      "canICancel": "Puis-je annuler ou rembourser mon soutien ?",
+      "canICancelAnswer": "Tout soutien est volontaire et définitif. Wihngo ne traite pas les remboursements. Veuillez vous assurer que vous souhaitez soutenir un oiseau avant de finaliser votre paiement."
+    },
+    "crypto": {
+      "title": "Paiements Crypto",
+      "whichCrypto": "Quelles crypto-monnaies sont prises en charge ?",
+      "whichCryptoAnswer": "Wihngo prend en charge USDC et EURC sur le réseau Solana. Ce sont des stablecoins, ce qui signifie que leur valeur est indexée sur le dollar américain et l'euro respectivement.",
+      "whySolana": "Pourquoi Solana ?",
+      "whySolanaAnswer": "Solana offre des frais de transaction extrêmement bas (généralement moins de 0,01 $) et des temps de confirmation rapides, ce qui en fait une solution idéale pour les paiements de soutien petits à moyens.",
+      "isCryptoSafe": "Les crypto sont-elles sûres ?",
+      "isCryptoSafeAnswer": "Les transactions crypto sont irréversibles et nécessitent une attention particulière. Vérifiez toujours deux fois l'adresse du portefeuille et le réseau avant d'envoyer. Wihngo ne conserve pas vos crypto et ne peut pas inverser les transactions.",
+      "wrongNetwork": "Que se passe-t-il si j'envoie sur le mauvais réseau ?",
+      "wrongNetworkAnswer": "L'envoi de crypto sur le mauvais réseau entraînera une perte permanente de fonds. Confirmez toujours que vous envoyez sur le bon réseau (Solana). Wihngo ne peut pas récupérer les fonds envoyés sur le mauvais réseau.",
+      "cryptoPayoutVolatility": "Qu'en est-il de la volatilité des paiements crypto ?",
+      "cryptoPayoutVolatilityAnswer": "Si vous choisissez de recevoir des paiements en crypto, vous acceptez le risque de volatilité du marché. La valeur de votre paiement peut changer entre le moment où elle est calculée et le moment où vous la recevez. Wihngo ne garantit aucune valeur spécifique."
+    },
+    "account": {
+      "title": "Compte et Confidentialité",
+      "howToDeleteAccount": "Comment supprimer mon compte ?",
+      "howToDeleteAccountAnswer": "Allez dans Paramètres > Paramètres de confidentialité > Supprimer le compte. Veuillez noter que la suppression de votre compte est permanente et ne peut pas être annulée.",
+      "isDataSafe": "Mes données sont-elles en sécurité ?",
+      "isDataSafeAnswer": "Oui. Wihngo respecte les réglementations RGPD et utilise le cryptage pour protéger vos données. Nous ne vendons jamais vos informations personnelles.",
+      "canIChangeEmail": "Puis-je changer mon adresse e-mail ?",
+      "canIChangeEmailAnswer": "Actuellement, les changements d'e-mail doivent être demandés via support@wihngo.com. Nous travaillons pour ajouter cette fonctionnalité directement dans l'application."
+    },
+    "legal": {
+      "title": "Légal et Conformité",
+      "isWihngoRegulated": "Wihngo est-il une institution financière réglementée ?",
+      "isWihngoRegulatedAnswer": "Non. Wihngo est une plateforme communautaire, pas une banque ou une institution financière. Nous facilitons le soutien volontaire entre utilisateurs. Wihngo détient temporairement des fonds pour les paiements mensuels mais n'offre pas de services financiers.",
+      "taxResponsibility": "Qui est responsable des taxes ?",
+      "taxResponsibilityAnswer": "Les propriétaires d'oiseaux sont responsables de déclarer et de payer les taxes applicables sur le soutien reçu via Wihngo. Nous recommandons de consulter un professionnel fiscal dans votre juridiction.",
+      "whereIsWihngoRegistered": "Où Wihngo est-il enregistré ?",
+      "whereIsWihngoRegisteredAnswer": "Wihngo est en cours d'enregistrement en Estonie et opère au sein de l'Union européenne."
+    }
+  }
 }

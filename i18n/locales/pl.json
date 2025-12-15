@@ -55,17 +55,20 @@
     "title": "Utwórz Historię",
     "post": "Opublikuj",
     "posting": "Publikowanie...",
-    "placeholder": "Podziel się swoją historią...",
+    "placeholder": "Napisz swoją historię tutaj... (maks. 5000 znaków)",
     "characterCount": "{{count}}/5000",
     "tagBird": "Oznacz Ptaka",
     "required": "*",
     "optional": "(Opcjonalne)",
-    "selectBird": "Wybierz ptaka",
+    "selectBird": "Wybierz ptaka do oznaczenia (wymagane)",
     "change": "Zmień",
     "mood": "Nastrój",
     "chooseMood": "Wybierz nastrój",
-    "addPhoto": "Dodaj Zdjęcie",
-    "addVideo": "Dodaj Wideo",
+    "moodSubtitle": "Opcjonalne - pomiń, jeśli wolisz",
+    "longPressMoodInfo": "Przytrzymaj dowolny nastrój, aby zobaczyć szczegóły i przykłady",
+    "skipNoMood": "Pomiń / Bez Nastroju",
+    "addPhoto": "Dodaj Zdjęcie (opcjonalne, lub wideo)",
+    "addVideo": "Dodaj Wideo (opcjonalne, lub zdjęcie)",
     "chooseOption": "Wybierz opcję",
     "takePhoto": "Zrób Zdjęcie",
     "recordVideo": "Nagraj Wideo",
@@ -98,8 +101,50 @@
     "tip1": "• Bądź autentyczny i dziel się swoimi doświadczeniami",
     "tip2": "• Oznacz ptaka (wymagane)",
     "tip3": "• Dodaj nastrój, aby wyrazić swoje uczucia (opcjonalne)",
-    "tip4": "• Dodaj zdjęcia lub wideo, aby uczynić ją bardziej interesującą",
+    "tip4": "• Dodaj zdjęcie lub wideo (nie oba), aby uczynić ją bardziej interesującą",
     "tip5": "• Wideo: Maks 60 sekund, 200MB"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "Miłość i Więź",
+      "description": "Uczucie, zaufanie, przytulanie, przy wiązanie",
+      "example": "\"W końcu zasnęła na moim ramieniu…\""
+    },
+    "newBeginning": {
+      "label": "Nowy Początek",
+      "description": "Nowy ptak, adopcja, ratunek, pierwszy dzień",
+      "example": "\"Witaj w domu, Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "Postęp i Zwycięstwa",
+      "description": "Sukces treningowy, poprawa zdrowia, kamienie milowe",
+      "example": "\"Nauczył się dziś mówić swoje imię!\""
+    },
+    "funnyMoment": {
+      "label": "Zabawny Moment",
+      "description": "Głupie zachowanie, nieoczekiwane działania",
+      "example": "\"Znowu ukradł moje klucze…\""
+    },
+    "peacefulMoment": {
+      "label": "Spokojny Moment",
+      "description": "Cisza, piękno, emocjonalna cisza",
+      "example": "\"Po prostu patrzę, jak cieszy się słońcem…\""
+    },
+    "lossAndMemory": {
+      "label": "Strata i Pamięć",
+      "description": "Odejście, pamięć, żałoba",
+      "example": "\"Zawsze będziesz ze mną…\""
+    },
+    "careAndHealth": {
+      "label": "Opieka i Zdrowie",
+      "description": "Wizyty u weterynarza, rekonwalescencja, porady, świadomość",
+      "example": "\"Aktualizacja po operacji…\""
+    },
+    "dailyLife": {
+      "label": "Życie Codzienne",
+      "description": "Normalne rutyny, codzienne chwile",
+      "example": "\"Nasz zwykły poranek razem\""
+    }
   },
   "stories": {
     "title": "Historie",
@@ -130,7 +175,15 @@
     "tipsCompellingTagline": "• Napisz przekonujący slogan oddający osobowość",
     "tipsIncludeDetails": "• Podaj szczegóły dotyczące opieki, zachowania i potrzeb",
     "tipsBeHonest": "• Bądź szczery i transparentny wobec wspierających",
-    "loadingBirdData": "Ładowanie danych ptaka..."
+    "loadingBirdData": "Ładowanie danych ptaka...",
+    "namePlaceholder": "Wprowadź imię ptaka (wymagane, np. Charlie)",
+    "speciesPlaceholder": "Wyszukaj i wybierz gatunek (wymagane)",
+    "taglinePlaceholder": "Krótki, chwytliwy opis",
+    "descriptionPlaceholder": "Opisz tego ptaka (opcjonalne - osobowość, nawyki itp.)",
+    "agePlaceholder": "Wprowadź wiek (opcjonalne, np. 2 lata)",
+    "locationPlaceholder": "Wyszukaj miasto (opcjonalne)",
+    "profileImagePlaceholder": "Dotknij, aby wybrać zdjęcie profilowe (wymagane)",
+    "coverImagePlaceholder": "Dotknij, aby wybrać zdjęcie okładki (opcjonalne)"
   },
   "birdProfile": {
     "loadingBird": "Ładowanie ptaka...",
@@ -301,11 +354,11 @@
     "payoutSettings": "Ustawienia wypłat",
     "termsOfService": "Warunki usługi",
     "languageChangeError": "Nie udało się zmienić języka",
-    "appSettings": "App Settings",
-    "theme": "Theme",
-    "support": "Support",
-    "helpSupport": "Help & Support",
-    "privacyPolicy": "Privacy Policy"
+    "appSettings": "Ustawienia Aplikacji",
+    "theme": "Motyw",
+    "support": "Wsparcie",
+    "helpSupport": "Pomoc i Wsparcie",
+    "privacyPolicy": "Polityka Prywatności"
   },
   "welcome": {
     "appTitle": "Whingo",
@@ -337,7 +390,24 @@
     "daysAgo": "{{count}}d temu"
   },
   "headers": {
-    "supportBird": "Wesprzyj {{birdName}}"
+    "search": "Szukaj",
+    "settings": "Ustawienia",
+    "editProfile": "Edytuj Profil",
+    "notifications": "Powiadomienia",
+    "privacy": "Prywatność",
+    "paymentMethods": "Metody Płatności",
+    "payoutSettings": "Ustawienia Wypłat",
+    "myBirds": "Moje Ptaki",
+    "lovedBirds": "Ulubione Ptaki",
+    "supportedBirds": "Wspierane Ptaki",
+    "story": "Historia",
+    "support": "Wesprzyj",
+    "supportBird": "Wesprzyj {{birdName}}",
+    "privacyPolicy": "Polityka Prywatności",
+    "termsOfService": "Warunki Korzystania z Usługi",
+    "faq": "Najczęściej Zadawane Pytania",
+    "editStory": "Edytuj Historię",
+    "payWithCrypto": "Zapłać Kryptowalutą"
   },
   "support": {
     "selectAmount": "Wybierz kwotę",
@@ -367,37 +437,37 @@
   },
   "chooseLanguage": "Wybierz język",
   "legal": {
-    "lastUpdated": "Last updated: December 15, 2025",
+    "lastUpdated": "Ostatnia aktualizacja: 15 grudnia 2025",
     "privacy": {
-      "intro": "Wihngo respects your privacy and is committed to protecting your personal data.",
-      "whoWeAre": "Who we are",
-      "whoWeAreContent": "Wihngo is a love-centric community platform for people who care about birds. The platform is operated in the European Union and is in the process of registration in Estonia.",
-      "whatDataWeCollect": "What data we collect",
-      "whatDataWeCollectIntro": "When you use the Wihngo app, we may collect:",
-      "dataAccountInfo": "Account information (name, email, password)",
-      "dataBirdInfo": "Bird information you share (species, name, photos, stories)",
-      "dataUserContent": "User-generated content (posts, comments, likes)",
-      "dataPaymentInfo": "Payment information for support transactions",
-      "dataTechnicalInfo": "Technical data (device type, OS version, IP address)",
-      "dataUsageInfo": "Usage data and analytics",
-      "whyWeCollectData": "Why we collect this data",
-      "whyWeCollectDataIntro": "We collect this data to:",
-      "reasonProvideService": "Provide and maintain the Wihngo service",
-      "reasonConnectUsers": "Connect people who care about birds",
-      "reasonProcessPayments": "Process support payments and donations",
-      "reasonImproveApp": "Improve app performance and user experience",
-      "reasonMaintainSecurity": "Maintain security and prevent fraud",
-      "legalBasis": "Legal basis",
-      "legalBasisContent": "Data is processed under the General Data Protection Regulation (GDPR) based on legitimate interest and contractual necessity.",
-      "dataSharing": "Data sharing",
-      "dataSharingContent": "We do not sell your data. Some data may be processed by trusted service providers (such as payment processors, cloud hosting, and analytics services). All providers are required to protect your data.",
-      "dataRetention": "Data retention",
-      "dataRetentionContent": "Data is kept only as long as necessary for the purposes described above, or as required by law.",
-      "yourRights": "Your rights",
-      "yourRightsContent": "Under GDPR, you have the right to access, correct, delete, or export your personal data. You can also object to processing or request restriction.",
-      "contact": "Contact",
-      "contactIntro": "For privacy-related questions or to exercise your rights, contact:",
-      "footer": "Wihngo is committed to transparency and protecting your personal information in accordance with EU data protection laws."
+      "intro": "Wihngo szanuje Twoją prywatność i zobowiązuje się do ochrony Twoich danych osobowych.",
+      "whoWeAre": "Kim jesteśmy",
+      "whoWeAreContent": "Wihngo to platforma społecznościowa skoncentrowana na miłości do ptaków dla osób, które dbają o ptaki. Platforma działa w Unii Europejskiej i jest w trakcie rejestracji w Estonia.",
+      "whatDataWeCollect": "Jakie dane zbieramy",
+      "whatDataWeCollectIntro": "Gdy korzystasz z aplikacji Wihngo, możemy zbierać:",
+      "dataAccountInfo": "Informacje o koncie (imię i nazwisko, e-mail, hasło)",
+      "dataBirdInfo": "Informacje o ptakach, które udostępniasz (gatunek, imię, zdjęcia, historie)",
+      "dataUserContent": "Treści generowane przez użytkowników (posty, komentarze, polubienia)",
+      "dataPaymentInfo": "Informacje o płatnościach dotyczące transakcji wsparcia",
+      "dataTechnicalInfo": "Dane techniczne (typ urządzenia, wersja systemu operacyjnego, adres IP)",
+      "dataUsageInfo": "Dane dotyczące użytkowania i analityka",
+      "whyWeCollectData": "Dlaczego zbieramy te dane",
+      "whyWeCollectDataIntro": "Zbieramy te dane, aby:",
+      "reasonProvideService": "Świadczyć i utrzymywać usługę Wihngo",
+      "reasonConnectUsers": "Łączyć osoby, które dbają o ptaki",
+      "reasonProcessPayments": "Przetwarzać płatności wsparcia i darowizny",
+      "reasonImproveApp": "Poprawiać wydajność aplikacji i doświadczenie użytkownika",
+      "reasonMaintainSecurity": "Utrzymywać bezpieczeństwo i zapobiegać oszustwom",
+      "legalBasis": "Podstawa prawna",
+      "legalBasisContent": "Dane są przetwarzane zgodnie z ogólnym rozporządzeniem o ochronie danych (GDPR) na podstawie prawnie uzasadnionego interesu i konieczności umownej.",
+      "dataSharing": "Udostępnianie danych",
+      "dataSharingContent": "Nie sprzedajemy Twoich danych. Niektóre dane mogą być przetwarzane przez zaufanych dostawców usług (takich jak podmioty przetwarzające płatności, hosting w chmurze i usługi analityczne). Wszyscy dostawcy są zobowiązani do ochrony Twoich danych.",
+      "dataRetention": "Przechowywanie danych",
+      "dataRetentionContent": "Dane są przechowywane tylko tak długo, jak jest to niezbędne do celów opisanych powyżej lub jak wymaga tego prawo.",
+      "yourRights": "Twoje prawa",
+      "yourRightsContent": "Zgodnie z GDPR masz prawo dostępu, poprawiania, usuwania lub eksportowania swoich danych osobowych. Możesz również wnieść sprzeciw wobec przetwarzania lub zażądać ograniczenia.",
+      "contact": "Kontakt",
+      "contactIntro": "W przypadku pytań związanych z prywatnością lub w celu skorzystania z przysługujących Ci praw skontaktuj się:",
+      "footer": "Wihngo zobowiązuje się do przejrzystości i ochrony Twoich danych osobowych zgodnie z prawem UE dotyczącym ochrony danych."
     },
     "terms": {
       "intro": "By using the Wihngo app, you agree to the following terms.",
@@ -428,6 +498,63 @@
       "contact": "Contact",
       "contactIntro": "For questions or support, contact:",
       "footer": "Thank you for being part of the Wihngo community and caring about birds."
+    }
+  },
+  "faq": {
+    "title": "Często Zadawane Pytania",
+    "subtitle": "Wszystko, co musisz wiedzieć o Wihngo",
+    "payouts": {
+      "title": "Wypłaty i Zarobki",
+      "whenDoIGetPaid": "Kiedy otrzymuję wypłatę?",
+      "whenDoIGetPaidAnswer": "Wypłaty odbywają się raz w miesiącu, zazwyczaj 1-5 dnia każdego miesiąca. Otrzymasz wypłatę, gdy Twoje saldo osiągnie minimalny próg €20.",
+      "whyMinimum": "Dlaczego jest minimum €20?",
+      "whyMinimumAnswer": "Minimalny próg wypłaty pomaga zmniejszyć opłaty transakcyjne i koszty przetwarzania. Zapewnia to, że zarówno Ty, jak i Wihngo możecie działać efektywnie. Jeśli nie osiągniesz €20 w ciągu miesiąca, Twoje saldo zostanie przeniesione na następny miesiąc.",
+      "whatIfNeverReach": "Co się stanie, jeśli nigdy nie osiągnę €20?",
+      "whatIfNeverReachAnswer": "Twoje saldo kumuluje się każdego miesiąca, aż osiągniesz próg €20. Gdy go osiągniesz, otrzymasz wypłatę w następnym zaplanowanym terminie wypłaty. Twoje środki nigdy nie wygasają.",
+      "platformFee": "Co to jest opłata platformy?",
+      "platformFeeAnswer": "Wihngo pobiera 5% opłaty platformy od całego otrzymanego wsparcia. Ta opłata pomaga nam utrzymać platformę, przetwarzać płatności i nadal ulepszać Wihngo. 95% każdej płatności za wsparcie trafia bezpośrednio do Ciebie.",
+      "payoutMethods": "Jakie metody wypłat są dostępne?",
+      "payoutMethodsAnswer": "Możesz otrzymywać wypłaty za pośrednictwem przelewu bankowego (SEPA/IBAN), PayPal lub kryptowaluty (USDC/EURC na Solana). Wybierz metodę, która działa najlepiej dla Ciebie w ustawieniach wypłat."
+    },
+    "support": {
+      "title": "Wspieranie Ptaków",
+      "howToSupport": "Jak wspierać ptaka?",
+      "howToSupportAnswer": "Naciśnij przycisk 'Wsparcie' na profilu dowolnego ptaka, wybierz kwotę, wybierz metodę płatności (PayPal lub crypto) i dokończ płatność. Wsparcie jest dobrowolne i idzie bezpośrednio na pomoc w opiece nad ptakiem.",
+      "whatIsSupport": "Do czego służy wsparcie?",
+      "whatIsSupportAnswer": "Wsparcie pomaga właścicielom ptaków w jedzeniu, opiece weterynaryjnej, mieszkaniu i innych wydatkach. To sposób, w jaki społeczność może się zjednoczyć i pomóc potrzebującym ptakom.",
+      "canICancel": "Czy mogę anulować lub zwrócić moje wsparcie?",
+      "canICancelAnswer": "Całe wsparcie jest dobrowolne i ostateczne. Wihngo nie przetwarza zwrotów pieniędzy. Upewnij się, że chcesz wesprzeć ptaka przed dokończeniem płatności."
+    },
+    "crypto": {
+      "title": "Płatności Krypto",
+      "whichCrypto": "Które kryptowaluty są obsługiwane?",
+      "whichCryptoAnswer": "Wihngo obsługuje USDC i EURC w sieci Solana. Są to stablecoiny, co oznacza, że ich wartość jest odpowiednio powiązana z dolarem amerykańskim i euro.",
+      "whySolana": "Dlaczego Solana?",
+      "whySolanaAnswer": "Solana oferuje wyjątkowo niskie opłaty transakcyjne (zazwyczaj poniżej $0,01) i szybkie czasy potwierdzenia, co czyni ją idealną do małych i średnich płatności za wsparcie.",
+      "isCryptoSafe": "Czy kryptowaluty są bezpieczne?",
+      "isCryptoSafeAnswer": "Transakcje kryptograficzne są nieodwracalne i wymagają starannej uwagi. Zawsze sprawdź dwukrotnie adres portfela i sieć przed wysłaniem. Wihngo nie przechowuje Twojej kryptowaluty i nie może cofnąć transakcji.",
+      "wrongNetwork": "Co się stanie, jeśli wyślę w niewłaściwej sieci?",
+      "wrongNetworkAnswer": "Wysłanie kryptowaluty do niewłaściwej sieci spowoduje trwałą utratę środków. Zawsze potwierdź, że wysyłasz we właściwej sieci (Solana). Wihngo nie może odzyskać środków wysłanych do niewłaściwej sieci.",
+      "cryptoPayoutVolatility": "Co z niestabilnością wypłat kryptowalut?",
+      "cryptoPayoutVolatilityAnswer": "Jeśli zdecydujesz się otrzymywać wypłaty w kryptowalutach, akceptujesz ryzyko zmienności rynku. Wartość Twojej wypłaty może się zmienić między momentem jej obliczenia a otrzymaniem. Wihngo nie gwarantuje żadnej konkretnej wartości."
+    },
+    "account": {
+      "title": "Konto i Prywatność",
+      "howToDeleteAccount": "Jak usunąć moje konto?",
+      "howToDeleteAccountAnswer": "Przejdź do Ustawienia > Ustawienia Prywatności > Usuń Konto. Należy pamiętać, że usunięcie konta jest trwałe i nie można go cofnąć.",
+      "isDataSafe": "Czy moje dane są bezpieczne?",
+      "isDataSafeAnswer": "Tak. Wihngo przestrzega przepisów RODO i używa szyfrowania do ochrony Twoich danych. Nigdy nie sprzedajemy Twoich danych osobowych.",
+      "canIChangeEmail": "Czy mogę zmienić mój adres e-mail?",
+      "canIChangeEmailAnswer": "Obecnie zmiany e-mail muszą być żądane przez support@wihngo.com. Pracujemy nad dodaniem tej funkcji bezpośrednio do aplikacji."
+    },
+    "legal": {
+      "title": "Prawne i Zgodność",
+      "isWihngoRegulated": "Czy Wihngo jest regulowaną instytucją finansową?",
+      "isWihngoRegulatedAnswer": "Nie. Wihngo jest platformą społecznościową, a nie bankiem ani instytucją finansową. Ułatwiamy dobrowolne wsparcie między użytkownikami. Wihngo tymczasowo przechowuje środki na miesięczne wypłaty, ale nie oferuje usług finansowych.",
+      "taxResponsibility": "Kto jest odpowiedzialny za podatki?",
+      "taxResponsibilityAnswer": "Właściciele ptaków są odpowiedzialni za zgłaszanie i opłacanie wszelkich obowiązujących podatków od wsparcia otrzymanego za pośrednictwem Wihngo. Zalecamy skonsultowanie się z profesjonalistą podatkowym w Twojej jurysdykcji.",
+      "whereIsWihngoRegistered": "Gdzie jest zarejestrowana Wihngo?",
+      "whereIsWihngoRegisteredAnswer": "Wihngo jest w trakcie rejestracji w Estonii i działa w ramach Unii Europejskiej."
     }
   }
 }

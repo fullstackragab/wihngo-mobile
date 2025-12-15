@@ -55,17 +55,20 @@
     "title": "Hikaye Oluştur",
     "post": "Paylaş",
     "posting": "Paylaşılıyor...",
-    "placeholder": "Hikayenizi paylaşın...",
+    "placeholder": "Hikayenizi buraya yazın... (maks. 5000 karakter)",
     "characterCount": "{{count}}/5000",
     "tagBird": "Kuş Etiketle",
     "required": "*",
     "optional": "(İsteğe bağlı)",
-    "selectBird": "Bir kuş seçin",
+    "selectBird": "Etiketlemek için bir kuş seçin (gerekli)",
     "change": "Değiştir",
     "mood": "Ruh Hali",
     "chooseMood": "Bir ruh hali seçin",
-    "addPhoto": "Fotoğraf Ekle",
-    "addVideo": "Video Ekle",
+    "moodSubtitle": "İsteğe bağlı - isterseniz atlayabilirsiniz",
+    "longPressMoodInfo": "Ayrıntıları ve örnekleri görmek için herhangi bir ruh haline uzun basın",
+    "skipNoMood": "Atla / Ruh Hali Yok",
+    "addPhoto": "Fotoğraf Ekle (isteğe bağlı, veya video)",
+    "addVideo": "Video Ekle (isteğe bağlı, veya fotoğraf)",
     "chooseOption": "Bir seçenek seçin",
     "takePhoto": "Fotoğraf Çek",
     "recordVideo": "Video Kaydet",
@@ -98,8 +101,50 @@
     "tip1": "• Otantik olun ve deneyimlerinizi paylaşın",
     "tip2": "• Bir kuş etiketleyin (gerekli)",
     "tip3": "• Duygularınızı ifade etmek için bir ruh hali ekleyin (isteğe bağlı)",
-    "tip4": "• Daha ilgi çekici hale getirmek için fotoğraf veya video ekleyin",
+    "tip4": "• Daha ilgi çekici hale getirmek için bir fotoğraf veya video (her ikisi değil) ekleyin",
     "tip5": "• Videolar: Maks 60 saniye, 200MB"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "Sevgi ve Bağ",
+      "description": "Sevgi, güven, kucaklama, bağlanma",
+      "example": "\"Sonunda omzumda uyudu…\""
+    },
+    "newBeginning": {
+      "label": "Yeni Başlangıç",
+      "description": "Yeni kuş, evlat edinme, kurtarma, ilk gün",
+      "example": "\"Hoş geldin eve, Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "İlerleme ve Zaferler",
+      "description": "Eğitim başarısı, sağlık iyileşmesi, dkilometre taşları",
+      "example": "\"Bugün adını söylemeyi öğrendi!\""
+    },
+    "funnyMoment": {
+      "label": "Komik An",
+      "description": "Sakar davranış, beklenmedik eylemler",
+      "example": "\"Anahtarlarımı yine çaldı…\""
+    },
+    "peacefulMoment": {
+      "label": "Huzurlu An",
+      "description": "Sakin, güzel, duygusal sessizlik",
+      "example": "\"Sadece güneşin tadını çıkarırken izliyorum…\""
+    },
+    "lossAndMemory": {
+      "label": "Kayıp ve Hatıra",
+      "description": "Vefat, anı, yas",
+      "example": "\"Her zaman benimle olacaksın…\""
+    },
+    "careAndHealth": {
+      "label": "Bakım ve Sağlık",
+      "description": "Veterin er ziyaretleri, iyileşme, tavsiyeler, fırkındalık",
+      "example": "\"Ameliyat sonrası güncelleme…\""
+    },
+    "dailyLife": {
+      "label": "Günlük Yaşam",
+      "description": "Normal rutinler, günlük anlar",
+      "example": "\"Birlikte her zamanki sabahımız\""
+    }
   },
   "stories": {
     "title": "Hikayeler",
@@ -130,7 +175,15 @@
     "tipsCompellingTagline": "• Kişiliği yakalayan çekici bir slogan yazın",
     "tipsIncludeDetails": "• Bakım, davranış ve ihtiyaçlar hakkında ayrıntılar ekleyin",
     "tipsBeHonest": "• Desteklere karşı dürüst ve şeffaf olun",
-    "loadingBirdData": "Kuş verileri yükleniyoristanbul..."
+    "loadingBirdData": "Kuş verileri yükleniyoristanbul...",
+    "namePlaceholder": "Kuş adını girin (gerekli, örn: Charlie)",
+    "speciesPlaceholder": "Türü arayın ve seçin (gerekli)",
+    "taglinePlaceholder": "Kısa, akılda kalıcı bir açıklama",
+    "descriptionPlaceholder": "Bu kuşu tanımlayın (isteğe bağlı - kişilik, alışkanlıklar vb.)",
+    "agePlaceholder": "Yaşı girin (isteğe bağlı, örn: 2 yaşında)",
+    "locationPlaceholder": "Şehir arayın (isteğe bağlı)",
+    "profileImagePlaceholder": "Profil resmi seçmek için dokunun (gerekli)",
+    "coverImagePlaceholder": "Kapak resmi seçmek için dokunun (isteğe bağlı)"
   },
   "birdProfile": {
     "loadingBird": "Kuş yükleniyor...",
@@ -301,11 +354,11 @@
     "payoutSettings": "Ödeme Ayarları",
     "termsOfService": "Hizmet şartları",
     "languageChangeError": "Dil değiştirilemedi",
-    "appSettings": "App Settings",
-    "theme": "Theme",
-    "support": "Support",
-    "helpSupport": "Help & Support",
-    "privacyPolicy": "Privacy Policy"
+    "appSettings": "Uygulama Ayarları",
+    "theme": "Tema",
+    "support": "Destek",
+    "helpSupport": "Yardım ve Destek",
+    "privacyPolicy": "Gizlilik Politikası"
   },
   "welcome": {
     "appTitle": "Whingo",
@@ -393,7 +446,24 @@
     "customizeAppearance": "Görünümü Özelleştir"
   },
   "headers": {
-    "supportBird": "{{birdName}}'u Destekle"
+    "search": "Ara",
+    "settings": "Ayarlar",
+    "editProfile": "Profili Düzenle",
+    "notifications": "Bildirimler",
+    "privacy": "Gizlilik",
+    "paymentMethods": "Ödeme Yöntemleri",
+    "payoutSettings": "Ödeme Ayarları",
+    "myBirds": "Kuşlarım",
+    "lovedBirds": "Sevilen Kuşlar",
+    "supportedBirds": "Desteklenen Kuşlar",
+    "story": "Hikaye",
+    "support": "Destek",
+    "supportBird": "{{birdName}}'u Destekle",
+    "privacyPolicy": "Gizlilik Politikası",
+    "termsOfService": "Hizmet Şartları",
+    "faq": "Sık Sorulan Sorular",
+    "editStory": "Hikayeyi Düzenle",
+    "payWithCrypto": "Kripto ile Öde"
   },
   "support": {
     "selectAmount": "Miktar seçin",
@@ -423,37 +493,37 @@
   },
   "chooseLanguage": "Dil seçin",
   "legal": {
-    "lastUpdated": "Last updated: December 15, 2025",
+    "lastUpdated": "Son güncelleme: 15 Aralık 2025",
     "privacy": {
-      "intro": "Wihngo respects your privacy and is committed to protecting your personal data.",
-      "whoWeAre": "Who we are",
-      "whoWeAreContent": "Wihngo is a love-centric community platform for people who care about birds. The platform is operated in the European Union and is in the process of registration in Estonia.",
-      "whatDataWeCollect": "What data we collect",
-      "whatDataWeCollectIntro": "When you use the Wihngo app, we may collect:",
-      "dataAccountInfo": "Account information (name, email, password)",
-      "dataBirdInfo": "Bird information you share (species, name, photos, stories)",
-      "dataUserContent": "User-generated content (posts, comments, likes)",
-      "dataPaymentInfo": "Payment information for support transactions",
-      "dataTechnicalInfo": "Technical data (device type, OS version, IP address)",
-      "dataUsageInfo": "Usage data and analytics",
-      "whyWeCollectData": "Why we collect this data",
-      "whyWeCollectDataIntro": "We collect this data to:",
-      "reasonProvideService": "Provide and maintain the Wihngo service",
-      "reasonConnectUsers": "Connect people who care about birds",
-      "reasonProcessPayments": "Process support payments and donations",
-      "reasonImproveApp": "Improve app performance and user experience",
-      "reasonMaintainSecurity": "Maintain security and prevent fraud",
-      "legalBasis": "Legal basis",
-      "legalBasisContent": "Data is processed under the General Data Protection Regulation (GDPR) based on legitimate interest and contractual necessity.",
-      "dataSharing": "Data sharing",
-      "dataSharingContent": "We do not sell your data. Some data may be processed by trusted service providers (such as payment processors, cloud hosting, and analytics services). All providers are required to protect your data.",
-      "dataRetention": "Data retention",
-      "dataRetentionContent": "Data is kept only as long as necessary for the purposes described above, or as required by law.",
-      "yourRights": "Your rights",
-      "yourRightsContent": "Under GDPR, you have the right to access, correct, delete, or export your personal data. You can also object to processing or request restriction.",
-      "contact": "Contact",
-      "contactIntro": "For privacy-related questions or to exercise your rights, contact:",
-      "footer": "Wihngo is committed to transparency and protecting your personal information in accordance with EU data protection laws."
+      "intro": "Wihngo gizliliğinize saygı duyar ve kişisel verilerinizi korumaya karşı kararlıdır.",
+      "whoWeAre": "Biz kimiz",
+      "whoWeAreContent": "Wihngo, kuşları önemseyen insanlar için sevgi odaklı bir topluluk platformudur. Platform Avrupa Birliği'nde faaliyet göstermekte ve Estonia'da kayıt süreci devam etmektedir.",
+      "whatDataWeCollect": "Hangi verileri topluyoruz",
+      "whatDataWeCollectIntro": "Wihngo uygulamasını kullandığınızda şunları toplayabiliriz:",
+      "dataAccountInfo": "Hesap bilgileri (ad, e-posta, şifre)",
+      "dataBirdInfo": "Paylaştığınız kuş bilgileri (tür, isim, fotoğraflar, hikayeler)",
+      "dataUserContent": "Kullanıcı tarafından oluşturulan içerik (gönderiler, yorumlar, beğeniler)",
+      "dataPaymentInfo": "Destek işlemleri için ödeme bilgileri",
+      "dataTechnicalInfo": "Teknik veriler (cihaz türü, işletim sistemi sürümü, IP adresi)",
+      "dataUsageInfo": "Kullanım verileri ve analizler",
+      "whyWeCollectData": "Bu verileri neden topluyoruz",
+      "whyWeCollectDataIntro": "Bu verileri şu amaçlarla topluyoruz:",
+      "reasonProvideService": "Wihngo hizmetini sağlamak ve sürdürmek",
+      "reasonConnectUsers": "Kuşları önemseyen insanları birbirine bağlamak",
+      "reasonProcessPayments": "Destek ödemelerini ve bağışları işlemek",
+      "reasonImproveApp": "Uygulama performansını ve kullanıcı deneyimini iyileştirmek",
+      "reasonMaintainSecurity": "Güvenliği sağlamak ve dolandırıcılığı önlemek",
+      "legalBasis": "Yasal dayanak",
+      "legalBasisContent": "Veriler, meşru çıkar ve sözleşmesel gereklilik temelinde Genel Veri Koruma Yönetmeliği (GDPR) kapsamında işlenir.",
+      "dataSharing": "Veri paylaşımı",
+      "dataSharingContent": "Verilerinizi satmıyoruz. Bazı veriler güvenilir hizmet sağlayıcılar (ödeme işleyicileri, bulut barındırma ve analiz hizmetleri gibi) tarafından işlenebilir. Tüm sağlayıcılar verilerinizi korumakla yükümlüdür.",
+      "dataRetention": "Veri saklama",
+      "dataRetentionContent": "Veriler yalnızca yukarıda açıklanan amaçlar için gerekli olduğu sürece veya yasaların gerektirdiği sürece saklanır.",
+      "yourRights": "Haklarınız",
+      "yourRightsContent": "GDPR kapsamında kişisel verilerinize erişme, düzeltme, silme veya dışa aktarma hakkına sahipsiniz. Ayrıca işlemeye itiraz edebilir veya kısıtlama talep edebilirsiniz.",
+      "contact": "İletişim",
+      "contactIntro": "Gizlilikle ilgili sorularınız veya haklarınızı kullanmak için iletişime geçin:",
+      "footer": "Wihngo, AB veri koruma yasalarına uygun olarak şeffaf olmaya ve kişisel bilgilerinizi korumaya karşı kararlıdır."
     },
     "terms": {
       "intro": "By using the Wihngo app, you agree to the following terms.",
@@ -484,6 +554,63 @@
       "contact": "Contact",
       "contactIntro": "For questions or support, contact:",
       "footer": "Thank you for being part of the Wihngo community and caring about birds."
+    }
+  },
+  "faq": {
+    "title": "Sık Sorulan Sorular",
+    "subtitle": "Wihngo hakkında bilmeniz gereken her şey",
+    "payouts": {
+      "title": "Ödemeler ve Kazançlar",
+      "whenDoIGetPaid": "Ne zaman ödeme alırım?",
+      "whenDoIGetPaidAnswer": "Ödemeler ayda bir kez, genellikle her ayın 1-5'inde gerçekleşir. Bakiyeniz minimum €20 eşiğine ulaştığında ödeme alırsınız.",
+      "whyMinimum": "Neden €20 minimum var?",
+      "whyMinimumAnswer": "Minimum ödeme eşiği, işlem ücretlerini ve işleme maliyetlerini azaltmaya yardımcı olur. Bu, hem sizin hem de Wihngo'nun verimli bir şekilde çalışabilmesini sağlar. Bir ayda €20'ye ulaşamazsanız, bakiyeniz bir sonraki aya aktarılır.",
+      "whatIfNeverReach": "€20'ye hiç ulaşamazsam ne olur?",
+      "whatIfNeverReachAnswer": "Bakiyeniz €20 eşiğine ulaşana kadar her ay birikir. Ulaştığınızda, bir sonraki planlanmış ödeme tarihinde ödeme alırsınız. Fonlarınızın süresi asla dolmaz.",
+      "platformFee": "Platform ücreti nedir?",
+      "platformFeeAnswer": "Wihngo, alınan tüm destekler için %5 platform ücreti alır. Bu ücret, platformu sürdürmemize, ödemeleri işlememize ve Wihngo'yu geliştirmeye devam etmemize yardımcı olur. Her destek ödemesinin %95'i doğrudan size gider.",
+      "payoutMethods": "Hangi ödeme yöntemleri mevcut?",
+      "payoutMethodsAnswer": "Banka havalesi (SEPA/IBAN), PayPal veya kripto para (Solana'da USDC/EURC) aracılığıyla ödeme alabilirsiniz. Ödeme ayarlarınızda sizin için en iyi çalışan yöntemi seçin."
+    },
+    "support": {
+      "title": "Kuşları Desteklemek",
+      "howToSupport": "Bir kuşu nasıl desteklerim?",
+      "howToSupportAnswer": "Herhangi bir kuş profilinde 'Destek' düğmesine dokunun, bir miktar seçin, ödeme yönteminizi (PayPal veya kripto) seçin ve ödemeyi tamamlayın. Destek gönüllüdür ve kuşun bakımına yardımcı olmak için doğrudan gider.",
+      "whatIsSupport": "Destek ne için kullanılır?",
+      "whatIsSupportAnswer": "Destek, kuş sahiplerine yiyecek, veteriner bakımı, barınma ve diğer masraflar konusunda yardımcı olur. Topluluğun bir araya gelmesi ve ihtiyacı olan kuşlara yardım etmesinin bir yoludur.",
+      "canICancel": "Desteğimi iptal edebilir veya iade alabilir miyim?",
+      "canICancelAnswer": "Tüm destekler gönüllüdür ve kesindir. Wihngo iade işlemi yapmaz. Ödemenizi tamamlamadan önce bir kuşu desteklemek istediğinizden emin olun."
+    },
+    "crypto": {
+      "title": "Kripto Ödemeler",
+      "whichCrypto": "Hangi kripto paralar destekleniyor?",
+      "whichCryptoAnswer": "Wihngo, Solana ağında USDC ve EURC'yi destekler. Bunlar stablecoin'lerdir, yani değerleri sırasıyla ABD Doları ve Euro'ya sabitlenmiştir.",
+      "whySolana": "Neden Solana?",
+      "whySolanaAnswer": "Solana, son derece düşük işlem ücretleri (genellikle 0,01 dolardan az) ve hızlı onay süreleri sunar, bu da onu küçük ila orta ölçekli destek ödemeleri için ideal kılar.",
+      "isCryptoSafe": "Kripto güvenli mi?",
+      "isCryptoSafeAnswer": "Kripto işlemleri geri alınamaz ve dikkatli ilgi gerektirir. Göndermeden önce her zaman cüzdan adresini ve ağı iki kez kontrol edin. Wihngo kriptonuzu emanet etmez ve işlemleri geri alamaz.",
+      "wrongNetwork": "Yanlış ağda gönderirsem ne olur?",
+      "wrongNetworkAnswer": "Yanlış ağa kripto göndermek, fonların kalıcı kaybına neden olur. Her zaman doğru ağda (Solana) gönderdiğinizi onaylayın. Wihngo, yanlış ağa gönderilen fonları kurtaramaz.",
+      "cryptoPayoutVolatility": "Kripto ödeme volatilitesi ne olacak?",
+      "cryptoPayoutVolatilityAnswer": "Kripto olarak ödeme almayı seçerseniz, piyasa volatilitesi riskini kabul edersiniz. Ödemenizin değeri, hesaplandığı zaman ile aldığınız zaman arasında değişebilir. Wihngo belirli bir değeri garanti etmez."
+    },
+    "account": {
+      "title": "Hesap ve Gizlilik",
+      "howToDeleteAccount": "Hesabımı nasıl silerim?",
+      "howToDeleteAccountAnswer": "Ayarlar > Gizlilik Ayarları > Hesabı Sil'e gidin. Hesabınızı silmenin kalıcı olduğunu ve geri alınamayacağını lütfen unutmayın.",
+      "isDataSafe": "Verilerim güvende mi?",
+      "isDataSafeAnswer": "Evet. Wihngo GDPR düzenlemelerine uyar ve verilerinizi korumak için şifreleme kullanır. Kişisel bilgilerinizi asla satmayız.",
+      "canIChangeEmail": "E-posta adresimi değiştirebilir miyim?",
+      "canIChangeEmailAnswer": "Şu anda e-posta değişiklikleri support@wihngo.com üzerinden talep edilmelidir. Bu özelliği doğrudan uygulamaya eklemek için çalışıyoruz."
+    },
+    "legal": {
+      "title": "Yasal ve Uyumluluk",
+      "isWihngoRegulated": "Wihngo düzenlenmiş bir finans kurumu mu?",
+      "isWihngoRegulatedAnswer": "Hayır. Wihngo bir topluluk platformudur, banka veya finans kurumu değildir. Kullanıcılar arasında gönüllü desteği kolaylaştırıyoruz. Wihngo, aylık ödemeler için geçici olarak fon tutar ancak finansal hizmetler sunmaz.",
+      "taxResponsibility": "Vergilerden kim sorumlu?",
+      "taxResponsibilityAnswer": "Kuş sahipleri, Wihngo aracılığıyla alınan destek için geçerli vergileri bildirmekten ve ödemekten sorumludur. Yetki alanınızdaki bir vergi uzmanına danışmanızı öneririz.",
+      "whereIsWihngoRegistered": "Wihngo nerede kayıtlı?",
+      "whereIsWihngoRegisteredAnswer": "Wihngo, Estonya'da kayıt sürecindedir ve Avrupa Birliği içinde faaliyet göstermektedir."
     }
   }
 }

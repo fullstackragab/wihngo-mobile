@@ -259,10 +259,7 @@ export default function AddBird() {
       >
         {/* Required Fields */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t("bird.sectionBasicInfo")}</Text>
-
           <ValidatedTextInput
-            label={t("bird.birdName")}
             value={name}
             onChangeText={setName}
             onBlur={() => setFieldTouched("name")}
@@ -273,7 +270,6 @@ export default function AddBird() {
           />
 
           <SpeciesAutocomplete
-            label={t("bird.species")}
             value={species}
             onChangeText={setSpecies}
             onSpeciesSelected={handleSpeciesSelected}
@@ -285,7 +281,6 @@ export default function AddBird() {
           />
 
           <ValidatedTextInput
-            label={t("bird.description")}
             value={description}
             onChangeText={setDescription}
             placeholder={t("bird.descriptionPlaceholder")}
@@ -297,12 +292,7 @@ export default function AddBird() {
 
         {/* Additional Info */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            {t("bird.sectionAdditionalDetails")}
-          </Text>
-
           <ValidatedTextInput
-            label={t("bird.age")}
             value={age}
             onChangeText={setAge}
             placeholder={t("bird.agePlaceholder")}
@@ -317,10 +307,7 @@ export default function AddBird() {
 
         {/* Images */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t("bird.sectionImages")}</Text>
-
           <ImagePickerButton
-            label={t("bird.profileImage")}
             placeholder={t("bird.profileImagePlaceholder")}
             initialUri={imageUri}
             onImageSelected={setImageUri}
@@ -332,7 +319,6 @@ export default function AddBird() {
           />
 
           <ImagePickerButton
-            label={t("bird.coverImage")}
             placeholder={t("bird.coverImagePlaceholder")}
             initialUri={coverImageUri}
             onImageSelected={setCoverImageUri}

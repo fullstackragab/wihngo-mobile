@@ -218,6 +218,27 @@ function RootLayoutNav() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="privacy-policy"
+          options={{
+            title: t("headers.privacyPolicy"),
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="terms-of-service"
+          options={{
+            title: t("headers.termsOfService"),
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="faq"
+          options={{
+            title: t("headers.faq"),
+            headerShown: true,
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

@@ -55,17 +55,20 @@
     "title": "创建故事",
     "post": "发布",
     "posting": "发布中...",
-    "placeholder": "分享您的故事...",
+    "placeholder": "在这里写下您的故事...（最多5000个字符）",
     "characterCount": "{{count}}/5000",
     "tagBird": "标记鸟类",
     "required": "*",
     "optional": "(可选)",
-    "selectBird": "选择一只鸟",
+    "selectBird": "选择要标记的鸟（必填）",
     "change": "更改",
     "mood": "心情",
     "chooseMood": "选择心情",
-    "addPhoto": "添加照片",
-    "addVideo": "添加视频",
+    "moodSubtitle": "可选 - 如果您愿意可以跳过",
+    "longPressMoodInfo": "长按任何心情查看详细信息和示例",
+    "skipNoMood": "跳过 / 无心情",
+    "addPhoto": "添加照片（可选，或视频）",
+    "addVideo": "添加视频（可选，或照片）",
     "chooseOption": "选择一个选项",
     "takePhoto": "拍照",
     "recordVideo": "录制视频",
@@ -98,8 +101,50 @@
     "tip1": "• 真实并分享您的经历",
     "tip2": "• 标记一只鸟（必需）",
     "tip3": "• 添加心情来帮助表达您的感受（可选）",
-    "tip4": "• 添加照片或视频使其更具吸引力",
+    "tip4": "• 添加一张照片或视频（不能同时添加）使其更具吸引力",
     "tip5": "• 视频：最多60秒，200MB"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "爱与纽带",
+      "description": "情感、信任、亲密、依恋",
+      "example": "\"她终于在我的肩上睡着了…\""
+    },
+    "newBeginning": {
+      "label": "新的开始",
+      "description": "新鸟、领养、救助、第一天",
+      "example": "\"欢迎回家，Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "进步与胜利",
+      "description": "训练成功、健康改善、里程碑",
+      "example": "\"他今天学会了说自己的名字！\""
+    },
+    "funnyMoment": {
+      "label": "有趣的时刻",
+      "description": "愚蠢的行为、意外的行动",
+      "example": "\"他又偷了我的钥匙…\""
+    },
+    "peacefulMoment": {
+      "label": "宁静的时刻",
+      "description": "平静、美丽、情感的沉默",
+      "example": "\"只是看着他享受阳光…\""
+    },
+    "lossAndMemory": {
+      "label": "失去与回忆",
+      "description": "离世、纪念、悲伤",
+      "example": "\"你永远在我身边…\""
+    },
+    "careAndHealth": {
+      "label": "护理与健康",
+      "description": "兽医就诊、康复、建议、意识",
+      "example": "\"手术后更新…\""
+    },
+    "dailyLife": {
+      "label": "日常生活",
+      "description": "正常的日常、日常的时刻",
+      "example": "\"我们平常的早晨在一起\""
+    }
   },
   "stories": {
     "title": "故事",
@@ -130,7 +175,15 @@
     "tipsCompellingTagline": "• 写一个引人注目的标语来捕捉个性",
     "tipsIncludeDetails": "• 包括有关护理、行为和需求的详细信息",
     "tipsBeHonest": "• 对支持者诚实透明",
-    "loadingBirdData": "加载鸟类数据..."
+    "loadingBirdData": "加载鸟类数据...",
+    "namePlaceholder": "输入鸟的名字（必填，例如：查理）",
+    "speciesPlaceholder": "搜索并选择品种（必填）",
+    "taglinePlaceholder": "简短、吸引人的描述",
+    "descriptionPlaceholder": "描述这只鸟（可选 - 性格、习性等）",
+    "agePlaceholder": "输入年龄（可选，例如：2岁）",
+    "locationPlaceholder": "搜索城市（可选）",
+    "profileImagePlaceholder": "轻触选择头像（必填）",
+    "coverImagePlaceholder": "轻触选择封面图片（可选）"
   },
   "birdProfile": {
     "loadingBird": "正在加载鸟类...",
@@ -301,11 +354,11 @@
     "payoutSettings": "支付设置",
     "termsOfService": "服务条款",
     "languageChangeError": "无法更改语言",
-    "appSettings": "App Settings",
-    "theme": "Theme",
-    "support": "Support",
-    "helpSupport": "Help & Support",
-    "privacyPolicy": "Privacy Policy"
+    "appSettings": "应用设置",
+    "theme": "主题",
+    "support": "支持",
+    "helpSupport": "帮助与支持",
+    "privacyPolicy": "隐私政策"
   },
   "welcome": {
     "appTitle": "温戈",
@@ -337,7 +390,24 @@
     "daysAgo": "{{count}}天前"
   },
   "headers": {
-    "supportBird": "支持 {{birdName}}"
+    "search": "搜索",
+    "settings": "设置",
+    "editProfile": "编辑个人资料",
+    "notifications": "通知",
+    "privacy": "隐私",
+    "paymentMethods": "支付方式",
+    "payoutSettings": "付款设置",
+    "myBirds": "我的鸟",
+    "lovedBirds": "喜爱的鸟",
+    "supportedBirds": "支持的鸟",
+    "story": "故事",
+    "support": "支持",
+    "supportBird": "支持 {{birdName}}",
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款",
+    "faq": "常见问题",
+    "editStory": "编辑故事",
+    "payWithCrypto": "使用加密货币支付"
   },
   "support": {
     "selectAmount": "选择金额",
@@ -367,37 +437,37 @@
   },
   "chooseLanguage": "选择语言",
   "legal": {
-    "lastUpdated": "Last updated: December 15, 2025",
+    "lastUpdated": "最后更新时间：2025年12月15日",
     "privacy": {
-      "intro": "Wihngo respects your privacy and is committed to protecting your personal data.",
-      "whoWeAre": "Who we are",
-      "whoWeAreContent": "Wihngo is a love-centric community platform for people who care about birds. The platform is operated in the European Union and is in the process of registration in Estonia.",
-      "whatDataWeCollect": "What data we collect",
-      "whatDataWeCollectIntro": "When you use the Wihngo app, we may collect:",
-      "dataAccountInfo": "Account information (name, email, password)",
-      "dataBirdInfo": "Bird information you share (species, name, photos, stories)",
-      "dataUserContent": "User-generated content (posts, comments, likes)",
-      "dataPaymentInfo": "Payment information for support transactions",
-      "dataTechnicalInfo": "Technical data (device type, OS version, IP address)",
-      "dataUsageInfo": "Usage data and analytics",
-      "whyWeCollectData": "Why we collect this data",
-      "whyWeCollectDataIntro": "We collect this data to:",
-      "reasonProvideService": "Provide and maintain the Wihngo service",
-      "reasonConnectUsers": "Connect people who care about birds",
-      "reasonProcessPayments": "Process support payments and donations",
-      "reasonImproveApp": "Improve app performance and user experience",
-      "reasonMaintainSecurity": "Maintain security and prevent fraud",
-      "legalBasis": "Legal basis",
-      "legalBasisContent": "Data is processed under the General Data Protection Regulation (GDPR) based on legitimate interest and contractual necessity.",
-      "dataSharing": "Data sharing",
-      "dataSharingContent": "We do not sell your data. Some data may be processed by trusted service providers (such as payment processors, cloud hosting, and analytics services). All providers are required to protect your data.",
-      "dataRetention": "Data retention",
-      "dataRetentionContent": "Data is kept only as long as necessary for the purposes described above, or as required by law.",
-      "yourRights": "Your rights",
-      "yourRightsContent": "Under GDPR, you have the right to access, correct, delete, or export your personal data. You can also object to processing or request restriction.",
-      "contact": "Contact",
-      "contactIntro": "For privacy-related questions or to exercise your rights, contact:",
-      "footer": "Wihngo is committed to transparency and protecting your personal information in accordance with EU data protection laws."
+      "intro": "Wihngo尊重您的隐私，并致力于保护您的个人数据。",
+      "whoWeAre": "我们是谁",
+      "whoWeAreContent": "Wihngo是一个以爱为中心的社区平台，为关心鸟类的人们提供服务。该平台在欧盟运营，正在Estonia进行注册。",
+      "whatDataWeCollect": "我们收集的数据",
+      "whatDataWeCollectIntro": "当您使用Wihngo应用程序时，我们可能会收集：",
+      "dataAccountInfo": "账户信息（姓名、电子邮件、密码）",
+      "dataBirdInfo": "您分享的鸟类信息（物种、名称、照片、故事）",
+      "dataUserContent": "用户生成的内容（帖子、评论、点赞）",
+      "dataPaymentInfo": "支持交易的支付信息",
+      "dataTechnicalInfo": "技术数据（设备类型、操作系统版本、IP地址）",
+      "dataUsageInfo": "使用数据和分析",
+      "whyWeCollectData": "我们为何收集这些数据",
+      "whyWeCollectDataIntro": "我们收集这些数据的目的是：",
+      "reasonProvideService": "提供和维护Wihngo服务",
+      "reasonConnectUsers": "连接关心鸟类的人们",
+      "reasonProcessPayments": "处理支持付款和捐款",
+      "reasonImproveApp": "改进应用程序性能和用户体验",
+      "reasonMaintainSecurity": "维护安全并防止欺诈",
+      "legalBasis": "法律依据",
+      "legalBasisContent": "数据根据合法利益和合同必要性，依据《通用数据保护条例》(GDPR)进行处理。",
+      "dataSharing": "数据共享",
+      "dataSharingContent": "我们不会出售您的数据。一些数据可能由可信赖的服务提供商（如支付处理商、云托管和分析服务）处理。所有提供商都有义务保护您的数据。",
+      "dataRetention": "数据保留",
+      "dataRetentionContent": "数据仅在上述目的所需的期限内保留，或根据法律要求保留。",
+      "yourRights": "您的权利",
+      "yourRightsContent": "根据GDPR，您有权访问、更正、删除或导出您的个人数据。您还可以反对处理或请求限制。",
+      "contact": "联系方式",
+      "contactIntro": "如有隐私相关问题或要行使您的权利，请联系：",
+      "footer": "Wihngo致力于透明度并根据EU数据保护法保护您的个人信息。"
     },
     "terms": {
       "intro": "By using the Wihngo app, you agree to the following terms.",
@@ -428,6 +498,63 @@
       "contact": "Contact",
       "contactIntro": "For questions or support, contact:",
       "footer": "Thank you for being part of the Wihngo community and caring about birds."
+    }
+  },
+  "faq": {
+    "title": "常见问题",
+    "subtitle": "关于 Wihngo 您需要了解的一切",
+    "payouts": {
+      "title": "付款和收入",
+      "whenDoIGetPaid": "我什么时候能收到付款?",
+      "whenDoIGetPaidAnswer": "付款每月进行一次,通常在每月的1-5日。当您的余额达到最低20欧元门槛时,您将收到付款。",
+      "whyMinimum": "为什么有20欧元的最低限额?",
+      "whyMinimumAnswer": "最低付款门槛有助于降低交易费用和处理成本。这确保了您和 Wihngo 都能高效运作。如果您在某个月没有达到20欧元,您的余额将结转到下个月。",
+      "whatIfNeverReach": "如果我从未达到20欧元会怎样?",
+      "whatIfNeverReachAnswer": "您的余额每月累积,直到您达到20欧元门槛。一旦达到,您将在下一个预定付款日收到付款。您的资金永不过期。",
+      "platformFee": "平台费用是多少?",
+      "platformFeeAnswer": "Wihngo 对所有收到的支持收取5%的平台费用。此费用帮助我们维护平台、处理付款并继续改进 Wihngo。每笔支持付款的95%直接归您所有。",
+      "payoutMethods": "有哪些付款方式?",
+      "payoutMethodsAnswer": "您可以通过银行转账(SEPA/IBAN)、PayPal 或加密货币(Solana 上的 USDC/EURC)收到付款。在您的付款设置中选择最适合您的方式。"
+    },
+    "support": {
+      "title": "鸟类支持",
+      "howToSupport": "如何支持一只鸟?",
+      "howToSupportAnswer": "点击任何鸟类个人资料上的\"支持\"按钮,选择金额,选择您的付款方式(PayPal 或加密货币)并完成付款。支持是自愿的,直接帮助照顾鸟类。",
+      "whatIsSupport": "支持用于什么?",
+      "whatIsSupportAnswer": "支持帮助鸟主人支付食物、兽医护理、住所和其他费用。这是社区团结起来帮助需要帮助的鸟类的方式。",
+      "canICancel": "我可以取消或退还我的支持吗?",
+      "canICancelAnswer": "所有支持都是自愿的且最终的。Wihngo 不处理退款。请在完成付款之前确保您想要支持一只鸟。"
+    },
+    "crypto": {
+      "title": "加密货币付款",
+      "whichCrypto": "支持哪些加密货币?",
+      "whichCryptoAnswer": "Wihngo 支持 Solana 网络上的 USDC 和 EURC。这些是稳定币,意味着它们的价值分别与美元和欧元挂钩。",
+      "whySolana": "为什么选择 Solana?",
+      "whySolanaAnswer": "Solana 提供极低的交易费用(通常低于0.01美元)和快速的确认时间,使其成为小到中等支持付款的理想选择。",
+      "isCryptoSafe": "加密货币安全吗?",
+      "isCryptoSafeAnswer": "加密货币交易是不可逆的,需要仔细注意。在发送之前,请务必仔细检查钱包地址和网络。Wihngo 不持有您的加密货币,也无法逆转交易。",
+      "wrongNetwork": "如果我发送到错误的网络会怎样?",
+      "wrongNetworkAnswer": "将加密货币发送到错误的网络将导致资金永久丢失。请务必确认您在正确的网络(Solana)上发送。Wihngo 无法恢复发送到错误网络的资金。",
+      "cryptoPayoutVolatility": "加密货币付款的波动性如何?",
+      "cryptoPayoutVolatilityAnswer": "如果您选择以加密货币接收付款,您接受市场波动的风险。您的付款价值在计算和收到之间可能会发生变化。Wihngo 不保证任何特定价值。"
+    },
+    "account": {
+      "title": "账户和安全",
+      "howToDeleteAccount": "如何删除我的账户?",
+      "howToDeleteAccountAnswer": "转到设置 > 安全设置 > 删除账户。请注意,删除您的账户是永久性的且不可逆转。",
+      "isDataSafe": "我的数据安全吗?",
+      "isDataSafeAnswer": "是的。Wihngo 遵守 GDPR 法规并使用加密来保护您的数据。我们绝不会出售您的个人信息。",
+      "canIChangeEmail": "我可以更改我的电子邮件地址吗?",
+      "canIChangeEmailAnswer": "目前,必须通过 support@wihngo.com 请求更改电子邮件。我们正在努力将此功能直接添加到应用程序中。"
+    },
+    "legal": {
+      "title": "法律和合规",
+      "isWihngoRegulated": "Wihngo 是受监管的金融机构吗?",
+      "isWihngoRegulatedAnswer": "不是。Wihngo 是一个社区平台,而不是银行或金融机构。我们促进用户之间的自愿支持。Wihngo 为月度付款临时持有资金,但不提供金融服务。",
+      "taxResponsibility": "谁负责税务?",
+      "taxResponsibilityAnswer": "鸟主人负责报告和支付通过 Wihngo 收到的支持所产生的任何适用税款。我们建议您咨询您所在司法管辖区的税务专业人士。",
+      "whereIsWihngoRegistered": "Wihngo 在哪里注册?",
+      "whereIsWihngoRegisteredAnswer": "Wihngo 正在爱沙尼亚注册过程中,并在欧盟内运营。"
     }
   }
 }

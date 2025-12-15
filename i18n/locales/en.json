@@ -80,17 +80,20 @@
     "title": "Create Story",
     "post": "Post",
     "posting": "Posting...",
-    "placeholder": "Share your story...",
+    "placeholder": "Write your story here... (max 5000 characters)",
     "characterCount": "{{count}}/5000",
     "tagBird": "Tag Bird",
     "required": "*",
     "optional": "(Optional)",
-    "selectBird": "Select a bird",
+    "selectBird": "Select a bird to tag (required)",
     "change": "Change",
     "mood": "Mood",
     "chooseMood": "Choose a mood",
-    "addPhoto": "Add Photo",
-    "addVideo": "Add Video",
+    "moodSubtitle": "Optional - skip if you prefer",
+    "longPressMoodInfo": "Long press any mood to see details and examples",
+    "skipNoMood": "Skip / No Mood",
+    "addPhoto": "Add Photo (optional, or video)",
+    "addVideo": "Add Video (optional, or photo)",
     "chooseOption": "Choose an option",
     "takePhoto": "Take Photo",
     "recordVideo": "Record Video",
@@ -123,8 +126,50 @@
     "tip1": "• Be authentic and share your experiences",
     "tip2": "• Tag a bird (required)",
     "tip3": "• Add a mood to help express your feelings (optional)",
-    "tip4": "• Add photos or videos to make it more engaging",
+    "tip4": "• Add a photo or video (not both) to make it more engaging",
     "tip5": "• Videos: Max 60 seconds, 200MB"
+  },
+  "moods": {
+    "loveAndBond": {
+      "label": "Love & Bond",
+      "description": "Affection, trust, cuddles, attachment",
+      "example": "\"She finally slept on my shoulder…\""
+    },
+    "newBeginning": {
+      "label": "New Beginning",
+      "description": "New bird, adoption, rescue, first day",
+      "example": "\"Welcome home, Sky 💚\""
+    },
+    "progressAndWins": {
+      "label": "Progress & Wins",
+      "description": "Training success, health improvement, milestones",
+      "example": "\"He learned to say his name today!\""
+    },
+    "funnyMoment": {
+      "label": "Funny Moment",
+      "description": "Silly behavior, unexpected actions",
+      "example": "\"He stole my keys again…\""
+    },
+    "peacefulMoment": {
+      "label": "Peaceful Moment",
+      "description": "Calm, beautiful, emotional silence",
+      "example": "\"Just watching him enjoy the sun…\""
+    },
+    "lossAndMemory": {
+      "label": "Loss & Memory",
+      "description": "Passing away, remembrance, grief",
+      "example": "\"You'll always be with me…\""
+    },
+    "careAndHealth": {
+      "label": "Care & Health",
+      "description": "Vet visits, recovery, advice, awareness",
+      "example": "\"Post-surgery update…\""
+    },
+    "dailyLife": {
+      "label": "Daily Life",
+      "description": "Normal routines, everyday moments",
+      "example": "\"Our usual morning together\""
+    }
   },
   "stories": {
     "title": "Stories",
@@ -156,14 +201,14 @@
     "noSupportedBirdsSubtext": "Support birds to help them and see them here",
     "noLovedBirds": "No loved birds yet",
     "noLovedBirdsSubtext": "Start loving birds to see them here",
-    "namePlaceholder": "e.g., Charlie",
-    "speciesPlaceholder": "Search for a species...",
+    "namePlaceholder": "Enter bird name (required, e.g., Charlie)",
+    "speciesPlaceholder": "Search and select species (required)",
     "taglinePlaceholder": "A short, catchy description",
-    "descriptionPlaceholder": "Tell us more about this bird...",
-    "agePlaceholder": "e.g., 2 years",
-    "locationPlaceholder": "Search for a city...",
-    "profileImagePlaceholder": "Tap to select a profile image",
-    "coverImagePlaceholder": "Tap to select a cover image",
+    "descriptionPlaceholder": "Describe this bird (optional - personality, habits, etc.)",
+    "agePlaceholder": "Enter age (optional, e.g., 2 years old)",
+    "locationPlaceholder": "Search for a city (optional)",
+    "profileImagePlaceholder": "Tap to select profile image (required)",
+    "coverImagePlaceholder": "Tap to select cover image (optional)",
     "sectionBasicInfo": "Basic Information",
     "sectionAdditionalDetails": "Additional Details",
     "sectionImages": "Images",
@@ -253,7 +298,12 @@
     "supportedBirds": "Supported Birds",
     "story": "Story",
     "support": "Support",
-    "supportBird": "Support Bird"
+    "supportBird": "Support Bird",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "faq": "FAQ",
+    "editStory": "Edit Story",
+    "payWithCrypto": "Pay with Crypto"
   },
   "support": {
     "selectAmount": "Select Amount",
@@ -267,10 +317,36 @@
     "totalSupportAmount": "Total Support Amount",
     "selectCryptocurrency": "Select Cryptocurrency",
     "selectNetwork": "Select Network",
+    "selectCurrency": "Select Currency",
     "backToAmounts": "Back to amounts",
     "backToNetworks": "Back to networks",
     "backToCurrencies": "Back to currencies",
-    "doNotShowAgain": "Do not show again"
+    "backToPaymentMethods": "Back to payment methods",
+    "doNotShowAgain": "Do not show again",
+    "platformSubtitle": "Help us keep Wihngo running and support bird conservation!",
+    "birdSubtitle": "Choose your payment method to support this amazing bird",
+    "quickSecurePayment": "Quick & secure payment",
+    "cryptoCurrencies": "USDC, EURC",
+    "platformSupportTitle": "❤️ Also Support Wihngo Platform",
+    "platformSupportText": "Help us continue building features for bird lovers!",
+    "supportWihngoViaPayPal": "Support Wihngo via PayPal",
+    "openingPayPal": "Opening PayPal",
+    "completeYourDonation": "Complete your donation on PayPal",
+    "thankYouForSupport": "Thank you for supporting Wihngo!",
+    "cannotOpenPayPal": "Cannot Open PayPal",
+    "unableToOpenPayPal": "Unable to open PayPal. Please try again later.",
+    "pleaseSelectNetwork": "Please select a network first",
+    "fallbackMessage": "This fallback should not appear. Please go back.",
+    "supportedCurrencies": "✅ Supported: USDC, EURC",
+    "lowestFees": "💡 Solana & Stellar recommended (lowest fees ~$0.0003)",
+    "amountLabel": "Amount: ${{amount}}",
+    "availableOn": "Available on {{network}}",
+    "chooseBlockchainNetwork": "Choose the blockchain network you prefer",
+    "confirmNetworkWarning": "⚠️ Network Warning",
+    "confirmNetworkText": "You must send cryptocurrency using the same network you select.",
+    "transfersCannotBeRecovered": "Transfers sent to the wrong network cannot be recovered",
+    "doYouUnderstand": "Do you understand and want to continue?",
+    "iUnderstandShowAddress": "I Understand - Show Address"
   },
   "media": {
     "changeImage": "Change Image",
@@ -784,6 +860,13 @@
     "cryptoPeerToPeer": "Crypto support is peer-to-peer",
     "noRecoveryPromise": "We cannot recover lost or incorrectly sent funds",
     "volatilityWarning": "Crypto payouts are subject to market volatility and network fees.",
-    "doubleCheckAddress": "Always double-check wallet addresses and networks before confirming."
+    "doubleCheckAddress": "Always double-check wallet addresses and networks before confirming.",
+    "networkLabel": "Network:",
+    "addressLabel": "Address:",
+    "importantDisclaimers": "Important Disclaimers:",
+    "andAcceptAllRisks": "and accept all risks"
+  },
+  "payout": {
+    "monthlyPayouts": "Monthly Payouts"
   }
 }

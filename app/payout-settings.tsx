@@ -233,7 +233,7 @@ export default function PayoutSettings() {
       <View style={styles.monthlyInfoCard}>
         <View style={styles.infoHeader}>
           <Ionicons name="calendar-outline" size={20} color="#4ECDC4" />
-          <Text style={styles.infoTitle}>Monthly Payouts</Text>
+          <Text style={styles.infoTitle}>{t("payout.monthlyPayouts")}</Text>
         </View>
         <Text style={styles.infoText}>{t("payout.monthlyPayoutInfo")}</Text>
         <Text style={styles.infoSubtext}>{t("payout.fundsHeldInfo")}</Text>

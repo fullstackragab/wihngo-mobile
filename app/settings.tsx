@@ -132,10 +132,8 @@ export default function Settings() {
         <Text style={styles.sectionTitle}>{t("settings.support")}</Text>
         <SettingsItem
           icon="circle-question"
-          title={t("settings.helpSupport")}
-          onPress={() => {
-            // TODO: Implement help page
-          }}
+          title={t("faq.title")}
+          onPress={() => router.push("/faq")}
         />
         <SettingsItem
           icon="file-lines"

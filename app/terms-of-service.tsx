@@ -45,8 +45,48 @@ export default function TermsOfService() {
           {t("legal.terms.platformRoleContent")}
         </Text>
 
-        <Text style={styles.sectionTitle}>{t("legal.terms.appUsage")}</Text>
-        <Text style={styles.paragraph}>{t("legal.terms.appUsageContent")}</Text>
+        <Text style={styles.sectionTitle}>{t("legal.terms.supportFunds")}</Text>
+        <Text style={styles.paragraph}>
+          {t("legal.terms.supportFundsIntro")}
+        </Text>
+        <View style={styles.bulletList}>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.supportFundsCollected")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.supportFundsMinimum")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.supportFundsMethod")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.supportFundsFee")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.supportFundsDelays")}
+          </Text>
+        </View>
+
+        <Text style={styles.sectionTitle}>
+          {t("legal.terms.cryptoSupport")}
+        </Text>
+        <View style={styles.bulletList}>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.cryptoSupportPayout")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.cryptoSupportPeerToPeer")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.cryptoSupportNoGuarantee")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.cryptoSupportIrreversible")}
+          </Text>
+        </View>
+        <Text style={styles.warningBox}>
+          {t("legal.terms.cryptoSupportNotWallet")}
+        </Text>
 
         <Text style={styles.sectionTitle}>{t("legal.terms.userContent")}</Text>
         <Text style={styles.paragraph}>
@@ -74,17 +114,24 @@ export default function TermsOfService() {
           </Text>
         </View>
 
-        <Text style={styles.sectionTitle}>
-          {t("legal.terms.supportAndPayments")}
-        </Text>
-        <Text style={styles.paragraph}>
-          {t("legal.terms.supportAndPaymentsContent")}
-        </Text>
-
         <Text style={styles.sectionTitle}>{t("legal.terms.noGuarantees")}</Text>
         <Text style={styles.paragraph}>
           {t("legal.terms.noGuaranteesContent")}
         </Text>
+
+        <Text style={styles.sectionTitle}>{t("legal.terms.liability")}</Text>
+        <Text style={styles.paragraph}>{t("legal.terms.liabilityIntro")}</Text>
+        <View style={styles.bulletList}>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.liabilityLostTransactions")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.liabilityDelays")}
+          </Text>
+          <Text style={styles.bullet}>
+            • {t("legal.terms.liabilityIncorrectAddresses")}
+          </Text>
+        </View>
 
         <Text style={styles.sectionTitle}>
           {t("legal.terms.limitationOfLiability")}
@@ -203,5 +250,16 @@ const styles = StyleSheet.create({
     color: "#666",
     lineHeight: 20,
     textAlign: "center",
+  },
+  warningBox: {
+    fontSize: 14,
+    color: "#856404",
+    backgroundColor: "#fff3cd",
+    borderColor: "#ffeaa7",
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    marginVertical: 12,
+    lineHeight: 20,
   },
 });

@@ -626,17 +626,27 @@ export default function SupportModal({
                   </View>
 
                   <Text style={styles.confirmationTitle}>
-                    Important Warning
+                    ⚠️ Network Warning
                   </Text>
 
                   <Text style={styles.confirmationText}>
-                    You must send cryptocurrency using the same network you
-                    select.
+                    Crypto transactions are irreversible. Please make sure you
+                    are sending on the correct network.
                   </Text>
 
                   <Text style={styles.confirmationWarning}>
-                    Transfers sent to the wrong network cannot be recovered
+                    Sending on the wrong network will result in permanent loss
+                    of funds. Wihngo cannot recover lost or incorrectly sent
+                    funds.
                   </Text>
+
+                  <View style={styles.disclaimerBox}>
+                    <Text style={styles.disclaimerText}>
+                      • Wihngo is not a wallet{"\n"}• Wihngo does not guarantee
+                      delivery{"\n"}• Crypto support is peer-to-peer{"\n"}• All
+                      transactions are final
+                    </Text>
+                  </View>
 
                   <Text style={styles.confirmationQuestion}>
                     Do you understand and want to continue?
@@ -1361,6 +1371,19 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  disclaimerBox: {
+    backgroundColor: "#FFF3CD",
+    borderRadius: 8,
+    padding: 12,
+    marginVertical: 16,
+    borderWidth: 1,
+    borderColor: "#FFEAA7",
+  },
+  disclaimerText: {
+    fontSize: 13,
+    color: "#856404",
+    lineHeight: 20,
   },
   emptyState: {
     alignItems: "center",

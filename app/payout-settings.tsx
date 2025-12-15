@@ -229,6 +229,16 @@ export default function PayoutSettings() {
         </TouchableOpacity>
       </View>
 
+      {/* Monthly Payout Information */}
+      <View style={styles.monthlyInfoCard}>
+        <View style={styles.infoHeader}>
+          <Ionicons name="calendar-outline" size={20} color="#4ECDC4" />
+          <Text style={styles.infoTitle}>Monthly Payouts</Text>
+        </View>
+        <Text style={styles.infoText}>{t("payout.monthlyPayoutInfo")}</Text>
+        <Text style={styles.infoSubtext}>{t("payout.fundsHeldInfo")}</Text>
+      </View>
+
       {/* Platform Fee Notice */}
       <View style={styles.infoCard}>
         <View style={styles.infoHeader}>
@@ -240,7 +250,7 @@ export default function PayoutSettings() {
           {"\n"}• {t("payout.youReceive")}
           {"\n"}• {t("payout.providerFees")}
           {"\n"}• {t("payout.minimumAmount")}
-          {"\n"}•{t("payout.frequency")}
+          {"\n"}• {t("payout.frequency")}
           {"\n"}• {t("payout.taxResponsibility")}
         </Text>
       </View>
@@ -598,6 +608,20 @@ const styles = StyleSheet.create({
     color: "#4ECDC4",
     fontSize: Typography.small,
     fontWeight: "600",
+  },
+  monthlyInfoCard: {
+    backgroundColor: "#E8F8F5",
+    margin: Spacing.md,
+    padding: Spacing.md,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#4ECDC4",
+  },
+  infoSubtext: {
+    fontSize: Typography.small,
+    color: "#34495E",
+    marginTop: Spacing.xs,
+    lineHeight: 20,
   },
   legalCard: {
     backgroundColor: "#fff",

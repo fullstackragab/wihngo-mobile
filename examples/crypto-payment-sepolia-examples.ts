@@ -1,6 +1,8 @@
 /**
  * Crypto Payment Integration - Testing Examples
- * Demonstrates how to use the updated crypto payment system with Sepolia ETH support
+ * @deprecated This file contains legacy examples for Sepolia and other networks.
+ * As of v3.0, only Solana network is supported for crypto payments.
+ * See CRYPTO_SOLANA_ONLY_UPDATE.md for current implementation.
  */
 
 import type { CryptoCurrency, CryptoNetwork } from "@/types/crypto";

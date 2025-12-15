@@ -4,13 +4,7 @@
  * Updated to match backend API documentation
  */
 
-export type PayoutMethodType =
-  | "BankTransfer"
-  | "PayPal"
-  | "Wise"
-  | "Solana"
-  | "Base"
-  | "Crypto";
+export type PayoutMethodType = "BankTransfer" | "PayPal" | "Wise" | "Solana";
 
 export type PayoutMethod = {
   id?: string;
@@ -27,10 +21,10 @@ export type PayoutMethod = {
   bankName?: string;
   // PayPal specific
   payPalEmail?: string;
-  // Crypto specific (Solana/Base)
+  // Crypto specific (Solana only)
   walletAddress?: string;
-  network?: string; // e.g., "solana-mainnet", "base-mainnet", "solana-devnet", "base-testnet"
-  currency?: string; // e.g., "USDC", "EURC", "SOL", "ETH"
+  network?: string; // e.g., "solana-mainnet", "solana-devnet"
+  currency?: string; // "USDC" or "EURC"
 };
 
 export type PayoutSettings = {
@@ -77,7 +71,7 @@ export type AddPayoutMethodDto = {
   bankName?: string;
   // PayPal
   payPalEmail?: string;
-  // Crypto (Solana/Base)
+  // Crypto (Solana only)
   walletAddress?: string;
   network?: string;
   currency?: string;

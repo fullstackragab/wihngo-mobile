@@ -28,18 +28,9 @@ export default function NetworkSelector({
     return null; // No need to show selector if only one network
   }
 
+  // Solana only - network selector won't render with single network
   const getNetworkDetails = (network: CryptoNetwork) => {
-    const details: Record<
-      CryptoNetwork,
-      { speed: string; confirmations: number }
-    > = {
-      ethereum: { speed: "Medium (2-5 min)", confirmations: 12 },
-      solana: { speed: "Very Fast (~1 sec)", confirmations: 1 },
-      polygon: { speed: "Medium (4-5 min)", confirmations: 128 },
-      base: { speed: "Fast (~24 sec)", confirmations: 12 },
-      stellar: { speed: "Very Fast (~5 sec)", confirmations: 1 },
-    };
-    return details[network] || { speed: "Unknown", confirmations: 0 };
+    return { speed: "Very Fast (~1 sec)", confirmations: 1 };
   };
 
   return (

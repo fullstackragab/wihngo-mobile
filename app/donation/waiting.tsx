@@ -13,11 +13,8 @@ import { sseService } from "@/services/sse.service";
 import {
   buildSolanaPayUri,
   copySolanaPayUri,
-  getConnectedAddress,
   getExplorerUrl,
-  isWalletConnected,
   openSolanaPayUri,
-  sendEvmPayment,
 } from "@/services/wallet.service";
 import type { Invoice, InvoiceEvent } from "@/types/invoice";
 import { useAppKit } from "@reown/appkit-react-native";
@@ -136,35 +133,13 @@ export default function WaitingForPaymentScreen() {
       if (invoice.payment_method.startsWith("solana_")) {
         const uri = buildSolanaPayUri(invoice);
         await openSolanaPayUri(uri);
-      } else if (invoice.payment_method.startsWith("base_")) {
-        // Check if wallet is connected
-        if (!isWalletConnected()) {
-          // Open Reown AppKit modal to connect
-          openWalletModal();
-          Alert.alert(
-            "Connect Wallet",
-            "Please connect your wallet to proceed with the payment"
-          );
-          return;
-        }
-
-        // Send payment
-        const txHash = await sendEvmPayment(invoice);
-        const payerAddress = getConnectedAddress();
-
-        // Submit to backend
-        await submitPayment({
-          invoice_id: invoice.id,
-          transaction_hash: txHash,
-          payer_address: payerAddress || "",
-          network: "base",
-          token_symbol: invoice.token_symbol || "USDC",
-        });
-
+      } else {
+        // Only Solana is supported
         Alert.alert(
-          "Transaction Sent!",
-          "Your transaction has been submitted. Waiting for confirmation..."
+          "Unsupported Payment Method",
+          "Only Solana network is supported for crypto payments."
         );
+        return;
       }
     } catch (error: any) {
       console.error("Error opening wallet:", error);

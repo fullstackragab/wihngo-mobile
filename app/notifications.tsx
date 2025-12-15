@@ -293,13 +293,13 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 16,
-    gap: 12,
   },
   notificationCard: {
     flexDirection: "row",
     backgroundColor: "#ffffff",
     borderRadius: 12,
     padding: 16,
+    marginBottom: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,

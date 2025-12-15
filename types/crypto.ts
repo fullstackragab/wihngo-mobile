@@ -8,28 +8,15 @@ export type CryptoCurrency =
   | "USDC" // USD Coin
   | "EURC"; // Euro Coin
 
-// Updated supported networks - Breaking Change v2.0
-export type CryptoNetwork =
-  | "ethereum"
-  | "solana"
-  | "polygon"
-  | "base"
-  | "stellar";
+// Updated supported networks - Only Solana (v3.0)
+export type CryptoNetwork = "solana";
 
 /**
- * Network confirmation requirements - Updated v2.0
- * Ethereum: 12 blocks (~2.4 minutes)
+ * Network confirmation requirements - Only Solana (v3.0)
  * Solana: 1 block (~400ms finalized)
- * Polygon: 128 blocks (~4.5 minutes)
- * Base: 12 blocks (~24 seconds)
- * Stellar: 1 ledger (~5 seconds)
  */
 export const NETWORK_CONFIRMATIONS: Record<CryptoNetwork, number> = {
-  ethereum: 12,
   solana: 1,
-  polygon: 128,
-  base: 12,
-  stellar: 1,
 };
 
 export type CryptoPaymentStatus =
@@ -181,16 +168,12 @@ export type CryptoPaymentStep =
   | "failed";
 
 /**
- * Network to Currency Mapping - Updated v2.0
- * Both USDC and EURC are supported on all networks
+ * Network to Currency Mapping - Only Solana (v3.0)
+ * Both USDC and EURC are supported on Solana
  * Default to USDC for backward compatibility
  */
 export const NETWORK_TO_CURRENCY: Record<CryptoNetwork, CryptoCurrency> = {
-  ethereum: "USDC",
   solana: "USDC",
-  polygon: "USDC",
-  base: "USDC",
-  stellar: "USDC",
 };
 
 /**
@@ -206,13 +189,13 @@ export function getCurrencyForNetwork(network: CryptoNetwork): CryptoCurrency {
  * - Ethereum, Solana, Polygon, Base, Stellar
  */
 export interface CurrencyNetworkMap {
-  USDC: ("ethereum" | "solana" | "polygon" | "base" | "stellar")[];
-  EURC: ("ethereum" | "solana" | "polygon" | "base" | "stellar")[];
+  USDC: "solana"[];
+  EURC: "solana"[];
 }
 
 export const VALID_COMBINATIONS: CurrencyNetworkMap = {
-  USDC: ["ethereum", "solana", "polygon", "base", "stellar"],
-  EURC: ["ethereum", "solana", "polygon", "base", "stellar"],
+  USDC: ["solana"],
+  EURC: ["solana"],
 };
 
 /**

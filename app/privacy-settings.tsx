@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, Switch, Text, View } from "react-native";
 
 export default function PrivacySettings() {
+  const { t } = useTranslation();
   const [profilePublic, setProfilePublic] = useState(true);
   const [showEmail, setShowEmail] = useState(false);
   const [showBirds, setShowBirds] = useState(true);
@@ -12,13 +14,17 @@ export default function PrivacySettings() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Profile Visibility</Text>
+        <Text style={styles.sectionTitle}>
+          {t("privacySettings.profileVisibility")}
+        </Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Public Profile</Text>
+            <Text style={styles.settingTitle}>
+              {t("privacySettings.publicProfile")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Make your profile visible to everyone
+              {t("privacySettings.publicProfileDesc")}
             </Text>
           </View>
           <Switch value={profilePublic} onValueChange={setProfilePublic} />
@@ -26,9 +32,11 @@ export default function PrivacySettings() {
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Show Email</Text>
+            <Text style={styles.settingTitle}>
+              {t("privacySettings.showEmail")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Display your email on your profile
+              {t("privacySettings.showEmailDesc")}
             </Text>
           </View>
           <Switch value={showEmail} onValueChange={setShowEmail} />
@@ -36,9 +44,11 @@ export default function PrivacySettings() {
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Show My Birds</Text>
+            <Text style={styles.settingTitle}>
+              {t("privacySettings.showMyBirds")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Let others see your bird collection
+              {t("privacySettings.showMyBirdsDesc")}
             </Text>
           </View>
           <Switch value={showBirds} onValueChange={setShowBirds} />
@@ -46,9 +56,11 @@ export default function PrivacySettings() {
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Show My Stories</Text>
+            <Text style={styles.settingTitle}>
+              {t("privacySettings.showMyStories")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Let others see your posted stories
+              {t("privacySettings.showMyStoriesDesc")}
             </Text>
           </View>
           <Switch value={showStories} onValueChange={setShowStories} />
@@ -56,13 +68,17 @@ export default function PrivacySettings() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Communication</Text>
+        <Text style={styles.sectionTitle}>
+          {t("privacySettings.communication")}
+        </Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Allow Messages</Text>
+            <Text style={styles.settingTitle}>
+              {t("privacySettings.allowMessages")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Let other users send you messages
+              {t("privacySettings.allowMessagesDesc")}
             </Text>
           </View>
           <Switch value={allowMessages} onValueChange={setAllowMessages} />
@@ -70,13 +86,17 @@ export default function PrivacySettings() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Data & Analytics</Text>
+        <Text style={styles.sectionTitle}>
+          {t("privacySettings.dataAnalytics")}
+        </Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Data Sharing</Text>
+            <Text style={styles.settingTitle}>
+              {t("privacySettings.dataSharing")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Share anonymous usage data to improve the app
+              {t("privacySettings.dataSharingDesc")}
             </Text>
           </View>
           <Switch value={dataSharing} onValueChange={setDataSharing} />
@@ -85,8 +105,7 @@ export default function PrivacySettings() {
 
       <View style={styles.infoSection}>
         <Text style={styles.infoText}>
-          Your privacy is important to us. We will never sell your personal
-          information to third parties. See our Privacy Policy for more details.
+          {t("privacySettings.privacyNotice")}
         </Text>
       </View>
     </ScrollView>

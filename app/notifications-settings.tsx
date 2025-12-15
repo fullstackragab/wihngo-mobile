@@ -65,25 +65,33 @@ export default function NotificationsSettings() {
           onPress={handleTestNotification}
           disabled={saving}
         >
-          <Text style={styles.testButtonText}>Send Test Notification</Text>
+          <Text style={styles.testButtonText}>
+            {t("notificationSettings.sendTest")}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.testButton, styles.permissionButton]}
           onPress={handleRequestPermission}
           disabled={saving}
         >
-          <Text style={styles.testButtonText}>Request Push Permissions</Text>
+          <Text style={styles.testButtonText}>
+            {t("notificationSettings.requestPermissions")}
+          </Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>General</Text>
+        <Text style={styles.sectionTitle}>
+          {t("notificationSettings.general")}
+        </Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Email Notifications</Text>
+            <Text style={styles.settingTitle}>
+              {t("notificationSettings.emailNotifications")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Receive notifications via email
+              {t("notificationSettings.emailNotificationsDesc")}
             </Text>
           </View>
           <Switch
@@ -97,13 +105,17 @@ export default function NotificationsSettings() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Engagement</Text>
+        <Text style={styles.sectionTitle}>
+          {t("notificationSettings.engagement")}
+        </Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Love Notifications</Text>
+            <Text style={styles.settingTitle}>
+              {t("notificationSettings.loveNotifications")}
+            </Text>
             <Text style={styles.settingDescription}>
-              When someone loves your bird
+              {t("notificationSettings.loveNotificationsDesc")}
             </Text>
           </View>
           <Switch
@@ -117,9 +129,11 @@ export default function NotificationsSettings() {
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Support Notifications</Text>
+            <Text style={styles.settingTitle}>
+              {t("notificationSettings.supportNotifications")}
+            </Text>
             <Text style={styles.settingDescription}>
-              When someone supports your bird
+              {t("notificationSettings.supportNotificationsDesc")}
             </Text>
           </View>
           <Switch
@@ -133,9 +147,11 @@ export default function NotificationsSettings() {
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Comment Notifications</Text>
+            <Text style={styles.settingTitle}>
+              {t("notificationSettings.commentNotifications")}
+            </Text>
             <Text style={styles.settingDescription}>
-              When someone comments on your content
+              {t("notificationSettings.commentNotificationsDesc")}
             </Text>
           </View>
           <Switch
@@ -149,13 +165,17 @@ export default function NotificationsSettings() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Content Updates</Text>
+        <Text style={styles.sectionTitle}>
+          {t("notificationSettings.contentUpdates")}
+        </Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Story Notifications</Text>
+            <Text style={styles.settingTitle}>
+              {t("notificationSettings.storyNotifications")}
+            </Text>
             <Text style={styles.settingDescription}>
-              New stories from birds you follow
+              {t("notificationSettings.storyNotificationsDesc")}
             </Text>
           </View>
           <Switch
@@ -169,9 +189,11 @@ export default function NotificationsSettings() {
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Bird Update Notifications</Text>
+            <Text style={styles.settingTitle}>
+              {t("notificationSettings.birdUpdateNotifications")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Updates about your loved birds
+              {t("notificationSettings.birdUpdateNotificationsDesc")}
             </Text>
           </View>
           <Switch
@@ -185,13 +207,17 @@ export default function NotificationsSettings() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>System</Text>
+        <Text style={styles.sectionTitle}>
+          {t("notificationSettings.system")}
+        </Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>System Notifications</Text>
+            <Text style={styles.settingTitle}>
+              {t("notificationSettings.systemNotifications")}
+            </Text>
             <Text style={styles.settingDescription}>
-              Important system announcements
+              {t("notificationSettings.systemNotificationsDesc")}
             </Text>
           </View>
           <Switch
@@ -205,15 +231,17 @@ export default function NotificationsSettings() {
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Recommendations</Text>
+        <Text style={styles.sectionTitle}>
+          {t("notificationSettings.recommendations")}
+        </Text>
 
         <View style={styles.settingItem}>
           <View style={styles.settingInfo}>
             <Text style={styles.settingTitle}>
-              Recommendation Notifications
+              {t("notificationSettings.recommendationNotifications")}
             </Text>
             <Text style={styles.settingDescription}>
-              Suggested birds and content
+              {t("notificationSettings.recommendationNotificationsDesc")}
             </Text>
           </View>
           <Switch

@@ -8,13 +8,9 @@ import type {
   Invoice,
   InvoiceEvent,
 } from "@/types/invoice";
-import { createInvoice, submitPayment } from "./invoice.service";
+import { createInvoice } from "./invoice.service";
 import { sseService } from "./sse.service";
-import {
-  buildSolanaPayUri,
-  openSolanaPayUri,
-  sendEvmPayment,
-} from "./wallet.service";
+import { buildSolanaPayUri, openSolanaPayUri } from "./wallet.service";
 
 /**
  * Start donation flow
@@ -46,25 +42,12 @@ export async function processSolanaPayment(invoice: Invoice): Promise<void> {
 
 /**
  * Process Base/EVM payment
+ * @deprecated Base network is no longer supported. Use Solana only.
  */
 export async function processBasePayment(invoice: Invoice): Promise<string> {
-  try {
-    const txHash = await sendEvmPayment(invoice);
-
-    // Submit transaction hash to backend
-    await submitPayment({
-      invoice_id: invoice.id,
-      transaction_hash: txHash,
-      payer_address: "", // Should be set by sendEvmPayment
-      network: "base",
-      token_symbol: invoice.token_symbol || "USDC",
-    });
-
-    return txHash;
-  } catch (error) {
-    console.error("Error processing Base payment:", error);
-    throw error;
-  }
+  throw new Error(
+    "Base network is no longer supported. Please use Solana network for crypto payments."
+  );
 }
 
 /**

@@ -122,6 +122,27 @@ export default function EditProfile() {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <FontAwesome6 name="xmark" size={24} color="#2C3E50" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{t("profile.editProfile")}</Text>
+        <TouchableOpacity
+          onPress={handleSave}
+          disabled={loading || !name.trim()}
+        >
+          <Text
+            style={[
+              styles.saveButton,
+              (!name.trim() || loading) && styles.saveButtonDisabled,
+            ]}
+          >
+            {loading ? t("profile.saving") : t("profile.save")}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <ScrollView>
         <View style={styles.profilePictureContainer}>
           {imageLoading ? (
@@ -178,7 +199,6 @@ export default function EditProfile() {
 
         <View style={styles.form}>
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>{t("profile.name")}</Text>
             <TextInput
               style={styles.input}
               value={name}
@@ -188,20 +208,15 @@ export default function EditProfile() {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>{t("profile.email")}</Text>
             <TextInput
               style={[styles.input, styles.inputDisabled]}
               value={email}
               editable={false}
               placeholder={t("profile.yourEmail")}
             />
-            <Text style={styles.helperText}>
-              {t("profile.emailCannotChange")}
-            </Text>
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>{t("profile.bio")}</Text>
             <TextInput
               style={[styles.input, styles.textArea]}
               value={bio}
@@ -212,16 +227,6 @@ export default function EditProfile() {
               textAlignVertical="top"
             />
           </View>
-
-          <TouchableOpacity
-            style={[styles.saveButton, loading && styles.saveButtonDisabled]}
-            onPress={handleSave}
-            disabled={loading}
-          >
-            <Text style={styles.saveButtonText}>
-              {loading ? t("profile.saving") : t("profile.saveChanges")}
-            </Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -232,6 +237,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E8E8E8",
+    backgroundColor: "#fff",
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#2C3E50",
+  },
+  saveButton: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#4ECDC4",
+  },
+  saveButtonDisabled: {
+    color: "#BDC3C7",
   },
   profilePictureContainer: {
     alignItems: "center",
@@ -294,20 +323,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#999",
     marginTop: 4,
-  },
-  saveButton: {
-    backgroundColor: "#007AFF",
-    padding: 16,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  saveButtonDisabled: {
-    backgroundColor: "#999",
-  },
-  saveButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

@@ -121,7 +121,7 @@ function RootLayoutNav() {
           name="edit-profile"
           options={{
             title: t("headers.editProfile"),
-            headerShown: true,
+            headerShown: false,
           }}
         />
         <Stack.Screen

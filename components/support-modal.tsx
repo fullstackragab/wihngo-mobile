@@ -449,11 +449,7 @@ export default function SupportModal({
         name: "USD Coin (USDC)",
         icon: "dollar-sign",
         networks: [
-          "solana" as CryptoNetwork, // RECOMMENDED - fastest & cheapest
-          "stellar" as CryptoNetwork,
-          "base" as CryptoNetwork,
-          "polygon" as CryptoNetwork,
-          "ethereum" as CryptoNetwork,
+          "solana" as CryptoNetwork, // Only Solana supported
         ],
       },
       {
@@ -461,11 +457,7 @@ export default function SupportModal({
         name: "Euro Coin (EURC)",
         icon: "euro-sign",
         networks: [
-          "solana" as CryptoNetwork, // RECOMMENDED - fastest & cheapest
-          "stellar" as CryptoNetwork,
-          "base" as CryptoNetwork,
-          "polygon" as CryptoNetwork,
-          "ethereum" as CryptoNetwork,
+          "solana" as CryptoNetwork, // Only Solana supported
         ],
       },
     ];

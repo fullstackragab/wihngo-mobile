@@ -242,16 +242,8 @@ export async function disconnectWallet(): Promise<void> {
 }
 
 /**
- * Get blockchain explorer URL for transaction
+ * Get blockchain explorer URL for transaction - Solana only
  */
-export function getExplorerUrl(
-  txHash: string,
-  network: "solana" | "base"
-): string {
-  if (network === "solana") {
-    return `https://explorer.solana.com/tx/${txHash}`;
-  } else if (network === "base") {
-    return `https://basescan.org/tx/${txHash}`;
-  }
-  return "";
+export function getExplorerUrl(txHash: string, network: "solana"): string {
+  return `https://explorer.solana.com/tx/${txHash}`;
 }

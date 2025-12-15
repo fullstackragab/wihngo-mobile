@@ -12,12 +12,7 @@ export type InvoiceStatus =
   | "EXPIRED"
   | "CANCELLED";
 
-export type PaymentMethod =
-  | "paypal"
-  | "solana_usdc"
-  | "solana_eurc"
-  | "base_usdc"
-  | "base_eurc";
+export type PaymentMethod = "paypal" | "solana_usdc" | "solana_eurc";
 
 export type InvoiceEventType =
   | "INVOICE_CREATED"
@@ -43,7 +38,7 @@ export interface Invoice {
   // Crypto-specific fields
   expected_token_amount?: number;
   token_symbol?: string;
-  network?: "solana" | "base";
+  network?: "solana";
   merchant_address?: string;
 
   // Payment URIs
@@ -95,7 +90,7 @@ export interface SubmitPaymentRequest {
   invoice_id: string;
   transaction_hash: string;
   payer_address: string;
-  network: "solana" | "base";
+  network: "solana";
   token_symbol: string;
 }
 

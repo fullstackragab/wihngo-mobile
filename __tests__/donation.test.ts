@@ -1,6 +1,6 @@
 /**
  * Unit Tests for Donation/Payment Helpers
- * Tests for Solana Pay URI builder, EVM payload builder, and helper functions
+ * Tests for Solana Pay URI builder and helper functions
  */
 
 import {
@@ -9,11 +9,7 @@ import {
   getTimeRemaining,
   isTerminalStatus,
 } from "@/services/donation.service";
-import {
-  buildEvmTransferPayload,
-  buildSolanaPayUri,
-  getExplorerUrl,
-} from "@/services/wallet.service";
+import { buildSolanaPayUri, getExplorerUrl } from "@/services/wallet.service";
 import type { Invoice } from "@/types/invoice";
 
 describe("Wallet Service Tests", () => {
@@ -82,44 +78,7 @@ describe("Wallet Service Tests", () => {
     });
   });
 
-  describe("buildEvmTransferPayload", () => {
-    it("should build correct ERC-20 transfer payload for USDC on Base", () => {
-      const mockInvoice: Partial<Invoice> = {
-        merchant_address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-        expected_token_amount: 10.5,
-        token_symbol: "USDC",
-      };
-
-      const payload = buildEvmTransferPayload(mockInvoice as Invoice);
-
-      expect(payload.to).toBe("0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"); // USDC on Base
-      expect(payload.data).toContain("0xa9059cbb"); // transfer function signature
-      expect(payload.value).toBe("0x0");
-    });
-
-    it("should build correct ERC-20 transfer payload for EURC on Base", () => {
-      const mockInvoice: Partial<Invoice> = {
-        merchant_address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-        expected_token_amount: 20,
-        token_symbol: "EURC",
-      };
-
-      const payload = buildEvmTransferPayload(mockInvoice as Invoice);
-
-      expect(payload.to).toBe("0x60a3E35Cc302bFA44Cb288Bc5a4F316Fdb1adb42"); // EURC on Base
-      expect(payload.data).toContain("0xa9059cbb");
-    });
-
-    it("should throw error for unsupported token", () => {
-      const mockInvoice: Partial<Invoice> = {
-        merchant_address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-        expected_token_amount: 10,
-        token_symbol: "INVALID",
-      };
-
-      expect(() => buildEvmTransferPayload(mockInvoice as Invoice)).toThrow();
-    });
-  });
+  // Removed Base/EVM tests - only Solana network is supported
 
   describe("getExplorerUrl", () => {
     it("should return correct Solana explorer URL", () => {
@@ -128,14 +87,6 @@ describe("Wallet Service Tests", () => {
       const url = getExplorerUrl(txHash, "solana");
 
       expect(url).toBe(`https://explorer.solana.com/tx/${txHash}`);
-    });
-
-    it("should return correct Base explorer URL", () => {
-      const txHash =
-        "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef";
-      const url = getExplorerUrl(txHash, "base");
-
-      expect(url).toBe(`https://basescan.org/tx/${txHash}`);
     });
   });
 });

@@ -270,8 +270,8 @@ export function getWalletAddressForNetwork(
 }
 
 /**
- * Get information about supported cryptocurrencies - Updated v2.0
- * Supported networks: Ethereum, Solana, Polygon, Base, Stellar
+ * Get information about supported cryptocurrencies - Only Solana (v3.0)
+ * Supported network: Solana only
  * Supported currencies: USDC, EURC
  */
 export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
@@ -281,16 +281,12 @@ export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
       name: "USD Coin (USDC)",
       symbol: "$",
       iconName: "usdc",
-      networks: ["ethereum", "solana", "polygon", "base", "stellar"],
+      networks: ["solana"],
       minAmount: 1,
-      confirmationsRequired: 12,
-      estimatedTime: "~30 sec - 5 min",
+      confirmationsRequired: 1,
+      estimatedTime: "~1 sec",
       decimals: {
-        ethereum: 6,
         solana: 6,
-        polygon: 6,
-        base: 6,
-        stellar: 7,
       },
     },
     {
@@ -298,33 +294,22 @@ export function getSupportedCryptocurrencies(): CryptoCurrencyInfo[] {
       name: "Euro Coin (EURC)",
       symbol: "€",
       iconName: "eurc",
-      networks: ["ethereum", "solana", "polygon", "base", "stellar"],
+      networks: ["solana"],
       minAmount: 1,
-      confirmationsRequired: 12,
-      estimatedTime: "~30 sec - 5 min",
+      confirmationsRequired: 1,
+      estimatedTime: "~1 sec",
       decimals: {
-        ethereum: 6,
         solana: 6,
-        polygon: 6,
-        base: 6,
-        stellar: 7,
       },
     },
   ];
 }
 
 /**
- * Get network display name - Updated v2.0
+ * Get network display name - Only Solana (v3.0)
  */
 export function getNetworkName(network: CryptoNetwork): string {
-  const networks: Record<CryptoNetwork, string> = {
-    ethereum: "Ethereum",
-    solana: "Solana",
-    polygon: "Polygon",
-    base: "Base",
-    stellar: "Stellar",
-  };
-  return networks[network];
+  return "Solana";
 }
 
 /**
@@ -343,7 +328,7 @@ export function formatCryptoAmount(
 }
 
 /**
- * Generate payment URI for QR code scanning - Updated v2.0
+ * Generate payment URI for QR code scanning - Only Solana (v3.0)
  * Backend generates proper URIs, this is a fallback
  */
 export function generatePaymentUri(
@@ -354,21 +339,10 @@ export function generatePaymentUri(
   label?: string
 ): string {
   // Backend should generate proper URIs, this is a fallback
-  // For USDC/EURC, the URI format depends on the network
-  if (network === "solana") {
-    return `solana:${address}?amount=${amount}${
-      label ? `&label=${encodeURIComponent(label)}` : ""
-    }`;
-  } else if (network === "stellar") {
-    return `web+stellar:pay?destination=${address}&amount=${amount}${
-      label ? `&memo=${encodeURIComponent(label)}` : ""
-    }`;
-  } else {
-    // Ethereum, Polygon, Base use EVM-compatible format
-    return `ethereum:${address}?value=${amount}${
-      label ? `&label=${encodeURIComponent(label)}` : ""
-    }`;
-  }
+  // Solana network only
+  return `solana:${address}?amount=${amount}${
+    label ? `&label=${encodeURIComponent(label)}` : ""
+  }`;
 }
 
 /**
@@ -392,7 +366,7 @@ export function calculateUsdAmount(
 }
 
 /**
- * Validate wallet address format - Updated v2.0
+ * Validate wallet address format - Only Solana (v3.0)
  */
 export function validateWalletAddress(
   address: string,
@@ -401,50 +375,19 @@ export function validateWalletAddress(
 ): boolean {
   if (!address || address.trim().length === 0) return false;
 
-  // Validate based on network
-  if (network) {
-    switch (network) {
-      case "ethereum":
-      case "polygon":
-      case "base":
-        // EVM-compatible addresses (0x + 40 hex chars)
-        return /^0x[a-fA-F0-9]{40}$/.test(address);
-      case "solana":
-        // Solana addresses are base58 encoded, 32-44 characters
-        return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
-      case "stellar":
-        // Stellar addresses start with G and are 56 characters
-        return /^G[A-Z2-7]{55}$/.test(address);
-    }
-  }
-
-  // Fallback: accept any reasonable length address
-  return address.length >= 26 && address.length <= 100;
+  // Solana addresses are base58 encoded, 32-44 characters
+  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address);
 }
 
 /**
- * Get estimated transaction fee in USD - Updated v2.0
+ * Get estimated transaction fee in USD - Only Solana (v3.0)
  */
 export function getEstimatedFee(
   currency: CryptoCurrency,
   network: CryptoNetwork
 ): number {
-  // Fee estimates for supported networks
-  const fees: Record<string, number> = {
-    "USDC-ethereum": 3.0, // Ethereum - higher fees
-    "USDC-solana": 0.00025, // Solana - very low fees
-    "USDC-polygon": 0.01, // Polygon - low fees
-    "USDC-base": 0.05, // Base - low fees
-    "USDC-stellar": 0.00001, // Stellar - minimal fees
-    "EURC-ethereum": 3.0, // Ethereum - higher fees
-    "EURC-solana": 0.00025, // Solana - very low fees
-    "EURC-polygon": 0.01, // Polygon - low fees
-    "EURC-base": 0.05, // Base - low fees
-    "EURC-stellar": 0.00001, // Stellar - minimal fees
-  };
-
-  const key = `${currency}-${network}`;
-  return fees[key] || 1.0;
+  // Solana has very low fees
+  return 0.00025;
 }
 
 /**

@@ -58,11 +58,10 @@ export type CreateBirdDto = {
   species: string;
   commonName?: string;
   scientificName?: string;
-  tagline: string;
   description?: string;
   imageS3Key?: string;
   coverImageS3Key?: string;
-  videoS3Key: string; // Required: Main video S3 key for the bird
+  videoS3Key?: string;
   age?: string;
   location?: string;
 };

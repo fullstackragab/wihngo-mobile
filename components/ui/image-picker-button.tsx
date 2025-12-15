@@ -6,6 +6,7 @@
 import { useImagePicker } from "@/hooks/useImagePicker";
 import Feather from "@expo/vector-icons/Feather";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -46,6 +47,7 @@ export default function ImagePickerButton({
   touched,
   onBlur,
 }: ImagePickerButtonProps) {
+  const { t } = useTranslation();
   const { uri, loading, pickImage, takePhoto, clearImage } = useImagePicker(
     {
       maxSizeMB,
@@ -105,7 +107,7 @@ export default function ImagePickerButton({
             <Image source={{ uri: displayUri }} style={styles.preview} />
             <View style={styles.overlay}>
               <Feather name="edit-2" size={24} color="#fff" />
-              <Text style={styles.overlayText}>Change Image</Text>
+              <Text style={styles.overlayText}>{t("media.changeImage")}</Text>
             </View>
           </View>
         ) : (
@@ -119,7 +121,7 @@ export default function ImagePickerButton({
       {displayUri && !showPreview && (
         <View style={styles.selectedInfo}>
           <Feather name="check-circle" size={16} color="#10b981" />
-          <Text style={styles.selectedText}>Image selected</Text>
+          <Text style={styles.selectedText}>{t("media.imageSelected")}</Text>
         </View>
       )}
 

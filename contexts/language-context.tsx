@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { I18nManager } from "react-native";
+import { Alert, I18nManager } from "react-native";
 import { saveLanguage } from "../i18n";
 
 interface LanguageContextType {
@@ -22,13 +22,14 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const { i18n } = useTranslation();
   const [language, setLanguageState] = useState(i18n.language);
-  const [isRTL, setIsRTL] = useState(I18nManager.isRTL);
+  const [isRTL, setIsRTL] = useState(i18n.language === "ar");
 
   // Listen to i18n language changes
   useEffect(() => {
     const handleLanguageChange = (lng: string) => {
       console.log("🔄 i18n language changed event:", lng);
       setLanguageState(lng);
+      setIsRTL(lng === "ar");
     };
 
     i18n.on("languageChanged", handleLanguageChange);
@@ -62,6 +63,17 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         I18nManager.allowRTL(shouldBeRTL);
         setIsRTL(shouldBeRTL);
         console.log("✅ RTL toggled to:", shouldBeRTL);
+
+        // Ask user to manually restart the app
+        Alert.alert(
+          "Restart Required",
+          "Please close and reopen the app to apply the layout direction change.",
+          [
+            {
+              text: "OK",
+            },
+          ]
+        );
       } else {
         setIsRTL(shouldBeRTL);
         console.log("✅ RTL state updated without restart:", shouldBeRTL);

@@ -177,12 +177,12 @@ export default function StoryDetail() {
   if (!story) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>Story not found</Text>
+        <Text style={styles.errorText}>{t("story.notFound")}</Text>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Text style={styles.backButtonText}>Go Back</Text>
+          <Text style={styles.backButtonText}>{t("story.goBack")}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -317,7 +317,7 @@ export default function StoryDetail() {
         <View style={styles.actions}>
           <TouchableOpacity style={styles.actionButton} onPress={handleLike}>
             <FontAwesome6 name="heart" size={24} color="#95A5A6" />
-            <Text style={styles.actionText}>Like</Text>
+            <Text style={styles.actionText}>{t("story.like")}</Text>
           </TouchableOpacity>
 
           <View style={styles.actionButton}>
@@ -337,7 +337,9 @@ export default function StoryDetail() {
 
         {/* Comments Section */}
         <View style={styles.commentsSection}>
-          <Text style={styles.commentsTitle}>Comments ({comments.length})</Text>
+          <Text style={styles.commentsTitle}>
+            {t("story.commentsCount", { count: comments.length })}
+          </Text>
 
           {comments.length > 0 ? (
             comments.map((comment) => (
@@ -375,7 +377,7 @@ export default function StoryDetail() {
       <View style={styles.commentInputContainer}>
         <TextInput
           style={styles.commentInput}
-          placeholder="Write a comment..."
+          placeholder={t("story.writeComment")}
           placeholderTextColor="#95A5A6"
           value={commentText}
           onChangeText={setCommentText}

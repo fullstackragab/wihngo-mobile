@@ -8,16 +8,22 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { apiHelper } from "./api-helper";
 
+// Check if running in Expo Go
+const isExpoGo = Constants.appOwnership === "expo";
+
 // Configure notification behavior
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+// Note: This has limited functionality in Expo Go
+if (!isExpoGo) {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+}
 
 /**
  * Register device for donation/invoice push notifications
@@ -26,6 +32,13 @@ export async function registerForDonationNotifications(): Promise<
   string | null
 > {
   try {
+    // Check if running in Expo Go
+    if (isExpoGo) {
+      console.log(
+        "📱 Running in Expo Go - Donation notifications have limited functionality"
+      );
+    }
+
     // Request permissions
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();

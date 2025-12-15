@@ -1,10 +1,12 @@
 import LoveThisBirdButton from "@/components/love-this-bird-button";
+import MemorialBadge from "@/components/memorial-badge";
+import MemorialMessages from "@/components/memorial-messages";
+import MemorialTribute from "@/components/memorial-tribute";
 import { PremiumBadge } from "@/components/premium-badge";
 import PremiumManagementCard from "@/components/premium-management-card";
 import PremiumUpsellModal from "@/components/premium-upsell-modal";
 import ShareButton from "@/components/share-button";
 import SupportButton from "@/components/support-button";
-import AnimatedCard from "@/components/ui/animated-card";
 import { useAuth } from "@/contexts/auth-context";
 import { getPremiumStatus, hasPremium } from "@/services/premium.service";
 import { Bird, BirdHealthLog } from "@/types/bird";
@@ -15,6 +17,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   Image,
@@ -30,6 +33,7 @@ interface BirdProfileProps {
 }
 
 export default function BirdProfile({ bird }: BirdProfileProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const { user } = useAuth();
   const [loveCount, setLoveCount] = useState(bird?.lovedBy || 2847);
@@ -75,294 +79,312 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
 
   const displayedStories = showAllStories ? stories : stories.slice(0, 3);
 
+  // If memorial bird, show tribute page
+  if (bird?.isMemorial) {
+    return (
+      <ScrollView style={styles.container}>
+        <MemorialTribute bird={bird} />
+
+        {/* Memorial Messages Section */}
+        {bird.birdId && (
+          <View style={styles.memorialMessagesContainer}>
+            <MemorialMessages birdId={bird.birdId} birdName={bird.name} />
+          </View>
+        )}
+
+        {/* Share Memorial */}
+        <View style={styles.memorialShareSection}>
+          <Text style={styles.memorialShareTitle}>
+            Share {bird.name}'s Memory
+          </Text>
+          <ShareButton
+            title={`In Memory of ${bird.name}`}
+            message={`Remembering ${bird.name}, a beautiful ${bird.species} who brought joy to our community. 🕊️`}
+            variant="solid"
+          />
+        </View>
+      </ScrollView>
+    );
+  }
+
   return (
     <ScrollView style={styles.container}>
-      <AnimatedCard>
-        {/* Cover Image */}
-        <LinearGradient
-          colors={
-            bird?.isMemorial ? ["#95A5A6", "#7F8C8D"] : ["#fbc2eb", "#a6c1ee"]
-          }
-          style={styles.hero}
-        >
-          <Image
-            source={{
-              uri:
-                bird?.coverImageUrl ||
-                bird?.imageUrl ||
-                "https://via.placeholder.com/200",
-            }}
-            style={styles.heroImage}
-          />
-          {bird?.isMemorial && (
-            <View style={styles.memorialBadge}>
-              <FontAwesome6 name="heart" size={12} color="#fff" />
-              <Text style={styles.memorialBadgeText}>In Loving Memory</Text>
-            </View>
-          )}
-        </LinearGradient>
+      {/* Cover Image */}
+      <LinearGradient
+        colors={
+          bird?.isMemorial ? ["#95A5A6", "#7F8C8D"] : ["#fbc2eb", "#a6c1ee"]
+        }
+        style={styles.hero}
+      >
+        <Image
+          source={{
+            uri:
+              bird?.coverImageUrl ||
+              bird?.imageUrl ||
+              "https://via.placeholder.com/200",
+          }}
+          style={styles.heroImage}
+        />
+        {bird?.isMemorial && (
+          <MemorialBadge size="medium" style={styles.memorialBadge} />
+        )}
+      </LinearGradient>
 
-        {/* Bird Info */}
-        <View style={styles.content}>
-          <View style={styles.titleRow}>
-            <Text style={styles.title}>{bird?.name}</Text>
-            {isPremiumBird && <PremiumBadge size="medium" />}
-            {bird?.species && (
-              <TouchableOpacity
-                onPress={() =>
-                  Alert.alert("Species", bird.species, [{ text: "OK" }])
-                }
-                style={styles.infoIcon}
-              >
-                <Ionicons
-                  name="information-circle-outline"
-                  size={24}
-                  color="#7F8C8D"
-                />
-              </TouchableOpacity>
-            )}
-          </View>
-          <Text style={styles.highlight}>{bird?.tagline}</Text>
-          {bird?.description && (
-            <Text style={styles.description}>{bird.description}</Text>
-          )}
-
-          {/* Additional Info */}
-          {(bird?.age || bird?.location) && (
-            <View style={styles.infoGrid}>
-              {bird?.age && (
-                <View style={styles.infoItem}>
-                  <FontAwesome6 name="calendar" size={14} color="#7F8C8D" />
-                  <Text style={styles.infoValue}>{bird.age}</Text>
-                </View>
-              )}
-              {bird?.location && (
-                <View style={styles.infoItem}>
-                  <FontAwesome6 name="location-dot" size={14} color="#7F8C8D" />
-                  <Text style={styles.infoValue}>{bird.location}</Text>
-                </View>
-              )}
-            </View>
-          )}
+      {/* Bird Info */}
+      <View style={styles.content}>
+        <View style={styles.titleRow}>
+          <Text style={styles.title}>{bird?.name}</Text>
+          {isPremiumBird && <PremiumBadge size="medium" />}
         </View>
-
-        {/* Stats */}
-        <View style={styles.statsRow}>
-          <View style={[styles.statPill, { backgroundColor: "#fee2e2" }]}>
-            <Ionicons name="heart" size={18} color="#ef4444" />
-            <Text style={styles.statValue}>{loveCount}</Text>
-          </View>
-          <View style={[styles.statPill, { backgroundColor: "#dcfce7" }]}>
-            <Ionicons name="sparkles" size={18} color="#10b981" />
-            <Text style={styles.statValue}>{bird?.supportedBy || 0}</Text>
-          </View>
-          <ShareButton
-            title={`Check out ${bird?.name}!`}
-            message={`${bird?.tagline || "Amazing bird on Wihngo!"}`}
-            variant="icon"
-            iconSize={20}
-            iconColor="#7F8C8D"
-            style={styles.statPill}
-          />
-        </View>
-
-        {/* Actions */}
-        <View style={styles.content}>
-          {isOwner && (
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => router.push(`/add-bird?birdId=${bird?.birdId}`)}
-            >
-              <Ionicons name="pencil" size={18} color="#fff" />
-              <Text style={styles.editButtonText}>Edit Bird</Text>
-            </TouchableOpacity>
-          )}
-          <View style={styles.actions}>
-            {bird?.birdId && (
-              <LoveThisBirdButton
-                birdId={bird.birdId}
-                initialIsLoved={bird.isLoved || false}
-                initialLoveCount={loveCount}
-                onLoveChange={handleLoveChange}
-                variant="pill"
-                style={{ flex: 1 }}
-              />
-            )}
-            {!bird?.isMemorial && (
-              <SupportButton
-                birdId={bird?.birdId}
-                birdName={bird?.name}
-                isMemorial={bird?.isMemorial}
-                variant="solid"
-                style={{ flex: 1 }}
-              />
-            )}
-          </View>
-        </View>
-
-        {/* Premium Management */}
-        {bird?.birdId && (
-          <View style={styles.premiumSection}>
-            <PremiumManagementCard
-              birdId={bird.birdId}
-              isOwner={isOwner}
-              onSubscriptionChange={handlePremiumUpdate}
-            />
-          </View>
+        {bird?.species && <Text style={styles.species}>{bird.species}</Text>}
+        {bird?.description && (
+          <Text style={styles.description}>{bird.description}</Text>
         )}
 
-        {/* Support Transparency */}
-        {!bird?.isMemorial && bird?.totalSupport && bird.totalSupport > 0 && (
-          <View style={styles.transparencySection}>
-            <View style={styles.sectionHeader}>
-              <FontAwesome6 name="chart-pie" size={16} color="#2C3E50" />
-              <Text style={styles.sectionTitle}>Support Transparency</Text>
-            </View>
-            <View style={styles.transparencyCard}>
-              <Text style={styles.transparencyAmount}>
-                ${bird.totalSupport.toLocaleString()} raised
-              </Text>
-              <Text style={styles.transparencyText}>
-                Funds used for: Food, medicine, vet visits, and habitat
-                maintenance
-              </Text>
-              <TouchableOpacity
-                style={styles.transparencyLink}
-                onPress={() =>
-                  Alert.alert(
-                    "Coming Soon",
-                    "Detailed breakdown will be available soon"
-                  )
-                }
-              >
-                <Text style={styles.transparencyLinkText}>View Details</Text>
-                <FontAwesome6 name="arrow-right" size={12} color="#4ECDC4" />
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-
-        {/* Health Log (for owners) */}
-        {healthLogs.length > 0 && (
-          <View style={styles.healthSection}>
-            <View style={styles.sectionHeader}>
-              <FontAwesome6 name="notes-medical" size={16} color="#2C3E50" />
-              <Text style={styles.sectionTitle}>Health Updates</Text>
-            </View>
-            {healthLogs.slice(0, 3).map((log) => (
-              <View key={log.logId} style={styles.healthLogCard}>
-                <View style={styles.healthLogHeader}>
-                  <Text style={styles.healthLogTitle}>{log.title}</Text>
-                  <Text style={styles.healthLogDate}>
-                    {new Date(log.createdAt).toLocaleDateString()}
-                  </Text>
-                </View>
-                <Text style={styles.healthLogDescription}>
-                  {log.description}
-                </Text>
-                {log.cost && (
-                  <Text style={styles.healthLogCost}>${log.cost}</Text>
-                )}
+        {/* Additional Info */}
+        {(bird?.age || bird?.location) && (
+          <View style={styles.infoGrid}>
+            {bird?.age && (
+              <View style={styles.infoItem}>
+                <FontAwesome6 name="calendar" size={14} color="#7F8C8D" />
+                <Text style={styles.infoValue}>{bird.age}</Text>
               </View>
-            ))}
+            )}
+            {bird?.location && (
+              <View style={styles.infoItem}>
+                <FontAwesome6 name="location-dot" size={14} color="#7F8C8D" />
+                <Text style={styles.infoValue}>{bird.location}</Text>
+              </View>
+            )}
           </View>
         )}
+      </View>
 
-        {/* Bird Stories */}
-        <View style={styles.storiesSection}>
-          <View style={styles.sectionHeader}>
-            <FontAwesome6 name="book-open" size={16} color="#2C3E50" />
-            <Text style={styles.sectionTitle}>Stories</Text>
-          </View>
-          {stories.length > 0 ? (
-            <>
-              {displayedStories.map((story) => {
-                // Handle both new API structure (preview) and legacy (title/content)
-                const previewText =
-                  story.preview || story.content || "No content";
-                const dateText =
-                  story.date ||
-                  (story.createdAt
-                    ? new Date(story.createdAt).toLocaleDateString()
-                    : "");
+      {/* Stats */}
+      <View style={styles.statsRow}>
+        <View style={[styles.statPill, { backgroundColor: "#fee2e2" }]}>
+          <Ionicons name="heart" size={18} color="#ef4444" />
+          <Text style={styles.statValue}>{loveCount}</Text>
+        </View>
+        <View style={[styles.statPill, { backgroundColor: "#dcfce7" }]}>
+          <Ionicons name="sparkles" size={18} color="#10b981" />
+          <Text style={styles.statValue}>{bird?.supportedBy || 0}</Text>
+        </View>
+        <ShareButton
+          title={`Check out ${bird?.name}!`}
+          message={`Amazing bird on Wihngo!`}
+          variant="icon"
+          iconSize={20}
+          iconColor="#7F8C8D"
+          style={styles.statPill}
+        />
+      </View>
 
-                return (
-                  <TouchableOpacity
-                    key={story.storyId}
-                    style={styles.storyCard}
-                    onPress={() => router.push(`/story/${story.storyId}`)}
-                  >
-                    {story.imageUrl && (
-                      <Image
-                        source={{ uri: story.imageUrl }}
-                        style={styles.storyThumb}
-                      />
-                    )}
-                    <View style={styles.storyContent}>
-                      <Text style={styles.storyTitle} numberOfLines={3}>
-                        {previewText}
-                      </Text>
-                      <Text style={styles.storyDate}>{dateText}</Text>
-                      {(story.likes !== undefined ||
-                        story.commentsCount !== undefined) && (
-                        <View style={styles.storyStats}>
-                          {story.likes !== undefined && (
-                            <View style={styles.storyStat}>
-                              <FontAwesome6
-                                name="heart"
-                                size={12}
-                                color="#FF6B6B"
-                              />
-                              <Text style={styles.storyStatText}>
-                                {story.likes}
-                              </Text>
-                            </View>
-                          )}
-                          {story.commentsCount !== undefined && (
-                            <View style={styles.storyStat}>
-                              <FontAwesome6
-                                name="comment"
-                                size={12}
-                                color="#95A5A6"
-                              />
-                              <Text style={styles.storyStatText}>
-                                {story.commentsCount}
-                              </Text>
-                            </View>
-                          )}
-                        </View>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-              {stories.length > 3 && !showAllStories && (
-                <TouchableOpacity
-                  style={styles.showMoreButton}
-                  onPress={() => setShowAllStories(true)}
-                >
-                  <Text style={styles.showMoreText}>
-                    Show all {stories.length} stories
-                  </Text>
-                  <FontAwesome6 name="chevron-down" size={12} color="#4ECDC4" />
-                </TouchableOpacity>
-              )}
-            </>
-          ) : (
-            <View style={styles.emptyStories}>
-              <FontAwesome6 name="book-open" size={32} color="#BDC3C7" />
-              <Text style={styles.emptyStoriesText}>No stories yet</Text>
-              <TouchableOpacity
-                style={styles.createStoryButton}
-                onPress={() => router.push("/create-story")}
-              >
-                <FontAwesome6 name="plus" size={14} color="#fff" />
-                <Text style={styles.createStoryButtonText}>Share a Story</Text>
-              </TouchableOpacity>
-            </View>
+      {/* Actions */}
+      <View style={styles.content}>
+        {isOwner && (
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => router.push(`/add-bird?birdId=${bird?.birdId}`)}
+          >
+            <Ionicons name="pencil" size={18} color="#fff" />
+            <Text style={styles.editButtonText}>
+              {t("birdProfile.editBird")}
+            </Text>
+          </TouchableOpacity>
+        )}
+        <View style={styles.actions}>
+          {bird?.birdId && (
+            <LoveThisBirdButton
+              birdId={bird.birdId}
+              initialIsLoved={bird.isLoved || false}
+              initialLoveCount={loveCount}
+              onLoveChange={handleLoveChange}
+              variant="pill"
+              style={{ flex: 1 }}
+            />
+          )}
+          {!bird?.isMemorial && (
+            <SupportButton
+              birdId={bird?.birdId}
+              birdName={bird?.name}
+              isMemorial={bird?.isMemorial}
+              variant="solid"
+              style={{ flex: 1 }}
+            />
           )}
         </View>
-      </AnimatedCard>
+      </View>
+
+      {/* Premium Management */}
+      {bird?.birdId && (
+        <View style={styles.premiumSection}>
+          <PremiumManagementCard
+            birdId={bird.birdId}
+            isOwner={isOwner}
+            onSubscriptionChange={handlePremiumUpdate}
+          />
+        </View>
+      )}
+
+      {/* Support Transparency */}
+      {!bird?.isMemorial && bird?.totalSupport && bird.totalSupport > 0 && (
+        <View style={styles.transparencySection}>
+          <View style={styles.sectionHeader}>
+            <FontAwesome6 name="chart-pie" size={16} color="#2C3E50" />
+            <Text style={styles.sectionTitle}>
+              {t("birdProfile.supportTransparency")}
+            </Text>
+          </View>
+          <View style={styles.transparencyCard}>
+            <Text style={styles.transparencyAmount}>
+              ${bird.totalSupport.toLocaleString()} {t("birdProfile.raised")}
+            </Text>
+            <Text style={styles.transparencyText}>
+              {t("birdProfile.fundsUsedFor")}
+            </Text>
+            <TouchableOpacity
+              style={styles.transparencyLink}
+              onPress={() =>
+                Alert.alert(
+                  t("birdProfile.comingSoon"),
+                  t("birdProfile.detailedBreakdown")
+                )
+              }
+            >
+              <Text style={styles.transparencyLinkText}>
+                {t("birdProfile.viewDetails")}
+              </Text>
+              <FontAwesome6 name="arrow-right" size={12} color="#4ECDC4" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      {/* Health Log (for owners) */}
+      {healthLogs.length > 0 && (
+        <View style={styles.healthSection}>
+          <View style={styles.sectionHeader}>
+            <FontAwesome6 name="notes-medical" size={16} color="#2C3E50" />
+            <Text style={styles.sectionTitle}>
+              {t("birdProfile.healthUpdates")}
+            </Text>
+          </View>
+          {healthLogs.slice(0, 3).map((log) => (
+            <View key={log.logId} style={styles.healthLogCard}>
+              <View style={styles.healthLogHeader}>
+                <Text style={styles.healthLogTitle}>{log.title}</Text>
+                <Text style={styles.healthLogDate}>
+                  {new Date(log.createdAt).toLocaleDateString()}
+                </Text>
+              </View>
+              <Text style={styles.healthLogDescription}>{log.description}</Text>
+              {log.cost && (
+                <Text style={styles.healthLogCost}>${log.cost}</Text>
+              )}
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* Bird Stories */}
+      <View style={styles.storiesSection}>
+        <View style={styles.sectionHeader}>
+          <FontAwesome6 name="book-open" size={16} color="#2C3E50" />
+          <Text style={styles.sectionTitle}>{t("birdProfile.stories")}</Text>
+        </View>
+        {stories.length > 0 ? (
+          <>
+            {displayedStories.map((story) => {
+              // Handle both new API structure (preview) and legacy (title/content)
+              const previewText =
+                story.preview || story.content || "No content";
+              const dateText =
+                story.date ||
+                (story.createdAt
+                  ? new Date(story.createdAt).toLocaleDateString()
+                  : "");
+
+              return (
+                <TouchableOpacity
+                  key={story.storyId}
+                  style={styles.storyCard}
+                  onPress={() => router.push(`/story/${story.storyId}`)}
+                >
+                  {story.imageUrl && (
+                    <Image
+                      source={{ uri: story.imageUrl }}
+                      style={styles.storyThumb}
+                    />
+                  )}
+                  <View style={styles.storyContent}>
+                    <Text style={styles.storyTitle} numberOfLines={3}>
+                      {previewText}
+                    </Text>
+                    <Text style={styles.storyDate}>{dateText}</Text>
+                    {(story.likes !== undefined ||
+                      story.commentsCount !== undefined) && (
+                      <View style={styles.storyStats}>
+                        {story.likes !== undefined && (
+                          <View style={styles.storyStat}>
+                            <FontAwesome6
+                              name="heart"
+                              size={12}
+                              color="#FF6B6B"
+                            />
+                            <Text style={styles.storyStatText}>
+                              {story.likes}
+                            </Text>
+                          </View>
+                        )}
+                        {story.commentsCount !== undefined && (
+                          <View style={styles.storyStat}>
+                            <FontAwesome6
+                              name="comment"
+                              size={12}
+                              color="#95A5A6"
+                            />
+                            <Text style={styles.storyStatText}>
+                              {story.commentsCount}
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+            {stories.length > 3 && !showAllStories && (
+              <TouchableOpacity
+                style={styles.showMoreButton}
+                onPress={() => setShowAllStories(true)}
+              >
+                <Text style={styles.showMoreText}>
+                  {t("birdProfile.showAllStories", { count: stories.length })}
+                </Text>
+                <FontAwesome6 name="chevron-down" size={12} color="#4ECDC4" />
+              </TouchableOpacity>
+            )}
+          </>
+        ) : (
+          <View style={styles.emptyStories}>
+            <FontAwesome6 name="book-open" size={32} color="#BDC3C7" />
+            <Text style={styles.emptyStoriesText}>
+              {t("birdProfile.noStoriesYet")}
+            </Text>
+            <TouchableOpacity
+              style={styles.createStoryButton}
+              onPress={() => router.push("/create-story")}
+            >
+              <FontAwesome6 name="plus" size={14} color="#fff" />
+              <Text style={styles.createStoryButtonText}>
+                {t("birdProfile.shareStory")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
 
       {/* Premium Upsell Modal */}
       {bird?.birdId && bird?.name && (
@@ -380,7 +402,7 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+    backgroundColor: "#fff",
   },
   hero: {
     height: 240,
@@ -424,8 +446,11 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#2C3E50",
   },
-  infoIcon: {
-    marginLeft: 4,
+  species: {
+    fontSize: 13,
+    color: "#95A5A6",
+    marginBottom: 8,
+    marginTop: 2,
   },
   subtitle: {
     fontSize: 14,
@@ -723,5 +748,20 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     fontWeight: "600",
+  },
+  memorialMessagesContainer: {
+    marginTop: 20,
+    minHeight: 400,
+  },
+  memorialShareSection: {
+    padding: 20,
+    backgroundColor: "#F8F9FA",
+    gap: 12,
+  },
+  memorialShareTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#2C3E50",
+    textAlign: "center",
   },
 });

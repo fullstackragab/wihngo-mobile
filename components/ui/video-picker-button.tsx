@@ -8,6 +8,7 @@ import { MEDIA_CONFIG, MediaValidation } from "@/lib/constants/media";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -39,6 +40,7 @@ export default function VideoPickerButton({
   showPreview = true,
   showGuidelines = true,
 }: VideoPickerButtonProps) {
+  const { t } = useTranslation();
   const { uri, duration, size, loading, pickVideo, recordVideo, clearVideo } =
     useVideoPicker(
       {
@@ -104,14 +106,16 @@ export default function VideoPickerButton({
         {loading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#007AFF" />
-            <Text style={styles.loadingText}>Processing video...</Text>
+            <Text style={styles.loadingText}>{t("media.processingVideo")}</Text>
           </View>
         ) : displayUri ? (
           <View style={styles.videoInfo}>
             <View style={styles.videoIconContainer}>
               <FontAwesome6 name="circle-play" size={64} color="#007AFF" />
             </View>
-            <Text style={styles.videoSelectedText}>Video selected</Text>
+            <Text style={styles.videoSelectedText}>
+              {t("media.videoSelected")}
+            </Text>
             {duration && (
               <Text style={styles.videoMetaText}>
                 Duration: {MediaValidation.formatDuration(duration)}
@@ -124,7 +128,7 @@ export default function VideoPickerButton({
             )}
             <View style={styles.changeButtonContainer}>
               <Feather name="edit-2" size={16} color="#007AFF" />
-              <Text style={styles.changeText}>Tap to change</Text>
+              <Text style={styles.changeText}>{t("media.tapToChange")}</Text>
             </View>
           </View>
         ) : (

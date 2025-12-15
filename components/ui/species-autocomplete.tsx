@@ -5,6 +5,7 @@
 
 import { BirdSpecies, searchBirdSpecies } from "@/lib/constants/bird-species";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   Pressable,
@@ -40,6 +41,7 @@ export default function SpeciesAutocomplete({
   style,
   onBlur,
 }: SpeciesAutocompleteProps) {
+  const { t } = useTranslation();
   const [isFocused, setIsFocused] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [suggestions, setSuggestions] = useState<BirdSpecies[]>([]);
@@ -65,7 +67,7 @@ export default function SpeciesAutocomplete({
 
     // Set new timer (300ms debounce)
     debounceTimerRef.current = setTimeout(() => {
-      const results = searchBirdSpecies(value).slice(0, 10);
+      const results = searchBirdSpecies(value, t).slice(0, 10);
       setSuggestions(results);
     }, 300);
 
@@ -75,7 +77,7 @@ export default function SpeciesAutocomplete({
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [value, showDropdown]);
+  }, [value, showDropdown, t]);
 
   const handleFocus = useCallback(() => {
     setIsFocused(true);
@@ -98,8 +100,16 @@ export default function SpeciesAutocomplete({
 
       console.log("handleSelectSpecies called with:", species);
 
-      // Update the input value first
-      onChangeText(species.species);
+      // Get translated name
+      const translationKey = `species.${species.species
+        .toLowerCase()
+        .replace(/['\s-]/g, "_")}`;
+      const translatedName = t(translationKey);
+      const displayName =
+        translatedName !== translationKey ? translatedName : species.species;
+
+      // Update the input value with translated name
+      onChangeText(displayName);
 
       // Notify parent component about the selection
       if (onSpeciesSelected) {
@@ -115,7 +125,7 @@ export default function SpeciesAutocomplete({
         isSelectingRef.current = false;
       }, 100);
     },
-    [onChangeText, onSpeciesSelected]
+    [onChangeText, onSpeciesSelected, t]
   );
 
   const showError = touched && error;
@@ -155,26 +165,39 @@ export default function SpeciesAutocomplete({
           <FlatList
             data={suggestions}
             keyExtractor={(item, index) => `${item.species}-${index}`}
-            renderItem={({ item }) => (
-              <Pressable
-                style={({ pressed }) => [
-                  styles.suggestionItem,
-                  pressed && styles.suggestionItemPressed,
-                ]}
-                onTouchStart={(e) => {
-                  e.stopPropagation();
-                  isSelectingRef.current = true;
-                }}
-                onPress={(e) => {
-                  e.stopPropagation();
-                  handleSelectSpecies(item);
-                }}
-              >
-                <Text style={styles.speciesName}>{item.species}</Text>
-                <Text style={styles.commonName}>{item.commonName}</Text>
-                <Text style={styles.scientificName}>{item.scientificName}</Text>
-              </Pressable>
-            )}
+            renderItem={({ item }) => {
+              const translationKey = `species.${item.species
+                .toLowerCase()
+                .replace(/['\s-]/g, "_")}`;
+              const translatedName = t(translationKey);
+              const displayName =
+                translatedName !== translationKey
+                  ? translatedName
+                  : item.species;
+
+              return (
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.suggestionItem,
+                    pressed && styles.suggestionItemPressed,
+                  ]}
+                  onTouchStart={(e) => {
+                    e.stopPropagation();
+                    isSelectingRef.current = true;
+                  }}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    handleSelectSpecies(item);
+                  }}
+                >
+                  <Text style={styles.speciesName}>{displayName}</Text>
+                  <Text style={styles.commonName}>{item.commonName}</Text>
+                  <Text style={styles.scientificName}>
+                    {item.scientificName}
+                  </Text>
+                </Pressable>
+              );
+            }}
             keyboardShouldPersistTaps="handled"
             nestedScrollEnabled
             style={styles.suggestionList}

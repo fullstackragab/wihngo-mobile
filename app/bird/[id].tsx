@@ -4,6 +4,7 @@ import { Bird } from "@/types/bird";
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -13,6 +14,7 @@ import {
 } from "react-native";
 
 export default function BirdDetailScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [bird, setBird] = useState<Bird | null>(null);
@@ -43,11 +45,15 @@ export default function BirdDetailScreen() {
   if (loading) {
     return (
       <>
-        <Stack.Screen options={{ title: "Bird Profile", headerShown: false }} />
+        <Stack.Screen
+          options={{ title: t("birdProfile.loadingBird"), headerShown: false }}
+        />
         <View style={styles.container}>
           <View style={styles.centerContent}>
             <ActivityIndicator size="large" color="#4ECDC4" />
-            <Text style={styles.loadingText}>Loading bird...</Text>
+            <Text style={styles.loadingText}>
+              {t("birdProfile.loadingBird")}
+            </Text>
           </View>
         </View>
       </>
@@ -57,13 +63,19 @@ export default function BirdDetailScreen() {
   if (error || !bird) {
     return (
       <>
-        <Stack.Screen options={{ title: "Bird Profile", headerShown: false }} />
+        <Stack.Screen
+          options={{ title: t("birdProfile.loadingBird"), headerShown: false }}
+        />
         <View style={styles.container}>
           <View style={styles.centerContent}>
             <Ionicons name="alert-circle-outline" size={64} color="#FF6B6B" />
-            <Text style={styles.errorText}>{error || "Bird not found"}</Text>
+            <Text style={styles.errorText}>
+              {error || t("birdProfile.birdNotFound")}
+            </Text>
             <TouchableOpacity style={styles.retryButton} onPress={loadBird}>
-              <Text style={styles.retryButtonText}>Retry</Text>
+              <Text style={styles.retryButtonText}>
+                {t("birdProfile.retry")}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -79,7 +91,9 @@ export default function BirdDetailScreen() {
           headerShown: false,
         }}
       />
-      <BirdProfile bird={bird} />
+      <View style={styles.container}>
+        <BirdProfile bird={bird} />
+      </View>
     </>
   );
 }

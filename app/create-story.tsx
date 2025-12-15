@@ -12,6 +12,7 @@ import { CreateStoryDto, StoryMode } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -29,6 +30,7 @@ import {
 } from "react-native";
 
 export default function CreateStory() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { user } = useAuth();
   const [content, setContent] = useState("");
@@ -55,7 +57,11 @@ export default function CreateStory() {
       setUserBirds(birds);
     } catch (error) {
       console.error("Error loading user birds:", error);
-      addNotification("recommendation", "Error", "Failed to load your birds");
+      addNotification(
+        "recommendation",
+        t("createStory.errorTitle"),
+        t("createStory.errorLoadingBirds")
+      );
     } finally {
       setLoadingBirds(false);
     }
@@ -88,19 +94,19 @@ export default function CreateStory() {
       clearVideo();
     }
     Alert.alert(
-      "Add Photo",
-      "Choose an option",
+      t("createStory.addPhoto"),
+      t("createStory.chooseOption"),
       [
         {
-          text: "Take Photo",
+          text: t("createStory.takePhoto"),
           onPress: takePhoto,
         },
         {
-          text: "Choose from Library",
+          text: t("createStory.chooseFromLibrary"),
           onPress: pickImage,
         },
         {
-          text: "Cancel",
+          text: t("createStory.cancel"),
           style: "cancel",
         },
       ],
@@ -114,19 +120,19 @@ export default function CreateStory() {
       clearImage();
     }
     Alert.alert(
-      "Add Video",
-      "Choose an option",
+      t("createStory.addVideo"),
+      t("createStory.chooseOption"),
       [
         {
-          text: "Record Video",
+          text: t("createStory.recordVideo"),
           onPress: recordVideo,
         },
         {
-          text: "Choose from Library",
+          text: t("createStory.chooseFromLibrary"),
           onPress: pickVideo,
         },
         {
-          text: "Cancel",
+          text: t("createStory.cancel"),
           style: "cancel",
         },
       ],
@@ -142,11 +148,14 @@ export default function CreateStory() {
   const handleOpenBirdSelector = () => {
     if (userBirds.length === 0) {
       Alert.alert(
-        "No Birds Yet",
-        "You don't have any birds yet. Would you like to add one?",
+        t("createStory.noBirdsYet"),
+        t("createStory.noBirdsMessage"),
         [
-          { text: "Cancel", style: "cancel" },
-          { text: "Add Bird", onPress: () => router.push("/add-bird") },
+          { text: t("createStory.cancel"), style: "cancel" },
+          {
+            text: t("createStory.addBird"),
+            onPress: () => router.push("/add-bird"),
+          },
         ]
       );
       return;
@@ -160,14 +169,14 @@ export default function CreateStory() {
       if (!selectedBird) {
         addNotification(
           "recommendation",
-          "Bird Required",
-          "Please select a bird to tag in your story."
+          t("createStory.birdRequired"),
+          t("createStory.birdRequiredMessage")
         );
       } else if (!content.trim()) {
         addNotification(
           "recommendation",
-          "Content Required",
-          "Please write some content for your story."
+          t("createStory.contentRequired"),
+          t("createStory.contentRequiredMessage")
         );
       }
       return;
@@ -177,8 +186,8 @@ export default function CreateStory() {
     if (content.trim().length > 5000) {
       addNotification(
         "recommendation",
-        "Content Too Long",
-        "Story content must be less than 5000 characters."
+        t("createStory.contentTooLong"),
+        t("createStory.contentTooLongMessage")
       );
       return;
     }
@@ -190,7 +199,7 @@ export default function CreateStory() {
       let imageS3Key: string | undefined;
       if (imageUri) {
         console.log("📤 Uploading story image...");
-        imageS3Key = await mediaService.uploadFile(imageUri, "story");
+        imageS3Key = await mediaService.uploadFile(imageUri, "story-image");
         console.log("✅ Story image uploaded:", imageS3Key);
       }
 
@@ -198,7 +207,7 @@ export default function CreateStory() {
       let videoS3Key: string | undefined;
       if (videoUri) {
         console.log("📤 Uploading story video...");
-        videoS3Key = await mediaService.uploadFile(videoUri, "story");
+        videoS3Key = await mediaService.uploadFile(videoUri, "story-video");
         console.log("✅ Story video uploaded:", videoS3Key);
       }
 
@@ -217,8 +226,8 @@ export default function CreateStory() {
 
       addNotification(
         "recommendation",
-        "Story Created",
-        "Your story has been shared successfully!"
+        t("createStory.storyCreated"),
+        t("createStory.storyCreatedMessage")
       );
 
       // Success - redirect back
@@ -227,18 +236,22 @@ export default function CreateStory() {
       console.error("❌ Error creating story:", error);
 
       // Handle specific error cases from backend
-      let errorMessage = "Failed to create story. Please try again.";
+      let errorMessage = t("createStory.errorMessage");
       if (error?.message?.includes("both")) {
-        errorMessage = "Story can have either an image or a video, not both.";
+        errorMessage = t("createStory.errorBothMedia");
       } else if (error?.message?.includes("bird")) {
-        errorMessage = "Please select at least one bird.";
+        errorMessage = t("createStory.birdRequiredMessage");
       } else if (error?.message?.includes("content")) {
-        errorMessage = "Story content cannot be empty.";
+        errorMessage = t("createStory.contentRequiredMessage");
       } else if (error?.message?.includes("S3")) {
-        errorMessage = "Media upload failed. Please try again.";
+        errorMessage = t("createStory.errorMediaUpload");
       }
 
-      addNotification("recommendation", "Error Creating Story", errorMessage);
+      addNotification(
+        "recommendation",
+        t("createStory.errorCreatingStory"),
+        errorMessage
+      );
     } finally {
       setLoading(false);
     }
@@ -254,7 +267,7 @@ export default function CreateStory() {
         <TouchableOpacity onPress={() => router.back()}>
           <FontAwesome6 name="xmark" size={24} color="#2C3E50" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Create Story</Text>
+        <Text style={styles.headerTitle}>{t("createStory.title")}</Text>
         <TouchableOpacity
           onPress={handleSubmit}
           disabled={loading || !content.trim() || !selectedBird}
@@ -266,7 +279,7 @@ export default function CreateStory() {
                 styles.postButtonDisabled,
             ]}
           >
-            {loading ? "Posting..." : "Post"}
+            {loading ? t("createStory.posting") : t("createStory.post")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -278,7 +291,7 @@ export default function CreateStory() {
         {/* Content Input */}
         <TextInput
           style={styles.contentInput}
-          placeholder="Share your story..."
+          placeholder={t("createStory.placeholder")}
           placeholderTextColor="#95A5A6"
           value={content}
           onChangeText={setContent}
@@ -291,7 +304,10 @@ export default function CreateStory() {
         {/* Select Bird */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>
-            Tag Bird <Text style={styles.requiredLabel}>*</Text>
+            {t("createStory.tagBird")}{" "}
+            <Text style={styles.requiredLabel}>
+              {t("createStory.required")}
+            </Text>
           </Text>
           {selectedBird ? (
             <View style={styles.selectedBirdCard}>
@@ -312,7 +328,9 @@ export default function CreateStory() {
                 style={styles.changeBirdButton}
                 onPress={handleOpenBirdSelector}
               >
-                <Text style={styles.changeBirdText}>Change</Text>
+                <Text style={styles.changeBirdText}>
+                  {t("createStory.change")}
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -322,7 +340,9 @@ export default function CreateStory() {
             >
               <View style={styles.selectBirdContent}>
                 <FontAwesome6 name="dove" size={20} color="#4ECDC4" />
-                <Text style={styles.selectBirdText}>Select a bird</Text>
+                <Text style={styles.selectBirdText}>
+                  {t("createStory.selectBird")}
+                </Text>
               </View>
             </TouchableOpacity>
           )}
@@ -331,7 +351,10 @@ export default function CreateStory() {
         {/* Mood Selection (Optional) */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>
-            Mood <Text style={styles.optionalLabel}>(Optional)</Text>
+            {t("createStory.mood")}{" "}
+            <Text style={styles.optionalLabel}>
+              {t("createStory.optional")}
+            </Text>
           </Text>
           {selectedMood ? (
             <View style={styles.moodSelectedContainer}>
@@ -340,7 +363,9 @@ export default function CreateStory() {
                 style={styles.changeMoodButton}
                 onPress={() => setShowMoodSelector(true)}
               >
-                <Text style={styles.changeMoodText}>Change</Text>
+                <Text style={styles.changeMoodText}>
+                  {t("createStory.change")}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.removeMoodButton}
@@ -356,9 +381,13 @@ export default function CreateStory() {
             >
               <View style={styles.selectMoodContent}>
                 <FontAwesome6 name="face-smile" size={20} color="#4ECDC4" />
-                <Text style={styles.selectMoodText}>Choose a mood</Text>
+                <Text style={styles.selectMoodText}>
+                  {t("createStory.chooseMood")}
+                </Text>
               </View>
-              <Text style={styles.selectMoodHint}>Optional</Text>
+              <Text style={styles.selectMoodHint}>
+                {t("createStory.optional")}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -366,7 +395,10 @@ export default function CreateStory() {
         {/* Image Upload */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>
-            Add Photo <Text style={styles.optionalLabel}>(Optional)</Text>
+            {t("createStory.addPhoto")}{" "}
+            <Text style={styles.optionalLabel}>
+              {t("createStory.optional")}
+            </Text>
           </Text>
           {imageUri ? (
             <View>
@@ -380,7 +412,9 @@ export default function CreateStory() {
                 onPress={clearImage}
               >
                 <FontAwesome6 name="xmark" size={16} color="#fff" />
-                <Text style={styles.removeImageText}>Remove</Text>
+                <Text style={styles.removeImageText}>
+                  {t("createStory.remove")}
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -389,7 +423,9 @@ export default function CreateStory() {
               onPress={handleAddPhoto}
             >
               <FontAwesome6 name="camera" size={20} color="#4ECDC4" />
-              <Text style={styles.addPhotoText}>Add Photo</Text>
+              <Text style={styles.addPhotoText}>
+                {t("createStory.addPhoto")}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
@@ -397,15 +433,20 @@ export default function CreateStory() {
         {/* Video Upload */}
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>
-            Add Video <Text style={styles.optionalLabel}>(Optional)</Text>
+            {t("createStory.addVideo")}{" "}
+            <Text style={styles.optionalLabel}>
+              {t("createStory.optional")}
+            </Text>
           </Text>
           {videoUri ? (
             <View>
               <View style={styles.videoPreview}>
                 <FontAwesome6 name="video" size={48} color="#4ECDC4" />
-                <Text style={styles.videoPreviewText}>Video Selected</Text>
+                <Text style={styles.videoPreviewText}>
+                  {t("createStory.videoSelected")}
+                </Text>
                 <Text style={styles.videoPreviewSubtext}>
-                  Max 60 seconds, 200MB
+                  {t("createStory.videoLimits")}
                 </Text>
               </View>
               <TouchableOpacity
@@ -413,7 +454,9 @@ export default function CreateStory() {
                 onPress={clearVideo}
               >
                 <FontAwesome6 name="xmark" size={16} color="#fff" />
-                <Text style={styles.removeVideoText}>Remove Video</Text>
+                <Text style={styles.removeVideoText}>
+                  {t("createStory.removeVideo")}
+                </Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -422,25 +465,21 @@ export default function CreateStory() {
               onPress={handleAddVideo}
             >
               <FontAwesome6 name="video" size={20} color="#4ECDC4" />
-              <Text style={styles.addVideoText}>Add Video</Text>
+              <Text style={styles.addVideoText}>
+                {t("createStory.addVideo")}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
 
         {/* Tips */}
         <View style={styles.tipsSection}>
-          <Text style={styles.tipsTitle}>💡 Tips for great stories</Text>
-          <Text style={styles.tipsText}>
-            • Be authentic and share your experiences
-          </Text>
-          <Text style={styles.tipsText}>• Tag a bird (required)</Text>
-          <Text style={styles.tipsText}>
-            • Add a mood to help express your feelings (optional)
-          </Text>
-          <Text style={styles.tipsText}>
-            • Add photos or videos to make it more engaging
-          </Text>
-          <Text style={styles.tipsText}>• Videos: Max 60 seconds, 200MB</Text>
+          <Text style={styles.tipsTitle}>{t("createStory.tipsTitle")}</Text>
+          <Text style={styles.tipsText}>{t("createStory.tip1")}</Text>
+          <Text style={styles.tipsText}>{t("createStory.tip2")}</Text>
+          <Text style={styles.tipsText}>{t("createStory.tip3")}</Text>
+          <Text style={styles.tipsText}>{t("createStory.tip4")}</Text>
+          <Text style={styles.tipsText}>{t("createStory.tip5")}</Text>
         </View>
       </ScrollView>
 
@@ -461,7 +500,9 @@ export default function CreateStory() {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Select a Bird</Text>
+            <Text style={styles.modalTitle}>
+              {t("createStory.selectBirdModal")}
+            </Text>
             <TouchableOpacity onPress={() => setShowBirdModal(false)}>
               <FontAwesome6 name="xmark" size={24} color="#2C3E50" />
             </TouchableOpacity>

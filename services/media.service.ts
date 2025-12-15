@@ -9,7 +9,13 @@ const MEDIA_ENDPOINT = "/api/media";
 export interface UploadUrlRequest {
   fileName: string; // Original file name (e.g., "my-story-image.jpg")
   contentType: string; // MIME type (e.g., "image/jpeg", "video/mp4")
-  category: "story" | "profile" | "bird"; // Media category
+  fileExtension: string; // File extension without dot (e.g., "png", "jpg", "mp4")
+  mediaType:
+    | "profile-image"
+    | "bird-profile-image"
+    | "bird-video"
+    | "story-image"
+    | "story-video"; // Specific media type
 }
 
 /**
@@ -36,19 +42,27 @@ export const mediaService = {
    * Step 1: Get pre-signed upload URL from API
    * @param fileName - Original file name (e.g., "photo.jpg")
    * @param contentType - MIME type (e.g., "image/jpeg")
-   * @param category - Media category ("story", "profile", or "bird")
+   * @param fileExtension - File extension without dot (e.g., "png", "jpg", "mp4")
+   * @param mediaType - Specific media type ("profile-image", "bird-profile-image", etc.)
    * @returns Upload URL, S3 key, and expiration info
    */
   async getUploadUrl(
     fileName: string,
     contentType: string,
-    category: "story" | "profile" | "bird"
+    fileExtension: string,
+    mediaType:
+      | "profile-image"
+      | "bird-profile-image"
+      | "bird-video"
+      | "story-image"
+      | "story-video"
   ): Promise<UploadUrlResponse> {
     try {
       const request: UploadUrlRequest = {
         fileName,
         contentType,
-        category,
+        fileExtension,
+        mediaType,
       };
       const response = await apiHelper.post<UploadUrlResponse>(
         `${MEDIA_ENDPOINT}/upload-url`,
@@ -122,12 +136,17 @@ export const mediaService = {
   /**
    * Complete upload flow: Get upload URL and upload file
    * @param fileUri - Local file URI
-   * @param category - Media category ("story", "profile", or "bird")
+   * @param mediaType - Specific media type ("profile-image", "bird-profile-image", "bird-video", "story-image", "story-video")
    * @returns S3 key to use in API calls
    */
   async uploadFile(
     fileUri: string,
-    category: "story" | "profile" | "bird"
+    mediaType:
+      | "profile-image"
+      | "bird-profile-image"
+      | "bird-video"
+      | "story-image"
+      | "story-video"
   ): Promise<string> {
     try {
       console.log("📤 Starting media upload flow...");
@@ -140,15 +159,17 @@ export const mediaService = {
       const contentType = getContentType(extension);
 
       console.log(`📝 File: ${fileName}`);
+      console.log(`📝 Extension: ${extension}`);
       console.log(`📝 Content-Type: ${contentType}`);
-      console.log(`📝 Category: ${category}`);
+      console.log(`📝 Media Type: ${mediaType}`);
 
       // Step 1: Get upload URL from backend
       console.log("📤 Step 1: Requesting upload URL...");
       const { uploadUrl, s3Key, expiresInMinutes } = await this.getUploadUrl(
         fileName,
         contentType,
-        category
+        extension,
+        mediaType
       );
 
       console.log(`🔑 S3 Key: ${s3Key}`);

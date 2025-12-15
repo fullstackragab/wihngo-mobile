@@ -69,9 +69,6 @@ export function PremiumBirdProfile({
               )}
             </View>
             <Text style={styles.species}>{bird.species}</Text>
-            <Text style={styles.tagline}>
-              💛 Celebrated Bird - Spreading love & joy
-            </Text>
           </View>
         </View>
 
@@ -252,11 +249,6 @@ const styles = StyleSheet.create({
     fontSize: Typography.body,
     color: "#666",
     marginBottom: Spacing.xs,
-  },
-  tagline: {
-    fontSize: Typography.small,
-    color: "#FF6B6B",
-    fontStyle: "italic",
   },
   statsRow: {
     flexDirection: "row",

@@ -4,6 +4,7 @@ import { highlightStory, unhighlightStory } from "@/services/premium.service";
 import { Story } from "@/types/story";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Image,
   Pressable,
@@ -26,6 +27,7 @@ export function StoryHighlights({
   stories,
   onUpdate,
 }: StoryHighlightsProps) {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const { addNotification } = useNotifications();
 
@@ -88,9 +90,9 @@ export function StoryHighlights({
           size={48}
           color={theme.colors.textSecondary}
         />
-        <Text style={styles.emptyText}>No highlighted stories yet</Text>
+        <Text style={styles.emptyText}>{t("story.noHighlightedStories")}</Text>
         <Text style={styles.emptySubtext}>
-          Pin up to {MAX_HIGHLIGHTS} stories to showcase them
+          {t("story.pinStories", { count: MAX_HIGHLIGHTS })}
         </Text>
       </View>
     );
@@ -100,7 +102,7 @@ export function StoryHighlights({
     <View style={styles.container}>
       <View style={styles.header}>
         <Ionicons name="bookmark" size={24} color={theme.colors.primary} />
-        <Text style={styles.title}>Story Highlights</Text>
+        <Text style={styles.title}>{t("story.storyHighlights")}</Text>
         <Text style={styles.count}>
           {highlightedStories.length}/{MAX_HIGHLIGHTS}
         </Text>

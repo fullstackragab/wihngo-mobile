@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Localization from "expo-localization";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { I18nManager } from "react-native";
 
 import ar from "./locales/ar.json";
 import de from "./locales/de.json";
@@ -71,6 +72,14 @@ export const saveLanguage = async (language: string) => {
 // Initialize i18n
 const initializeI18n = async () => {
   const initialLanguage = await getInitialLanguage();
+
+  // Set RTL based on initial language
+  const shouldBeRTL = initialLanguage === "ar";
+  if (I18nManager.isRTL !== shouldBeRTL) {
+    I18nManager.forceRTL(shouldBeRTL);
+    I18nManager.allowRTL(shouldBeRTL);
+    console.log("🔄 RTL initialized to:", shouldBeRTL);
+  }
 
   i18n.use(initReactI18next).init({
     resources,

@@ -94,16 +94,6 @@ export default function MyBirds() {
         options={{
           title: t("bird.myBirds"),
           presentation: "card",
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.push("/add-bird")}>
-              <FontAwesome6
-                name="plus"
-                size={20}
-                color="#007AFF"
-                style={{ marginRight: 16 }}
-              />
-            </TouchableOpacity>
-          ),
         }}
       />
       <FlatList
@@ -121,6 +111,14 @@ export default function MyBirds() {
         refreshing={loading}
         onRefresh={loadMyBirds}
       />
+
+      {/* Floating Action Button */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => router.push("/add-bird")}
+      >
+        <FontAwesome6 name="plus" size={20} color="#FFFFFF" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -203,5 +201,21 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  fab: {
+    position: "absolute",
+    right: 24,
+    bottom: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#1A1A1A",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
 });

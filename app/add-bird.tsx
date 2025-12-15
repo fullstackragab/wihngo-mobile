@@ -34,11 +34,9 @@ export default function AddBird() {
   const { user, isAuthenticated } = useAuth();
   const [name, setName] = useState("");
   const [species, setSpecies] = useState("");
-  const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
   const [imageUri, setImageUri] = useState("");
   const [coverImageUri, setCoverImageUri] = useState("");
-  const [videoUri, setVideoUri] = useState("");
   const [age, setAge] = useState("");
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,16 +58,14 @@ export default function AddBird() {
       // Populate form with existing data
       setName(bird.name || "");
       setSpecies(bird.species || "");
-      setTagline(bird.tagline || "");
       setDescription(bird.description || "");
       setAge(bird.age || "");
       setLocation(bird.location || "");
 
-      // For images/video, we'll use the URLs from the bird object
+      // For images, we'll use the URLs from the bird object
       // The user can change them by selecting new ones
       if (bird.imageUrl) setImageUri(bird.imageUrl);
       if (bird.coverImageUrl) setCoverImageUri(bird.coverImageUrl);
-      if (bird.videoUrl) setVideoUri(bird.videoUrl);
     } catch (error) {
       console.error("Error loading bird data:", error);
       addNotification("recommendation", "Error", "Failed to load bird data");
@@ -81,20 +77,23 @@ export default function AddBird() {
 
   const handleSpeciesSelected = (selectedSpecies: BirdSpecies) => {
     console.log("Species selected:", selectedSpecies);
-    setSpecies(selectedSpecies.species);
+    // Get translated species name
+    const translationKey = `species.${selectedSpecies.species
+      .toLowerCase()
+      .replace(/['\s-]/g, "_")}`;
+    const translatedName = t(translationKey);
+    const displayName =
+      translatedName !== translationKey
+        ? translatedName
+        : selectedSpecies.species;
+    setSpecies(displayName);
   };
 
   const { validateForm, getFieldError, setFieldTouched, isFieldTouched } =
     useFormValidation({
       name: { required: true, message: "Bird name is required" },
       species: { required: true, message: "Species is required" },
-      tagline: {
-        required: true,
-        maxLength: 100,
-        message: "Tagline is required (max 100 characters)",
-      },
       imageUri: { required: true, message: "Profile image is required" },
-      videoUri: { required: false, message: "" },
     });
 
   const handleSubmit = async () => {
@@ -113,9 +112,7 @@ export default function AddBird() {
     const isValid = validateForm({
       name,
       species,
-      tagline,
       imageUri,
-      videoUri,
     });
     if (!isValid) {
       return;
@@ -152,23 +149,13 @@ export default function AddBird() {
         console.log("✅ Cover image uploaded:", coverImageS3Key);
       }
 
-      // Step 3: Upload video to S3 (optional)
-      let videoS3Key: string | undefined;
-      if (videoUri.trim()) {
-        console.log("📤 Uploading video...");
-        videoS3Key = await mediaService.uploadFile(videoUri, "bird-video");
-        console.log("✅ Video uploaded:", videoS3Key);
-      }
-
-      // Step 4: Prepare bird data
+      // Step 3: Prepare bird data
       const birdData: CreateBirdDto = {
         name: name.trim(),
         species: species.trim(),
-        tagline: tagline.trim(),
         description: description.trim() || undefined,
         imageS3Key,
         coverImageS3Key,
-        videoS3Key: videoS3Key || undefined,
         age: age.trim() || undefined,
         location: location.trim() || undefined,
       };
@@ -228,7 +215,7 @@ export default function AddBird() {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
         <ActivityIndicator size="large" color="#4ECDC4" />
-        <Text style={styles.loadingText}>Loading bird data...</Text>
+        <Text style={styles.loadingText}>{t("bird.loadingBirdData")}</Text>
       </View>
     );
   }
@@ -244,16 +231,12 @@ export default function AddBird() {
           <FontAwesome6 name="xmark" size={24} color="#2C3E50" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>
-          {isEditMode ? "Edit Bird" : "Add New Bird"}
+          {isEditMode ? t("bird.editBird") : t("bird.addBird")}
         </Text>
         <TouchableOpacity
           onPress={handleSubmit}
           disabled={
-            loading ||
-            !name.trim() ||
-            !species.trim() ||
-            !tagline.trim() ||
-            !imageUri.trim()
+            loading || !name.trim() || !species.trim() || !imageUri.trim()
           }
         >
           <Text
@@ -261,7 +244,6 @@ export default function AddBird() {
               styles.saveButton,
               (!name.trim() ||
                 !species.trim() ||
-                !tagline.trim() ||
                 !imageUri.trim() ||
                 loading) &&
                 styles.saveButtonDisabled,
@@ -277,7 +259,7 @@ export default function AddBird() {
       >
         {/* Required Fields */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Basic Information</Text>
+          <Text style={styles.sectionTitle}>{t("bird.sectionBasicInfo")}</Text>
 
           <ValidatedTextInput
             label={t("bird.birdName")}
@@ -303,19 +285,6 @@ export default function AddBird() {
           />
 
           <ValidatedTextInput
-            label={t("bird.tagline")}
-            value={tagline}
-            onChangeText={setTagline}
-            onBlur={() => setFieldTouched("tagline")}
-            error={getFieldError("tagline")}
-            touched={isFieldTouched("tagline")}
-            required
-            placeholder={t("bird.taglinePlaceholder")}
-            maxLength={100}
-          />
-          <Text style={styles.charCount}>{tagline.length}/100</Text>
-
-          <ValidatedTextInput
             label={t("bird.description")}
             value={description}
             onChangeText={setDescription}
@@ -328,7 +297,9 @@ export default function AddBird() {
 
         {/* Additional Info */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Additional Details</Text>
+          <Text style={styles.sectionTitle}>
+            {t("bird.sectionAdditionalDetails")}
+          </Text>
 
           <ValidatedTextInput
             label={t("bird.age")}
@@ -346,7 +317,7 @@ export default function AddBird() {
 
         {/* Images */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Images</Text>
+          <Text style={styles.sectionTitle}>{t("bird.sectionImages")}</Text>
 
           <ImagePickerButton
             label={t("bird.profileImage")}
@@ -372,17 +343,10 @@ export default function AddBird() {
 
         {/* Tips */}
         <View style={styles.tipsSection}>
-          <Text style={styles.tipsTitle}>💡 Tips for listing your bird</Text>
-          <Text style={styles.tipsText}>• Use clear, high-quality photos</Text>
-          <Text style={styles.tipsText}>
-            • Write a compelling tagline that captures personality
-          </Text>
-          <Text style={styles.tipsText}>
-            • Include details about care, behavior, and needs
-          </Text>
-          <Text style={styles.tipsText}>
-            • Be honest and transparent with supporters
-          </Text>
+          <Text style={styles.tipsTitle}>{t("bird.tipsTitle")}</Text>
+          <Text style={styles.tipsText}>{t("bird.tipsClearPhotos")}</Text>
+          <Text style={styles.tipsText}>{t("bird.tipsIncludeDetails")}</Text>
+          <Text style={styles.tipsText}>{t("bird.tipsBeHonest")}</Text>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

@@ -233,7 +233,7 @@ export default function EditStory() {
       if (imageUri && !imageUri.startsWith("http")) {
         // Only upload if it's a local file (not existing URL)
         console.log("📤 Uploading story image...");
-        imageS3Key = await mediaService.uploadFile(imageUri, "story");
+        imageS3Key = await mediaService.uploadFile(imageUri, "story-image");
         console.log("✅ Story image uploaded:", imageS3Key);
       }
 
@@ -242,7 +242,7 @@ export default function EditStory() {
       if (videoUri && !videoUri.startsWith("http")) {
         // Only upload if it's a local file (not existing URL)
         console.log("📤 Uploading story video...");
-        videoS3Key = await mediaService.uploadFile(videoUri, "story");
+        videoS3Key = await mediaService.uploadFile(videoUri, "story-video");
         console.log("✅ Story video uploaded:", videoS3Key);
       }
 

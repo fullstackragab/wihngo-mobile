@@ -1,13 +1,13 @@
 /**
  * Example: Donation Button Component
- * 
+ *
  * Use this component to add donation functionality to any screen
  * Place in: components/donation/DonationButton.tsx
  */
 
-import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 interface DonationButtonProps {
   birdId?: string;
@@ -175,9 +175,9 @@ import { DonationButton } from "@/components/donation/DonationButton";
 function HomeScreen() {
   return (
     <View>
-      {/* Other content */}
+      <Text>Other content here</Text>
       
-      <View style={styles.footer}>
+      <View style={{ padding: 16 }}>
         <DonationButton
           variant="secondary"
           size="medium"

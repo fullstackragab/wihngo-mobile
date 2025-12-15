@@ -296,17 +296,38 @@ export const COMMON_BIRD_SPECIES: BirdSpecies[] = [
 /**
  * Search bird species by name
  */
-export function searchBirdSpecies(query: string): BirdSpecies[] {
+export function searchBirdSpecies(
+  query: string,
+  translateFn?: (key: string) => string
+): BirdSpecies[] {
   if (!query.trim()) {
     return COMMON_BIRD_SPECIES;
   }
 
   const searchTerm = query.toLowerCase().trim();
 
-  return COMMON_BIRD_SPECIES.filter(
-    (bird) =>
+  return COMMON_BIRD_SPECIES.filter((bird) => {
+    // If translate function provided, prioritize translated name search
+    if (translateFn) {
+      const translationKey = `species.${bird.species
+        .toLowerCase()
+        .replace(/['\s-]/g, "_")}`;
+      const translatedName = translateFn(translationKey);
+
+      // Search in translated name first (if translation exists)
+      if (translatedName !== translationKey) {
+        if (translatedName.toLowerCase().includes(searchTerm)) {
+          return true;
+        }
+      }
+    }
+
+    // Also search in English names (as fallback or additional matching)
+    const matchesEnglish =
       bird.species.toLowerCase().includes(searchTerm) ||
       bird.commonName.toLowerCase().includes(searchTerm) ||
-      bird.scientificName.toLowerCase().includes(searchTerm)
-  );
+      bird.scientificName.toLowerCase().includes(searchTerm);
+
+    return matchesEnglish;
+  });
 }

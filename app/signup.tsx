@@ -137,10 +137,8 @@ export default function SignUp() {
               source={require("../assets/images/splash-icon.png")}
               style={styles.logo}
             />
-            <Text style={styles.appTitle}>Join Whingo</Text>
-            <Text style={styles.appSubtitle}>
-              Start your bird conservation journey
-            </Text>
+            <Text style={styles.appTitle}>{t("auth.joinWhingo")}</Text>
+            <Text style={styles.appSubtitle}>{t("auth.startJourney")}</Text>
           </View>
 
           {/* Sign Up Form */}
@@ -154,7 +152,7 @@ export default function SignUp() {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Full Name"
+                placeholder={t("auth.fullName")}
                 placeholderTextColor="#95A5A6"
                 value={name}
                 onChangeText={setName}
@@ -173,7 +171,7 @@ export default function SignUp() {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Email"
+                placeholder={t("auth.email")}
                 placeholderTextColor="#95A5A6"
                 value={email}
                 onChangeText={setEmail}
@@ -193,7 +191,7 @@ export default function SignUp() {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Password"
+                placeholder={t("auth.password")}
                 placeholderTextColor="#95A5A6"
                 secureTextEntry={!showPassword}
                 value={password}
@@ -223,7 +221,7 @@ export default function SignUp() {
               />
               <TextInput
                 style={styles.input}
-                placeholder="Confirm Password"
+                placeholder={t("auth.confirmPassword")}
                 placeholderTextColor="#95A5A6"
                 secureTextEntry={!showConfirmPassword}
                 value={confirmPassword}
@@ -247,10 +245,7 @@ export default function SignUp() {
             {/* Password Requirements */}
             <View style={styles.passwordHints}>
               <Text style={styles.passwordHintText}>
-                • At least 8 characters
-              </Text>
-              <Text style={styles.passwordHintText}>
-                • Include uppercase, lowercase, number & special character
+                {t("auth.passwordRequirements")}
               </Text>
             </View>
 
@@ -272,24 +267,29 @@ export default function SignUp() {
                 {isLoading ? (
                   <ActivityIndicator color="#FFFFFF" />
                 ) : (
-                  <Text style={styles.signupButtonText}>Create Account</Text>
+                  <Text style={styles.signupButtonText}>
+                    {t("auth.createAccount")}
+                  </Text>
                 )}
               </LinearGradient>
             </TouchableOpacity>
 
             {/* Terms and Conditions */}
             <Text style={styles.termsText}>
-              By signing up, you agree to our{" "}
-              <Text style={styles.termsLink}>Terms of Service</Text> and{" "}
-              <Text style={styles.termsLink}>Privacy Policy</Text>
+              {t("auth.termsAgreement")}{" "}
+              <Text style={styles.termsLink}>{t("auth.termsOfService")}</Text>{" "}
+              {t("auth.and")}{" "}
+              <Text style={styles.termsLink}>{t("auth.privacyPolicy")}</Text>
             </Text>
 
             {/* Login Link */}
             <View style={styles.loginContainer}>
-              <Text style={styles.loginText}>Already have an account? </Text>
+              <Text style={styles.loginText}>
+                {t("auth.alreadyHaveAccount")}{" "}
+              </Text>
               <Link href="/welcome" asChild>
                 <TouchableOpacity>
-                  <Text style={styles.loginLink}>Sign In</Text>
+                  <Text style={styles.loginLink}>{t("auth.signIn")}</Text>
                 </TouchableOpacity>
               </Link>
             </View>

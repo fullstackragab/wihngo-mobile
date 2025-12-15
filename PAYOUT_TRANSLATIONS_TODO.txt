@@ -1,0 +1,15 @@
+Remaining translations to add:
+- Portuguese (pt)
+- Italian (it) 
+- Chinese (zh)
+- Japanese (ja)
+- Korean (ko)
+- Arabic (ar)
+- Vietnamese (vi)
+- Turkish (tr)
+- Thai (th)
+- Hindi (hi)
+- Indonesian (id)
+- Polish (pl)
+
+These need the full "payout" section added before "settings" section in each file.

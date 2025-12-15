@@ -1,4 +1,6 @@
+import { NavigationChevron } from "@/components/navigation-chevron";
 import { useAuth } from "@/contexts/auth-context";
+import { useLanguage } from "@/contexts/language-context";
 import { useNotifications } from "@/contexts/notification-context";
 import { BorderRadius, FontSizes, Spacing } from "@/lib/constants/theme";
 import { storyService } from "@/services/story.service";
@@ -21,6 +23,7 @@ import {
 export default function Profile() {
   const { t } = useTranslation();
   const { user, logout, isAuthenticated, updateUser } = useAuth();
+  const { language, setLanguage, isRTL } = useLanguage();
   const { addNotification } = useNotifications();
   const router = useRouter();
   const [lovedBirds, setLovedBirds] = useState<Bird[]>([]);
@@ -51,15 +54,17 @@ export default function Profile() {
     try {
       // Fetch latest profile data including S3 image URL
       const profileData = await userService.getProfile();
-      const updatedUser: User = {
-        ...user,
-        name: profileData.name,
-        bio: profileData.bio,
-        profileImageUrl: profileData.profileImageUrl, // S3 pre-signed URL
-        profileImageS3Key: profileData.profileImageS3Key,
-      };
-      updateUser(updatedUser);
-      console.log("✅ Profile data refreshed with S3 image URL");
+      if (user) {
+        const updatedUser: User = {
+          ...user,
+          name: profileData.name,
+          bio: profileData.bio,
+          profileImageUrl: profileData.profileImageUrl, // S3 pre-signed URL
+          profileImageS3Key: profileData.profileImageS3Key,
+        };
+        updateUser(updatedUser);
+        console.log("✅ Profile data refreshed with S3 image URL");
+      }
     } catch (error) {
       console.error("Error refreshing profile data:", error);
     }
@@ -120,8 +125,8 @@ export default function Profile() {
       <View style={styles.container}>
         <View style={styles.notAuthHeader}>
           <FontAwesome6 name="user-circle" size={80} color="#E0E0E0" />
-          <Text style={styles.notAuthTitle}>Join Whingo</Text>
-          <Text style={styles.notAuthText}>Connect with birds you love</Text>
+          <Text style={styles.notAuthTitle}>{t("auth.joinWhingo")}</Text>
+          <Text style={styles.notAuthText}>{t("auth.connectWithBirds")}</Text>
         </View>
 
         <View style={styles.notAuthContent}>
@@ -129,14 +134,16 @@ export default function Profile() {
             style={styles.primaryButton}
             onPress={() => router.push("/signup")}
           >
-            <Text style={styles.primaryButtonText}>Create Account</Text>
+            <Text style={styles.primaryButtonText}>
+              {t("auth.createAccount")}
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={() => router.push("/welcome")}
           >
-            <Text style={styles.secondaryButtonText}>Sign In</Text>
+            <Text style={styles.secondaryButtonText}>{t("auth.signIn")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -197,7 +204,7 @@ export default function Profile() {
         >
           <FontAwesome6 name="book-open" size={18} color="#666" />
           <Text style={styles.menuText}>{t("story.myStories")}</Text>
-          <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
+          <NavigationChevron />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -206,7 +213,7 @@ export default function Profile() {
         >
           <FontAwesome6 name="dove" size={18} color="#666" />
           <Text style={styles.menuText}>{t("bird.myBirds")}</Text>
-          <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
+          <NavigationChevron />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -215,7 +222,7 @@ export default function Profile() {
         >
           <FontAwesome6 name="heart" size={18} color="#666" />
           <Text style={styles.menuText}>{t("bird.lovedBirds")}</Text>
-          <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
+          <NavigationChevron />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -224,7 +231,7 @@ export default function Profile() {
         >
           <FontAwesome6 name="hand-holding-heart" size={18} color="#666" />
           <Text style={styles.menuText}>{t("bird.supportedBirds")}</Text>
-          <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
+          <NavigationChevron />
         </TouchableOpacity>
 
         <View style={styles.menuDivider} />
@@ -235,7 +242,7 @@ export default function Profile() {
         >
           <FontAwesome6 name="pen" size={18} color="#666" />
           <Text style={styles.menuText}>{t("settings.editProfile")}</Text>
-          <FontAwesome6 name="chevron-right" size={14} color="#CCC" />
+          <NavigationChevron />
         </TouchableOpacity>
       </View>
 
@@ -309,7 +316,7 @@ const styles = StyleSheet.create({
   },
   settingsButton: {
     position: "absolute",
-    top: Spacing.xl,
+    top: Spacing.xl + 8,
     right: Spacing.lg,
     width: 40,
     height: 40,

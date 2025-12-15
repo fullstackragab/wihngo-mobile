@@ -85,7 +85,7 @@ export default function SupportBird() {
         <TouchableOpacity onPress={() => router.back()}>
           <FontAwesome6 name="arrow-left" size={24} color="#2C3E50" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Support Bird</Text>
+        <Text style={styles.headerTitle}>{t("headers.supportBird")}</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -135,7 +135,7 @@ export default function SupportBird() {
 
         {/* Amount Selection */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Select Amount</Text>
+          <Text style={styles.sectionTitle}>{t("support.selectAmount")}</Text>
           <View style={styles.amountGrid}>
             {PRESET_AMOUNTS.map((amount) => (
               <TouchableOpacity
@@ -164,13 +164,13 @@ export default function SupportBird() {
           {/* Custom Amount */}
           <View style={styles.customAmountContainer}>
             <Text style={styles.customAmountLabel}>
-              Or enter custom amount:
+              {t("support.orEnterCustomAmount")}
             </Text>
             <View style={styles.customAmountInput}>
               <Text style={styles.currencySymbol}>$</Text>
               <TextInput
                 style={styles.input}
-                placeholder="0.00"
+                placeholder={t("support.customAmountPlaceholder")}
                 placeholderTextColor="#95A5A6"
                 value={customAmount}
                 onChangeText={(text) => {
@@ -185,22 +185,24 @@ export default function SupportBird() {
 
         {/* Personal Message */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Add a Message (Optional)</Text>
+          <Text style={styles.sectionTitle}>{t("support.addMessage")}</Text>
           <TextInput
             style={styles.messageInput}
-            placeholder="Share words of encouragement..."
+            placeholder={t("support.messagePlaceholder")}
             placeholderTextColor="#95A5A6"
             value={message}
             onChangeText={setMessage}
             multiline
             maxLength={200}
           />
-          <Text style={styles.characterCount}>{message.length}/200</Text>
+          <Text style={styles.characterCount}>
+            {t("support.characterCount", { count: message.length })}
+          </Text>
         </View>
 
         {/* Payment Method */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Payment Method</Text>
+          <Text style={styles.sectionTitle}>{t("support.paymentMethod")}</Text>
           <View style={styles.paymentMethods}>
             <TouchableOpacity
               style={[
@@ -298,7 +300,9 @@ export default function SupportBird() {
           </View>
 
           {/* Crypto Payment Options */}
-          <Text style={styles.cryptoSectionTitle}>Cryptocurrency</Text>
+          <Text style={styles.cryptoSectionTitle}>
+            {t("support.cryptocurrency")}
+          </Text>
           <View style={styles.paymentMethods}>
             <TouchableOpacity
               style={[
@@ -329,7 +333,9 @@ export default function SupportBird() {
 
         {/* Total */}
         <View style={styles.totalCard}>
-          <Text style={styles.totalLabel}>Total Support Amount</Text>
+          <Text style={styles.totalLabel}>
+            {t("support.totalSupportAmount")}
+          </Text>
           <Text style={styles.totalAmount}>${getFinalAmount().toFixed(2)}</Text>
         </View>
 

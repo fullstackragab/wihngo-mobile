@@ -229,7 +229,7 @@ export default function Welcome() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Choose Language</Text>
+              <Text style={styles.modalTitle}>{t("chooseLanguage")}</Text>
               <TouchableOpacity onPress={() => setShowLanguagePicker(false)}>
                 <FontAwesome6 name="xmark" size={24} color="#333" />
               </TouchableOpacity>

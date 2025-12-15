@@ -146,6 +146,13 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
+          name="payout-settings"
+          options={{
+            title: t("headers.payoutSettings"),
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
           name="my-birds"
           options={{
             title: t("headers.myBirds"),

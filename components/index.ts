@@ -23,8 +23,16 @@ export { StoryHighlights } from "./story-highlights";
 
 // Bird Components
 export { default as BirdCard } from "./bird-card";
+
+// Navigation Components
+export { NavigationChevron } from "./navigation-chevron";
+
+// Memorial Components
 export { BirdThumb } from "./bird-thumb";
 export { LoveThisBirdButton } from "./love-this-bird-button";
+export { default as MemorialBadge } from "./memorial-badge";
+export { default as MemorialMessages } from "./memorial-messages";
+export { default as MemorialTribute } from "./memorial-tribute";
 
 // Social Components
 export { ShareButton } from "./share-button";

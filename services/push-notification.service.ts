@@ -10,6 +10,9 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { notificationService } from "./notification.service";
 
+// Check if running in Expo Go
+const isExpoGo = Constants.appOwnership === "expo";
+
 // Expo Project ID from app config
 const EXPO_PROJECT_ID =
   Constants.expoConfig?.extra?.eas?.projectId ||
@@ -17,15 +20,18 @@ const EXPO_PROJECT_ID =
   "1f8be543-8a9c-49dc-ae05-8e8161b36f4c";
 
 // Configure notification behavior when app is in foreground
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+// Note: This has limited functionality in Expo Go
+if (!isExpoGo) {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+}
 
 export interface LocalNotification {
   title: string;
@@ -45,6 +51,14 @@ export const pushNotificationService = {
    */
   async initialize(): Promise<void> {
     try {
+      // Check if running in Expo Go
+      if (isExpoGo) {
+        console.log(
+          "📱 Running in Expo Go - Push notifications have limited functionality. Use a development build for full features."
+        );
+        // Still attempt basic initialization for testing
+      }
+
       // Request permissions
       const hasPermission = await this.requestPermission();
       if (!hasPermission) {

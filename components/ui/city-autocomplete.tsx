@@ -1,5 +1,6 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -35,6 +36,7 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
   placeholder = "Search for a city...",
   required = false,
 }) => {
+  const { i18n, t } = useTranslation();
   const [query, setQuery] = useState(value);
   const [cities, setCities] = useState<City[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -96,7 +98,7 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
           `addressdetails=1&` +
           `limit=10&` +
           `featuretype=city&` +
-          `accept-language=en`,
+          `accept-language=${i18n.language}`,
         {
           headers: {
             "User-Agent": "Wihngo-App", // Required by Nominatim
@@ -212,7 +214,8 @@ const CityAutocomplete: React.FC<CityAutocompleteProps> = ({
     <View style={styles.container}>
       <View style={styles.labelContainer}>
         <Text style={styles.label}>
-          Location (city){required && <Text style={styles.required}> *</Text>}
+          {t("bird.locationCity")}
+          {required && <Text style={styles.required}> *</Text>}
         </Text>
       </View>
 

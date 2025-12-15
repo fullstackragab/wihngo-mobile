@@ -180,16 +180,6 @@ export default function MyStories() {
         options={{
           title: t("story.myStories"),
           presentation: "card",
-          headerRight: () => (
-            <TouchableOpacity onPress={() => router.push("/create-story")}>
-              <FontAwesome6
-                name="plus"
-                size={20}
-                color="#007AFF"
-                style={{ marginRight: 16 }}
-              />
-            </TouchableOpacity>
-          ),
         }}
       />
       <FlatList
@@ -200,6 +190,14 @@ export default function MyStories() {
         refreshing={loading}
         onRefresh={loadMyStories}
       />
+
+      {/* Floating Action Button */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => router.push("/create-story")}
+      >
+        <FontAwesome6 name="plus" size={20} color="#FFFFFF" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -215,22 +213,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-  },
-  floatingButton: {
-    position: "absolute",
-    bottom: 24,
-    right: 24,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: "#4ECDC4",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
   },
   listContent: {
     padding: 16,
@@ -363,5 +345,21 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+  },
+  fab: {
+    position: "absolute",
+    right: 24,
+    bottom: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: "#1A1A1A",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
 });

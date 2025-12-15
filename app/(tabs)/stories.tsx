@@ -6,6 +6,7 @@ import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
 import React, { useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -19,6 +20,7 @@ import {
 const PAGE_SIZE = 10;
 
 export default function Stories() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [visibleStoryId, setVisibleStoryId] = useState<string | null>(null);
 
@@ -104,7 +106,7 @@ export default function Stories() {
     <View style={styles.container}>
       {/* Minimal Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Stories</Text>
+        <Text style={styles.headerTitle}>{t("stories.title")}</Text>
       </View>
 
       {/* Preload adjacent videos for smooth playback */}
@@ -143,12 +145,14 @@ export default function Stories() {
       ) : (
         <View style={styles.emptyContainer}>
           <FontAwesome6 name="book-open" size={40} color="#E0E0E0" />
-          <Text style={styles.emptyText}>No stories yet</Text>
+          <Text style={styles.emptyText}>{t("stories.emptyText")}</Text>
           <TouchableOpacity
             style={styles.createFirstButton}
             onPress={() => router.push("/create-story")}
           >
-            <Text style={styles.createFirstButtonText}>Create Story</Text>
+            <Text style={styles.createFirstButtonText}>
+              {t("stories.createFirst")}
+            </Text>
           </TouchableOpacity>
         </View>
       )}

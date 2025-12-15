@@ -1,3 +1,4 @@
+import { NavigationChevron } from "@/components/navigation-chevron";
 import { useLanguage } from "@/contexts/language-context";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useRouter } from "expo-router";
@@ -5,6 +6,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
+  I18nManager,
   Modal,
   ScrollView,
   StyleSheet,
@@ -15,7 +17,7 @@ import {
 
 export default function Settings() {
   const router = useRouter();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, isRTL } = useLanguage();
   const { t, i18n } = useTranslation();
   const [showLanguageModal, setShowLanguageModal] = useState(false);
 
@@ -73,12 +75,15 @@ export default function Settings() {
         <FontAwesome6 name={icon as any} size={20} color="#666" />
         <Text style={styles.settingText}>{title}</Text>
       </View>
-      <FontAwesome6 name="chevron-right" size={16} color="#999" />
+      <NavigationChevron size={14} color="#999" />
     </TouchableOpacity>
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t("settings.account")}</Text>
         {/* <SettingsItem
@@ -95,6 +100,15 @@ export default function Settings() {
           icon="lock"
           title={t("settings.privacy")}
           onPress={() => router.push("/privacy-settings")}
+        />
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{t("settings.fundsReceived")}</Text>
+        <SettingsItem
+          icon="wallet"
+          title={t("settings.payoutSettings")}
+          onPress={() => router.push("/payout-settings")}
         />
       </View>
 
@@ -191,6 +205,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
   },
+  contentContainer: {
+    paddingBottom: 40,
+  },
   section: {
     marginTop: 20,
     backgroundColor: "#fff",
@@ -205,16 +222,18 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   settingItem: {
-    flexDirection: "row",
+    flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
+    paddingLeft: I18nManager.isRTL ? 26 : 16,
+    paddingRight: I18nManager.isRTL ? 16 : 26,
     paddingVertical: 14,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
   },
   settingLeft: {
-    flexDirection: "row",
+    flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
     alignItems: "center",
     gap: 12,
   },
@@ -223,6 +242,7 @@ const styles = StyleSheet.create({
     color: "#333",
     flex: 1,
     flexWrap: "wrap",
+    textAlign: I18nManager.isRTL ? "right" : "left",
   },
   modalOverlay: {
     flex: 1,
@@ -237,7 +257,7 @@ const styles = StyleSheet.create({
     maxHeight: "70%",
   },
   modalHeader: {
-    flexDirection: "row",
+    flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 20,
@@ -249,9 +269,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#333",
+    textAlign: I18nManager.isRTL ? "right" : "left",
   },
   languageOption: {
-    flexDirection: "row",
+    flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
     alignItems: "center",
     paddingVertical: 16,
     paddingHorizontal: 12,
@@ -270,6 +291,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     flexWrap: "wrap",
+    textAlign: I18nManager.isRTL ? "right" : "left",
   },
   languageNameActive: {
     fontWeight: "600",

@@ -140,16 +140,12 @@ export default function Settings() {
         <SettingsItem
           icon="file-lines"
           title={t("settings.termsOfService")}
-          onPress={() => {
-            // TODO: Implement terms page
-          }}
+          onPress={() => router.push("/terms-of-service")}
         />
         <SettingsItem
           icon="shield-halved"
           title={t("settings.privacyPolicy")}
-          onPress={() => {
-            // TODO: Implement privacy policy page
-          }}
+          onPress={() => router.push("/privacy-policy")}
         />
       </View>
 

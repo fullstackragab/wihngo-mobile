@@ -36,7 +36,7 @@ export async function testS3Upload(): Promise<void> {
     // Pick a test image
     console.log("📸 Opening image picker...");
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ["images"],
       allowsEditing: true,
       quality: 0.8,
     });
@@ -92,7 +92,7 @@ export async function testMultipleUploads(count: number = 3): Promise<void> {
         console.log(`\n📤 Upload ${i + 1}/${count}...`);
 
         const result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          mediaTypes: ["images"],
           allowsEditing: true,
           quality: 0.8,
         });

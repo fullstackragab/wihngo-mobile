@@ -4,6 +4,7 @@ import { payoutService } from "@/services/payout.service";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   ScrollView,
@@ -17,6 +18,7 @@ import {
 export default function AddIbanMethod() {
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     accountHolderName: "",
@@ -54,18 +56,18 @@ export default function AddIbanMethod() {
   const handleSubmit = async () => {
     // Validation
     if (!formData.accountHolderName.trim()) {
-      Alert.alert("Error", "Please enter account holder name");
+      Alert.alert(t("addIbanMethod.error"), t("addIbanMethod.enterAccountHolder"));
       return;
     }
 
     if (!formData.iban.trim()) {
-      Alert.alert("Error", "Please enter IBAN");
+      Alert.alert(t("addIbanMethod.error"), t("addIbanMethod.enterIban"));
       return;
     }
 
     const cleanIban = formData.iban.replace(/\s/g, "");
     if (!validateIban(cleanIban)) {
-      Alert.alert("Error", "Please enter a valid IBAN");
+      Alert.alert(t("addIbanMethod.error"), t("addIbanMethod.enterValidIban"));
       return;
     }
 
@@ -80,7 +82,7 @@ export default function AddIbanMethod() {
         isDefault: true,
       });
 
-      Alert.alert("Success", "IBAN payment method added successfully", [
+      Alert.alert(t("addIbanMethod.success"), t("addIbanMethod.methodAdded"), [
         {
           text: "OK",
           onPress: () => {
@@ -94,8 +96,8 @@ export default function AddIbanMethod() {
       const errorMessage =
         error?.response?.data?.message ||
         error?.message ||
-        "Failed to add payment method. Please try again.";
-      Alert.alert("Error", errorMessage);
+        t("addIbanMethod.addFailed");
+      Alert.alert(t("addIbanMethod.error"), errorMessage);
     } finally {
       setLoading(false);
     }

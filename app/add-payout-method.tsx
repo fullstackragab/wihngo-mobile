@@ -78,34 +78,6 @@ export default function AddPayoutMethod() {
         t("addPayoutMethod.methods.eurcSolana.feature4"),
       ],
     },
-    {
-      type: "Base" as PayoutMethodType,
-      cryptoConfig: { currency: "USDC", network: "base-mainnet" },
-      icon: "wallet-outline",
-      title: t("addPayoutMethod.methods.usdcBase.title"),
-      subtitle: t("addPayoutMethod.methods.usdcBase.subtitle"),
-      recommended: false,
-      features: [
-        t("addPayoutMethod.methods.usdcBase.feature1"),
-        t("addPayoutMethod.methods.usdcBase.feature2"),
-        t("addPayoutMethod.methods.usdcBase.feature3"),
-        t("addPayoutMethod.methods.usdcBase.feature4"),
-      ],
-    },
-    {
-      type: "Base" as PayoutMethodType,
-      cryptoConfig: { currency: "EURC", network: "base-mainnet" },
-      icon: "wallet-outline",
-      title: t("addPayoutMethod.methods.eurcBase.title"),
-      subtitle: t("addPayoutMethod.methods.eurcBase.subtitle"),
-      recommended: false,
-      features: [
-        t("addPayoutMethod.methods.eurcBase.feature1"),
-        t("addPayoutMethod.methods.eurcBase.feature2"),
-        t("addPayoutMethod.methods.eurcBase.feature3"),
-        t("addPayoutMethod.methods.eurcBase.feature4"),
-      ],
-    },
   ];
 
   const handleSelectMethod = (method: {
@@ -134,7 +106,6 @@ export default function AddPayoutMethod() {
         router.push("/add-paypal-method");
         break;
       case "Solana":
-      case "Base":
       case "Crypto":
         router.push({
           pathname: "/add-crypto-method",

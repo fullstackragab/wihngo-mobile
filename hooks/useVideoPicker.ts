@@ -135,7 +135,7 @@ export function useVideoPicker(
 
       // Launch image library with video option
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        mediaTypes: ["videos"],
         allowsEditing: true,
         quality: finalOptions.quality,
         videoMaxDuration: finalOptions.maxDurationSeconds,
@@ -197,7 +197,7 @@ export function useVideoPicker(
 
       // Launch camera for video recording
       const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        mediaTypes: ["videos"],
         allowsEditing: false, // Disable editing to prevent camera issues
         quality: finalOptions.quality,
         videoMaxDuration: finalOptions.maxDurationSeconds,

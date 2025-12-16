@@ -96,6 +96,8 @@ export type Story = {
   imageUrl?: string | null;
   videoS3Key?: string | null;
   videoUrl?: string | null;
+  audioS3Key?: string | null;
+  audioUrl?: string | null;
   likeCount?: number; // Number of likes on the story
   commentCount?: number; // Number of top-level comments
 };
@@ -113,10 +115,11 @@ export type StoryComment = {
 // Request payload for creating a story
 export type CreateStoryDto = {
   content: string; // REQUIRED: Story content (max 5000 chars, cannot be empty)
-  birdIds: string[]; // REQUIRED: At least 1 bird ID
+  birdId: string; // REQUIRED: Single bird ID
   mode?: StoryMode | null; // OPTIONAL: Story mood
-  imageS3Key?: string | null; // OPTIONAL: S3 key from media upload (image OR video, not both)
-  videoS3Key?: string | null; // OPTIONAL: S3 key from media upload (image OR video, not both)
+  imageS3Key?: string | null; // OPTIONAL: S3 key from media upload
+  videoS3Key?: string | null; // OPTIONAL: S3 key from media upload
+  audioS3Key?: string | null; // OPTIONAL: S3 key from audio recording (can be combined with image/video)
 };
 
 // Request payload for updating a story (all fields optional for partial updates)
@@ -137,6 +140,8 @@ export type StoryDetailDto = {
   imageUrl?: string | null;
   videoS3Key?: string | null;
   videoUrl?: string | null;
+  audioS3Key?: string | null;
+  audioUrl?: string | null;
   createdAt: string; // ISO 8601 format
   birds: StoryBird[]; // Full bird details with pre-signed URLs
   author: {
@@ -153,4 +158,27 @@ export type StoryListResponse = {
   pageSize: number;
   totalCount: number;
   items: Story[];
+};
+
+// Story length options for AI generation
+export enum StoryLength {
+  Short = "Short",
+  Medium = "Medium",
+}
+
+// Request payload for AI story generation
+export type GenerateStoryRequest = {
+  birdId: string; // REQUIRED: The bird to generate a story about
+  mode?: StoryMode | null; // OPTIONAL: The mood/tone of the story
+  imageS3Key?: string | null; // OPTIONAL: S3 key of uploaded image for context
+  videoS3Key?: string | null; // OPTIONAL: S3 key of uploaded video for context
+  language?: string; // OPTIONAL: Language code (e.g., "en", "es"). Default: "en"
+  length?: StoryLength | null; // OPTIONAL: Story length (Short/Medium/Long). Default: Medium
+};
+
+// Response from AI story generation
+export type GenerateStoryResponse = {
+  generatedContent: string; // The AI-generated story content (max 5000 chars)
+  tokensUsed?: number; // OPTIONAL: Number of AI tokens consumed
+  generationId?: string; // OPTIONAL: Unique ID for tracking/analytics
 };

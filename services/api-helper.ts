@@ -170,6 +170,7 @@ export async function authenticatedGet<T>(url: string): Promise<T> {
  * POST request with authentication
  */
 export async function authenticatedPost<T>(url: string, data: any): Promise<T> {
+  console.log("📤 POST Request Body:", JSON.stringify(data, null, 2));
   const response = await authenticatedFetch(url, {
     method: "POST",
     body: JSON.stringify(data),

@@ -15,7 +15,8 @@ export interface UploadUrlRequest {
     | "bird-profile-image"
     | "bird-video"
     | "story-image"
-    | "story-video"; // Specific media type
+    | "story-video"
+    | "story-audio"; // Specific media type
 }
 
 /**
@@ -56,6 +57,7 @@ export const mediaService = {
       | "bird-video"
       | "story-image"
       | "story-video"
+      | "story-audio"
   ): Promise<UploadUrlResponse> {
     try {
       const request: UploadUrlRequest = {
@@ -147,6 +149,7 @@ export const mediaService = {
       | "bird-video"
       | "story-image"
       | "story-video"
+      | "story-audio"
   ): Promise<string> {
     try {
       console.log("📤 Starting media upload flow...");
@@ -249,6 +252,11 @@ function getContentType(extension: string): string {
     mov: "video/quicktime",
     avi: "video/x-msvideo",
     webm: "video/webm",
+    m4a: "audio/mp4",
+    mp3: "audio/mpeg",
+    wav: "audio/wav",
+    aac: "audio/aac",
+    ogg: "audio/ogg",
   };
 
   return contentTypes[ext] || "application/octet-stream";

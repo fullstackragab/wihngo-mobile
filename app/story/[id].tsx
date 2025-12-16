@@ -4,10 +4,12 @@ import { storyService } from "@/services/story.service";
 import { StoryComment, StoryDetailDto } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Audio } from "expo-av";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { VideoView, useVideoPlayer } from "expo-video";
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -26,6 +28,7 @@ import {
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default function StoryDetail() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [story, setStory] = useState<StoryDetailDto | null>(null);
@@ -36,6 +39,13 @@ export default function StoryDetail() {
   const [showImage, setShowImage] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoViewRef = useRef<VideoView>(null);
+
+  // Audio playback state
+  const [audioSound, setAudioSound] = useState<Audio.Sound | null>(null);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const [audioDuration, setAudioDuration] = useState(0);
+  const [audioPosition, setAudioPosition] = useState(0);
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
 
   const player = useVideoPlayer(story?.videoUrl || "", (player) => {
     player.loop = false;
@@ -91,11 +101,26 @@ export default function StoryDetail() {
     };
   }, [player]);
 
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioSound) {
+        audioSound.unloadAsync();
+      }
+    };
+  }, [audioSound]);
+
   const loadStoryDetail = async () => {
     if (!id) return;
 
     try {
       const data = await storyService.getStoryDetail(id);
+      console.log("📖 Story detail loaded:", {
+        storyId: data.storyId,
+        hasAudioUrl: !!data.audioUrl,
+        audioUrl: data.audioUrl,
+        audioS3Key: data.audioS3Key,
+      });
       setStory(data);
       setComments(data.comments || []);
     } catch (error) {
@@ -164,6 +189,62 @@ export default function StoryDetail() {
       "Coming Soon",
       "Comment functionality will be available in a future update."
     );
+  };
+
+  // Audio playback functions
+  const handleAudioPlayPause = async () => {
+    if (!story?.audioUrl) return;
+
+    try {
+      if (audioSound) {
+        // Toggle play/pause
+        if (isAudioPlaying) {
+          await audioSound.pauseAsync();
+          setIsAudioPlaying(false);
+        } else {
+          await audioSound.playAsync();
+          setIsAudioPlaying(true);
+        }
+      } else {
+        // Load and play audio
+        setIsAudioLoading(true);
+        await Audio.setAudioModeAsync({
+          playsInSilentModeIOS: true,
+          staysActiveInBackground: false,
+        });
+
+        const { sound } = await Audio.Sound.createAsync(
+          { uri: story.audioUrl },
+          { shouldPlay: true },
+          (status) => {
+            if (status.isLoaded) {
+              setAudioPosition(status.positionMillis || 0);
+              setAudioDuration(status.durationMillis || 0);
+              setIsAudioPlaying(status.isPlaying);
+              if (status.didJustFinish) {
+                setIsAudioPlaying(false);
+                setAudioPosition(0);
+              }
+            }
+          }
+        );
+
+        setAudioSound(sound);
+        setIsAudioLoading(false);
+        setIsAudioPlaying(true);
+      }
+    } catch (error) {
+      console.error("Error playing audio:", error);
+      setIsAudioLoading(false);
+      Alert.alert(t("common.error"), t("story.audioPlaybackError"));
+    }
+  };
+
+  const formatAudioTime = (millis: number) => {
+    const totalSeconds = Math.floor(millis / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
   if (loading) {
@@ -312,6 +393,51 @@ export default function StoryDetail() {
         ) : story.imageUrl ? (
           <Image source={{ uri: story.imageUrl }} style={styles.storyMedia} />
         ) : null}
+
+        {/* Audio Player (Voice Note) */}
+        {story.audioUrl && (
+          <View style={styles.audioPlayerContainer}>
+            <View style={styles.audioPlayer}>
+              <TouchableOpacity
+                style={styles.audioPlayButton}
+                onPress={handleAudioPlayPause}
+                disabled={isAudioLoading}
+              >
+                {isAudioLoading ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Ionicons
+                    name={isAudioPlaying ? "pause" : "play"}
+                    size={24}
+                    color="#fff"
+                  />
+                )}
+              </TouchableOpacity>
+
+              <View style={styles.audioInfo}>
+                <Text style={styles.audioLabel}>{t("story.voiceNote")}</Text>
+                <View style={styles.audioProgressContainer}>
+                  <View
+                    style={[
+                      styles.audioProgressBar,
+                      {
+                        width:
+                          audioDuration > 0
+                            ? `${(audioPosition / audioDuration) * 100}%`
+                            : "0%",
+                      },
+                    ]}
+                  />
+                </View>
+                <Text style={styles.audioTime}>
+                  {formatAudioTime(audioPosition)} / {formatAudioTime(audioDuration)}
+                </Text>
+              </View>
+
+              <Ionicons name="mic" size={20} color="#4ECDC4" />
+            </View>
+          </View>
+        )}
 
         {/* Actions */}
         <View style={styles.actions}>
@@ -552,6 +678,52 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: "center",
     alignItems: "center",
+  },
+  audioPlayerContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  audioPlayer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F8F9FA",
+    borderRadius: 12,
+    padding: 12,
+    gap: 12,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+  },
+  audioPlayButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "#4ECDC4",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  audioInfo: {
+    flex: 1,
+    gap: 4,
+  },
+  audioLabel: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#2C3E50",
+  },
+  audioProgressContainer: {
+    height: 4,
+    backgroundColor: "#E8E8E8",
+    borderRadius: 2,
+    overflow: "hidden",
+  },
+  audioProgressBar: {
+    height: "100%",
+    backgroundColor: "#4ECDC4",
+    borderRadius: 2,
+  },
+  audioTime: {
+    fontSize: 11,
+    color: "#95A5A6",
   },
   actions: {
     flexDirection: "row",

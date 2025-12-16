@@ -1,7 +1,9 @@
 import { NavigationChevron } from "@/components/navigation-chevron";
 import { useLanguage } from "@/contexts/language-context";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import Constants from "expo-constants";
 import { useRouter } from "expo-router";
+import * as Linking from "expo-linking";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -147,6 +149,28 @@ export default function Settings() {
         />
       </View>
 
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{t("settings.about")}</Text>
+        <View style={styles.aboutContainer}>
+          <Text style={styles.appName}>Wihngo</Text>
+          <Text style={styles.appVersion}>
+            {t("settings.version")} {Constants.expoConfig?.version || "1.0.0"}
+          </Text>
+          <View style={styles.attributionContainer}>
+            <Text style={styles.attributionText}>
+              {t("settings.appIconBy")}{" "}
+            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                Linking.openURL("https://www.freepik.com/icon/bird_3069186")
+              }
+            >
+              <Text style={styles.attributionLink}>Freepik</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+
       <Modal
         visible={showLanguageModal}
         transparent
@@ -290,5 +314,35 @@ const styles = StyleSheet.create({
   languageNameActive: {
     fontWeight: "600",
     color: "#4ECDC4",
+  },
+  aboutContainer: {
+    alignItems: "center",
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+  },
+  appName: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 4,
+  },
+  appVersion: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 16,
+  },
+  attributionContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  attributionText: {
+    fontSize: 12,
+    color: "#999",
+  },
+  attributionLink: {
+    fontSize: 12,
+    color: "#4ECDC4",
+    textDecorationLine: "underline",
   },
 });

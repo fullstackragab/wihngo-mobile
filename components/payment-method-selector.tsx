@@ -29,13 +29,9 @@ export default function PaymentMethodSelector({
 }: PaymentMethodSelectorProps) {
   const allMethods = getEnabledPaymentMethods();
 
-  // Group methods by network for organized display
+  // Group methods by network for organized display - Solana only
   const methodsByNetwork: Record<string, PaymentMethod[]> = {
     solana: [],
-    stellar: [],
-    base: [],
-    polygon: [],
-    ethereum: [],
   };
 
   allMethods.forEach((method) => {
@@ -62,11 +58,7 @@ export default function PaymentMethodSelector({
 
   const getNetworkName = (network: CryptoNetwork): string => {
     const names: Record<CryptoNetwork, string> = {
-      ethereum: "Ethereum",
       solana: "Solana",
-      polygon: "Polygon",
-      base: "Base",
-      stellar: "Stellar",
     };
     return names[network] || network;
   };
@@ -150,7 +142,7 @@ export default function PaymentMethodSelector({
         </Text>
       </View>
 
-      {/* Network: Solana */}
+      {/* Network: Solana - Only supported network */}
       {methodsByNetwork.solana.length > 0 && (
         <View style={styles.networkSection}>
           <View style={styles.networkSectionHeader}>
@@ -163,61 +155,6 @@ export default function PaymentMethodSelector({
             </View>
           </View>
           {methodsByNetwork.solana.map(renderCurrencyButton)}
-        </View>
-      )}
-
-      {/* Network: Stellar */}
-      {methodsByNetwork.stellar.length > 0 && (
-        <View style={styles.networkSection}>
-          <View style={styles.networkSectionHeader}>
-            <FontAwesome6 name="star" size={20} color="#7D7D7D" />
-            <Text style={styles.networkSectionTitle}>
-              {getNetworkName("stellar")}
-            </Text>
-          </View>
-          {methodsByNetwork.stellar.map(renderCurrencyButton)}
-        </View>
-      )}
-
-      {/* Network: Base */}
-      {methodsByNetwork.base.length > 0 && (
-        <View style={styles.networkSection}>
-          <View style={styles.networkSectionHeader}>
-            <FontAwesome6 name="layer-group" size={20} color="#0052FF" />
-            <Text style={styles.networkSectionTitle}>
-              {getNetworkName("base")}
-            </Text>
-          </View>
-          {methodsByNetwork.base.map(renderCurrencyButton)}
-        </View>
-      )}
-
-      {/* Network: Polygon */}
-      {methodsByNetwork.polygon.length > 0 && (
-        <View style={styles.networkSection}>
-          <View style={styles.networkSectionHeader}>
-            <FontAwesome6 name="hexagon" size={20} color="#8247E5" />
-            <Text style={styles.networkSectionTitle}>
-              {getNetworkName("polygon")}
-            </Text>
-          </View>
-          {methodsByNetwork.polygon.map(renderCurrencyButton)}
-        </View>
-      )}
-
-      {/* Network: Ethereum */}
-      {methodsByNetwork.ethereum.length > 0 && (
-        <View style={styles.networkSection}>
-          <View style={styles.networkSectionHeader}>
-            <FontAwesome6 name="ethereum" size={20} color="#627EEA" />
-            <Text style={styles.networkSectionTitle}>
-              {getNetworkName("ethereum")}
-            </Text>
-            <View style={[styles.badge, { backgroundColor: "#627EEA" }]}>
-              <Text style={styles.badgeText}>MOST TRUSTED</Text>
-            </View>
-          </View>
-          {methodsByNetwork.ethereum.map(renderCurrencyButton)}
         </View>
       )}
 

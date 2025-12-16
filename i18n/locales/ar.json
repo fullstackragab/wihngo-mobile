@@ -127,7 +127,22 @@
     "tip2": "• ضع علامة على طائر (مطلوب)",
     "tip3": "• أضف مزاجاً للتعبير عن مشاعرك (اختياري)",
     "tip4": "• أضف صورة أو مقطع فيديو (وليس كلاهما) لجعلها أكثر جاذبية",
-    "tip5": "• مقاطع الفيديو: حد أقصى 60 ثانية، 200 ميجابايت"
+    "tip5": "• مقاطع الفيديو: حد أقصى 60 ثانية، 200 ميجابايت",
+    "aiGeneration": {
+      "button": "كتابة AI",
+      "generating": "جارٍ إنشاء قصتك...",
+      "birdRequiredTitle": "اختر طائراً أولاً",
+      "birdRequiredMessage": "يرجى اختيار طائر قبل إنشاء محتوى AI. يستخدم AI ملف تعريف طائرك لإنشاء قصة مخصصة.",
+      "replaceContentTitle": "استبدال المحتوى؟",
+      "replaceContentMessage": "سيقوم AI بإنشاء محتوى جديد واستبدال النص الحالي. هل تريد المتابعة؟",
+      "replace": "استبدال",
+      "successTitle": "تم إنشاء القصة",
+      "successMessage": "لقد أنشأ AI قصة لك! لا تتردد في تعديلها لتصبح خاصة بك.",
+      "errorTitle": "فشل الإنشاء",
+      "errorMessage": "فشل في إنشاء محتوى القصة. يرجى المحاولة مرة أخرى.",
+      "rateLimitMessage": "لقد وصلت إلى حد إنشاء AI. يرجى المحاولة مرة أخرى لاحقاً.",
+      "birdNotFoundMessage": "لم يتم العثور على الطائر. يرجى اختيار طائر صالح."
+    }
   },
   "moods": {
     "loveAndBond": {
@@ -260,7 +275,9 @@
     "deleteConfirmMessage": "هل أنت متأكد أنك تريد حذف هذه القصة؟ لا يمكن التراجع عن هذا الإجراء. سيتم أيضاً إزالة ملفات الوسائط من التخزين.",
     "deleteSuccess": "تم حذف القصة بنجاح",
     "deleteFailed": "فشل حذف القصة. يرجى المحاولة مرة أخرى.",
-    "noPermission": "ليس لديك إذن لحذف هذه القصة."
+    "noPermission": "ليس لديك إذن لحذف هذه القصة.",
+    "voiceNote": "ملاحظة صوتية",
+    "audioPlaybackError": "فشل تشغيل الصوت. يرجى المحاولة مرة أخرى."
   },
   "search": {
     "search": "بحث",
@@ -314,7 +331,9 @@
     "searchBirdsPlaceholder": "ابحث عن الطيور...",
     "sortAZ": "أ-ي",
     "sortPopular": "شائع",
-    "sortSupported": "مدعوم"
+    "sortSupported": "مدعوم",
+    "somethingWentWrong": "حدث خطأ ما",
+    "tryAgain": "حاول مرة أخرى"
   },
   "welcome": {
     "appTitle": "وينقو",
@@ -358,15 +377,18 @@
     "yourBalance": "رصيدك",
     "pending": "قيد الانتظار",
     "nextPayout": "الدفع التالي",
-    "minimumPayout": "الحد الأدنى للدفع هو €20",
+    "minimumPayout": "الحد الأدنى للدفع هو €10",
+    "monthlyPayoutInfo": "يتم تجميع الأموال ودفعها مرة واحدة شهريًا عندما يصل رصيدك إلى 10€.",
     "viewHistory": "عرض سجل الدفع",
     "howPayoutsWork": "كيف تعمل المدفوعات",
     "platformFee": "تفرض Wihngo رسوم منصة بنسبة 5٪",
     "youReceive": "تحصل على 95٪ من الدعم المالي",
     "providerFees": "قد تطبق رسوم معالج الدفع",
-    "minimumAmount": "الحد الأدنى للمبلغ: €20",
+    "minimumAmount": "الحد الأدنى للمبلغ: €10",
     "frequency": "التكرار: شهري",
     "taxResponsibility": "أنت مسؤول عن الضرائب",
+    "fundsHeldInfo": "يتم تجميع الدعم المستلم ودفعه مرة واحدة شهريًا عند الوصول إلى الحد الأدنى للدفع.",
+    "monthlyPayouts": "الدفعات الشهرية",
     "paymentMethods": "طرق الدفع",
     "addMethod": "إضافة طريقة",
     "noMethods": "لا توجد طرق دفع مضافة",
@@ -388,14 +410,15 @@
     "loadFailed": "فشل تحميل إعدادات الدفع",
     "legalInfo": "معلومات قانونية",
     "legalNotice": "Wihngo ليست مؤسسة مالية. Wihngo تسهل المدفوعات وتنقل أموال الدعم إلى المالك الجديد. المالك الجديد مسؤول عن تقديم تفاصيل دفع دقيقة والتعامل مع الضرائب المطبقة.",
-    "totalEarned": "إجمالي الأرباح",
+    "totalEarned": "إجمالي الأموال المستلمة",
     "totalPaidOut": "إجمالي المدفوعات",
     "requestedDate": "تاريخ الطلب",
     "processedDate": "تاريخ المعالجة",
     "completedDate": "تاريخ الإنجاز",
     "payoutFailed": "فشل الدفع",
     "noHistory": "لا يوجد سجل دفع بعد",
-    "noHistorySubtext": "ستظهر معاملات الدفع الخاصة بك هنا"
+    "noHistorySubtext": "ستظهر معاملات الدفع الخاصة بك هنا",
+    "payoutHistory": "سجل الدفع"
   },
   "paymentMethods": {
     "title": "طرق الدفع",
@@ -494,7 +517,10 @@
     "helpSupport": "المساعدة والدعم",
     "termsOfService": "شروط الخدمة",
     "privacyPolicy": "سياسة الخصوصية",
-    "languageChangeError": "فشل تغيير اللغة"
+    "languageChangeError": "فشل تغيير اللغة",
+    "about": "حول",
+    "version": "الإصدار",
+    "appIconBy": "أيقونة التطبيق من"
   },
   "notificationSettings": {
     "sendTest": "إرسال إشعار اختباري",
@@ -578,7 +604,33 @@
     "backToAmounts": "العودة إلى المبالغ",
     "backToNetworks": "العودة إلى الشبكات",
     "backToCurrencies": "العودة إلى العملات",
-    "doNotShowAgain": "لا تُظهر مرة أخرى"
+    "backToPaymentMethods": "العودة إلى طرق الدفع",
+    "doNotShowAgain": "لا تُظهر مرة أخرى",
+    "selectCurrency": "اختر العملة",
+    "platformSubtitle": "ساعدنا في الحفاظ على Wihngo ودعم حماية الطيور!",
+    "birdSubtitle": "اختر طريقة الدفع الخاصة بك لدعم هذا الطائر الرائع",
+    "quickSecurePayment": "دفع سريع وآمن",
+    "cryptoCurrencies": "USDC, EURC",
+    "platformSupportTitle": "❤️ ادعم أيضاً منصة Wihngo",
+    "platformSupportText": "ساعدنا على مواصلة بناء الميزات لمحبي الطيور!",
+    "supportWihngoViaPayPal": "دعم Wihngo عبر PayPal",
+    "openingPayPal": "فتح PayPal",
+    "completeYourDonation": "أكمل تبرعك على PayPal",
+    "thankYouForSupport": "شكراً لدعم Wihngo!",
+    "cannotOpenPayPal": "لا يمكن فتح PayPal",
+    "unableToOpenPayPal": "تعذر فتح PayPal. يرجى المحاولة مرة أخرى لاحقاً.",
+    "pleaseSelectNetwork": "يرجى اختيار شبكة أولاً",
+    "fallbackMessage": "لا ينبغي أن تظهر هذه الرسالة. يرجى العودة.",
+    "supportedCurrencies": "✅ مدعوم: USDC, EURC",
+    "lowestFees": "💡 Solana & Stellar موصى بها (أقل رسوم ~$0.0003)",
+    "amountLabel": "المبلغ: ${{amount}}",
+    "availableOn": "متاح على {{network}}",
+    "chooseBlockchainNetwork": "اختر شبكة البلوكشين التي تفضلها",
+    "confirmNetworkWarning": "⚠️ تحذير الشبكة",
+    "confirmNetworkText": "يجب عليك إرسال العملة المشفرة باستخدام نفس الشبكة التي تختارها.",
+    "transfersCannotBeRecovered": "لا يمكن استرداد التحويلات المرسلة إلى الشبكة الخطأ",
+    "doYouUnderstand": "هل تفهم وتريد المتابعة؟",
+    "iUnderstandShowAddress": "أفهم - أظهر العنوان"
   },
   "notifications": {
     "title": "الإشعارات",
@@ -694,34 +746,50 @@
       "footer": "تلتزم Wihngo بالشفافية وحماية معلوماتك الشخصية وفقًا لقوانين حماية البيانات في الاتحاد الأوروبي."
     },
     "terms": {
-      "intro": "By using the Wihngo app, you agree to the following terms.",
-      "platformRole": "Platform role",
-      "platformRoleContent": "Wihngo is a community platform. It is not a charity, financial institution, or veterinary service. We facilitate connections and support between bird lovers.",
-      "appUsage": "App usage",
-      "appUsageContent": "The Wihngo app is provided for connecting people who care about birds, sharing bird stories, and offering support. You must use the app responsibly and in accordance with these terms.",
-      "userContent": "User content",
-      "userContentContent": "Content you share on Wihngo (stories, photos, comments) remains your property. By posting content, you grant Wihngo a license to display and distribute it within the platform. You are responsible for the content you post.",
-      "communityGuidelines": "Community guidelines",
-      "communityGuidelinesIntro": "We expect all users to:",
-      "guidelineRespectful": "Be respectful and kind to others",
-      "guidelineAuthentic": "Share authentic stories about birds",
-      "guidelineResponsible": "Use the support features responsibly",
-      "guidelineNoHarm": "Not post harmful, offensive, or misleading content",
-      "supportAndPayments": "Support and payments",
-      "supportAndPaymentsContent": "Wihngo facilitates support payments between users. We are not responsible for the outcomes of these transactions. Users are responsible for providing accurate payment information and handling applicable taxes.",
-      "noGuarantees": "No guarantees",
-      "noGuaranteesContent": "Wihngo does not guarantee outcomes related to birds, stories, or support activities. All interactions and support are between users.",
-      "limitationOfLiability": "Limitation of liability",
-      "limitationOfLiabilityContent": "Wihngo is not responsible for any loss or damage arising from the use of the app. This includes, but is not limited to, financial losses, data loss, or any indirect damages.",
-      "accountTermination": "Account termination",
-      "accountTerminationContent": "Wihngo reserves the right to suspend or terminate accounts that violate these terms or engage in harmful behavior.",
-      "governingLaw": "Governing law",
-      "governingLawContent": "These terms are governed by the laws of Estonia and the European Union.",
-      "changes": "Changes to terms",
-      "changesContent": "Wihngo may update these terms from time to time. We will notify users of significant changes through the app.",
-      "contact": "Contact",
-      "contactIntro": "For questions or support, contact:",
-      "footer": "Thank you for being part of the Wihngo community and caring about birds."
+      "intro": "باستخدام تطبيقات Wihngo للهاتف المحمول أو الموقع الإلكتروني، فإنك توافق على هذه الشروط.",
+      "platformRole": "1. دور المنصة",
+      "platformRoleContent": "Wihngo هي منصة مجتمعية لمحبي الطيور. ليست مؤسسة خيرية أو بنك أو مؤسسة مالية. توفر Wihngo مساحة للمستخدمين لمشاركة القصص ودعم الطيور طوعياً.",
+      "appUsage": "استخدام التطبيق",
+      "appUsageContent": "يتم توفير تطبيق Wihngo لربط الأشخاص الذين يهتمون بالطيور ومشاركة قصص الطيور وتقديم الدعم. يجب عليك استخدام التطبيق بشكل مسؤول ووفقًا لهذه الشروط.",
+      "supportFunds": "2. أموال الدعم",
+      "supportFundsIntro": "عندما يختار المستخدم دعم طائر، يتم الاحتفاظ بالأموال مؤقتاً من قبل Wihngo.",
+      "supportFundsCollected": "يتم جمع الأموال من قبل Wihngo وتوزيعها على المستخدمين مرة واحدة شهرياً.",
+      "supportFundsMinimum": "الحد الأدنى للدفع: 10 يورو. إذا كان رصيد المستخدم أقل من 10 يورو، يتم ترحيله إلى الدفعة التالية.",
+      "supportFundsMethod": "تتم المدفوعات عبر التحويل البنكي أو طريقة أخرى يختارها Wihngo.",
+      "supportFundsFee": "يأخذ Wihngo رسوم منصة (مثل 5%) تلقائياً من كل دفعة دعم.",
+      "supportFundsDelays": "Wihngo غير مسؤول عن التأخيرات الناتجة عن البنوك أو شبكات الدفع أو شبكات العملات المشفرة.",
+      "cryptoSupport": "3. دعم العملات المشفرة (إن وجد)",
+      "cryptoSupportPayout": "يمكن للمستخدمين اختيار استلام المدفوعات بالعملات المشفرة.",
+      "cryptoSupportPeerToPeer": "مدفوعات العملات المشفرة هي نظير لنظير وتخضع لرسوم الشبكة والتقلبات.",
+      "cryptoSupportNoGuarantee": "لا يضمن Wihngo القيمة وقت الدفع.",
+      "cryptoSupportIrreversible": "معاملات العملات المشفرة لا رجعة فيها. يجب على المستخدمين التحقق من العناوين والشبكات.",
+      "cryptoSupportNotWallet": "Wihngo ليس محفظة. Wihngo لا يضمن التسليم. دعم العملات المشفرة هو نظير لنظير.",
+      "userContent": "4. محتوى المستخدم",
+      "userContentContent": "يحتفظ المستخدمون بملكية محتواهم (القصص والصور). من خلال النشر، يمنح المستخدمون Wihngo ترخيصاً غير حصري لعرض المحتوى علنياً.",
+      "communityGuidelines": "إرشادات المجتمع",
+      "communityGuidelinesIntro": "نتوقع من جميع المستخدمين:",
+      "guidelineRespectful": "أن يكونوا محترمين ولطفاء مع الآخرين",
+      "guidelineAuthentic": "مشاركة قصص حقيقية عن الطيور",
+      "guidelineResponsible": "استخدام ميزات الدعم بشكل مسؤول",
+      "guidelineNoHarm": "عدم نشر محتوى ضار أو مسيء أو مضلل",
+      "noGuarantees": "5. لا ضمانات",
+      "noGuaranteesContent": "لا يضمن Wihngo نتائج دعم الطيور أو القصص أو التفاعلات. الدعم طوعي وحسب تقدير المستخدم.",
+      "liability": "6. المسؤولية",
+      "liabilityIntro": "Wihngo غير مسؤول عن:",
+      "liabilityLostTransactions": "المعاملات المفقودة أو غير الصحيحة",
+      "liabilityDelays": "التأخير في المدفوعات",
+      "liabilityIncorrectAddresses": "عناوين العملات المشفرة غير الصحيحة المقدمة من المستخدم",
+      "limitationOfLiability": "تحديد المسؤولية",
+      "limitationOfLiabilityContent": "Wihngo غير مسؤول عن أي خسارة أو ضرر ناتج عن استخدام التطبيق. يشمل ذلك، على سبيل المثال لا الحصر، الخسائر المالية وفقدان البيانات أو أي أضرار غير مباشرة.",
+      "accountTermination": "إنهاء الحساب",
+      "accountTerminationContent": "يحتفظ Wihngo بالحق في تعليق أو إنهاء الحسابات التي تنتهك هذه الشروط أو تشارك في سلوك ضار.",
+      "governingLaw": "7. القانون الحاكم",
+      "governingLawContent": "تخضع هذه الشروط لقوانين إستونيا والاتحاد الأوروبي.",
+      "changes": "التغييرات على الشروط",
+      "changesContent": "قد يقوم Wihngo بتحديث هذه الشروط من وقت لآخر. سنقوم بإخطار المستخدمين بالتغييرات الهامة من خلال التطبيق.",
+      "contact": "الاتصال",
+      "contactIntro": "للأسئلة أو الدعم، اتصل بـ:",
+      "footer": "شكرًا لكونك جزءًا من مجتمع Wihngo ولاهتمامك بالطيور."
     }
   },
   "faq": {
@@ -779,6 +847,43 @@
       "taxResponsibilityAnswer": "أصحاب الطيور مسؤولون عن الإبلاغ عن ودفع أي ضرائب مطبقة على الدعم المستلم من خلال Wihngo. نوصي بالتشاور مع متخصص ضرائب في ولايتك القضائية.",
       "whereIsWihngoRegistered": "أين مسجل Wihngo؟",
       "whereIsWihngoRegisteredAnswer": "Wihngo في عملية التسجيل في إستونيا وتعمل داخل الاتحاد الأوروبي."
+    },
+    "addIbanMethod": {
+      "error": "خطأ",
+      "success": "نجاح",
+      "enterAccountHolder": "يرجى إدخال اسم صاحب الحساب",
+      "enterIban": "يرجى إدخال IBAN",
+      "enterValidIban": "يرجى إدخال IBAN صالح",
+      "methodAdded": "تمت إضافة طريقة الدفع IBAN بنجاح",
+      "addFailed": "فشل إضافة طريقة الدفع. يرجى المحاولة مرة أخرى."
+    },
+    "addPayPalMethod": {
+      "error": "خطأ",
+      "success": "نجاح",
+      "enterEmail": "يرجى إدخال بريدك الإلكتروني في PayPal",
+      "enterValidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح",
+      "methodAdded": "تمت إضافة طريقة الدفع PayPal بنجاح",
+      "addFailed": "فشل إضافة طريقة الدفع. يرجى المحاولة مرة أخرى."
+    },
+    "addCryptoMethod": {
+      "error": "خطأ",
+      "success": "نجاح",
+      "enterWalletAddress": "يرجى إدخال عنوان محفظتك",
+      "enterValidAddress": "يرجى إدخال عنوان محفظة {{network}} صالح",
+      "methodAdded": "تمت إضافة طريقة الدفع {{currency}} بنجاح",
+      "addFailed": "فشل إضافة طريقة الدفع. يرجى المحاولة مرة أخرى."
     }
+  },
+  "audioRecording": {
+    "title": "مذكرة صوتية",
+    "recording": "جاري التسجيل",
+    "paused": "متوقف مؤقتاً",
+    "recorded": "مكتمل",
+    "ready": "جاهز",
+    "instructionStart": "اضغط على الزر الأحمر لبدء التسجيل",
+    "instructionRecording": "التسجيل قيد التقدم... اضغط على إيقاف عند الانتهاء",
+    "instructionPaused": "التسجيل متوقف مؤقتاً. اضغط على تشغيل للمتابعة",
+    "instructionRecorded": "اضغط على تشغيل للاستماع إلى التسجيل",
+    "maxDuration": "الحد الأقصى لوقت التسجيل: {{duration}}"
   }
 }

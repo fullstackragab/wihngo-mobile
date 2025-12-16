@@ -71,7 +71,7 @@ export function useImagePicker(
 
       // Launch image library
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ["images"],
         allowsEditing: finalOptions.allowsEditing,
         quality: finalOptions.quality,
         aspect: finalOptions.aspect,
@@ -133,7 +133,7 @@ export function useImagePicker(
 
       // Launch camera
       const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ["images"],
         allowsEditing: finalOptions.allowsEditing,
         quality: finalOptions.quality,
         aspect: finalOptions.aspect,

@@ -127,7 +127,50 @@
     "tip2": "• Tag a bird (required)",
     "tip3": "• Add a mood to help express your feelings (optional)",
     "tip4": "• Add a photo or video (not both) to make it more engaging",
-    "tip5": "• Videos: Max 60 seconds, 200MB"
+    "tip5": "• Videos: Max 60 seconds, 200MB",
+    "aiGeneration": {
+      "button": "AI Write",
+      "generating": "Creating your story...",
+      "birdRequiredTitle": "Select a Bird First",
+      "birdRequiredMessage": "Please select a bird before generating AI content. The AI uses your bird's profile to create a personalized story.",
+      "replaceContentTitle": "Replace Content?",
+      "replaceContentMessage": "AI will generate new content and replace your current text. Do you want to continue?",
+      "replace": "Replace",
+      "successTitle": "Story Generated",
+      "successMessage": "AI has created a story for you! Feel free to edit it to make it your own.",
+      "errorTitle": "Generation Failed",
+      "errorMessage": "Failed to generate story content. Please try again.",
+      "rateLimitMessage": "You've reached the AI generation limit. Please try again later.",
+      "birdNotFoundMessage": "Bird not found. Please select a valid bird.",
+      "settings": {
+        "title": "AI Story Settings",
+        "storyLength": "Story Length",
+        "short": "Short",
+        "medium": "Medium",
+        "shortRange": "50-150 words",
+        "mediumRange": "150-300 words",
+        "done": "Done"
+      }
+    },
+    "addAudio": "Add Voice Note",
+    "removeAudio": "Remove Voice Note",
+    "audioRecorded": "Voice note recorded",
+    "audioRecording": {
+      "title": "Record Voice Note",
+      "recording": "Recording... Tap stop when finished",
+      "recorded": "Tap play to preview your recording",
+      "tapToStart": "Tap the microphone to start recording",
+      "maxDuration": "Maximum duration: {{duration}}",
+      "transcribed": "Audio Transcribed",
+      "transcribedMessage": "Your voice has been converted to text.",
+      "transcribing": "Transcribing audio...",
+      "error": "Transcription Error",
+      "errorMessage": "Failed to transcribe audio.",
+      "contentExists": "Replace or Append?",
+      "contentExistsMessage": "Do you want to replace or append the transcription?",
+      "replace": "Replace",
+      "append": "Append"
+    }
   },
   "moods": {
     "loveAndBond": {
@@ -260,7 +303,9 @@
     "commentsCount": "Comments ({{count}})",
     "storyHighlights": "Story Highlights",
     "noHighlightedStories": "No highlighted stories yet",
-    "pinStories": "Pin up to {{count}} stories to showcase them"
+    "pinStories": "Pin up to {{count}} stories to showcase them",
+    "voiceNote": "Voice Note",
+    "audioPlaybackError": "Failed to play audio. Please try again."
   },
   "search": {
     "search": "Search",
@@ -346,7 +391,21 @@
     "confirmNetworkText": "You must send cryptocurrency using the same network you select.",
     "transfersCannotBeRecovered": "Transfers sent to the wrong network cannot be recovered",
     "doYouUnderstand": "Do you understand and want to continue?",
-    "iUnderstandShowAddress": "I Understand - Show Address"
+    "iUnderstandShowAddress": "I Understand - Show Address",
+    "authenticationRequired": "Authentication Required",
+    "pleaseLoginToMakePayment": "Please login to make a payment.",
+    "sessionExpired": "Session Expired",
+    "sessionExpiredMessage": "Your session has expired. Please login again.",
+    "currencyNotSupported": "Currency Not Supported",
+    "paymentError": "Payment Error",
+    "failedToCreateCryptoPayment": "Failed to create crypto payment: {{error}}",
+    "paymentSuccessful": "Payment Successful",
+    "thankYouForYourSupport": "Thank you for your support!",
+    "minimumAmountRequired": "Minimum Amount Required",
+    "cryptoMinimumMessage": "Crypto payments require a minimum of ${{amount}} due to blockchain network fees and transaction costs.",
+    "transactionError": "Transaction Error",
+    "failedToRecordTransaction": "Failed to record transaction",
+    "failedToProcessPayment": "Failed to process payment"
   },
   "media": {
     "changeImage": "Change Image",
@@ -367,7 +426,9 @@
     "searchBirdsPlaceholder": "Search birds...",
     "sortAZ": "A-Z",
     "sortPopular": "Popular",
-    "sortSupported": "Supported"
+    "sortSupported": "Supported",
+    "somethingWentWrong": "Something went wrong",
+    "tryAgain": "Try Again"
   },
   "welcome": {
     "appTitle": "Whingo",
@@ -420,7 +481,10 @@
     "helpSupport": "Help & Support",
     "termsOfService": "Terms of Service",
     "privacyPolicy": "Privacy Policy",
-    "languageChangeError": "Failed to change language"
+    "languageChangeError": "Failed to change language",
+    "about": "About",
+    "version": "Version",
+    "appIconBy": "App icon by"
   },
   "notificationSettings": {
     "sendTest": "Send Test Notification",
@@ -507,7 +571,7 @@
       "supportFunds": "2. Support Funds",
       "supportFundsIntro": "When a user chooses to support a bird, the funds are temporarily held by Wihngo.",
       "supportFundsCollected": "Funds are collected by Wihngo and distributed to users once per month.",
-      "supportFundsMinimum": "Minimum payout threshold: €20. If a user's balance is below €20, it rolls over to the next payout.",
+      "supportFundsMinimum": "Minimum payout threshold: €10. If a user's balance is below €10, it rolls over to the next payout.",
       "supportFundsMethod": "Payouts are made via bank transfer or another method selected by Wihngo.",
       "supportFundsFee": "Wihngo takes a platform fee (e.g., 5%) automatically from each support payment.",
       "supportFundsDelays": "Wihngo is not responsible for delays caused by banking, payment networks, or crypto networks.",
@@ -553,20 +617,21 @@
     "payable": "Payable",
     "paid": "Paid",
     "statusPending": "Funds received, awaiting monthly payout",
-    "statusPayable": "Your balance reached €20, payout will be sent on the next payout date",
+    "statusPayable": "Your balance reached €10, payout will be sent on the next payout date",
     "statusPaid": "Funds sent to your bank / crypto wallet",
     "nextPayout": "Next payout",
-    "minimumPayout": "Minimum payout amount is €20",
-    "monthlyPayoutInfo": "Funds are accumulated and paid out once per month when your balance reaches €20.",
+    "minimumPayout": "Minimum payout amount is €10",
+    "monthlyPayoutInfo": "Funds are accumulated and paid out once per month when your balance reaches €10.",
     "viewHistory": "View Payout History",
     "howPayoutsWork": "How Payouts Work",
     "platformFee": "Wihngo charges a 5% platform fee",
     "youReceive": "95% of support goes to you",
     "providerFees": "Payment provider fees apply",
-    "minimumAmount": "Minimum payout: €20",
+    "minimumAmount": "Minimum payout: €10",
     "frequency": "Payout frequency: Monthly",
     "taxResponsibility": "You're responsible for taxes",
     "fundsHeldInfo": "Support received is accumulated and paid out once per month when the minimum payout threshold is reached.",
+    "monthlyPayouts": "Monthly Payouts",
     "paymentMethods": "Payment Methods",
     "addMethod": "Add Method",
     "noMethods": "No payment methods added",
@@ -588,14 +653,15 @@
     "loadFailed": "Failed to load payout settings",
     "legalInfo": "Legal Information",
     "legalNotice": "Wihngo is not a payment institution. Wihngo facilitates payments and transfers support funds to bird owners. Bird owners are responsible for providing correct payout details and handling applicable taxes.",
-    "totalEarned": "Total Earned",
+    "totalEarned": "Total Funds Received",
     "totalPaidOut": "Total Paid Out",
     "requestedDate": "Requested",
     "processedDate": "Processed",
     "completedDate": "Completed",
     "payoutFailed": "Payout failed",
     "noHistory": "No payout history yet",
-    "noHistorySubtext": "Your payout transactions will appear here"
+    "noHistorySubtext": "Your payout transactions will appear here",
+    "payoutHistory": "Payout History"
   },
   "paymentMethods": {
     "title": "Payment Methods",
@@ -678,6 +744,45 @@
         "feature4": "Requires Base-compatible wallet"
       }
     }
+  },
+  "addIbanMethod": {
+    "error": "Error",
+    "success": "Success",
+    "enterAccountHolder": "Please enter account holder name",
+    "enterIban": "Please enter IBAN",
+    "enterValidIban": "Please enter a valid IBAN",
+    "methodAdded": "IBAN payment method added successfully",
+    "addFailed": "Failed to add payment method. Please try again."
+  },
+  "addPayPalMethod": {
+    "error": "Error",
+    "success": "Success",
+    "enterEmail": "Please enter your PayPal email",
+    "enterValidEmail": "Please enter a valid email address",
+    "methodAdded": "PayPal payment method added successfully",
+    "addFailed": "Failed to add payment method. Please try again."
+  },
+  "addCryptoMethod": {
+    "error": "Error",
+    "success": "Success",
+    "enterWalletAddress": "Please enter your wallet address",
+    "enterValidAddress": "Please enter a valid {{network}} wallet address",
+    "methodAdded": "{{currency}} payment method added successfully",
+    "addFailed": "Failed to add payment method. Please try again."
+  },
+  "donation": {
+    "error": "Error",
+    "success": "Success",
+    "paypalCheckoutNotAvailable": "PayPal checkout URL not available",
+    "failedToLoadInvoice": "Failed to load invoice details",
+    "failedToOpenWallet": "Failed to open wallet",
+    "failedToCopy": "Failed to copy to clipboard",
+    "failedToReportPayment": "Failed to report payment",
+    "failedToLoadBird": "Failed to load bird details",
+    "failedToLoadHistory": "Failed to load invoice history",
+    "receiptDownloaded": "Receipt downloaded successfully!",
+    "failedToDownloadReceipt": "Failed to download receipt",
+    "failedToLoadStory": "Failed to load story data"
   },
   "profile": {
     "yourName": "Enter your name (required)",
@@ -838,13 +943,13 @@
     "title": "Frequently Asked Questions",
     "subtitle": "Everything you need to know about Wihngo",
     "payouts": {
-      "title": "Payouts & Earnings",
+      "title": "Payouts & Funds",
       "whenDoIGetPaid": "When do I get paid?",
-      "whenDoIGetPaidAnswer": "Payouts happen once per month, typically on the 1st-5th of each month. You will receive a payout when your balance reaches the minimum threshold of €20.",
-      "whyMinimum": "Why is there a €20 minimum?",
-      "whyMinimumAnswer": "The minimum payout threshold helps reduce transaction fees and processing costs. This ensures that both you and Wihngo can operate efficiently. If you don't reach €20 in a month, your balance will roll over to the next month.",
-      "whatIfNeverReach": "What happens if I never reach €20?",
-      "whatIfNeverReachAnswer": "Your balance accumulates each month until you reach the €20 threshold. Once you reach it, you'll receive a payout on the next scheduled payout date. Your funds never expire.",
+      "whenDoIGetPaidAnswer": "Payouts happen once per month, typically on the 1st-5th of each month. You will receive a payout when your balance reaches the minimum threshold of €10.",
+      "whyMinimum": "Why is there a €10 minimum?",
+      "whyMinimumAnswer": "The minimum payout threshold helps reduce transaction fees and processing costs. This ensures that both you and Wihngo can operate efficiently. If you don't reach €10 in a month, your balance will roll over to the next month.",
+      "whatIfNeverReach": "What happens if I never reach €10?",
+      "whatIfNeverReachAnswer": "Your balance accumulates each month until you reach the €10 threshold. Once you reach it, you'll receive a payout on the next scheduled payout date. Your funds never expire.",
       "platformFee": "What is the platform fee?",
       "platformFeeAnswer": "Wihngo charges a 5% platform fee on all support received. This fee helps us maintain the platform, process payments, and continue improving Wihngo. 95% of every support payment goes directly to you.",
       "payoutMethods": "What payout methods are available?",
@@ -911,7 +1016,16 @@
     "importantDisclaimers": "Important Disclaimers:",
     "andAcceptAllRisks": "and accept all risks"
   },
-  "payout": {
-    "monthlyPayouts": "Monthly Payouts"
+  "audioRecording": {
+    "title": "Voice Note",
+    "recording": "Recording",
+    "paused": "Paused",
+    "recorded": "Complete",
+    "ready": "Ready",
+    "instructionStart": "Tap the red button to start recording",
+    "instructionRecording": "Recording in progress... Tap stop when you're done",
+    "instructionPaused": "Recording paused. Tap play to resume",
+    "instructionRecorded": "Tap play to listen to your recording",
+    "maxDuration": "Maximum recording time: {{duration}}"
   }
 }

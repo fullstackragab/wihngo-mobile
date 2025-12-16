@@ -1,19 +1,18 @@
 /**
  * Reown AppKit Configuration
- * Configures wallet connection for EVM chains (Base) and Solana
+ * Configures wallet connection for Solana network only
+ * Supports USDC and EURC payments via Solana Pay
  */
 
 import "@walletconnect/react-native-compat";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { EthersAdapter } from "@reown/appkit-ethers-react-native";
 import { createAppKit, solana } from "@reown/appkit-react-native";
 import {
   PhantomConnector,
   SolanaAdapter,
   SolflareConnector,
 } from "@reown/appkit-solana-react-native";
-import { base, baseSepolia } from "viem/chains";
 
 // Storage adapter for Reown AppKit using AsyncStorage
 const storage = {
@@ -54,23 +53,20 @@ if (!projectId) {
   console.warn("Missing EXPO_PUBLIC_REOWN_PROJECT_ID in .env");
 }
 
-// Initialize adapters
-const ethersAdapter = new EthersAdapter();
+// Initialize Solana adapter only
 const solanaAdapter = new SolanaAdapter();
 
-// Define networks for donation system
+// Define networks for crypto payment system - Solana only
 const networks = [
-  base, // Base mainnet for USDC/EURC
-  baseSepolia, // Base testnet
-  solana, // Solana for Solana Pay
+  solana, // Solana for USDC and EURC
 ];
 
 // Create AppKit instance
 export const appKit = createAppKit({
   projectId,
   networks,
-  defaultNetwork: base,
-  adapters: [ethersAdapter, solanaAdapter],
+  defaultNetwork: solana,
+  adapters: [solanaAdapter],
   storage,
 
   // Extra connectors for Phantom and Solflare wallets
@@ -79,7 +75,7 @@ export const appKit = createAppKit({
   // Metadata for your dApp
   metadata: {
     name: "Wihngo",
-    description: "Support birds and conservation with crypto donations",
+    description: "Support birds and conservation with crypto payments",
     url: "https://wihngo.com",
     icons: ["https://wihngo.com/icon.png"],
     redirect: {

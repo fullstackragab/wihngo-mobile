@@ -9,6 +9,7 @@ import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
@@ -31,6 +32,7 @@ export default function NotificationCenter({
   onClose,
 }: NotificationCenterProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const {
     notifications,
     unreadCount,
@@ -146,13 +148,13 @@ export default function NotificationCenter({
       <View style={styles.contentContainer}>
         <View style={styles.headerRow}>
           <Text style={styles.title} numberOfLines={1}>
-            {item.title}
+            {t(item.title)}
           </Text>
           <Text style={styles.time}>{formatTime(item.createdAt)}</Text>
         </View>
 
         <Text style={styles.message} numberOfLines={2}>
-          {item.message}
+          {t(item.message)}
         </Text>
 
         {item.imageUrl && (

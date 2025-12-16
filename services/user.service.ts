@@ -43,10 +43,14 @@ export const userService = {
   // Get loved birds
   async getLovedBirds(userId: string): Promise<Bird[]> {
     try {
-      const response = await apiHelper.get<Bird[]>(
+      const response = await apiHelper.get<any[]>(
         `${USER_ENDPOINT}/${userId}/loved-birds`
       );
-      return response;
+      // Normalize bird data - API may return 'id' instead of 'birdId'
+      return response.map((bird) => ({
+        ...bird,
+        birdId: bird.birdId || bird.id,
+      }));
     } catch (error) {
       console.error("Error fetching loved birds:", error);
       return [];
@@ -56,10 +60,14 @@ export const userService = {
   // Get supported birds
   async getSupportedBirds(userId: string): Promise<Bird[]> {
     try {
-      const response = await apiHelper.get<Bird[]>(
+      const response = await apiHelper.get<any[]>(
         `${USER_ENDPOINT}/${userId}/supported-birds`
       );
-      return response;
+      // Normalize bird data - API may return 'id' instead of 'birdId'
+      return response.map((bird) => ({
+        ...bird,
+        birdId: bird.birdId || bird.id,
+      }));
     } catch (error) {
       console.error("Error fetching supported birds:", error);
       return [];
@@ -69,10 +77,14 @@ export const userService = {
   // Get owned birds
   async getOwnedBirds(userId: string): Promise<Bird[]> {
     try {
-      const response = await apiHelper.get<Bird[]>(
+      const response = await apiHelper.get<any[]>(
         `${USER_ENDPOINT}/${userId}/owned-birds`
       );
-      return response;
+      // Normalize bird data - API may return 'id' instead of 'birdId'
+      return response.map((bird) => ({
+        ...bird,
+        birdId: bird.birdId || bird.id,
+      }));
     } catch (error) {
       console.error("Error fetching owned birds:", error);
       return [];

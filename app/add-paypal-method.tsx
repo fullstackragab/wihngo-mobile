@@ -4,6 +4,7 @@ import { payoutService } from "@/services/payout.service";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   ScrollView,
@@ -17,6 +18,7 @@ import {
 export default function AddPayPalMethod() {
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [paypalEmail, setPaypalEmail] = useState("");
 
@@ -28,12 +30,12 @@ export default function AddPayPalMethod() {
   const handleSubmit = async () => {
     // Validation
     if (!paypalEmail.trim()) {
-      Alert.alert("Error", "Please enter your PayPal email");
+      Alert.alert(t("addPayPalMethod.error"), t("addPayPalMethod.enterEmail"));
       return;
     }
 
     if (!validateEmail(paypalEmail)) {
-      Alert.alert("Error", "Please enter a valid email address");
+      Alert.alert(t("addPayPalMethod.error"), t("addPayPalMethod.enterValidEmail"));
       return;
     }
 
@@ -45,7 +47,7 @@ export default function AddPayPalMethod() {
         isDefault: true,
       });
 
-      Alert.alert("Success", "PayPal payment method added successfully", [
+      Alert.alert(t("addPayPalMethod.success"), t("addPayPalMethod.methodAdded"), [
         {
           text: "OK",
           onPress: () => {
@@ -59,8 +61,8 @@ export default function AddPayPalMethod() {
       const errorMessage =
         error?.response?.data?.message ||
         error?.message ||
-        "Failed to add payment method. Please try again.";
-      Alert.alert("Error", errorMessage);
+        t("addPayPalMethod.addFailed");
+      Alert.alert(t("addPayPalMethod.error"), errorMessage);
     } finally {
       setLoading(false);
     }

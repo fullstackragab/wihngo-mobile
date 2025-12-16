@@ -145,8 +145,8 @@ export default function SupportModal({
     if (!user) {
       addNotification(
         "recommendation",
-        "Authentication Required",
-        "Please login to make a payment."
+        t("support.authenticationRequired"),
+        t("support.pleaseLoginToMakePayment")
       );
       router.replace("/welcome");
       return;
@@ -186,8 +186,8 @@ export default function SupportModal({
         router.replace("/welcome");
         addNotification(
           "recommendation",
-          "Session Expired",
-          "Your session has expired. Please login again."
+          t("support.sessionExpired"),
+          t("support.sessionExpiredMessage")
         );
         return;
       }
@@ -208,16 +208,16 @@ export default function SupportModal({
 
         addNotification(
           "recommendation",
-          "Currency Not Supported",
+          t("support.currencyNotSupported"),
           errorMessage
         );
       } else {
         addNotification(
           "recommendation",
-          "Payment Error",
-          `Failed to create crypto payment: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
+          t("support.paymentError"),
+          t("support.failedToCreateCryptoPayment", {
+            error: error instanceof Error ? error.message : "Unknown error"
+          })
         );
       }
       resetPaymentState();
@@ -257,8 +257,8 @@ export default function SupportModal({
 
             addNotification(
               "recommendation",
-              "Payment Successful",
-              "Thank you for your support!"
+              t("support.paymentSuccessful"),
+              t("support.thankYouForYourSupport")
             );
           } catch (error) {
             console.error("Error recording transaction:", error);
@@ -317,8 +317,8 @@ export default function SupportModal({
     } else {
       addNotification(
         "recommendation",
-        "Cannot Open PayPal",
-        "Unable to open PayPal. Please try again later."
+        t("support.cannotOpenPayPal"),
+        t("support.unableToOpenPayPal")
       );
     }
   };
@@ -328,8 +328,8 @@ export default function SupportModal({
     if (!customAmount || isNaN(amount) || amount < MINIMUM_DONATION_AMOUNT) {
       addNotification(
         "recommendation",
-        "Minimum Amount Required",
-        `Crypto payments require a minimum of $${MINIMUM_DONATION_AMOUNT} due to blockchain network fees and transaction costs.`
+        t("support.minimumAmountRequired"),
+        t("support.cryptoMinimumMessage", { amount: MINIMUM_DONATION_AMOUNT })
       );
       return;
     }
@@ -392,16 +392,16 @@ export default function SupportModal({
               router.replace("/welcome");
               addNotification(
                 "recommendation",
-                "Session Expired",
-                "Your session has expired. Please login again."
+                t("support.sessionExpired"),
+                t("support.sessionExpiredMessage")
               );
               return;
             }
 
             addNotification(
               "recommendation",
-              "Transaction Error",
-              "Failed to record transaction"
+              t("support.transactionError"),
+              t("support.failedToRecordTransaction")
             );
           } finally {
             setIsProcessing(false);
@@ -411,8 +411,8 @@ export default function SupportModal({
       } else {
         addNotification(
           "recommendation",
-          "Cannot Open PayPal",
-          "Unable to open PayPal. Please try again later."
+          t("support.cannotOpenPayPal"),
+          t("support.unableToOpenPayPal")
         );
         setIsProcessing(false);
         setSelectedAmount(null);
@@ -421,8 +421,8 @@ export default function SupportModal({
       console.error("PayPal error:", error);
       addNotification(
         "recommendation",
-        "Payment Error",
-        "Failed to process payment"
+        t("support.paymentError"),
+        t("support.failedToProcessPayment")
       );
       setIsProcessing(false);
       setSelectedAmount(null);
@@ -933,8 +933,8 @@ export default function SupportModal({
                         } else {
                           addNotification(
                             "recommendation",
-                            "Cannot Open PayPal",
-                            "Unable to open PayPal. Please try again later."
+                            t("support.cannotOpenPayPal"),
+                            t("support.unableToOpenPayPal")
                           );
                         }
                       }}

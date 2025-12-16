@@ -19,7 +19,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.abdelfattahragab.wihngo",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": ["remote-notification"],
+        "NSMicrophoneUsageDescription": "Wihngo needs access to your microphone to record voice notes for your bird stories."
       },
       "associatedDomains": ["applinks:wihngo.com"]
     },
@@ -40,7 +41,8 @@
         "WAKE_LOCK",
         "POST_NOTIFICATIONS",
         "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "RECORD_AUDIO"
       ],
       "intentFilters": [
         {

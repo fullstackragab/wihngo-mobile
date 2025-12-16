@@ -7,6 +7,7 @@ import { getTimeRemaining, startDonation } from "@/services/donation.service";
 import type { Invoice } from "@/types/invoice";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -21,6 +22,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CheckoutScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{
     birdId?: string;
     birdName?: string;
@@ -96,7 +98,7 @@ export default function CheckoutScreen() {
           params: { invoiceId: invoice.id },
         });
       } else {
-        Alert.alert("Error", "PayPal checkout URL not available");
+        Alert.alert(t("donation.error"), t("donation.paypalCheckoutNotAvailable"));
       }
     } else if (invoice.payment_method.startsWith("solana_")) {
       // Navigate to Solana payment screen

@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { payoutService } from "@/services/payout.service";
 import { PayoutHistoryItem } from "@/types/payout";
 import { Ionicons } from "@expo/vector-icons";
+import { Stack } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -223,6 +224,12 @@ export default function PayoutHistory() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          title: t("payout.payoutHistory"),
+          headerShown: true,
+        }}
+      />
       <FlatList
         data={transactions}
         renderItem={renderTransaction}

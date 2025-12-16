@@ -45,7 +45,7 @@ export default function PremiumPaymentOptions({
       id: "crypto" as PaymentOption,
       name: "Cryptocurrency",
       icon: "bitcoin-sign",
-      description: "USDC, EURC on multiple networks",
+      description: "USDC, EURC on Solana",
       color: "#F7931A",
       badge: "NEW",
       available: true,

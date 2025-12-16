@@ -1,5 +1,7 @@
 import {
   CreateStoryDto,
+  GenerateStoryRequest,
+  GenerateStoryResponse,
   Story,
   StoryComment,
   StoryDetailDto,
@@ -165,6 +167,57 @@ export const storyService = {
       );
     } catch (error) {
       console.error("❌ Error deleting story:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Generate AI story content based on bird profile, mood, and media
+   * @param data - Bird ID, optional mood, and optional media S3 keys
+   * @returns Generated story content
+   * @throws Error if bird not found, not owned, or rate limit exceeded
+   */
+  async generateStoryContent(
+    data: GenerateStoryRequest
+  ): Promise<GenerateStoryResponse> {
+    try {
+      const response = await apiHelper.post<GenerateStoryResponse>(
+        `${STORIES_ENDPOINT}/generate`,
+        data
+      );
+      console.log("✅ AI story content generated successfully");
+      return response;
+    } catch (error) {
+      console.error("❌ Error generating AI story content:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Transcribe audio to text using OpenAI Whisper API
+   * @param audioS3Key - S3 key of the uploaded audio file
+   * @param language - Optional language code hint (e.g., "en", "ar") for better accuracy
+   * @returns Transcribed text and metadata
+   * @throws Error if audio not found or transcription fails
+   */
+  async transcribeAudio(audioS3Key: string, language?: string): Promise<{
+    transcribedText: string;
+    transcriptionId: string;
+    language?: string;
+  }> {
+    try {
+      const response = await apiHelper.post<{
+        transcribedText: string;
+        transcriptionId: string;
+        language?: string;
+      }>(`${STORIES_ENDPOINT}/transcribe`, {
+        audioS3Key,
+        language: language || undefined
+      });
+      console.log("✅ Audio transcribed successfully");
+      return response;
+    } catch (error) {
+      console.error("❌ Error transcribing audio:", error);
       throw error;
     }
   },

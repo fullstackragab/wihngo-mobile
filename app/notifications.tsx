@@ -110,11 +110,11 @@ export default function NotificationsScreen() {
 
       <View style={styles.contentContainer}>
         <View style={styles.headerRow}>
-          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title}>{t(item.title)}</Text>
           {!item.isRead && <View style={styles.unreadDot} />}
         </View>
         <Text style={styles.message} numberOfLines={2}>
-          {item.message}
+          {t(item.message)}
         </Text>
         <Text style={styles.time}>{formatTime(item.createdAt)}</Text>
       </View>
@@ -308,8 +308,9 @@ const styles = StyleSheet.create({
   },
   unreadCard: {
     backgroundColor: "#eff6ff",
-    borderLeftWidth: 3,
+    borderLeftWidth: 4,
     borderLeftColor: "#4ECDC4",
+    overflow: "hidden",
   },
   iconContainer: {
     marginRight: 12,

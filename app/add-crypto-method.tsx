@@ -5,6 +5,7 @@ import { PayoutMethodType } from "@/types/payout";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   ScrollView,
@@ -18,6 +19,7 @@ import {
 export default function AddCryptoMethod() {
   const router = useRouter();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{
     methodType: string;
     currency: string;
@@ -76,14 +78,14 @@ export default function AddCryptoMethod() {
   const handleSubmit = async () => {
     // Validation
     if (!walletAddress.trim()) {
-      Alert.alert("Error", "Please enter your wallet address");
+      Alert.alert(t("addCryptoMethod.error"), t("addCryptoMethod.enterWalletAddress"));
       return;
     }
 
     if (!validateAddress(walletAddress.trim())) {
       Alert.alert(
-        "Error",
-        `Please enter a valid ${config.network} wallet address`
+        t("addCryptoMethod.error"),
+        t("addCryptoMethod.enterValidAddress", { network: config.network })
       );
       return;
     }
@@ -99,8 +101,8 @@ export default function AddCryptoMethod() {
       });
 
       Alert.alert(
-        "Success",
-        `${config.title} payment method added successfully`,
+        t("addCryptoMethod.success"),
+        t("addCryptoMethod.methodAdded", { currency: config.title }),
         [
           {
             text: "OK",
@@ -116,8 +118,8 @@ export default function AddCryptoMethod() {
       const errorMessage =
         error?.response?.data?.message ||
         error?.message ||
-        "Failed to add payment method. Please try again.";
-      Alert.alert("Error", errorMessage);
+        t("addCryptoMethod.addFailed");
+      Alert.alert(t("addCryptoMethod.error"), errorMessage);
     } finally {
       setLoading(false);
     }

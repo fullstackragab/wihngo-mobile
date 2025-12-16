@@ -3,8 +3,10 @@
  * Reusable error display with retry functionality
  */
 
+import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import Feather from "@expo/vector-icons/Feather";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   StyleSheet,
   Text,
@@ -21,19 +23,24 @@ interface ErrorViewProps {
 }
 
 export default function ErrorView({
-  message = "Something went wrong",
+  message,
   onRetry,
-  retryButtonText = "Try Again",
+  retryButtonText,
   style,
 }: ErrorViewProps) {
+  const { t } = useTranslation();
+
+  const defaultMessage = message || t("messages.somethingWentWrong");
+  const defaultRetryText = retryButtonText || t("messages.tryAgain");
+
   return (
     <View style={[styles.container, style]}>
-      <Feather name="alert-circle" size={64} color="#ef4444" />
-      <Text style={styles.errorText}>{message}</Text>
+      <Feather name="alert-circle" size={64} color="#EF4444" />
+      <Text style={styles.errorText}>{defaultMessage}</Text>
       {onRetry && (
         <TouchableOpacity style={styles.retryButton} onPress={onRetry}>
-          <Feather name="refresh-cw" size={18} color="#fff" />
-          <Text style={styles.retryButtonText}>{retryButtonText}</Text>
+          <Feather name="refresh-cw" size={18} color="#FFFFFF" />
+          <Text style={styles.retryButtonText}>{defaultRetryText}</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -45,28 +52,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 24,
+    backgroundColor: "#FFFFFF",
+    padding: Spacing.xl,
   },
   errorText: {
-    marginTop: 16,
-    marginBottom: 24,
-    fontSize: 14,
-    color: "#666",
+    marginTop: Spacing.md,
+    marginBottom: Spacing.xl,
+    fontSize: Typography.body,
+    color: "#666666",
     textAlign: "center",
   },
   retryButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#3b82f6",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    gap: 8,
+    backgroundColor: "#4ECDC4",
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.xl,
+    borderRadius: BorderRadius.md,
+    gap: Spacing.sm,
   },
   retryButtonText: {
-    color: "#fff",
-    fontSize: 14,
+    color: "#FFFFFF",
+    fontSize: Typography.body,
     fontWeight: "600",
   },
 });

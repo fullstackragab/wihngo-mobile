@@ -1,12 +1,15 @@
 import { NotificationBell } from "@/components/notification-bell";
 import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { useAuth } from "@/contexts/auth-context";
+import { birdService } from "@/services/bird.service";
+import { storyService } from "@/services/story.service";
 import { Bird } from "@/types/bird";
 import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -20,28 +23,70 @@ import {
   View,
 } from "react-native";
 
+// Tips data - could be fetched from API in the future
+const TIPS = [
+  { key: "tip1", icon: "heart" as const },
+  { key: "tip2", icon: "camera" as const },
+  { key: "tip3", icon: "shield-halved" as const },
+  { key: "tip4", icon: "leaf" as const },
+  { key: "tip5", icon: "hand-holding-heart" as const },
+];
+
 export default function Home() {
   const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   const [featuredBirds, setFeaturedBirds] = useState<Bird[]>([]);
-  const [trendingStories, setTrendingStories] = useState<Story[]>([]);
-  const [recentlySupported, setRecentlySupported] = useState<Bird[]>([]);
+  const [recentStories, setRecentStories] = useState<Story[]>([]);
+  const [newBirds, setNewBirds] = useState<Bird[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [filter, setFilter] = useState<"nearby" | "popular" | "new">("nearby");
+
+  // Get time-based greeting
+  const greeting = useMemo(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return t("home.greetingMorning");
+    if (hour < 17) return t("home.greetingAfternoon");
+    return t("home.greetingEvening");
+  }, [t]);
+
+  // Get daily tip based on day of year
+  const dailyTip = useMemo(() => {
+    const dayOfYear = Math.floor(
+      (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
+        (1000 * 60 * 60 * 24)
+    );
+    const tipIndex = dayOfYear % TIPS.length;
+    return TIPS[tipIndex];
+  }, []);
+
+  // Select featured bird of the week
+  const featuredBirdOfWeek = useMemo(() => {
+    if (featuredBirds.length === 0) return null;
+    // Use week number to select a featured bird consistently
+    const weekNumber = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 7));
+    return featuredBirds[weekNumber % featuredBirds.length];
+  }, [featuredBirds]);
 
   const loadHomeData = async () => {
     try {
-      // TODO: Replace with actual API calls
-      // const featured = await birdService.getFeaturedBirds();
-      // const trending = await storyService.getTrendingStories();
-      // const supported = await birdService.getRecentlySupported();
+      // Fetch data in parallel
+      const [birdsData, storiesResponse] = await Promise.all([
+        birdService.getBirds(),
+        storyService.getStories(1, 5),
+      ]);
 
-      // Mock data for now
-      setFeaturedBirds([]);
-      setTrendingStories([]);
-      setRecentlySupported([]);
+      // Set featured birds (most supported)
+      const sortedBySupport = [...birdsData].sort(
+        (a, b) => (b.supportedBy || 0) - (a.supportedBy || 0)
+      );
+      setFeaturedBirds(sortedBySupport.slice(0, 10));
+
+      // Set new birds (most recently added - assuming last in list are newest)
+      setNewBirds(birdsData.slice(-5).reverse());
+
+      // Set recent stories
+      setRecentStories(storiesResponse.items || []);
     } catch (error) {
       console.error("Error loading home data:", error);
     } finally {
@@ -59,10 +104,25 @@ export default function Home() {
     loadHomeData();
   };
 
-  const renderBirdCard = ({ item }: { item: Bird }) => (
+  const getActivityStatusColor = (status?: string) => {
+    switch (status) {
+      case "Active":
+        return "#22C55E";
+      case "Quiet":
+        return "#F59E0B";
+      case "Inactive":
+        return "#9CA3AF";
+      case "Memorial":
+        return "#8B5CF6";
+      default:
+        return "#9CA3AF";
+    }
+  };
+
+  const renderFeaturedBirdCard = ({ item }: { item: Bird }) => (
     <TouchableOpacity
       style={styles.featuredCard}
-      onPress={() => router.push(`/(tabs)/birds/${item.birdId}`)}
+      onPress={() => router.push(`/(tabs)/birds/${item.birdId}` as any)}
       activeOpacity={0.7}
     >
       <Image
@@ -70,7 +130,7 @@ export default function Home() {
         style={styles.featuredImage}
       />
       <LinearGradient
-        colors={["transparent", "rgba(0,0,0,0.6)"]}
+        colors={["transparent", "rgba(0,0,0,0.7)"]}
         style={styles.imageOverlay}
       />
       <View style={styles.featuredInfo}>
@@ -83,45 +143,75 @@ export default function Home() {
         <View style={styles.statsRow}>
           <View style={styles.stat}>
             <FontAwesome6 name="heart" size={12} color="#FF6B6B" solid />
-            <Text style={styles.statText}>{item.lovedBy}</Text>
+            <Text style={styles.statText}>{item.lovedBy || 0}</Text>
           </View>
           <View style={styles.stat}>
             <FontAwesome6 name="hand-holding-heart" size={12} color="#4ECDC4" />
-            <Text style={styles.statText}>{item.supportedBy}</Text>
+            <Text style={styles.statText}>{item.supportedBy || 0}</Text>
           </View>
         </View>
       </View>
+      {item.activityStatus && (
+        <View
+          style={[
+            styles.activityBadge,
+            { backgroundColor: getActivityStatusColor(item.activityStatus) },
+          ]}
+        />
+      )}
     </TouchableOpacity>
   );
 
   const renderStoryCard = ({ item }: { item: Story }) => (
     <TouchableOpacity
       style={styles.storyCard}
-      onPress={() => router.push(`/story/${item.storyId}`)}
+      onPress={() => router.push(`/story/${item.storyId}` as any)}
       activeOpacity={0.7}
     >
-      {item.imageUrl && (
+      {item.imageUrl ? (
         <Image source={{ uri: item.imageUrl }} style={styles.storyImage} />
+      ) : (
+        <View style={[styles.storyImage, styles.storyImagePlaceholder]}>
+          <FontAwesome6 name="feather" size={24} color="#CBD5E1" />
+        </View>
       )}
       <View style={styles.storyContent}>
         <Text style={styles.storyTitle} numberOfLines={2}>
-          {item.title}
+          {item.preview}
         </Text>
-        <Text style={styles.storyAuthor}>
-          {t("home.by")} {item.userName}
-          {item.birdName && ` • ${item.birdName}`}
+        <Text style={styles.storyAuthor} numberOfLines={1}>
+          {item.birds.length > 0 ? item.birds.join(", ") : item.date}
         </Text>
         <View style={styles.storyStats}>
           <View style={styles.stat}>
             <FontAwesome6 name="heart" size={12} color="#FF6B6B" />
-            <Text style={styles.statText}>{item.likes}</Text>
+            <Text style={styles.statTextDark}>{item.likeCount || 0}</Text>
           </View>
           <View style={styles.stat}>
-            <FontAwesome6 name="comment" size={12} color="#95A5A6" />
-            <Text style={styles.statText}>{item.commentsCount}</Text>
+            <FontAwesome6 name="comment" size={12} color="#64748B" />
+            <Text style={styles.statTextDark}>{item.commentCount || 0}</Text>
           </View>
         </View>
       </View>
+    </TouchableOpacity>
+  );
+
+  const renderNewBirdCard = ({ item }: { item: Bird }) => (
+    <TouchableOpacity
+      style={styles.newBirdCard}
+      onPress={() => router.push(`/(tabs)/birds/${item.birdId}` as any)}
+      activeOpacity={0.7}
+    >
+      <Image
+        source={{ uri: item.imageUrl || "https://via.placeholder.com/80" }}
+        style={styles.newBirdImage}
+      />
+      <Text style={styles.newBirdName} numberOfLines={1}>
+        {item.name}
+      </Text>
+      <Text style={styles.newBirdSpecies} numberOfLines={1}>
+        {item.species}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -147,57 +237,13 @@ export default function Home() {
       }
       showsVerticalScrollIndicator={false}
     >
-      {/* Header with Filter Buttons */}
+      {/* Header */}
       <View style={styles.header}>
-        <View style={styles.filterContainer}>
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              filter === "nearby" && styles.filterButtonActive,
-            ]}
-            onPress={() => setFilter("nearby")}
-          >
-            <Text
-              style={[
-                styles.filterButtonText,
-                filter === "nearby" && styles.filterButtonTextActive,
-              ]}
-            >
-              {t("home.nearby")}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              filter === "popular" && styles.filterButtonActive,
-            ]}
-            onPress={() => setFilter("popular")}
-          >
-            <Text
-              style={[
-                styles.filterButtonText,
-                filter === "popular" && styles.filterButtonTextActive,
-              ]}
-            >
-              {t("home.popular")}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.filterButton,
-              filter === "new" && styles.filterButtonActive,
-            ]}
-            onPress={() => setFilter("new")}
-          >
-            <Text
-              style={[
-                styles.filterButtonText,
-                filter === "new" && styles.filterButtonTextActive,
-              ]}
-            >
-              {t("home.new")}
-            </Text>
-          </TouchableOpacity>
+        <View style={styles.headerLeft}>
+          <Text style={styles.greeting}>{greeting}</Text>
+          {isAuthenticated && user?.name && (
+            <Text style={styles.userName}>{user.name.split(" ")[0]}</Text>
+          )}
         </View>
         <View style={styles.headerActions}>
           <NotificationBell iconSize={22} iconColor="#666" />
@@ -210,62 +256,199 @@ export default function Home() {
         </View>
       </View>
 
-      {/* Featured Birds - Primary Focus */}
-      <View style={styles.section}>
-        {featuredBirds.length > 0 ? (
-          <FlatList
-            horizontal
-            data={featuredBirds}
-            renderItem={renderBirdCard}
-            keyExtractor={(item) => item.birdId}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalList}
-          />
-        ) : (
-          <View style={styles.emptyState}>
-            <FontAwesome6 name="dove" size={40} color="#E0E0E0" />
-            <Text style={styles.emptyText}>{t("home.noBirdsYet")}</Text>
-            <TouchableOpacity
-              style={styles.textButton}
-              onPress={() => router.push("/(tabs)/birds")}
-            >
-              <Text style={styles.textButtonLabel}>
-                {t("home.exploreBirds")}
-              </Text>
-            </TouchableOpacity>
+      {/* Quick Actions */}
+      <View style={styles.quickActionsContainer}>
+        <TouchableOpacity
+          style={styles.quickActionButton}
+          onPress={() => router.push("/create-story")}
+          activeOpacity={0.8}
+        >
+          <LinearGradient
+            colors={["#10B981", "#059669"]}
+            style={styles.quickActionGradient}
+          >
+            <FontAwesome6 name="pen-to-square" size={18} color="#fff" />
+            <Text style={styles.quickActionText}>
+              {t("home.shareStory")}
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.quickActionButton}
+          onPress={() => router.push("/(tabs)/birds")}
+          activeOpacity={0.8}
+        >
+          <View style={styles.quickActionOutline}>
+            <FontAwesome6 name="dove" size={18} color="#4ECDC4" />
+            <Text style={styles.quickActionTextOutline}>
+              {t("home.exploreBirds")}
+            </Text>
           </View>
-        )}
+        </TouchableOpacity>
       </View>
 
-      {/* Stories Section - Compact */}
-      {trendingStories.length > 0 && (
+      {/* Featured Bird of the Week */}
+      {featuredBirdOfWeek && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>{t("home.stories")}</Text>
+            <View style={styles.sectionTitleRow}>
+              <MaterialCommunityIcons name="star-circle" size={20} color="#F59E0B" />
+              <Text style={styles.sectionTitle}>{t("home.birdOfTheWeek")}</Text>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.featuredBirdOfWeek}
+            onPress={() =>
+              router.push(`/(tabs)/birds/${featuredBirdOfWeek.birdId}` as any)
+            }
+            activeOpacity={0.8}
+          >
+            <Image
+              source={{
+                uri:
+                  featuredBirdOfWeek.coverImageUrl ||
+                  featuredBirdOfWeek.imageUrl ||
+                  "https://via.placeholder.com/400x200",
+              }}
+              style={styles.featuredBirdOfWeekImage}
+            />
+            <LinearGradient
+              colors={["transparent", "rgba(0,0,0,0.8)"]}
+              style={styles.featuredBirdOfWeekOverlay}
+            >
+              <View style={styles.featuredBirdOfWeekInfo}>
+                <View style={styles.featuredBirdOfWeekBadge}>
+                  <FontAwesome6 name="crown" size={12} color="#F59E0B" />
+                  <Text style={styles.featuredBirdOfWeekBadgeText}>
+                    {t("home.featured")}
+                  </Text>
+                </View>
+                <Text style={styles.featuredBirdOfWeekName}>
+                  {featuredBirdOfWeek.name}
+                </Text>
+                <Text style={styles.featuredBirdOfWeekSpecies}>
+                  {featuredBirdOfWeek.species}
+                </Text>
+                {featuredBirdOfWeek.tagline && (
+                  <Text
+                    style={styles.featuredBirdOfWeekTagline}
+                    numberOfLines={2}
+                  >
+                    "{featuredBirdOfWeek.tagline}"
+                  </Text>
+                )}
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* Recent Stories */}
+      {recentStories.length > 0 && (
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionTitleRow}>
+              <FontAwesome6 name="book-open" size={16} color="#6366F1" />
+              <Text style={styles.sectionTitle}>{t("home.recentStories")}</Text>
+            </View>
             <TouchableOpacity onPress={() => router.push("/(tabs)/stories")}>
               <Text style={styles.seeAll}>{t("home.viewAll")}</Text>
             </TouchableOpacity>
           </View>
-          {trendingStories.map((story) => (
-            <View key={story.storyId}>{renderStoryCard({ item: story })}</View>
-          ))}
+          <FlatList
+            horizontal
+            data={recentStories}
+            renderItem={renderStoryCard}
+            keyExtractor={(item) => item.storyId}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalList}
+          />
         </View>
       )}
 
-      {/* Recently Supported - Only show if authenticated and has data */}
-      {isAuthenticated && recentlySupported.length > 0 && (
+      {/* Popular Birds */}
+      {featuredBirds.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{t("home.yourBirds")}</Text>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionTitleRow}>
+              <FontAwesome6 name="fire" size={16} color="#EF4444" />
+              <Text style={styles.sectionTitle}>{t("home.popularBirds")}</Text>
+            </View>
+            <TouchableOpacity onPress={() => router.push("/(tabs)/birds")}>
+              <Text style={styles.seeAll}>{t("home.viewAll")}</Text>
+            </TouchableOpacity>
+          </View>
           <FlatList
             horizontal
-            data={recentlySupported}
-            renderItem={renderBirdCard}
+            data={featuredBirds.slice(0, 5)}
+            renderItem={renderFeaturedBirdCard}
             keyExtractor={(item) => item.birdId}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.horizontalList}
           />
         </View>
       )}
+
+      {/* Community Section - New Birds */}
+      {newBirds.length > 0 && (
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionTitleRow}>
+              <FontAwesome6 name="sparkles" size={16} color="#8B5CF6" />
+              <Text style={styles.sectionTitle}>{t("home.newToWihngo")}</Text>
+            </View>
+          </View>
+          <FlatList
+            horizontal
+            data={newBirds}
+            renderItem={renderNewBirdCard}
+            keyExtractor={(item) => item.birdId}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalList}
+          />
+        </View>
+      )}
+
+      {/* Tip of the Day */}
+      <View style={styles.section}>
+        <View style={styles.tipCard}>
+          <View style={styles.tipHeader}>
+            <View style={styles.tipIconContainer}>
+              <FontAwesome6 name="lightbulb" size={16} color="#F59E0B" />
+            </View>
+            <Text style={styles.tipTitle}>{t("home.tipOfTheDay")}</Text>
+          </View>
+          <View style={styles.tipContent}>
+            <FontAwesome6
+              name={dailyTip.icon}
+              size={20}
+              color="#64748B"
+              style={styles.tipContentIcon}
+            />
+            <Text style={styles.tipText}>
+              {t(`home.tips.${dailyTip.key}`)}
+            </Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Empty State when no birds */}
+      {featuredBirds.length === 0 && recentStories.length === 0 && (
+        <View style={styles.emptyState}>
+          <FontAwesome6 name="dove" size={48} color="#E0E0E0" />
+          <Text style={styles.emptyTitle}>{t("home.noBirdsYet")}</Text>
+          <Text style={styles.emptySubtitle}>{t("home.emptySubtitle")}</Text>
+          <TouchableOpacity
+            style={styles.emptyButton}
+            onPress={() => router.push("/(tabs)/birds")}
+          >
+            <Text style={styles.emptyButtonText}>{t("home.exploreBirds")}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {/* Bottom Spacer */}
+      <View style={styles.bottomSpacer} />
     </ScrollView>
   );
 }
@@ -292,29 +475,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.xl,
-    paddingBottom: Spacing.lg,
+    paddingBottom: Spacing.md,
   },
-  filterContainer: {
-    flexDirection: "row",
-    gap: 8,
+  headerLeft: {
     flex: 1,
   },
-  filterButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: BorderRadius.md,
-    backgroundColor: "#F5F5F5",
+  greeting: {
+    fontSize: Typography.small,
+    color: "#64748B",
+    fontWeight: "500",
   },
-  filterButtonActive: {
-    backgroundColor: "#1A1A1A",
-  },
-  filterButtonText: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#666",
-  },
-  filterButtonTextActive: {
-    color: "#FFFFFF",
+  userName: {
+    fontSize: Typography.h1,
+    fontWeight: "700",
+    color: "#1A1A1A",
+    marginTop: 2,
   },
   headerActions: {
     flexDirection: "row",
@@ -329,9 +504,49 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  quickActionsContainer: {
+    flexDirection: "row",
+    paddingHorizontal: Spacing.lg,
+    gap: 12,
+    marginTop: Spacing.md,
+    marginBottom: Spacing.lg,
+  },
+  quickActionButton: {
+    flex: 1,
+  },
+  quickActionGradient: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: BorderRadius.lg,
+    gap: 8,
+  },
+  quickActionOutline: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 2,
+    borderColor: "#4ECDC4",
+    gap: 8,
+  },
+  quickActionText: {
+    fontSize: Typography.body,
+    fontWeight: "600",
+    color: "#FFFFFF",
+  },
+  quickActionTextOutline: {
+    fontSize: Typography.body,
+    fontWeight: "600",
+    color: "#4ECDC4",
+  },
   section: {
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.md,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.sm,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -340,28 +555,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     marginBottom: Spacing.md,
   },
+  sectionTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
   sectionTitle: {
-    fontSize: Typography.h2,
+    fontSize: Typography.h3,
     fontWeight: "600",
     color: "#1A1A1A",
     letterSpacing: -0.3,
   },
   seeAll: {
     fontSize: Typography.small,
-    color: "#666",
-    fontWeight: "500",
+    color: "#4ECDC4",
+    fontWeight: "600",
   },
   horizontalList: {
     paddingHorizontal: Spacing.lg,
   },
   featuredCard: {
-    width: 160,
+    width: 150,
     marginRight: Spacing.md,
+    borderRadius: BorderRadius.lg,
+    overflow: "hidden",
+    backgroundColor: "#F8FAFC",
   },
   featuredImage: {
     width: "100%",
-    height: 200,
-    borderRadius: BorderRadius.md,
+    height: 180,
+    borderRadius: BorderRadius.lg,
   },
   imageOverlay: {
     position: "absolute",
@@ -369,7 +592,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: "60%",
-    borderRadius: BorderRadius.md,
+    borderRadius: BorderRadius.lg,
   },
   featuredInfo: {
     position: "absolute",
@@ -379,15 +602,15 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
   },
   birdName: {
-    fontSize: Typography.h3,
-    fontWeight: "600",
+    fontSize: Typography.body,
+    fontWeight: "700",
     color: "#FFFFFF",
-    marginBottom: Spacing.xs,
+    marginBottom: 2,
   },
   birdSpecies: {
     fontSize: Typography.small,
-    color: "rgba(255,255,255,0.9)",
-    marginBottom: Spacing.sm,
+    color: "rgba(255,255,255,0.85)",
+    marginBottom: Spacing.xs,
   },
   statsRow: {
     flexDirection: "row",
@@ -403,56 +626,205 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontWeight: "500",
   },
-  storyCard: {
+  statTextDark: {
+    fontSize: Typography.small,
+    color: "#64748B",
+    fontWeight: "500",
+  },
+  activityBadge: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "#FFFFFF",
+  },
+  featuredBirdOfWeek: {
     marginHorizontal: Spacing.lg,
-    marginBottom: Spacing.md,
-    backgroundColor: "#FAFAFA",
-    borderRadius: BorderRadius.md,
+    borderRadius: BorderRadius.xl,
+    overflow: "hidden",
+    height: 200,
+  },
+  featuredBirdOfWeekImage: {
+    width: "100%",
+    height: "100%",
+  },
+  featuredBirdOfWeekOverlay: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: "100%",
+    justifyContent: "flex-end",
+  },
+  featuredBirdOfWeekInfo: {
+    padding: Spacing.lg,
+  },
+  featuredBirdOfWeekBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(245, 158, 11, 0.2)",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.full,
+    alignSelf: "flex-start",
+    gap: 6,
+    marginBottom: Spacing.sm,
+  },
+  featuredBirdOfWeekBadgeText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#F59E0B",
+    textTransform: "uppercase",
+  },
+  featuredBirdOfWeekName: {
+    fontSize: Typography.h1,
+    fontWeight: "700",
+    color: "#FFFFFF",
+  },
+  featuredBirdOfWeekSpecies: {
+    fontSize: Typography.body,
+    color: "rgba(255,255,255,0.85)",
+    marginTop: 2,
+  },
+  featuredBirdOfWeekTagline: {
+    fontSize: Typography.small,
+    color: "rgba(255,255,255,0.7)",
+    fontStyle: "italic",
+    marginTop: Spacing.sm,
+  },
+  storyCard: {
+    width: 260,
+    marginRight: Spacing.md,
+    backgroundColor: "#F8FAFC",
+    borderRadius: BorderRadius.lg,
     overflow: "hidden",
   },
   storyImage: {
     width: "100%",
-    height: 180,
-    backgroundColor: "#F0F0F0",
+    height: 120,
+    backgroundColor: "#E2E8F0",
+  },
+  storyImagePlaceholder: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   storyContent: {
     padding: Spacing.md,
   },
   storyTitle: {
-    fontSize: Typography.h3,
+    fontSize: Typography.body,
     fontWeight: "600",
     color: "#1A1A1A",
-    marginBottom: Spacing.xs,
-    lineHeight: 22,
+    marginBottom: 4,
+    lineHeight: 20,
   },
   storyAuthor: {
     fontSize: Typography.small,
-    color: "#999",
+    color: "#64748B",
     marginBottom: Spacing.sm,
   },
   storyStats: {
     flexDirection: "row",
     gap: Spacing.md,
   },
+  newBirdCard: {
+    width: 100,
+    marginRight: Spacing.md,
+    alignItems: "center",
+  },
+  newBirdImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: Spacing.sm,
+    borderWidth: 3,
+    borderColor: "#E2E8F0",
+  },
+  newBirdName: {
+    fontSize: Typography.body,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    textAlign: "center",
+  },
+  newBirdSpecies: {
+    fontSize: Typography.small,
+    color: "#64748B",
+    textAlign: "center",
+  },
+  tipCard: {
+    marginHorizontal: Spacing.lg,
+    backgroundColor: "#FFFBEB",
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+    borderWidth: 1,
+    borderColor: "#FEF3C7",
+  },
+  tipHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: Spacing.md,
+  },
+  tipIconContainer: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "#FEF3C7",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  tipTitle: {
+    fontSize: Typography.body,
+    fontWeight: "600",
+    color: "#92400E",
+  },
+  tipContent: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+  },
+  tipContentIcon: {
+    marginTop: 2,
+  },
+  tipText: {
+    flex: 1,
+    fontSize: Typography.body,
+    color: "#78350F",
+    lineHeight: 22,
+  },
   emptyState: {
     alignItems: "center",
     paddingVertical: Spacing.xxl,
     paddingHorizontal: Spacing.lg,
   },
-  emptyText: {
+  emptyTitle: {
+    fontSize: Typography.h2,
+    fontWeight: "600",
+    color: "#1A1A1A",
+    marginTop: Spacing.lg,
+  },
+  emptySubtitle: {
     fontSize: Typography.body,
-    color: "#999",
+    color: "#64748B",
     textAlign: "center",
-    marginTop: Spacing.md,
-    marginBottom: Spacing.sm,
+    marginTop: Spacing.sm,
+    marginBottom: Spacing.lg,
   },
-  textButton: {
-    paddingVertical: Spacing.sm,
-    paddingHorizontal: Spacing.md,
+  emptyButton: {
+    backgroundColor: "#4ECDC4",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: BorderRadius.lg,
   },
-  textButtonLabel: {
-    color: "#4ECDC4",
+  emptyButtonText: {
     fontSize: Typography.body,
-    fontWeight: "500",
+    fontWeight: "600",
+    color: "#FFFFFF",
+  },
+  bottomSpacer: {
+    height: Spacing.xxl,
   },
 });

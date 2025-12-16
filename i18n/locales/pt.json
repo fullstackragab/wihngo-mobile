@@ -92,6 +92,7 @@
     "errorMessage": "Falha ao criar história. Tente novamente.",
     "errorBothMedia": "A história pode ter uma imagem ou um vídeo, não ambos.",
     "errorMediaUpload": "Falha no upload de mídia. Tente novamente.",
+    "errorContentModeration": "Seu conteúdo foi sinalizado pelo nosso sistema de moderação. Por favor, revise seu texto e imagens para garantir que sigam nossas diretrizes da comunidade.",
     "selectBirdModal": "Selecione um Pássaro",
     "noResults": "Nenhum pássaro encontrado",
     "videoSelected": "Vídeo Selecionado",
@@ -116,7 +117,16 @@
       "errorTitle": "Falha na geração",
       "errorMessage": "Não foi possível gerar o conteúdo da história. Por favor, tente novamente.",
       "rateLimitMessage": "Você atingiu o limite de geração de IA. Por favor, tente novamente mais tarde.",
-      "birdNotFoundMessage": "Pássaro não encontrado. Por favor, selecione um pássaro válido."
+      "birdNotFoundMessage": "Pássaro não encontrado. Por favor, selecione um pássaro válido.",
+      "settings": {
+        "title": "Configurações de História IA",
+        "storyLength": "Tamanho da História",
+        "short": "Curta",
+        "medium": "Média",
+        "shortRange": "50-150 palavras",
+        "mediumRange": "150-300 palavras",
+        "done": "Concluído"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "Foto de perfil",
     "coverImage": "Foto de capa",
     "noBirds": "Você ainda não adicionou nenhum pássaro",
+    "noBirdsSubtext": "Comece a adicionar pássaros para construir sua coleção",
+    "addFirstBird": "Adicione seu primeiro pássaro",
     "lovedBy": "Amado por",
     "supportedBy": "Apoiado por",
+    "allBirds": "Todos os pássaros",
+    "lovedBirds": "Pássaros amados",
+    "supportedBirds": "Pássaros apoiados",
+    "noSupportedBirds": "Ainda não há pássaros apoiados",
+    "noSupportedBirdsSubtext": "Apoie pássaros para ajudá-los e vê-los aqui",
+    "noLovedBirds": "Ainda não há pássaros amados",
+    "noLovedBirdsSubtext": "Comece a amar pássaros para vê-los aqui",
     "sectionBasicInfo": "Informações Básicas",
     "sectionAdditionalDetails": "Detalhes Adicionais",
     "sectionImages": "Imagens",
@@ -205,6 +224,11 @@
     "birdNotFound": "Pássaro não encontrado",
     "retry": "Tentar Novamente",
     "editBird": "Editar Pássaro",
+    "support": "Apoiar",
+    "supportUnavailable": "Apoio indisponível",
+    "loveThisBird": "Amar este pássaro",
+    "loved": "Amado",
+    "lovedWithHeart": "Amado \u2764\ufe0f",
     "supportTransparency": "Transparência de Apoio",
     "raised": "arrecadado",
     "fundsUsedFor": "Fundos utilizados para: Comida, medicamentos, visitas veterinárias e manutenção do habitat",
@@ -216,7 +240,20 @@
     "showAllStories": "Mostrar todas as {{count}} histórias",
     "noStoriesYet": "Ainda não há histórias",
     "shareStory": "Compartilhar uma História",
-    "species": "Espécie"
+    "species": "Espécie",
+    "activityStatus": {
+      "recentlyActive": "Ativo recentemente",
+      "activeThisWeek": "Ativo esta semana",
+      "activeRecently": "Ativo recentemente",
+      "lastSeenWeeksAgo": "Visto há {{weeks}} semanas",
+      "lastSeenMonthAgo": "Visto há cerca de um mês",
+      "lastSeenMonthsAgo": "Visto há {{months}} meses",
+      "lastSeenYearsAgo": "Visto há {{years}} anos",
+      "noRecentActivity": "Sem atividade recente",
+      "rememberedWithLove": "Lembrado com amor",
+      "supportUnavailable": "O apoio não está disponível atualmente para este pássaro.",
+      "supportClosed": "O apoio está encerrado para este pássaro."
+    }
   },
   "story": {
     "myStories": "Minhas histórias",

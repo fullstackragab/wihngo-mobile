@@ -1,13 +1,16 @@
 /**
  * SupportButton Component
  * Reusable button for supporting birds with modal integration
+ * Handles activity status to show/hide support based on bird activity
  */
 
+import { BirdActivityStatus } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 import SupportModal from "./support-modal";
 
 interface SupportButtonProps {
@@ -19,6 +22,10 @@ interface SupportButtonProps {
   style?: ViewStyle;
   disabled?: boolean;
   isMemorial?: boolean;
+  // Activity status props
+  activityStatus?: BirdActivityStatus;
+  canSupport?: boolean;
+  supportUnavailableMessage?: string;
 }
 
 export default function SupportButton({
@@ -30,12 +37,19 @@ export default function SupportButton({
   style,
   disabled = false,
   isMemorial = false,
+  activityStatus,
+  canSupport = true,
+  supportUnavailableMessage,
 }: SupportButtonProps) {
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
 
+  // Determine if support should be available based on activity status
+  const isSupportAvailable = canSupport && !isMemorial && activityStatus !== 'Inactive' && activityStatus !== 'Memorial';
+
   const handlePress = () => {
-    if (isMemorial) {
-      // Memorial bird - support not available (user can see memorial status)
+    if (!isSupportAvailable) {
+      // Support not available - don't open modal
       return;
     }
     setShowModal(true);
@@ -48,17 +62,31 @@ export default function SupportButton({
     }
   };
 
+  // If support is not available (inactive or memorial), show unavailable state
+  if (!isSupportAvailable && !isPlatformSupport) {
+    return (
+      <View style={[styles.unavailableContainer, style]}>
+        <View style={styles.unavailableButton}>
+          <FontAwesome6 name="hand-holding-heart" size={16} color="#9CA3AF" />
+          <Text style={styles.unavailableText}>
+            {supportUnavailableMessage || t("birdProfile.supportUnavailable")}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   if (variant === "solid") {
     return (
       <>
         <TouchableOpacity
           style={[styles.solidButton, style]}
           onPress={handlePress}
-          disabled={disabled || isMemorial}
+          disabled={disabled || !isSupportAvailable}
           activeOpacity={0.8}
         >
           <FontAwesome6 name="hand-holding-heart" size={18} color="#fff" />
-          <Text style={styles.solidButtonText}>Support</Text>
+          <Text style={styles.solidButtonText}>{t("birdProfile.support")}</Text>
         </TouchableOpacity>
 
         <SupportModal
@@ -79,7 +107,7 @@ export default function SupportButton({
         style={[styles.gradientButtonWrapper, style]}
         onPress={handlePress}
         activeOpacity={0.8}
-        disabled={disabled || isMemorial}
+        disabled={disabled || !isSupportAvailable}
       >
         <LinearGradient
           colors={["#10b981", "#14b8a6"]}
@@ -88,7 +116,7 @@ export default function SupportButton({
           style={styles.gradientButton}
         >
           <MaterialCommunityIcons name="corn" size={20} color="white" />
-          <Text style={styles.gradientButtonText}>Support</Text>
+          <Text style={styles.gradientButtonText}>{t("birdProfile.support")}</Text>
         </LinearGradient>
       </TouchableOpacity>
 
@@ -137,5 +165,27 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 13,
     fontWeight: "600",
+  },
+  unavailableContainer: {
+    flex: 1,
+  },
+  unavailableButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F3F4F6",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 24,
+    gap: 8,
+    minHeight: 44,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+  },
+  unavailableText: {
+    color: "#9CA3AF",
+    fontSize: 12,
+    fontWeight: "500",
+    textAlign: "center",
   },
 });

@@ -11,6 +11,7 @@ import Feather from "@expo/vector-icons/Feather";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -38,6 +39,7 @@ export default function LoveThisBirdButton({
   style,
   disabled = false,
 }: LoveThisBirdButtonProps) {
+  const { t } = useTranslation();
   const [isLoved, setIsLoved] = useState(initialIsLoved);
   const [loveCount, setLoveCount] = useState(initialLoveCount);
   const [isLoading, setIsLoading] = useState(false);
@@ -122,7 +124,7 @@ export default function LoveThisBirdButton({
               color="#fff"
             />
             <Text style={styles.pillButtonText}>
-              {isLoved ? "Loved" : "Love This Bird"}
+              {isLoved ? t("birdProfile.loved") : t("birdProfile.loveThisBird")}
             </Text>
           </>
         )}
@@ -150,7 +152,7 @@ export default function LoveThisBirdButton({
           <>
             <Feather name="heart" size={20} color="white" />
             <Text style={styles.gradientButtonText}>
-              {isLoved ? "Loved ❤️" : "Love This Bird"}
+              {isLoved ? t("birdProfile.lovedWithHeart") : t("birdProfile.loveThisBird")}
             </Text>
           </>
         )}

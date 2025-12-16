@@ -180,6 +180,33 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
         />
       </View>
 
+      {/* Activity Status Indicator */}
+      {bird?.lastSeenText && !bird?.isMemorial && (
+        <View style={styles.activityStatusContainer}>
+          <View style={[
+            styles.activityIndicator,
+            bird?.activityStatus === 'Active' && styles.activityIndicatorActive,
+            bird?.activityStatus === 'Quiet' && styles.activityIndicatorQuiet,
+            bird?.activityStatus === 'Inactive' && styles.activityIndicatorInactive,
+          ]}>
+            <View style={[
+              styles.activityDot,
+              bird?.activityStatus === 'Active' && styles.activityDotActive,
+              bird?.activityStatus === 'Quiet' && styles.activityDotQuiet,
+              bird?.activityStatus === 'Inactive' && styles.activityDotInactive,
+            ]} />
+            <Text style={[
+              styles.activityText,
+              bird?.activityStatus === 'Active' && styles.activityTextActive,
+              bird?.activityStatus === 'Quiet' && styles.activityTextQuiet,
+              bird?.activityStatus === 'Inactive' && styles.activityTextInactive,
+            ]}>
+              {bird.lastSeenText}
+            </Text>
+          </View>
+        </View>
+      )}
+
       {/* Actions */}
       <View style={styles.content}>
         {isOwner && (
@@ -209,6 +236,9 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
               birdId={bird?.birdId}
               birdName={bird?.name}
               isMemorial={bird?.isMemorial}
+              activityStatus={bird?.activityStatus}
+              canSupport={bird?.canSupport}
+              supportUnavailableMessage={bird?.supportUnavailableMessage}
               variant="solid"
               style={{ flex: 1 }}
             />
@@ -763,5 +793,58 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#2C3E50",
     textAlign: "center",
+  },
+  // Activity status styles
+  activityStatusContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 12,
+  },
+  activityIndicator: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    gap: 6,
+    backgroundColor: "#F3F4F6",
+  },
+  activityIndicatorActive: {
+    backgroundColor: "#DCFCE7",
+  },
+  activityIndicatorQuiet: {
+    backgroundColor: "#FEF3C7",
+  },
+  activityIndicatorInactive: {
+    backgroundColor: "#FEE2E2",
+  },
+  activityDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#9CA3AF",
+  },
+  activityDotActive: {
+    backgroundColor: "#22C55E",
+  },
+  activityDotQuiet: {
+    backgroundColor: "#F59E0B",
+  },
+  activityDotInactive: {
+    backgroundColor: "#EF4444",
+  },
+  activityText: {
+    fontSize: 12,
+    fontWeight: "500",
+    color: "#6B7280",
+  },
+  activityTextActive: {
+    color: "#166534",
+  },
+  activityTextQuiet: {
+    color: "#92400E",
+  },
+  activityTextInactive: {
+    color: "#991B1B",
   },
 });

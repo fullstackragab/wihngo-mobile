@@ -10,12 +10,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import { usePaymentStatusPolling } from "@/hooks/usePaymentStatusPolling";
 import {
-  calculateCryptoAmount,
   createCryptoPayment,
-  getCryptoExchangeRate,
-  getEstimatedFee,
-  getNetworkName,
-  getSupportedCryptocurrencies,
   verifyCryptoPayment,
 } from "@/services/crypto.service";
 import {
@@ -23,12 +18,11 @@ import {
   CryptoNetwork,
   CryptoPaymentRequest,
   CryptoPaymentStep,
-  getCurrencyForNetwork,
-  isValidCurrencyNetwork,
 } from "@/types/crypto";
+import { useTranslation } from "react-i18next";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -46,13 +40,13 @@ export default function CryptoPaymentScreen() {
   const plan = params.plan as "monthly" | "yearly" | "lifetime";
   const purpose = (params.purpose as any) || "premium_subscription";
 
+  const { t } = useTranslation();
   const { isAuthenticated, token } = useAuth();
   const { addNotification } = useNotifications();
-  const [step, setStep] = useState<CryptoPaymentStep>("select-network");
+  const [step, setStep] = useState<CryptoPaymentStep>("select-currency");
   const [selectedCurrency, setSelectedCurrency] = useState<CryptoCurrency>();
-  const [selectedNetwork, setSelectedNetwork] = useState<CryptoNetwork>();
-  const [exchangeRate, setExchangeRate] = useState<number>(0);
-  const [cryptoAmount, setCryptoAmount] = useState<number>(0);
+  // Default to Solana network (only supported network in v3.0)
+  const selectedNetwork: CryptoNetwork = "solana";
   const [payment, setPayment] = useState<CryptoPaymentRequest | null>(null);
   const [loading, setLoading] = useState(false);
   const [enablePolling, setEnablePolling] = useState(false);
@@ -124,125 +118,6 @@ export default function CryptoPaymentScreen() {
       router.replace("/welcome");
     }
   }, [isAuthenticated, token]);
-
-  // Get network details helper - Solana only
-  const getNetworkDetails = (network: CryptoNetwork) => {
-    return { speed: "Very Fast (~1 sec)", confirmations: 1 };
-  };
-
-  // Get networks for selected currency
-  const getNetworksForCurrency = () => {
-    if (!selectedCurrency) return [];
-    const crypto = getSupportedCryptocurrencies().find(
-      (c) => c.code === selectedCurrency
-    );
-    return crypto?.networks || [];
-  };
-
-  const fetchExchangeRate = useCallback(async () => {
-    if (!selectedCurrency) return;
-
-    try {
-      const rate = await getCryptoExchangeRate(selectedCurrency);
-      setExchangeRate(rate.usdRate);
-      const amount = calculateCryptoAmount(amountUsd, rate.usdRate);
-      setCryptoAmount(amount);
-    } catch (error) {
-      console.error("Failed to fetch exchange rate:", error);
-      addNotification(
-        "recommendation",
-        "Exchange Rate Error",
-        "Failed to fetch exchange rate. Please try again."
-      );
-    }
-  }, [selectedCurrency, amountUsd]);
-
-  // Fetch exchange rate when currency is selected
-  useEffect(() => {
-    if (selectedCurrency) {
-      fetchExchangeRate();
-    }
-  }, [selectedCurrency, fetchExchangeRate]);
-
-  // Handle network selection and proceed to currency selection
-  const handleNetworkSelect = (network: CryptoNetwork) => {
-    setSelectedNetwork(network);
-    setStep("select-currency");
-  };
-
-  // Create payment request
-  const handleCreatePayment = async () => {
-    if (!selectedCurrency || !selectedNetwork) {
-      // Missing selections - user can see UI state
-      return;
-    }
-
-    // Validate currency-network combination
-    if (!isValidCurrencyNetwork(selectedCurrency, selectedNetwork)) {
-      addNotification(
-        "recommendation",
-        "Invalid Configuration",
-        `${selectedCurrency} is not supported on ${getNetworkName(
-          selectedNetwork
-        )}`
-      );
-      return;
-    }
-
-    // Check authentication before making payment
-    if (!isAuthenticated || !token) {
-      addNotification(
-        "recommendation",
-        "Authentication Required",
-        "Please login to make a payment."
-      );
-      router.replace("/welcome");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      console.log("💰 Creating payment with:", {
-        currency: selectedCurrency,
-        network: selectedNetwork,
-        amountUsd,
-      });
-
-      const response = await createCryptoPayment({
-        birdId,
-        amountUsd,
-        currency: selectedCurrency,
-        network: selectedNetwork,
-        purpose,
-        plan,
-      });
-
-      setPayment(response.paymentRequest);
-      setStep("payment-address");
-      setEnablePolling(true);
-    } catch (error: any) {
-      console.error("Failed to create payment:", error);
-
-      // Check if it's an authentication error
-      if (error?.message?.includes("Session expired")) {
-        addNotification(
-          "recommendation",
-          "Session Expired",
-          "Your session has expired. Please login again."
-        );
-        // Navigate back - AuthContext will handle the logout
-        setTimeout(() => router.replace("/welcome"), 1500);
-      } else {
-        addNotification(
-          "recommendation",
-          "Payment Error",
-          "Failed to create payment request. Please try again."
-        );
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Manual refresh payment status using the hook's forceCheck
   const handleRefreshStatus = async () => {
@@ -336,91 +211,20 @@ export default function CryptoPaymentScreen() {
 
   const renderStepContent = () => {
     switch (step) {
-      case "select-network":
-        // Show all available networks
-        const allNetworks: CryptoNetwork[] = [
-          "solana",
-          "stellar",
-          "base",
-          "polygon",
-          "ethereum",
-        ];
-        return (
-          <View style={styles.networkSelectionContainer}>
-            <View style={styles.headerInfo}>
-              <Text style={styles.headerInfoTitle}>
-                Select Blockchain Network
-              </Text>
-              <Text style={styles.headerSubtitle}>
-                Choose your preferred blockchain network first
-              </Text>
-              <View style={styles.amountPreview}>
-                <Text style={styles.amountPreviewLabel}>Amount to Pay</Text>
-                <Text style={styles.amountPreviewValue}>
-                  ${amountUsd.toFixed(2)} USD
-                </Text>
-              </View>
-            </View>
-            <View style={styles.networkList}>
-              {allNetworks.map((network) => {
-                const isSelected = selectedNetwork === network;
-                const details = getNetworkDetails(network);
-                return (
-                  <TouchableOpacity
-                    key={network}
-                    style={[
-                      styles.networkCard,
-                      isSelected && styles.selectedCard,
-                    ]}
-                    onPress={() => {
-                      setSelectedNetwork(network);
-                      setStep("select-currency");
-                    }}
-                  >
-                    <View style={styles.networkInfo}>
-                      <Text style={styles.networkName}>
-                        {getNetworkName(network)}
-                      </Text>
-                      <Text style={styles.networkDetail}>{details.speed}</Text>
-                      <Text style={styles.networkDetail}>
-                        Fee: ~$
-                        {getEstimatedFee(
-                          getCurrencyForNetwork(network),
-                          network
-                        ).toFixed(2)}
-                      </Text>
-                    </View>
-                    {isSelected && (
-                      <FontAwesome6
-                        name="circle-check"
-                        size={24}
-                        color="#007AFF"
-                      />
-                    )}
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </View>
-        );
-
       case "select-currency":
         return (
           <View style={styles.currencySelectionContainer}>
             <View style={styles.headerInfo}>
-              <Text style={styles.headerInfoTitle}>Select Currency</Text>
+              <Text style={styles.headerInfoTitle}>{t("crypto.selectCurrency")}</Text>
               <Text style={styles.headerSubtitle}>
-                Available on{" "}
-                {selectedNetwork && getNetworkName(selectedNetwork)}
+                {t("crypto.payOnSolana")}
               </Text>
-              <TouchableOpacity
-                style={styles.changeNetworkButton}
-                onPress={() => setStep("select-network")}
-                disabled={loading}
-              >
-                <FontAwesome6 name="arrow-left" size={14} color="#007AFF" />
-                <Text style={styles.changeNetworkText}>Change Network</Text>
-              </TouchableOpacity>
+              <View style={styles.amountPreview}>
+                <Text style={styles.amountPreviewLabel}>{t("crypto.amountToPay")}</Text>
+                <Text style={styles.amountPreviewValue}>
+                  ${amountUsd.toFixed(2)} USD
+                </Text>
+              </View>
             </View>
             {loading ? (
               <View style={styles.loadingContainer}>
@@ -445,7 +249,7 @@ export default function CryptoPaymentScreen() {
                       birdId,
                       amountUsd,
                       currency,
-                      network: selectedNetwork!,
+                      network: selectedNetwork,
                       purpose,
                       plan,
                     });
@@ -470,7 +274,6 @@ export default function CryptoPaymentScreen() {
                         "Payment Error",
                         "Failed to create payment request. Please try again."
                       );
-                      setStep("select-network");
                     }
                   } finally {
                     setLoading(false);
@@ -480,83 +283,6 @@ export default function CryptoPaymentScreen() {
                 network={selectedNetwork}
               />
             )}
-          </View>
-        );
-
-      case "review-amount":
-        const reviewNetworks = getNetworksForCurrency();
-        return (
-          <View style={styles.reviewContainer}>
-            <View style={styles.amountCard}>
-              <Text style={styles.amountLabel}>Payment Summary</Text>
-              <View style={styles.amountDisplay}>
-                <Text style={styles.cryptoAmountLarge}>
-                  {cryptoAmount.toFixed(6)} {selectedCurrency}
-                </Text>
-                <Text style={styles.usdAmountLarge}>
-                  ≈ ${amountUsd.toFixed(2)} USD
-                </Text>
-              </View>
-              <Text style={styles.exchangeRate}>
-                1 {selectedCurrency} ≈ ${exchangeRate.toFixed(4)} USD
-              </Text>
-            </View>
-
-            <View style={styles.networkInfoCard}>
-              <Text style={styles.networkInfoLabel}>Selected Network</Text>
-              <Text style={styles.networkInfoValue}>
-                {selectedNetwork && getNetworkName(selectedNetwork)}
-              </Text>
-              <TouchableOpacity
-                style={styles.changeNetworkButton}
-                onPress={() => setStep("select-network")}
-              >
-                <Text style={styles.changeNetworkText}>Change Network</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.detailsCard}>
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Purpose:</Text>
-                <Text style={styles.detailValue}>
-                  {purpose === "premium_subscription"
-                    ? `Premium ${plan || "subscription"}`
-                    : purpose}
-                </Text>
-              </View>
-              {selectedNetwork && (
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailLabel}>Network Fee:</Text>
-                  <Text style={styles.detailValue}>
-                    ~$
-                    {getEstimatedFee(selectedCurrency, selectedNetwork).toFixed(
-                      2
-                    )}{" "}
-                    USD
-                  </Text>
-                </View>
-              )}
-            </View>
-
-            <TouchableOpacity
-              style={[
-                styles.continueButton,
-                !selectedNetwork && styles.disabledButton,
-              ]}
-              onPress={handleCreatePayment}
-              disabled={!selectedNetwork || loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <>
-                  <Text style={styles.continueButtonText}>
-                    Continue to Payment
-                  </Text>
-                  <FontAwesome6 name="arrow-right" size={16} color="#fff" />
-                </>
-              )}
-            </TouchableOpacity>
           </View>
         );
 
@@ -779,8 +505,7 @@ export default function CryptoPaymentScreen() {
           <View
             style={[
               styles.progressStep,
-              (step === "select-currency" || step === "review-amount") &&
-                styles.activeStep,
+              step === "select-currency" && styles.activeStep,
             ]}
           >
             <Text style={styles.progressNumber}>1</Text>
@@ -888,44 +613,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 20,
   },
-  reviewContainer: {
-    gap: 20,
-  },
-  networkSelectionContainer: {
-    gap: 20,
-  },
   currencySelectionContainer: {
     gap: 20,
-  },
-  networkList: {
-    gap: 12,
-  },
-  networkCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: "transparent",
-  },
-  selectedCard: {
-    backgroundColor: "#E3F2FD",
-    borderColor: "#007AFF",
-  },
-  networkInfo: {
-    flex: 1,
-    gap: 6,
-  },
-  networkName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333",
-  },
-  networkDetail: {
-    fontSize: 13,
-    color: "#666",
   },
   headerInfo: {
     backgroundColor: "#f8f8f8",
@@ -962,100 +651,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
   },
-  networkInfoCard: {
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    padding: 16,
-    gap: 8,
-  },
-  networkInfoLabel: {
-    fontSize: 12,
-    color: "#666",
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-  },
-  networkInfoValue: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333",
-  },
-  changeNetworkButton: {
-    marginTop: 8,
-    alignSelf: "flex-start",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-  },
-  changeNetworkText: {
-    fontSize: 14,
-    color: "#007AFF",
-    fontWeight: "600",
-  },
-  detailsCard: {
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    padding: 16,
-    gap: 12,
-  },
-  detailRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  detailLabel: {
-    fontSize: 14,
-    color: "#666",
-  },
-  detailValue: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#333",
-  },
-  amountCard: {
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    padding: 20,
-    alignItems: "center",
-    gap: 12,
-  },
-  amountLabel: {
-    fontSize: 14,
-    color: "#666",
-    fontWeight: "500",
-  },
-  amountDisplay: {
-    alignItems: "center",
-    gap: 4,
-  },
-  cryptoAmountLarge: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#333",
-  },
-  usdAmountLarge: {
-    fontSize: 16,
-    color: "#666",
-  },
-  exchangeRate: {
-    fontSize: 12,
-    color: "#999",
-  },
-  continueButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    backgroundColor: "#007AFF",
-    paddingVertical: 16,
-    borderRadius: 8,
-  },
   disabledButton: {
     backgroundColor: "#ccc",
-  },
-  continueButtonText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#fff",
   },
   confirmingContainer: {
     gap: 20,

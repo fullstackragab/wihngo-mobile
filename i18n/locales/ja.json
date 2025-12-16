@@ -92,6 +92,7 @@
     "errorMessage": "ストーリーの作成に失敗しました。もう一度お試しください。",
     "errorBothMedia": "ストーリーには画像または動画のいずれかを含めることができますが、両方は含められません。",
     "errorMediaUpload": "メディアのアップロードに失敗しました。もう一度お試しください。",
+    "errorContentModeration": "お客様のコンテンツがモデレーションシステムによってフラグされました。テキストと画像がコミュニティガイドラインに従っているか確認してください。",
     "selectBirdModal": "鳥を選択",
     "noResults": "鳥が見つかりません",
     "videoSelected": "動画が選択されました",
@@ -116,7 +117,16 @@
       "errorTitle": "生成に失敗しました",
       "errorMessage": "ストーリーコンテンツを生成できませんでした。もう一度お試しください。",
       "rateLimitMessage": "AI生成の制限に達しました。後でもう一度お試しください。",
-      "birdNotFoundMessage": "鳥が見つかりません。有効な鳥を選択してください。"
+      "birdNotFoundMessage": "鳥が見つかりません。有効な鳥を選択してください。",
+      "settings": {
+        "title": "AIストーリー設定",
+        "storyLength": "ストーリーの長さ",
+        "short": "短い",
+        "medium": "中程度",
+        "shortRange": "50-150語",
+        "mediumRange": "150-300語",
+        "done": "完了"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "プロフィール画像",
     "coverImage": "カバー画像",
     "noBirds": "まだ鳥を追加していません",
+    "noBirdsSubtext": "鳥を追加してコレクションを作りましょう",
+    "addFirstBird": "最初の鳥を追加する",
     "lovedBy": "に愛されている",
     "supportedBy": "サポートされている",
+    "allBirds": "すべての鳥",
+    "lovedBirds": "お気に入りの鳥",
+    "supportedBirds": "サポート中の鳥",
+    "noSupportedBirds": "まだサポートしている鳥がいません",
+    "noSupportedBirdsSubtext": "鳥をサポートして、ここで見ることができます",
+    "noLovedBirds": "まだお気に入りの鳥がいません",
+    "noLovedBirdsSubtext": "鳥を好きになって、ここで見ることができます",
     "sectionBasicInfo": "基本情報",
     "sectionAdditionalDetails": "追加の詳細",
     "sectionImages": "画像",
@@ -205,6 +224,11 @@
     "birdNotFound": "鳥が見つかりません",
     "retry": "再試行",
     "editBird": "鳥を編集",
+    "support": "サポート",
+    "supportUnavailable": "サポート不可",
+    "loveThisBird": "この鳥を愛する",
+    "loved": "愛している",
+    "lovedWithHeart": "愛している \u2764\ufe0f",
     "supportTransparency": "サポートの透明性",
     "raised": "集めた",
     "fundsUsedFor": "資金の使途：食料、薬、獣医の診察、生息地の維持",
@@ -216,7 +240,20 @@
     "showAllStories": "すべての{{count}}件のストーリーを表示",
     "noStoriesYet": "まだストーリーがありません",
     "shareStory": "ストーリーを共有",
-    "species": "種"
+    "species": "種",
+    "activityStatus": {
+      "recentlyActive": "最近アクティブ",
+      "activeThisWeek": "今週アクティブ",
+      "activeRecently": "最近アクティブ",
+      "lastSeenWeeksAgo": "最終確認：{{weeks}}週間前",
+      "lastSeenMonthAgo": "最終確認：約1ヶ月前",
+      "lastSeenMonthsAgo": "最終確認：{{months}}ヶ月前",
+      "lastSeenYearsAgo": "最終確認：{{years}}年前",
+      "noRecentActivity": "最近のアクティビティなし",
+      "rememberedWithLove": "愛と共に記憶されています",
+      "supportUnavailable": "この鳥へのサポートは現在利用できません。",
+      "supportClosed": "この鳥へのサポートは終了しました。"
+    }
   },
   "story": {
     "myStories": "マイストーリー",

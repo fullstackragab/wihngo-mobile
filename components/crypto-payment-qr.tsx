@@ -12,6 +12,7 @@ import { CryptoPaymentRequest } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as Clipboard from "expo-clipboard";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
@@ -27,6 +28,7 @@ export default function CryptoPaymentQR({
   onExpired,
   children,
 }: CryptoPaymentQRProps) {
+  const { t } = useTranslation();
   const [timeRemaining, setTimeRemaining] = useState<string>("");
   const [copied, setCopied] = useState(false);
 
@@ -69,7 +71,7 @@ export default function CryptoPaymentQR({
       <View style={styles.timerContainer}>
         <FontAwesome6 name="clock" size={16} color="#FF6B6B" />
         <Text style={styles.timerText}>
-          Time remaining: <Text style={styles.timerValue}>{timeRemaining}</Text>
+          {t("crypto.timeRemaining")} <Text style={styles.timerValue}>{timeRemaining}</Text>
         </Text>
       </View>
 
@@ -83,14 +85,14 @@ export default function CryptoPaymentQR({
             color="black"
           />
         </View>
-        <Text style={styles.qrLabel}>Scan to pay</Text>
+        <Text style={styles.qrLabel}>{t("crypto.scanToPay")}</Text>
       </View>
 
       {/* Payment Details */}
       <View style={styles.detailsContainer}>
         {/* Network */}
         <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Network</Text>
+          <Text style={styles.detailLabel}>{t("crypto.network")}</Text>
           <Text style={styles.detailValueText}>
             {getNetworkName(payment.network)}
           </Text>
@@ -99,7 +101,7 @@ export default function CryptoPaymentQR({
         {/* Wallet Address */}
         <View style={styles.addressContainer}>
           <View style={styles.addressHeader}>
-            <Text style={styles.detailLabel}>Payment Address</Text>
+            <Text style={styles.detailLabel}>{t("crypto.paymentAddress")}</Text>
             <TouchableOpacity
               onPress={() => copyToClipboard(payment.walletAddress, "Address")}
               style={styles.copyButton}
@@ -110,7 +112,7 @@ export default function CryptoPaymentQR({
                 color="#007AFF"
               />
               <Text style={styles.copyButtonText}>
-                {copied ? "Copied" : "Copy"}
+                {copied ? t("crypto.copied") : t("crypto.copy")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -123,7 +125,7 @@ export default function CryptoPaymentQR({
 
         {/* Confirmations Required */}
         <View style={styles.detailRow}>
-          <Text style={styles.detailLabel}>Confirmations Required</Text>
+          <Text style={styles.detailLabel}>{t("crypto.confirmationsRequired")}</Text>
           <Text style={styles.detailValueText}>
             {payment.requiredConfirmations}
           </Text>
@@ -132,29 +134,26 @@ export default function CryptoPaymentQR({
 
       {/* Simplified Instructions */}
       <View style={styles.instructionsContainer}>
-        <Text style={styles.instructionsTitle}>How to Pay</Text>
+        <Text style={styles.instructionsTitle}>{t("crypto.howToPay")}</Text>
         <View style={styles.instructionItem}>
           <FontAwesome6 name="wallet" size={20} color="#007AFF" />
           <Text style={styles.instructionText}>
-            Send{" "}
-            <Text style={styles.bold}>
-              {formatCryptoAmount(payment.amountCrypto, payment.currency)}{" "}
-              {payment.currency}
-            </Text>{" "}
-            (≈ ${payment.amountUsd.toFixed(2)}) or more to the address above
+            {t("crypto.sendAmount", {
+              amount: formatCryptoAmount(payment.amountCrypto, payment.currency),
+              currency: payment.currency,
+              usdAmount: payment.amountUsd.toFixed(2)
+            })}
           </Text>
         </View>
         <View style={styles.feeInfoBox}>
           <FontAwesome6 name="circle-info" size={16} color="#FF9500" />
           <View style={styles.feeInfoContent}>
-            <Text style={styles.feeInfoTitle}>Transaction Fees</Text>
+            <Text style={styles.feeInfoTitle}>{t("crypto.transactionFees")}</Text>
             <Text style={styles.feeInfoText}>
-              • Wihngo deducts 5% (minimum $1){"\n"}• Plus network fees (varies
-              by blockchain){"\n"}• Minimum recommended:{" "}
-              <Text style={styles.bold}>$10</Text>
+              {t("crypto.feeDetails")}
             </Text>
             <Text style={styles.feeExample}>
-              Example: Send $100 → Receive ~$94 ($5 Wihngo fee + $1 network fee)
+              {t("crypto.feeExample")}
             </Text>
           </View>
         </View>
@@ -165,12 +164,10 @@ export default function CryptoPaymentQR({
         <FontAwesome6 name="magnifying-glass" size={16} color="#4CAF50" />
         <View style={styles.autoDetectContent}>
           <Text style={styles.autoDetectTitle}>
-            ✨ Automatic Payment Detection
+            {t("crypto.automaticDetection")}
           </Text>
           <Text style={styles.autoDetectText}>
-            Your payment will be detected automatically within 10-60 seconds. No
-            transaction hash needed! Payment completes after{" "}
-            {payment.requiredConfirmations} confirmations.
+            {t("crypto.automaticDetectionText", { confirmations: payment.requiredConfirmations })}
           </Text>
         </View>
       </View>
@@ -182,8 +179,7 @@ export default function CryptoPaymentQR({
       <View style={styles.infoBox}>
         <FontAwesome6 name="circle-info" size={16} color="#2196F3" />
         <Text style={styles.infoText}>
-          This address is unique to your transaction. Any amount sent will be
-          credited to your account.
+          {t("crypto.uniqueAddressNotice")}
         </Text>
       </View>
     </View>

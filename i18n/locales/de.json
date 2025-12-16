@@ -92,6 +92,7 @@
     "errorMessage": "Geschichte konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
     "errorBothMedia": "Die Geschichte kann entweder ein Bild oder ein Video haben, aber nicht beides.",
     "errorMediaUpload": "Medienupload fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "errorContentModeration": "Ihr Inhalt wurde von unserem Moderationssystem markiert. Bitte überprüfen Sie Ihren Text und Ihre Bilder, um sicherzustellen, dass sie unseren Community-Richtlinien entsprechen.",
     "selectBirdModal": "Vogel Auswählen",
     "noResults": "Keine Vögel gefunden",
     "videoSelected": "Video Ausgewählt",
@@ -116,7 +117,16 @@
       "errorTitle": "Generierung fehlgeschlagen",
       "errorMessage": "Geschichte konnte nicht generiert werden. Bitte versuche es erneut.",
       "rateLimitMessage": "Du hast das KI-Generierungslimit erreicht. Bitte versuche es später erneut.",
-      "birdNotFoundMessage": "Vogel nicht gefunden. Bitte wähle einen gültigen Vogel aus."
+      "birdNotFoundMessage": "Vogel nicht gefunden. Bitte wähle einen gültigen Vogel aus.",
+      "settings": {
+        "title": "KI-Geschichten-Einstellungen",
+        "storyLength": "Geschichtenlänge",
+        "short": "Kurz",
+        "medium": "Mittel",
+        "shortRange": "50-150 Wörter",
+        "mediumRange": "150-300 Wörter",
+        "done": "Fertig"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "Profilbild",
     "coverImage": "Titelbild",
     "noBirds": "Sie haben noch keine Vögel hinzugefügt",
+    "noBirdsSubtext": "Beginnen Sie mit dem Hinzufügen von Vögeln, um Ihre Sammlung aufzubauen",
+    "addFirstBird": "Fügen Sie Ihren ersten Vogel hinzu",
     "lovedBy": "Geliebt von",
     "supportedBy": "Unterstützt von",
+    "allBirds": "Alle Vögel",
+    "lovedBirds": "Geliebte Vögel",
+    "supportedBirds": "Unterstützte Vögel",
+    "noSupportedBirds": "Noch keine unterstützten Vögel",
+    "noSupportedBirdsSubtext": "Unterstützen Sie Vögel, um ihnen zu helfen und sie hier zu sehen",
+    "noLovedBirds": "Noch keine geliebten Vögel",
+    "noLovedBirdsSubtext": "Beginnen Sie, Vögel zu lieben, um sie hier zu sehen",
     "sectionBasicInfo": "Grundinformationen",
     "sectionAdditionalDetails": "Zusätzliche Details",
     "sectionImages": "Bilder",
@@ -205,6 +224,11 @@
     "birdNotFound": "Vogel nicht gefunden",
     "retry": "Erneut versuchen",
     "editBird": "Vogel Bearbeiten",
+    "support": "Unterstützen",
+    "supportUnavailable": "Unterstützung nicht verfügbar",
+    "loveThisBird": "Vogel lieben",
+    "loved": "Geliebt",
+    "lovedWithHeart": "Geliebt \u2764\ufe0f",
     "supportTransparency": "Transparenz der Unterstützung",
     "raised": "gesammelt",
     "fundsUsedFor": "Mittel verwendet für: Futter, Medikamente, Tierarztbesuche und Lebensraumwartung",
@@ -216,7 +240,20 @@
     "showAllStories": "Alle {{count}} Geschichten anzeigen",
     "noStoriesYet": "Noch keine Geschichten",
     "shareStory": "Eine Geschichte Teilen",
-    "species": "Art"
+    "species": "Art",
+    "activityStatus": {
+      "recentlyActive": "Kürzlich aktiv",
+      "activeThisWeek": "Diese Woche aktiv",
+      "activeRecently": "Kürzlich aktiv",
+      "lastSeenWeeksAgo": "Zuletzt gesehen: vor {{weeks}} Wochen",
+      "lastSeenMonthAgo": "Zuletzt gesehen: vor etwa einem Monat",
+      "lastSeenMonthsAgo": "Zuletzt gesehen: vor {{months}} Monaten",
+      "lastSeenYearsAgo": "Zuletzt gesehen: vor {{years}} Jahren",
+      "noRecentActivity": "Keine aktuelle Aktivität",
+      "rememberedWithLove": "In Liebe erinnert",
+      "supportUnavailable": "Unterstützung ist für diesen Vogel derzeit nicht verfügbar.",
+      "supportClosed": "Unterstützung für diesen Vogel ist geschlossen."
+    }
   },
   "story": {
     "myStories": "Meine Geschichten",

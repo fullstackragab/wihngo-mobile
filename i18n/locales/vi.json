@@ -92,6 +92,7 @@
     "errorMessage": "Không thể tạo câu chuyện. Vui lòng thử lại.",
     "errorBothMedia": "Câu chuyện có thể có hình ảnh hoặc video, không phải cả hai.",
     "errorMediaUpload": "Tải lên phương tiện thất bại. Vui lòng thử lại.",
+    "errorContentModeration": "Nội dung của bạn đã bị hệ thống kiểm duyệt đánh dấu. Vui lòng kiểm tra văn bản và hình ảnh để đảm bảo tuân theo nguyên tắc cộng đồng của chúng tôi.",
     "selectBirdModal": "Chọn Một Con Chim",
     "noResults": "Không tìm thấy chim",
     "videoSelected": "Đã Chọn Video",
@@ -116,7 +117,16 @@
       "errorTitle": "Tạo thất bại",
       "errorMessage": "Không thể tạo nội dung câu chuyện. Vui lòng thử lại.",
       "rateLimitMessage": "Bạn đã đạt đến giới hạn tạo AI. Vui lòng thử lại sau.",
-      "birdNotFoundMessage": "Không tìm thấy chim. Vui lòng chọn một con chim hợp lệ."
+      "birdNotFoundMessage": "Không tìm thấy chim. Vui lòng chọn một con chim hợp lệ.",
+      "settings": {
+        "title": "Cài đặt Câu chuyện AI",
+        "storyLength": "Độ dài Câu chuyện",
+        "short": "Ngắn",
+        "medium": "Trung bình",
+        "shortRange": "50-150 từ",
+        "mediumRange": "150-300 từ",
+        "done": "Xong"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "Ảnh đại diện",
     "coverImage": "Ảnh bìa",
     "noBirds": "Bạn chưa thêm chim nào",
+    "noBirdsSubtext": "Bắt đầu thêm chim để xây dựng bộ sưu tập của bạn",
+    "addFirstBird": "Thêm chim đầu tiên của bạn",
     "lovedBy": "Được yêu thích bởi",
     "supportedBy": "Được hỗ trợ bởi",
+    "allBirds": "Tất cả chim",
+    "lovedBirds": "Chim yêu thích",
+    "supportedBirds": "Chim được hỗ trợ",
+    "noSupportedBirds": "Chưa có chim được hỗ trợ",
+    "noSupportedBirdsSubtext": "Hỗ trợ chim để giúp chúng và xem chúng ở đây",
+    "noLovedBirds": "Chưa có chim yêu thích",
+    "noLovedBirdsSubtext": "Bắt đầu yêu thích chim để xem chúng ở đây",
     "sectionBasicInfo": "Thông Tin Cơ Bản",
     "sectionAdditionalDetails": "Chi Tiết Bổ Sung",
     "sectionImages": "Hình Ảnh",
@@ -205,6 +224,11 @@
     "birdNotFound": "Không tìm thấy chim",
     "retry": "Thử lại",
     "editBird": "Chỉnh sửa Chim",
+    "support": "Hỗ trợ",
+    "supportUnavailable": "Hỗ trợ không khả dụng",
+    "loveThisBird": "Yêu chim này",
+    "loved": "Đã yêu",
+    "lovedWithHeart": "Đã yêu \u2764\ufe0f",
     "supportTransparency": "Minh bạch Hỗ trợ",
     "raised": "đã quyên góp",
     "fundsUsedFor": "Quỹ được sử dụng cho: Thức ăn, thuốc men, khám thú y và bảo trì môi trường sống",
@@ -216,7 +240,20 @@
     "showAllStories": "Hiển thị tất cả {{count}} câu chuyện",
     "noStoriesYet": "Chưa có câu chuyện nào",
     "shareStory": "Chia sẻ Câu chuyện",
-    "species": "Loài"
+    "species": "Loài",
+    "activityStatus": {
+      "recentlyActive": "Hoạt động gần đây",
+      "activeThisWeek": "Hoạt động tuần này",
+      "activeRecently": "Hoạt động gần đây",
+      "lastSeenWeeksAgo": "Lần cuối thấy: {{weeks}} tuần trước",
+      "lastSeenMonthAgo": "Lần cuối thấy: khoảng một tháng trước",
+      "lastSeenMonthsAgo": "Lần cuối thấy: {{months}} tháng trước",
+      "lastSeenYearsAgo": "Lần cuối thấy: {{years}} năm trước",
+      "noRecentActivity": "Không có hoạt động gần đây",
+      "rememberedWithLove": "Được nhớ đến với tình yêu",
+      "supportUnavailable": "Hỗ trợ hiện không khả dụng cho chim này.",
+      "supportClosed": "Hỗ trợ đã đóng cho chim này."
+    }
   },
   "story": {
     "myStories": "Câu chuyện của tôi",

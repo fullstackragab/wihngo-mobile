@@ -92,6 +92,7 @@
     "errorMessage": "创建故事失败。请重试。",
     "errorBothMedia": "故事可以有图片或视频，但不能两者都有。",
     "errorMediaUpload": "媒体上传失败。请重试。",
+    "errorContentModeration": "您的内容被我们的审核系统标记。请检查您的文字和图片，确保它们符合我们的社区准则。",
     "selectBirdModal": "选择一只鸟",
     "noResults": "未找到鸟",
     "videoSelected": "已选择视频",
@@ -116,7 +117,16 @@
       "errorTitle": "生成失败",
       "errorMessage": "无法生成故事内容。请重试。",
       "rateLimitMessage": "您已达到AI生成限制。请稍后再试。",
-      "birdNotFoundMessage": "未找到鸟。请选择一只有效的鸟。"
+      "birdNotFoundMessage": "未找到鸟。请选择一只有效的鸟。",
+      "settings": {
+        "title": "AI故事设置",
+        "storyLength": "故事长度",
+        "short": "短",
+        "medium": "中",
+        "shortRange": "50-150字",
+        "mediumRange": "150-300字",
+        "done": "完成"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "头像",
     "coverImage": "封面图片",
     "noBirds": "您还没有添加任何鸟类",
+    "noBirdsSubtext": "开始添加鸟类来建立您的收藏",
+    "addFirstBird": "添加您的第一只鸟",
     "lovedBy": "喜爱者",
     "supportedBy": "支持者",
+    "allBirds": "所有鸟类",
+    "lovedBirds": "喜爱的鸟",
+    "supportedBirds": "支持的鸟",
+    "noSupportedBirds": "还没有支持的鸟",
+    "noSupportedBirdsSubtext": "支持鸟类来帮助它们并在这里看到它们",
+    "noLovedBirds": "还没有喜爱的鸟",
+    "noLovedBirdsSubtext": "开始喜爱鸟类以在这里看到它们",
     "sectionBasicInfo": "基本信息",
     "sectionAdditionalDetails": "其他详情",
     "sectionImages": "图片",
@@ -205,6 +224,11 @@
     "birdNotFound": "未找到鸟类",
     "retry": "重试",
     "editBird": "编辑鸟类",
+    "support": "支持",
+    "supportUnavailable": "暂不支持",
+    "loveThisBird": "喜欢这只鸟",
+    "loved": "已喜欢",
+    "lovedWithHeart": "已喜欢 \u2764\ufe0f",
     "supportTransparency": "支持透明度",
     "raised": "已筹集",
     "fundsUsedFor": "资金用于：食物、药物、兽医访问和栖息地维护",
@@ -216,7 +240,20 @@
     "showAllStories": "显示所有{{count}}个故事",
     "noStoriesYet": "暂无故事",
     "shareStory": "分享故事",
-    "species": "物种"
+    "species": "物种",
+    "activityStatus": {
+      "recentlyActive": "最近活跃",
+      "activeThisWeek": "本周活跃",
+      "activeRecently": "最近活跃",
+      "lastSeenWeeksAgo": "上次出现：{{weeks}}周前",
+      "lastSeenMonthAgo": "上次出现：约一个月前",
+      "lastSeenMonthsAgo": "上次出现：{{months}}个月前",
+      "lastSeenYearsAgo": "上次出现：{{years}}年前",
+      "noRecentActivity": "最近无活动",
+      "rememberedWithLove": "以爱铭记",
+      "supportUnavailable": "此鸟类目前无法接受支持。",
+      "supportClosed": "此鸟类的支持已关闭。"
+    }
   },
   "story": {
     "myStories": "我的故事",

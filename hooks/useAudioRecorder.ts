@@ -17,6 +17,7 @@ export interface AudioRecorderResult {
   duration: number | null; // in milliseconds
   isRecording: boolean;
   isPaused: boolean;
+  isPlaying: boolean;
   loading: boolean;
   error: string | null;
   startRecording: () => Promise<void>;
@@ -47,6 +48,7 @@ export function useAudioRecorder(
   const [error, setError] = useState<string | null>(null);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const finalOptions = { ...DEFAULT_OPTIONS, ...options };
 
@@ -236,6 +238,7 @@ export function useAudioRecorder(
     setError(null);
     setIsRecording(false);
     setIsPaused(false);
+    setIsPlaying(false);
 
     if (sound) {
       sound.unloadAsync().catch(console.error);
@@ -258,16 +261,19 @@ export function useAudioRecorder(
       );
 
       setSound(newSound);
+      setIsPlaying(true);
 
       // Auto-unload when playback finishes
       newSound.setOnPlaybackStatusUpdate((status) => {
         if (status.isLoaded && status.didJustFinish) {
           newSound.unloadAsync();
           setSound(null);
+          setIsPlaying(false);
         }
       });
     } catch (err) {
       console.error("Failed to play recording:", err);
+      setIsPlaying(false);
       Alert.alert("Error", "Failed to play recording");
     }
   }, [uri, sound]);
@@ -277,6 +283,7 @@ export function useAudioRecorder(
       await sound.stopAsync();
       await sound.unloadAsync();
       setSound(null);
+      setIsPlaying(false);
     }
   }, [sound]);
 
@@ -285,6 +292,7 @@ export function useAudioRecorder(
     duration,
     isRecording,
     isPaused,
+    isPlaying,
     loading,
     error,
     startRecording,

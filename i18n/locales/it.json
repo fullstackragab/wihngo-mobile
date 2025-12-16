@@ -92,6 +92,7 @@
     "errorMessage": "Impossibile creare la storia. Riprova.",
     "errorBothMedia": "La storia può avere un'immagine o un video, non entrambi.",
     "errorMediaUpload": "Caricamento media fallito. Riprova.",
+    "errorContentModeration": "Il tuo contenuto è stato segnalato dal nostro sistema di moderazione. Per favore rivedi il tuo testo e le tue immagini per assicurarti che rispettino le nostre linee guida della comunità.",
     "selectBirdModal": "Seleziona un Uccello",
     "noResults": "Nessun uccello trovato",
     "videoSelected": "Video Selezionato",
@@ -116,7 +117,16 @@
       "errorTitle": "Generazione fallita",
       "errorMessage": "Impossibile generare il contenuto della storia. Riprova.",
       "rateLimitMessage": "Hai raggiunto il limite di generazione IA. Riprova più tardi.",
-      "birdNotFoundMessage": "Uccello non trovato. Seleziona un uccello valido."
+      "birdNotFoundMessage": "Uccello non trovato. Seleziona un uccello valido.",
+      "settings": {
+        "title": "Impostazioni Storia IA",
+        "storyLength": "Lunghezza Storia",
+        "short": "Breve",
+        "medium": "Media",
+        "shortRange": "50-150 parole",
+        "mediumRange": "150-300 parole",
+        "done": "Fatto"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "Immagine profilo",
     "coverImage": "Immagine copertina",
     "noBirds": "Non hai ancora aggiunto uccelli",
+    "noBirdsSubtext": "Inizia ad aggiungere uccelli per costruire la tua collezione",
+    "addFirstBird": "Aggiungi il tuo primo uccello",
     "lovedBy": "Amato da",
     "supportedBy": "Supportato da",
+    "allBirds": "Tutti gli uccelli",
+    "lovedBirds": "Uccelli amati",
+    "supportedBirds": "Uccelli supportati",
+    "noSupportedBirds": "Nessun uccello supportato ancora",
+    "noSupportedBirdsSubtext": "Supporta gli uccelli per aiutarli e vederli qui",
+    "noLovedBirds": "Nessun uccello amato ancora",
+    "noLovedBirdsSubtext": "Inizia ad amare gli uccelli per vederli qui",
     "sectionBasicInfo": "Informazioni di Base",
     "sectionAdditionalDetails": "Dettagli Aggiuntivi",
     "sectionImages": "Immagini",
@@ -205,6 +224,11 @@
     "birdNotFound": "Uccello non trovato",
     "retry": "Riprova",
     "editBird": "Modifica Uccello",
+    "support": "Supporta",
+    "supportUnavailable": "Supporto non disponibile",
+    "loveThisBird": "Ama questo uccello",
+    "loved": "Amato",
+    "lovedWithHeart": "Amato \u2764\ufe0f",
     "supportTransparency": "Trasparenza del Supporto",
     "raised": "raccolto",
     "fundsUsedFor": "Fondi utilizzati per: Cibo, medicine, visite veterinarie e manutenzione dell'habitat",
@@ -216,7 +240,20 @@
     "showAllStories": "Mostra tutte le {{count}} storie",
     "noStoriesYet": "Ancora nessuna storia",
     "shareStory": "Condividi una Storia",
-    "species": "Specie"
+    "species": "Specie",
+    "activityStatus": {
+      "recentlyActive": "Recentemente attivo",
+      "activeThisWeek": "Attivo questa settimana",
+      "activeRecently": "Attivo di recente",
+      "lastSeenWeeksAgo": "Ultimo avvistamento: {{weeks}} settimane fa",
+      "lastSeenMonthAgo": "Ultimo avvistamento: circa un mese fa",
+      "lastSeenMonthsAgo": "Ultimo avvistamento: {{months}} mesi fa",
+      "lastSeenYearsAgo": "Ultimo avvistamento: {{years}} anni fa",
+      "noRecentActivity": "Nessuna attività recente",
+      "rememberedWithLove": "Ricordato con amore",
+      "supportUnavailable": "Il supporto non è attualmente disponibile per questo uccello.",
+      "supportClosed": "Il supporto è chiuso per questo uccello."
+    }
   },
   "story": {
     "myStories": "Le mie storie",

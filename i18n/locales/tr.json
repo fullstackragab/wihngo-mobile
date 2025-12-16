@@ -92,6 +92,7 @@
     "errorMessage": "Hikaye oluşturulamadı. Lütfen tekrar deneyin.",
     "errorBothMedia": "Hikaye bir resim veya video içerebilir, ikisini birden değil.",
     "errorMediaUpload": "Medya yüklemesi başarısız oldu. Lütfen tekrar deneyin.",
+    "errorContentModeration": "İçeriğiniz denetim sistemimiz tarafından işaretlendi. Lütfen metin ve görsellerinizin topluluk kurallarımıza uygun olduğundan emin olun.",
     "selectBirdModal": "Bir Kuş Seçin",
     "noResults": "Kuş bulunamadı",
     "videoSelected": "Video Seçildi",
@@ -116,7 +117,16 @@
       "errorTitle": "Oluşturma başarısız",
       "errorMessage": "Hikaye içeriği oluşturulamadı. Lütfen tekrar deneyin.",
       "rateLimitMessage": "AI oluşturma limitine ulaştınız. Lütfen daha sonra tekrar deneyin.",
-      "birdNotFoundMessage": "Kuş bulunamadı. Lütfen geçerli bir kuş seçin."
+      "birdNotFoundMessage": "Kuş bulunamadı. Lütfen geçerli bir kuş seçin.",
+      "settings": {
+        "title": "AI Hikaye Ayarları",
+        "storyLength": "Hikaye Uzunluğu",
+        "short": "Kısa",
+        "medium": "Orta",
+        "shortRange": "50-150 kelime",
+        "mediumRange": "150-300 kelime",
+        "done": "Tamam"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "Profil resmi",
     "coverImage": "Kapak resmi",
     "noBirds": "Henüz kuş eklemediniz",
+    "noBirdsSubtext": "Koleksiyonunuzu oluşturmak için kuş eklemeye başlayın",
+    "addFirstBird": "İlk kuşunuzu ekleyin",
     "lovedBy": "Tarafından sevilen",
     "supportedBy": "Tarafından desteklenen",
+    "allBirds": "Tüm kuşlar",
+    "lovedBirds": "Sevilen kuşlar",
+    "supportedBirds": "Desteklenen kuşlar",
+    "noSupportedBirds": "Henüz desteklenen kuş yok",
+    "noSupportedBirdsSubtext": "Kuşları destekleyerek onlara yardım edin ve burada görün",
+    "noLovedBirds": "Henüz sevilen kuş yok",
+    "noLovedBirdsSubtext": "Kuşları sevmeye başlayın ve burada görün",
     "sectionBasicInfo": "Temel Bilgiler",
     "sectionAdditionalDetails": "Ek Detaylar",
     "sectionImages": "Görseller",
@@ -205,6 +224,11 @@
     "birdNotFound": "Kuş bulunamadı",
     "retry": "Yeniden Dene",
     "editBird": "Kuşu Düzenle",
+    "support": "Destekle",
+    "supportUnavailable": "Destek mevcut değil",
+    "loveThisBird": "Bu kuşu sev",
+    "loved": "Sevildi",
+    "lovedWithHeart": "Sevildi \u2764\ufe0f",
     "supportTransparency": "Destek Şeffaflığı",
     "raised": "toplanan",
     "fundsUsedFor": "Fonlar şunlar için kullanılır: Yiyecek, ilaç, veteriner ziyaretleri ve habitat bakımı",
@@ -216,7 +240,20 @@
     "showAllStories": "Tüm {{count}} hikayeyi göster",
     "noStoriesYet": "Henüz hikaye yok",
     "shareStory": "Bir Hikaye Paylaş",
-    "species": "Tür"
+    "species": "Tür",
+    "activityStatus": {
+      "recentlyActive": "Son zamanlarda aktif",
+      "activeThisWeek": "Bu hafta aktif",
+      "activeRecently": "Son zamanlarda aktif",
+      "lastSeenWeeksAgo": "Son görülme: {{weeks}} hafta önce",
+      "lastSeenMonthAgo": "Son görülme: yaklaşık bir ay önce",
+      "lastSeenMonthsAgo": "Son görülme: {{months}} ay önce",
+      "lastSeenYearsAgo": "Son görülme: {{years}} yıl önce",
+      "noRecentActivity": "Son zamanlarda aktivite yok",
+      "rememberedWithLove": "Sevgiyle anılıyor",
+      "supportUnavailable": "Bu kuş için destek şu anda kullanılamıyor.",
+      "supportClosed": "Bu kuş için destek kapatılmıştır."
+    }
   },
   "story": {
     "myStories": "Hikayelerim",

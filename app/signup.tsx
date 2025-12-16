@@ -5,6 +5,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Image,
@@ -20,6 +21,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignUp() {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

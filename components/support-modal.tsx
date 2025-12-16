@@ -1,12 +1,7 @@
-import {
-  getCurrenciesForNetwork,
-  NETWORK_OPTIONS,
-} from "@/config/paymentMethods";
 import { useAuth } from "@/contexts/auth-context";
 import { useNotifications } from "@/contexts/notification-context";
 import {
   createCryptoPayment,
-  getSupportedCryptocurrencies,
   pollPaymentStatus,
 } from "@/services/crypto.service";
 import { createSupportTransaction } from "@/services/support.service";
@@ -18,7 +13,6 @@ import {
 import { calculateTotalAmount, MINIMUM_DONATION_AMOUNT } from "@/types/support";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -27,16 +21,16 @@ import {
   Image,
   Linking,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CryptoPaymentQR from "./crypto-payment-qr";
 import CryptoPaymentStatus from "./crypto-payment-status";
-
-const NETWORK_WARNING_KEY = "@network_warning_dismissed";
 
 interface SupportModalProps {
   visible: boolean;
@@ -46,6 +40,9 @@ interface SupportModalProps {
   isPlatformSupport?: boolean;
 }
 
+// Solana is the only supported network
+const SOLANA_NETWORK: CryptoNetwork = "solana";
+
 export default function SupportModal({
   visible,
   onClose,
@@ -53,7 +50,6 @@ export default function SupportModal({
   birdName,
   isPlatformSupport = false,
 }: SupportModalProps) {
-  // Helper function to get currency icon
   const getCurrencyIcon = (code: CryptoCurrency) => {
     const icons: Record<CryptoCurrency, any> = {
       USDC: require("@/assets/icons/usdc.png"),
@@ -67,35 +63,19 @@ export default function SupportModal({
   const [paymentMethod, setPaymentMethod] = useState<
     "paypal" | "crypto" | null
   >(null);
-  const [cryptoCurrency, setCryptoCurrency] = useState<CryptoCurrency | null>(
-    null
-  );
-  const [cryptoNetwork, setCryptoNetwork] = useState<CryptoNetwork | null>(
-    null
-  );
   const [cryptoPayment, setCryptoPayment] =
     useState<CryptoPaymentRequest | null>(null);
-  const [showCryptoSelector, setShowCryptoSelector] = useState(false);
-  const [showNetworkSelector, setShowNetworkSelector] = useState(false);
   const [showCurrencySelector, setShowCurrencySelector] = useState(false);
-  const [showPlatformSupport, setShowPlatformSupport] = useState(false);
-  const [showNetworkConfirmation, setShowNetworkConfirmation] = useState(false);
-  const [pendingNetwork, setPendingNetwork] = useState<CryptoNetwork | null>(
-    null
-  );
-  const [doNotShowWarningAgain, setDoNotShowWarningAgain] = useState(false);
   const [customAmount, setCustomAmount] = useState<string>("");
-  const [calculatedFee, setCalculatedFee] = useState<number>(0);
-  const [totalAmount, setTotalAmount] = useState<number>(0);
   const { user, logout } = useAuth();
   const { addNotification } = useNotifications();
   const router = useRouter();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
     null
   );
 
-  // Cleanup polling on unmount or when modal closes
   useEffect(() => {
     if (!visible) {
       stopPaymentPolling();
@@ -103,50 +83,20 @@ export default function SupportModal({
     }
   }, [visible]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopPaymentPolling();
     };
   }, []);
 
-  // Handle amount input changes and calculate fees
-  const handleAmountChange = (value: string) => {
-    setCustomAmount(value);
-    const amount = parseFloat(value);
-    if (!isNaN(amount) && amount > 0) {
-      const { platformFee, totalAmount: total } = calculateTotalAmount(amount);
-      setCalculatedFee(platformFee);
-      setTotalAmount(total);
-    } else {
-      setCalculatedFee(0);
-      setTotalAmount(0);
-    }
-  };
-
-  const handleCryptoPayment = async (amount: number) => {
-    if (!user) {
-      // Not logged in - user should see login requirement
-      return;
-    }
-
-    setSelectedAmount(amount);
-    setPaymentMethod("crypto");
-    setShowCryptoSelector(true);
-  };
-
-  const handleCryptoSelection = async (
-    currency: CryptoCurrency,
-    network: CryptoNetwork
-  ) => {
+  const handleCryptoSelection = async (currency: CryptoCurrency) => {
     if (!selectedAmount) return;
 
-    // Double-check user is authenticated
     if (!user) {
       addNotification(
         "recommendation",
-        t("support.authenticationRequired"),
-        t("support.pleaseLoginToMakePayment")
+        t("common.pleaseLogin"),
+        t("common.notLoggedIn")
       );
       router.replace("/welcome");
       return;
@@ -154,70 +104,43 @@ export default function SupportModal({
 
     try {
       setIsProcessing(true);
-      setCryptoCurrency(currency);
-      setCryptoNetwork(network);
-      setShowCryptoSelector(false);
+      setShowCurrencySelector(false);
 
-      // Create crypto payment request
       const response = await createCryptoPayment({
         birdId: isPlatformSupport ? undefined : birdId,
         amountUsd: selectedAmount,
         currency,
-        network,
+        network: SOLANA_NETWORK,
         purpose: "donation",
       });
 
       setCryptoPayment(response.paymentRequest);
-
-      // Start polling for payment status
       startPaymentPolling(response.paymentRequest.id);
     } catch (error) {
       console.error("Error creating crypto payment:", error);
-      console.error("Error details:", {
-        currency,
-        network,
-        amount: selectedAmount,
-        errorMessage: error instanceof Error ? error.message : String(error),
-      });
 
-      // Handle session expiry
       if (error instanceof Error && error.message.includes("Session expired")) {
         await logout();
         router.replace("/welcome");
         addNotification(
           "recommendation",
-          t("support.sessionExpired"),
-          t("support.sessionExpiredMessage")
+          t("auth.sessionExpired"),
+          t("auth.sessionExpired")
         );
         return;
       }
 
-      // Handle unsupported currency or backend validation errors
       if (error instanceof Error && error.message.includes("400")) {
-        // Try to get more specific error message from backend
-        let errorMessage = `${currency} on ${network} network is not yet supported by the backend.`;
-
-        // Check if we have ApiError with data
-        const apiError = error as any;
-        if (apiError.data) {
-          console.log("Backend error data:", apiError.data);
-          // Backend might return { error: "message" } or { message: "message" }
-          errorMessage =
-            apiError.data.error || apiError.data.message || errorMessage;
-        }
-
         addNotification(
           "recommendation",
-          t("support.currencyNotSupported"),
-          errorMessage
+          t("crypto.paymentError"),
+          t("crypto.currencyNotSupported")
         );
       } else {
         addNotification(
           "recommendation",
-          t("support.paymentError"),
-          t("support.failedToCreateCryptoPayment", {
-            error: error instanceof Error ? error.message : "Unknown error"
-          })
+          t("crypto.paymentError"),
+          error instanceof Error ? error.message : t("crypto.unknownError")
         );
       }
       resetPaymentState();
@@ -227,7 +150,6 @@ export default function SupportModal({
   };
 
   const startPaymentPolling = (paymentId: string) => {
-    // Clear any existing polling interval
     stopPaymentPolling();
 
     pollingIntervalRef.current = setInterval(async () => {
@@ -238,7 +160,6 @@ export default function SupportModal({
         if (updatedPayment.status === "completed") {
           stopPaymentPolling();
 
-          // Record the transaction with fee breakdown
           try {
             const donationAmount = parseFloat(customAmount);
             const { platformFee, totalAmount: total } =
@@ -257,14 +178,13 @@ export default function SupportModal({
 
             addNotification(
               "recommendation",
-              t("support.paymentSuccessful"),
-              t("support.thankYouForYourSupport")
+              t("crypto.paymentSuccessful"),
+              t("crypto.thankYouForSupport")
             );
           } catch (error) {
             console.error("Error recording transaction:", error);
           }
 
-          // Success - close modal after a delay
           setTimeout(() => {
             onClose();
             resetPaymentState();
@@ -275,14 +195,11 @@ export default function SupportModal({
           updatedPayment.status === "cancelled"
         ) {
           stopPaymentPolling();
-          // Don't reset state immediately - let user see the status
-          // They can manually close or try again
         }
       } catch (error) {
         console.error("Error polling payment:", error);
-        // Don't stop polling on error - might be temporary network issue
       }
-    }, 5000); // Poll every 5 seconds
+    }, 5000);
   };
 
   const stopPaymentPolling = () => {
@@ -296,261 +213,105 @@ export default function SupportModal({
     stopPaymentPolling();
     setSelectedAmount(null);
     setPaymentMethod(null);
-    setCryptoCurrency(null);
-    setCryptoNetwork(null);
     setCryptoPayment(null);
-    setShowCryptoSelector(false);
-    setShowNetworkSelector(false);
     setShowCurrencySelector(false);
-    setShowPlatformSupport(false);
     setCustomAmount("");
     setIsProcessing(false);
   };
 
-  const handlePlatformPayPal = async () => {
-    const paypalUrl = "https://www.paypal.com/ncp/payment/AECE9FQMFFETS";
-    const canOpen = await Linking.canOpenURL(paypalUrl);
-    if (canOpen) {
-      await Linking.openURL(paypalUrl);
-      onClose();
-      resetPaymentState();
-    } else {
-      addNotification(
-        "recommendation",
-        t("support.cannotOpenPayPal"),
-        t("support.unableToOpenPayPal")
-      );
-    }
-  };
-
-  const handlePlatformCrypto = () => {
-    const amount = parseFloat(customAmount);
-    if (!customAmount || isNaN(amount) || amount < MINIMUM_DONATION_AMOUNT) {
-      addNotification(
-        "recommendation",
-        t("support.minimumAmountRequired"),
-        t("support.cryptoMinimumMessage", { amount: MINIMUM_DONATION_AMOUNT })
-      );
-      return;
-    }
-
-    // Calculate total with platform fee
-    const { totalAmount: total } = calculateTotalAmount(amount);
-    setSelectedAmount(total); // Use total amount for payment
+  const handleCryptoButtonPress = () => {
     setPaymentMethod("crypto");
-    setShowCryptoSelector(true);
+    setSelectedAmount(MINIMUM_DONATION_AMOUNT);
+    setShowCurrencySelector(true);
   };
 
-  const handlePayPalPayment = async (amount: number) => {
-    if (!user) {
-      // Not logged in - user should see login requirement
-      return;
-    }
-
-    try {
-      setIsProcessing(true);
-      setSelectedAmount(amount);
-
-      // PayPal payment URL (you'll need to configure this with your PayPal credentials)
-      const paypalUrl = `https://www.paypal.com/paypalme/yourpaypalhandle/${amount}`;
-
-      // Open PayPal in browser
-      const canOpen = await Linking.canOpenURL(paypalUrl);
-      if (canOpen) {
-        await Linking.openURL(paypalUrl);
-
-        // Simulate payment completion (in production, you'd use PayPal SDK or webhook)
-        // For now, we'll create the transaction record immediately
-        setTimeout(async () => {
-          try {
-            const donationAmount = parseFloat(customAmount);
-            const { platformFee, totalAmount: total } =
-              calculateTotalAmount(donationAmount);
-
-            await createSupportTransaction({
-              supporterId: user.userId,
-              birdId: isPlatformSupport ? undefined : birdId,
-              amount: donationAmount,
-              platformFee: platformFee,
-              totalAmount: total,
-              paymentProvider: "PayPal",
-              paymentId: `PAYPAL_${Date.now()}`, // Replace with actual PayPal transaction ID
-              status: "completed",
-            });
-
-            // Success - close modal
-            onClose();
-          } catch (error) {
-            console.error("Error recording transaction:", error);
-
-            // Handle session expiry
-            if (
-              error instanceof Error &&
-              error.message.includes("Session expired")
-            ) {
-              await logout();
-              router.replace("/welcome");
-              addNotification(
-                "recommendation",
-                t("support.sessionExpired"),
-                t("support.sessionExpiredMessage")
-              );
-              return;
-            }
-
-            addNotification(
-              "recommendation",
-              t("support.transactionError"),
-              t("support.failedToRecordTransaction")
-            );
-          } finally {
-            setIsProcessing(false);
-            setSelectedAmount(null);
-          }
-        }, 2000);
-      } else {
-        addNotification(
-          "recommendation",
-          t("support.cannotOpenPayPal"),
-          t("support.unableToOpenPayPal")
-        );
-        setIsProcessing(false);
-        setSelectedAmount(null);
-      }
-    } catch (error) {
-      console.error("PayPal error:", error);
-      addNotification(
-        "recommendation",
-        t("support.paymentError"),
-        t("support.failedToProcessPayment")
-      );
-      setIsProcessing(false);
-      setSelectedAmount(null);
-    }
-  };
-
-  // Network Selector Component
-  const NetworkSelector = ({
-    selectedAmount,
-    onSelect,
-    onBack,
-  }: {
-    selectedAmount: number;
-    onSelect: (currency: CryptoCurrency, network: CryptoNetwork) => void;
-    onBack: () => void;
-  }) => {
-    const [selectedCurrency, setSelectedCurrency] =
-      useState<CryptoCurrency | null>(null);
-
+  // Currency Selector Component - Solana only
+  const CurrencySelector = () => {
     const currencies = [
-      // Updated v2.0 - Only supported currencies
       {
         code: "USDC" as CryptoCurrency,
-        name: "USD Coin (USDC)",
-        icon: "dollar-sign",
-        networks: [
-          "solana" as CryptoNetwork, // Only Solana supported
-        ],
+        name: "USD Coin",
+        description: t("crypto.usdcDescription"),
+        recommended: true,
       },
       {
         code: "EURC" as CryptoCurrency,
-        name: "Euro Coin (EURC)",
-        icon: "euro-sign",
-        networks: [
-          "solana" as CryptoNetwork, // Only Solana supported
-        ],
+        name: "Euro Coin",
+        description: t("crypto.eurcDescription"),
+        recommended: false,
       },
     ];
 
-    const getNetworkDisplayName = (network: CryptoNetwork): string => {
-      const names: Record<CryptoNetwork, string> = {
-        ethereum: "Ethereum",
-        solana: "Solana",
-        polygon: "Polygon",
-        base: "Base",
-        stellar: "Stellar",
-      };
-      return names[network] || network;
-    };
-
     return (
       <View>
-        <Text style={styles.selectorTitle}>
-          {t("support.selectCryptocurrency")}
-        </Text>
-        <Text style={styles.selectorSubtitle}>
-          {t("support.amountLabel", { amount: selectedAmount })}
-        </Text>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => {
+            setShowCurrencySelector(false);
+            setPaymentMethod(null);
+          }}
+        >
+          <Feather name="arrow-left" size={20} color="#007AFF" />
+          <Text style={styles.backButtonText}>{t("common.back")}</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.selectorTitle}>{t("crypto.selectCurrency")}</Text>
+        <Text style={styles.selectorSubtitle}>{t("crypto.payOnSolana")}</Text>
 
         <View style={styles.infoBox}>
-          <FontAwesome6 name="circle-info" size={14} color="#007AFF" />
+          <FontAwesome6 name="bolt" size={14} color="#14F195" />
           <Text style={styles.infoBoxText}>
-            {t("support.supportedCurrencies")}
-            {"\n"}
-            {t("support.lowestFees")}
+            {t("crypto.solanaFastCheap")}
           </Text>
         </View>
 
-        {!selectedCurrency ? (
-          <View style={styles.currencyList}>
-            {currencies.map((currency) => (
-              <TouchableOpacity
-                key={currency.code}
-                style={styles.currencyCard}
-                onPress={() => {
-                  if (currency.networks.length === 1) {
-                    onSelect(currency.code, currency.networks[0]);
-                  } else {
-                    setSelectedCurrency(currency.code);
-                  }
-                }}
-              >
-                <FontAwesome6
-                  name={currency.icon as any}
-                  size={24}
-                  color="#007AFF"
-                />
-                <Text style={styles.currencyName}>{currency.name}</Text>
-                <Text style={styles.currencyCode}>{currency.code}</Text>
-                {currency.networks.length > 1 && (
-                  <Feather name="chevron-right" size={20} color="#999" />
-                )}
-              </TouchableOpacity>
-            ))}
-          </View>
-        ) : (
-          <View>
+        <View style={styles.currencyList}>
+          {currencies.map((currency) => (
             <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => setSelectedCurrency(null)}
+              key={currency.code}
+              style={[
+                styles.currencyCard,
+                currency.recommended && styles.recommendedCard,
+              ]}
+              onPress={() => handleCryptoSelection(currency.code)}
+              disabled={isProcessing}
             >
-              <Feather name="arrow-left" size={20} color="#007AFF" />
-              <Text style={styles.backButtonText}>
-                {t("support.backToCurrencies")}
-              </Text>
+              <Image
+                source={getCurrencyIcon(currency.code)}
+                style={styles.currencyIcon}
+                resizeMode="contain"
+              />
+              <View style={styles.currencyInfo}>
+                <View style={styles.currencyNameRow}>
+                  <Text style={styles.currencyName}>{currency.name}</Text>
+                  {currency.recommended && (
+                    <View style={styles.recommendedBadge}>
+                      <Text style={styles.recommendedBadgeText}>
+                        {t("crypto.recommended")}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+                <Text style={styles.currencyCode}>{currency.code}</Text>
+                <Text style={styles.currencyDescription}>
+                  {currency.description}
+                </Text>
+              </View>
+              {isProcessing ? (
+                <ActivityIndicator size="small" color="#007AFF" />
+              ) : (
+                <Feather name="chevron-right" size={20} color="#999" />
+              )}
             </TouchableOpacity>
+          ))}
+        </View>
 
-            <Text style={styles.networkTitle}>
-              {t("support.selectNetwork")}
-            </Text>
-            <View style={styles.networkList}>
-              {currencies
-                .find((c) => c.code === selectedCurrency)
-                ?.networks.map((network) => (
-                  <TouchableOpacity
-                    key={network}
-                    style={styles.networkCard}
-                    onPress={() => onSelect(selectedCurrency, network)}
-                  >
-                    <Text style={styles.networkName}>
-                      {getNetworkDisplayName(network)}
-                    </Text>
-                    <Feather name="chevron-right" size={20} color="#999" />
-                  </TouchableOpacity>
-                ))}
-            </View>
-          </View>
-        )}
+        <View style={styles.networkInfo}>
+          <FontAwesome6 name="circle-info" size={12} color="#666" />
+          <Text style={styles.networkInfoText}>
+            {t("crypto.networkInfo")}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -561,14 +322,21 @@ export default function SupportModal({
       transparent
       animationType="slide"
       onRequestClose={onClose}
+      statusBarTranslucent
     >
       <View style={styles.overlay}>
-        <View style={styles.modalContainer}>
+        <View style={[
+          styles.modalContainer,
+          {
+            paddingBottom: Math.max(insets.bottom, 20),
+            height: cryptoPayment ? "90%" : showCurrencySelector ? "70%" : "50%"
+          }
+        ]}>
           <View style={styles.header}>
             <Text style={styles.title}>
               {isPlatformSupport
-                ? t("support.support") + " Wihngo"
-                : t("support.support") + ` ${birdName}`}
+                ? t("support.supportPlatform")
+                : t("headers.supportBird", { birdName })}
             </Text>
             <TouchableOpacity
               onPress={() => {
@@ -586,7 +354,6 @@ export default function SupportModal({
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            {/* Show crypto payment flow if active */}
             {cryptoPayment ? (
               <View>
                 <TouchableOpacity
@@ -594,238 +361,21 @@ export default function SupportModal({
                   onPress={resetPaymentState}
                 >
                   <Feather name="arrow-left" size={20} color="#007AFF" />
-                  <Text style={styles.backButtonText}>
-                    {t("support.backToAmounts")}
-                  </Text>
+                  <Text style={styles.backButtonText}>{t("common.back")}</Text>
                 </TouchableOpacity>
 
                 <CryptoPaymentQR
                   payment={cryptoPayment}
                   onExpired={() => {
-                    // Don't reset state - just stop polling
-                    // User can see expired status and manually close
                     stopPaymentPolling();
                   }}
                 />
 
                 <CryptoPaymentStatus payment={cryptoPayment} />
               </View>
-            ) : showNetworkConfirmation ? (
-              <View>
-                <TouchableOpacity
-                  style={styles.backButton}
-                  onPress={() => {
-                    setShowNetworkConfirmation(false);
-                    setPendingNetwork(null);
-                  }}
-                >
-                  <Feather name="arrow-left" size={20} color="#007AFF" />
-                  <Text style={styles.backButtonText}>Back to networks</Text>
-                </TouchableOpacity>
-
-                <View style={styles.confirmationContainer}>
-                  <View style={styles.warningIconContainer}>
-                    <FontAwesome6
-                      name="triangle-exclamation"
-                      size={48}
-                      color="#FF9500"
-                    />
-                  </View>
-
-                  <Text style={styles.confirmationTitle}>
-                    {t("support.confirmNetworkWarning")}
-                  </Text>
-
-                  <Text style={styles.confirmationText}>
-                    {t("support.confirmNetworkText")}
-                  </Text>
-
-                  <Text style={styles.confirmationWarning}>
-                    {t("support.transfersCannotBeRecovered")}
-                  </Text>
-
-                  <View style={styles.disclaimerBox}>
-                    <Text style={styles.disclaimerText}>
-                      • {t("crypto.wihngoNotWallet")}
-                      {"\n"}• {t("crypto.wihngoNoGuarantee")}
-                      {"\n"}• {t("crypto.cryptoPeerToPeer")}
-                      {"\n"}• {t("common.ok")}
-                    </Text>
-                  </View>
-
-                  <Text style={styles.confirmationQuestion}>
-                    {t("support.doYouUnderstand")}
-                  </Text>
-
-                  <TouchableOpacity
-                    style={styles.checkboxContainer}
-                    onPress={() =>
-                      setDoNotShowWarningAgain(!doNotShowWarningAgain)
-                    }
-                  >
-                    <View
-                      style={[
-                        styles.checkbox,
-                        doNotShowWarningAgain && styles.checkboxChecked,
-                      ]}
-                    >
-                      {doNotShowWarningAgain && (
-                        <FontAwesome6 name="check" size={14} color="#fff" />
-                      )}
-                    </View>
-                    <Text style={styles.checkboxLabel}>
-                      {t("support.doNotShowAgain")}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.confirmButton}
-                    onPress={async () => {
-                      if (pendingNetwork) {
-                        if (doNotShowWarningAgain) {
-                          await AsyncStorage.setItem(
-                            NETWORK_WARNING_KEY,
-                            "true"
-                          );
-                        }
-                        setCryptoNetwork(pendingNetwork);
-                        setShowNetworkConfirmation(false);
-                        handleCryptoSelection("USDC", pendingNetwork);
-                        setPendingNetwork(null);
-                        setDoNotShowWarningAgain(false);
-                      }
-                    }}
-                  >
-                    <Text style={styles.confirmButtonText}>
-                      {t("support.iUnderstandShowAddress")}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : showCryptoSelector ? (
-              <NetworkSelector
-                selectedAmount={selectedAmount || 0}
-                onSelect={handleCryptoSelection}
-                onBack={() => setShowCryptoSelector(false)}
-              />
-            ) : showNetworkSelector ? (
-              <View>
-                <TouchableOpacity
-                  style={styles.backButton}
-                  onPress={() => setShowNetworkSelector(false)}
-                >
-                  <Feather name="arrow-left" size={20} color="#007AFF" />
-                  <Text style={styles.backButtonText}>
-                    {t("support.backToPaymentMethods")}
-                  </Text>
-                </TouchableOpacity>
-
-                <Text style={styles.selectorTitle}>
-                  {t("support.selectNetwork")}
-                </Text>
-                <Text style={styles.selectorSubtitle}>
-                  {t("support.chooseBlockchainNetwork")}
-                </Text>
-
-                <View style={styles.networkList}>
-                  {NETWORK_OPTIONS.map((network) => (
-                    <TouchableOpacity
-                      key={network.network}
-                      style={styles.networkCard}
-                      onPress={() => {
-                        setCryptoNetwork(network.network);
-                        setShowNetworkSelector(false);
-                        setShowCurrencySelector(true);
-                      }}
-                    >
-                      <View style={styles.networkCardContent}>
-                        <Text style={styles.networkName}>{network.name}</Text>
-                        <Text style={styles.networkDescription}>
-                          {network.description}
-                        </Text>
-                      </View>
-                      <Feather name="chevron-right" size={20} color="#999" />
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
             ) : showCurrencySelector ? (
-              <View>
-                <TouchableOpacity
-                  style={styles.backButton}
-                  onPress={() => {
-                    setShowCurrencySelector(false);
-                    setShowNetworkSelector(true);
-                    setCryptoNetwork(null);
-                  }}
-                >
-                  <Feather name="arrow-left" size={20} color="#007AFF" />
-                  <Text style={styles.backButtonText}>Back to networks</Text>
-                </TouchableOpacity>
-
-                <Text style={styles.selectorTitle}>
-                  {t("support.selectCurrency")}
-                </Text>
-                <Text style={styles.selectorSubtitle}>
-                  {t("support.availableOn", {
-                    network: NETWORK_OPTIONS.find(
-                      (n) => n.network === cryptoNetwork
-                    )?.name,
-                  })}
-                </Text>
-
-                <View style={styles.currencyList}>
-                  {cryptoNetwork ? (
-                    getSupportedCryptocurrencies()
-                      .filter((crypto) =>
-                        getCurrenciesForNetwork(cryptoNetwork).includes(
-                          crypto.code
-                        )
-                      )
-                      .map((currency) => (
-                        <TouchableOpacity
-                          key={currency.code}
-                          style={styles.currencyCard}
-                          onPress={async () => {
-                            setCryptoCurrency(currency.code);
-                            // Now create the payment with a default amount or ask for amount here
-                            // For now, using a default minimum amount
-                            const defaultAmount = MINIMUM_DONATION_AMOUNT;
-                            const { totalAmount: total } =
-                              calculateTotalAmount(defaultAmount);
-                            setSelectedAmount(total);
-
-                            if (cryptoNetwork) {
-                              await handleCryptoSelection(
-                                currency.code,
-                                cryptoNetwork
-                              );
-                            }
-                          }}
-                        >
-                          <Image
-                            source={getCurrencyIcon(currency.code)}
-                            style={styles.currencyIcon}
-                            resizeMode="contain"
-                          />
-                          <Text style={styles.currencyName}>
-                            {currency.name}
-                          </Text>
-                          <Text style={styles.currencyCode}>
-                            {currency.code}
-                          </Text>
-                        </TouchableOpacity>
-                      ))
-                  ) : (
-                    <View style={styles.emptyState}>
-                      <Text style={styles.emptyStateText}>
-                        {t("support.pleaseSelectNetwork")}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              </View>
-            ) : paymentMethod === null ? (
+              <CurrencySelector />
+            ) : (
               <>
                 <Text style={styles.subtitle}>
                   {isPlatformSupport
@@ -833,12 +383,11 @@ export default function SupportModal({
                     : t("support.birdSubtitle")}
                 </Text>
 
-                {/* Payment Method Selection - Show First */}
                 <View style={styles.paymentMethodsContainer}>
                   {/* PayPal Button */}
                   <TouchableOpacity
                     style={[
-                      styles.paymentMethodButtonLarge,
+                      styles.paymentMethodButton,
                       styles.paypalButton,
                     ]}
                     onPress={async () => {
@@ -863,46 +412,27 @@ export default function SupportModal({
                     }}
                     disabled={isProcessing}
                   >
-                    {isProcessing && paymentMethod === "paypal" ? (
-                      <ActivityIndicator size="large" color="#0070BA" />
-                    ) : (
-                      <>
-                        <FontAwesome6 name="paypal" size={24} color="#0070BA" />
-                        <Text style={styles.paymentMethodButtonTextLarge}>
-                          PayPal
-                        </Text>
-                        <Text style={styles.paymentMethodDescription}>
-                          {t("support.quickSecurePayment")}
-                        </Text>
-                      </>
-                    )}
+                    <FontAwesome6 name="paypal" size={28} color="#0070BA" />
+                    <Text style={styles.paymentMethodButtonText}>PayPal</Text>
+                    <Text style={styles.paymentMethodDescription}>
+                      {t("support.quickSecurePayment")}
+                    </Text>
                   </TouchableOpacity>
 
                   {/* Crypto Button */}
                   <TouchableOpacity
                     style={[
-                      styles.paymentMethodButtonLarge,
+                      styles.paymentMethodButton,
                       styles.cryptoButton,
                     ]}
-                    onPress={() => {
-                      setPaymentMethod("crypto");
-                      setShowNetworkSelector(true);
-                    }}
+                    onPress={handleCryptoButtonPress}
                     disabled={isProcessing}
                   >
-                    {isProcessing && paymentMethod === "crypto" ? (
-                      <ActivityIndicator size="large" color="#26A17B" />
-                    ) : (
-                      <>
-                        <FontAwesome6 name="coins" size={24} color="#26A17B" />
-                        <Text style={styles.paymentMethodButtonTextLarge}>
-                          Crypto
-                        </Text>
-                        <Text style={styles.paymentMethodDescription}>
-                          {t("support.cryptoCurrencies")}
-                        </Text>
-                      </>
-                    )}
+                    <FontAwesome6 name="coins" size={28} color="#14F195" />
+                    <Text style={styles.paymentMethodButtonText}>Crypto</Text>
+                    <Text style={styles.paymentMethodDescription}>
+                      USDC, EURC
+                    </Text>
                   </TouchableOpacity>
                 </View>
 
@@ -920,9 +450,7 @@ export default function SupportModal({
                       onPress={async () => {
                         const wihngoPaypalUrl =
                           "https://www.paypal.com/ncp/payment/AECE9FQMFFETS";
-                        const canOpen = await Linking.canOpenURL(
-                          wihngoPaypalUrl
-                        );
+                        const canOpen = await Linking.canOpenURL(wihngoPaypalUrl);
                         if (canOpen) {
                           await Linking.openURL(wihngoPaypalUrl);
                           addNotification(
@@ -947,12 +475,6 @@ export default function SupportModal({
                   </View>
                 )}
               </>
-            ) : (
-              <>
-                <Text style={styles.subtitle}>
-                  {t("support.fallbackMessage")}
-                </Text>
-              </>
             )}
           </ScrollView>
         </View>
@@ -971,9 +493,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    maxHeight: "90%",
-    minHeight: "80%",
-    flexDirection: "column",
   },
   header: {
     flexDirection: "row",
@@ -997,157 +516,54 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    paddingBottom: 40,
   },
   subtitle: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 20,
+    marginBottom: 24,
     textAlign: "center",
-  },
-  customAmountContainer: {
-    backgroundColor: "#f8f8f8",
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-  },
-  customAmountLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: 12,
-  },
-  customAmountInput: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: "#e0e0e0",
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: 12,
-  },
-  feeBreakdown: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    marginTop: 8,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "#e0e0e0",
-  },
-  feeRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  feeLabel: {
-    fontSize: 14,
-    color: "#666",
-  },
-  feeValue: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#333",
-  },
-  totalRow: {
-    borderTopWidth: 1,
-    borderTopColor: "#e0e0e0",
-    paddingTop: 12,
-    marginTop: 4,
-    marginBottom: 0,
-  },
-  totalLabel: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#333",
-  },
-  totalValue: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#007AFF",
-  },
-  minAmountText: {
-    fontSize: 12,
-    color: "#666",
-    lineHeight: 18,
-    marginBottom: 16,
   },
   paymentMethodsContainer: {
     flexDirection: "row",
-    gap: 12,
-    marginTop: 16,
+    gap: 16,
     justifyContent: "center",
-    alignItems: "center",
   },
   paymentMethodButton: {
     flex: 1,
     backgroundColor: "#fff",
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 2,
-    paddingVertical: 16,
-    paddingHorizontal: 12,
+    paddingVertical: 24,
+    paddingHorizontal: 16,
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
+    maxWidth: 160,
   },
   paypalButton: {
     borderColor: "#0070BA",
-    backgroundColor: "#E8F4FD",
+    backgroundColor: "#F5FAFF",
   },
   cryptoButton: {
-    borderColor: "#26A17B",
-    backgroundColor: "#E8F9F4",
+    borderColor: "#14F195",
+    backgroundColor: "#F0FFF8",
   },
   paymentMethodButtonText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#333",
-  },
-  paymentMethodButtonLarge: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#f7931a",
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 4,
-    minWidth: 120,
-    maxWidth: 140,
-  },
-  paymentMethodButtonTextLarge: {
-    color: "#333",
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "700",
+    color: "#333",
   },
   paymentMethodDescription: {
-    color: "#666",
-    fontSize: 10,
-    marginTop: 2,
-  },
-  networkCardContent: {
-    flex: 1,
-  },
-  networkDescription: {
     fontSize: 12,
     color: "#666",
-    marginTop: 4,
-  },
-  paymentMethodSubtext: {
-    color: "#666",
-    fontSize: 12,
+    textAlign: "center",
   },
   backButton: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginBottom: 16,
-    padding: 8,
+    marginBottom: 20,
+    padding: 4,
   },
   backButtonText: {
     color: "#007AFF",
@@ -1155,7 +571,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   selectorTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 8,
@@ -1169,20 +585,20 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    backgroundColor: "#E8F4FD",
-    borderRadius: 8,
+    alignItems: "center",
+    backgroundColor: "#F0FFF8",
+    borderRadius: 12,
     padding: 12,
-    marginBottom: 16,
-    gap: 8,
+    marginBottom: 20,
+    gap: 10,
     borderWidth: 1,
-    borderColor: "#B3D9F9",
+    borderColor: "#14F195",
   },
   infoBoxText: {
     flex: 1,
-    fontSize: 12,
-    color: "#007AFF",
-    lineHeight: 18,
+    fontSize: 13,
+    color: "#059669",
+    fontWeight: "500",
   },
   currencyList: {
     gap: 12,
@@ -1191,86 +607,74 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f8f8f8",
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
-    gap: 12,
+    gap: 14,
     borderWidth: 2,
     borderColor: "transparent",
   },
+  recommendedCard: {
+    borderColor: "#14F195",
+    backgroundColor: "#F0FFF8",
+  },
   currencyIcon: {
-    width: 40,
-    height: 40,
+    width: 48,
+    height: 48,
+  },
+  currencyInfo: {
+    flex: 1,
+  },
+  currencyNameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   currencyName: {
-    flex: 1,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "600",
     color: "#333",
   },
+  recommendedBadge: {
+    backgroundColor: "#14F195",
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 6,
+  },
+  recommendedBadgeText: {
+    fontSize: 10,
+    fontWeight: "700",
+    color: "#065F46",
+    textTransform: "uppercase",
+  },
   currencyCode: {
+    fontSize: 13,
+    color: "#666",
+    marginTop: 2,
+  },
+  currencyDescription: {
     fontSize: 12,
-    color: "#666",
-    marginRight: 8,
-  },
-  usdtNetworkContainer: {
-    marginBottom: 20,
-  },
-  networkTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 8,
-    textAlign: "center",
-  },
-  networkSubtitle: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  networkList: {
-    gap: 12,
-  },
-  networkCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 2,
-    borderColor: "transparent",
-  },
-  networkIcon: {
-    width: 24,
-    height: 24,
-    marginRight: 12,
-  },
-  networkInfo: {
-    flex: 1,
-  },
-  networkName: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#333",
-  },
-  networkSpeed: {
-    fontSize: 12,
-    color: "#666",
+    color: "#888",
     marginTop: 4,
   },
-  selectedNetworkCard: {
-    borderColor: "#007AFF",
-    backgroundColor: "#E8F4FD",
+  networkInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 20,
+    paddingHorizontal: 4,
+  },
+  networkInfoText: {
+    fontSize: 12,
+    color: "#666",
+    flex: 1,
   },
   platformSupportSection: {
-    marginTop: 24,
-    paddingTop: 24,
+    marginTop: 32,
   },
   divider: {
     height: 1,
     backgroundColor: "#e0e0e0",
-    marginBottom: 20,
+    marginBottom: 24,
   },
   platformSupportTitle: {
     fontSize: 16,
@@ -1287,123 +691,17 @@ const styles = StyleSheet.create({
   },
   supportWihngoButton: {
     backgroundColor: "#007AFF",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 6,
+    gap: 8,
   },
   supportWihngoButtonText: {
     color: "#fff",
     fontSize: 14,
     fontWeight: "600",
-  },
-  platformSupportNote: {
-    fontSize: 12,
-    color: "#999",
-    textAlign: "center",
-    fontStyle: "italic",
-  },
-  disclaimer: {
-    marginTop: 24,
-    fontSize: 13,
-    color: "#999",
-    textAlign: "center",
-  },
-  confirmationContainer: {
-    paddingVertical: 20,
-    alignItems: "center",
-  },
-  warningIconContainer: {
-    marginBottom: 20,
-  },
-  confirmationTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  confirmationText: {
-    fontSize: 16,
-    color: "#333",
-    marginBottom: 12,
-    textAlign: "center",
-    lineHeight: 24,
-  },
-  confirmationWarning: {
-    fontSize: 15,
-    color: "#FF3B30",
-    fontWeight: "600",
-    marginBottom: 20,
-    textAlign: "center",
-    lineHeight: 22,
-  },
-  confirmationQuestion: {
-    fontSize: 16,
-    color: "#666",
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 24,
-    gap: 10,
-  },
-  checkbox: {
-    width: 22,
-    height: 22,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: "#007AFF",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-  },
-  checkboxChecked: {
-    backgroundColor: "#007AFF",
-  },
-  checkboxLabel: {
-    fontSize: 14,
-    color: "#666",
-  },
-  confirmButton: {
-    backgroundColor: "#007AFF",
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    minWidth: "80%",
-    alignItems: "center",
-  },
-  confirmButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  disclaimerBox: {
-    backgroundColor: "#FFF3CD",
-    borderRadius: 8,
-    padding: 12,
-    marginVertical: 16,
-    borderWidth: 1,
-    borderColor: "#FFEAA7",
-  },
-  disclaimerText: {
-    fontSize: 13,
-    color: "#856404",
-    lineHeight: 20,
-  },
-  emptyState: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 40,
-  },
-  emptyStateText: {
-    fontSize: 16,
-    color: "#666",
-    textAlign: "center",
   },
 });

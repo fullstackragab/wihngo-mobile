@@ -92,6 +92,7 @@
     "errorMessage": "Nie udało się utworzyć historii. Spróbuj ponownie.",
     "errorBothMedia": "Historia może mieć obraz lub wideo, nie oba.",
     "errorMediaUpload": "Przesyłanie mediów nie powiodło się. Spróbuj ponownie.",
+    "errorContentModeration": "Twoja treść została oznaczona przez nasz system moderacji. Sprawdź swój tekst i obrazy, aby upewnić się, że są zgodne z naszymi wytycznymi społeczności.",
     "selectBirdModal": "Wybierz Ptaka",
     "noResults": "Nie znaleziono ptaków",
     "videoSelected": "Wideo Wybrane",
@@ -116,7 +117,16 @@
       "errorTitle": "Generowanie nie powiodło się",
       "errorMessage": "Nie udało się wygenerować treści historii. Spróbuj ponownie.",
       "rateLimitMessage": "Osiągnięto limit generowania AI. Spróbuj ponownie później.",
-      "birdNotFoundMessage": "Ptak nie znaleziony. Wybierz prawidłowego ptaka."
+      "birdNotFoundMessage": "Ptak nie znaleziony. Wybierz prawidłowego ptaka.",
+      "settings": {
+        "title": "Ustawienia Historii AI",
+        "storyLength": "Długość Historii",
+        "short": "Krótka",
+        "medium": "Średnia",
+        "shortRange": "50-150 słów",
+        "mediumRange": "150-300 słów",
+        "done": "Gotowe"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "Zdjęcie profilowe",
     "coverImage": "Zdjęcie okładki",
     "noBirds": "Nie dodałeś jeszcze żadnych ptaków",
+    "noBirdsSubtext": "Zacznij dodawać ptaki, aby zbudować swoją kolekcję",
+    "addFirstBird": "Dodaj swojego pierwszego ptaka",
     "lovedBy": "Kochany przez",
     "supportedBy": "Wspierany przez",
+    "allBirds": "Wszystkie ptaki",
+    "lovedBirds": "Ulubione ptaki",
+    "supportedBirds": "Wspierane ptaki",
+    "noSupportedBirds": "Jeszcze nie ma wspieranych ptaków",
+    "noSupportedBirdsSubtext": "Wspieraj ptaki, aby im pomóc i zobaczyć je tutaj",
+    "noLovedBirds": "Jeszcze nie ma ulubionych ptaków",
+    "noLovedBirdsSubtext": "Zacznij kochać ptaki, aby zobaczyć je tutaj",
     "sectionBasicInfo": "Podstawowe Informacje",
     "sectionAdditionalDetails": "Dodatkowe Szczegóły",
     "sectionImages": "Zdjęcia",
@@ -205,6 +224,11 @@
     "birdNotFound": "Nie znaleziono ptaka",
     "retry": "Spróbuj ponownie",
     "editBird": "Edytuj Ptaka",
+    "support": "Wesprzyj",
+    "supportUnavailable": "Wsparcie niedostępne",
+    "loveThisBird": "Pokochaj tego ptaka",
+    "loved": "Ukochany",
+    "lovedWithHeart": "Ukochany \u2764\ufe0f",
     "supportTransparency": "Przejrzystość Wsparcia",
     "raised": "zebrane",
     "fundsUsedFor": "Fundusze wykorzystane na: Jedzenie, leki, wizyty u weterynarza i utrzymanie siedliska",
@@ -216,7 +240,20 @@
     "showAllStories": "Pokaż wszystkie {{count}} historie",
     "noStoriesYet": "Jeszcze nie ma historii",
     "shareStory": "Udostępnij Historię",
-    "species": "Gatunek"
+    "species": "Gatunek",
+    "activityStatus": {
+      "recentlyActive": "Ostatnio aktywny",
+      "activeThisWeek": "Aktywny w tym tygodniu",
+      "activeRecently": "Ostatnio aktywny",
+      "lastSeenWeeksAgo": "Ostatnio widziany: {{weeks}} tygodni temu",
+      "lastSeenMonthAgo": "Ostatnio widziany: około miesiąc temu",
+      "lastSeenMonthsAgo": "Ostatnio widziany: {{months}} miesięcy temu",
+      "lastSeenYearsAgo": "Ostatnio widziany: {{years}} lat temu",
+      "noRecentActivity": "Brak ostatniej aktywności",
+      "rememberedWithLove": "Pamiętany z miłością",
+      "supportUnavailable": "Wsparcie jest obecnie niedostępne dla tego ptaka.",
+      "supportClosed": "Wsparcie jest zamknięte dla tego ptaka."
+    }
   },
   "story": {
     "myStories": "Moje historie",

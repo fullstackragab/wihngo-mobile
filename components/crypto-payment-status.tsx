@@ -10,6 +10,7 @@ import {
 import { CryptoPaymentRequest } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 type CryptoPaymentStatusProps = {
@@ -21,27 +22,31 @@ export default function CryptoPaymentStatus({
   payment,
   showDetails = true,
 }: CryptoPaymentStatusProps) {
+  const { t } = useTranslation();
   const statusColor = getPaymentStatusColor(payment.status);
   const statusIcon = getPaymentStatusIcon(payment.status);
 
   const getStatusMessage = () => {
     switch (payment.status) {
       case "pending":
-        return "Waiting for payment...";
+        return t("crypto.waitingForPayment");
       case "confirming":
-        return `Confirming transaction (${payment.confirmations}/${payment.requiredConfirmations})`;
+        return t("crypto.confirmingTransaction", {
+          current: payment.confirmations,
+          required: payment.requiredConfirmations
+        });
       case "confirmed":
-        return "Payment confirmed!";
+        return t("crypto.paymentConfirmed");
       case "completed":
-        return "Payment completed successfully!";
+        return t("crypto.paymentCompleted");
       case "expired":
-        return "Payment window expired";
+        return t("crypto.paymentExpired");
       case "cancelled":
-        return "Payment cancelled";
+        return t("crypto.paymentCancelled");
       case "failed":
-        return "Payment failed";
+        return t("crypto.paymentFailed");
       default:
-        return "Unknown status";
+        return t("crypto.unknownStatus");
     }
   };
 
@@ -86,9 +91,9 @@ export default function CryptoPaymentStatus({
           <View style={styles.statusInfo}>
             <Text style={styles.statusTitle}>{getStatusMessage()}</Text>
             <Text style={styles.statusSubtitle}>
-              Status:{" "}
+              {t("crypto.statusLabel")}{" "}
               <Text style={[styles.statusBadge, { color: getStatusColor() }]}>
-                {payment.status.toUpperCase()}
+                {t(`crypto.status.${payment.status}`, { defaultValue: payment.status.toUpperCase() })}
               </Text>
             </Text>
           </View>
@@ -111,7 +116,7 @@ export default function CryptoPaymentStatus({
               />
             </View>
             <Text style={styles.progressText}>
-              Confirmations: {payment.confirmations} /{" "}
+              {t("crypto.confirmations")} {payment.confirmations} /{" "}
               {payment.requiredConfirmations}
             </Text>
           </View>
@@ -119,7 +124,7 @@ export default function CryptoPaymentStatus({
 
         {showDetails && payment.transactionHash && (
           <View style={styles.transactionInfo}>
-            <Text style={styles.transactionLabel}>Transaction Hash:</Text>
+            <Text style={styles.transactionLabel}>{t("crypto.transactionHash")}</Text>
             <Text style={styles.transactionHash} numberOfLines={1}>
               {payment.transactionHash}
             </Text>
@@ -131,8 +136,7 @@ export default function CryptoPaymentStatus({
         <View style={styles.helpBox}>
           <FontAwesome6 name="circle-info" size={16} color="#007AFF" />
           <Text style={styles.helpText}>
-            Your transaction is being confirmed on the blockchain. This usually
-            takes a few minutes depending on network conditions.
+            {t("crypto.confirmingHelp")}
           </Text>
         </View>
       )}
@@ -142,8 +146,7 @@ export default function CryptoPaymentStatus({
           <View style={[styles.helpBox, styles.successBox]}>
             <FontAwesome6 name="circle-check" size={16} color="#28a745" />
             <Text style={[styles.helpText, styles.successText]}>
-              Your payment has been successfully processed. Your premium
-              features are now active!
+              {t("crypto.successHelp")}
             </Text>
           </View>
         )}
@@ -154,8 +157,8 @@ export default function CryptoPaymentStatus({
             <FontAwesome6 name="circle-exclamation" size={16} color="#dc3545" />
             <Text style={[styles.helpText, styles.errorText]}>
               {payment.status === "expired"
-                ? "The payment window has expired. Please create a new payment request."
-                : "The payment could not be processed. Please contact support if you believe this is an error."}
+                ? t("crypto.expiredHelp")
+                : t("crypto.failedHelp")}
             </Text>
           </View>
         )}

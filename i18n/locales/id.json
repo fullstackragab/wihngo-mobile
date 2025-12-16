@@ -92,6 +92,7 @@
     "errorMessage": "Gagal membuat cerita. Silakan coba lagi.",
     "errorBothMedia": "Cerita bisa memiliki gambar atau video, tidak keduanya.",
     "errorMediaUpload": "Unggah media gagal. Silakan coba lagi.",
+    "errorContentModeration": "Konten Anda ditandai oleh sistem moderasi kami. Harap periksa teks dan gambar Anda untuk memastikan mengikuti pedoman komunitas kami.",
     "selectBirdModal": "Pilih Burung",
     "noResults": "Tidak ada burung ditemukan",
     "videoSelected": "Video Dipilih",
@@ -116,7 +117,16 @@
       "errorTitle": "Pembuatan gagal",
       "errorMessage": "Gagal membuat konten cerita. Silakan coba lagi.",
       "rateLimitMessage": "Anda telah mencapai batas pembuatan AI. Silakan coba lagi nanti.",
-      "birdNotFoundMessage": "Burung tidak ditemukan. Silakan pilih burung yang valid."
+      "birdNotFoundMessage": "Burung tidak ditemukan. Silakan pilih burung yang valid.",
+      "settings": {
+        "title": "Pengaturan Cerita AI",
+        "storyLength": "Panjang Cerita",
+        "short": "Pendek",
+        "medium": "Sedang",
+        "shortRange": "50-150 kata",
+        "mediumRange": "150-300 kata",
+        "done": "Selesai"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "Foto profil",
     "coverImage": "Foto sampul",
     "noBirds": "Anda belum menambahkan burung",
+    "noBirdsSubtext": "Mulai tambahkan burung untuk membangun koleksi Anda",
+    "addFirstBird": "Tambahkan burung pertama Anda",
     "lovedBy": "Dicintai oleh",
     "supportedBy": "Didukung oleh",
+    "allBirds": "Semua burung",
+    "lovedBirds": "Burung favorit",
+    "supportedBirds": "Burung yang didukung",
+    "noSupportedBirds": "Belum ada burung yang didukung",
+    "noSupportedBirdsSubtext": "Dukung burung untuk membantu mereka dan lihat di sini",
+    "noLovedBirds": "Belum ada burung favorit",
+    "noLovedBirdsSubtext": "Mulai menyukai burung untuk melihatnya di sini",
     "sectionBasicInfo": "Informasi Dasar",
     "sectionAdditionalDetails": "Detail Tambahan",
     "sectionImages": "Gambar",
@@ -205,6 +224,11 @@
     "birdNotFound": "Burung tidak ditemukan",
     "retry": "Coba Lagi",
     "editBird": "Edit Burung",
+    "support": "Dukung",
+    "supportUnavailable": "Dukungan tidak tersedia",
+    "loveThisBird": "Cintai burung ini",
+    "loved": "Dicintai",
+    "lovedWithHeart": "Dicintai \u2764\ufe0f",
     "supportTransparency": "Transparansi Dukungan",
     "raised": "terkumpul",
     "fundsUsedFor": "Dana digunakan untuk: Makanan, obat-obatan, kunjungan dokter hewan, dan pemeliharaan habitat",
@@ -216,7 +240,20 @@
     "showAllStories": "Tampilkan semua {{count}} cerita",
     "noStoriesYet": "Belum ada cerita",
     "shareStory": "Bagikan Cerita",
-    "species": "Spesies"
+    "species": "Spesies",
+    "activityStatus": {
+      "recentlyActive": "Baru saja aktif",
+      "activeThisWeek": "Aktif minggu ini",
+      "activeRecently": "Baru saja aktif",
+      "lastSeenWeeksAgo": "Terakhir dilihat: {{weeks}} minggu lalu",
+      "lastSeenMonthAgo": "Terakhir dilihat: sekitar satu bulan lalu",
+      "lastSeenMonthsAgo": "Terakhir dilihat: {{months}} bulan lalu",
+      "lastSeenYearsAgo": "Terakhir dilihat: {{years}} tahun lalu",
+      "noRecentActivity": "Tidak ada aktivitas terbaru",
+      "rememberedWithLove": "Dikenang dengan cinta",
+      "supportUnavailable": "Dukungan saat ini tidak tersedia untuk burung ini.",
+      "supportClosed": "Dukungan ditutup untuk burung ini."
+    }
   },
   "story": {
     "myStories": "Cerita saya",

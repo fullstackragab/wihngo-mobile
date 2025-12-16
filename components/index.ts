@@ -37,7 +37,7 @@ export { default as MemorialTribute } from "./memorial-tribute";
 // Social Components
 export { ShareButton } from "./share-button";
 export { SupportButton } from "./support-button";
-export { SupportModal } from "./support-modal";
+export { default as SupportModal } from "./support-modal";
 
 // Notification Components
 export { NotificationBell } from "./notification-bell";

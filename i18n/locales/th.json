@@ -92,6 +92,7 @@
     "errorMessage": "สร้างเรื่องราวไม่สำเร็จ กรุณาลองอีกครั้ง",
     "errorBothMedia": "เรื่องราวสามารถมีรูปภาพหรือวิดีโอได้ ไม่ใช่ทั้งสอง",
     "errorMediaUpload": "อัปโหลดสื่อล้มเหลว กรุณาลองอีกครั้ง",
+    "errorContentModeration": "เนื้อหาของคุณถูกระบบตรวจสอบตั้งค่าสถานะ กรุณาตรวจสอบข้อความและรูปภาพของคุณเพื่อให้แน่ใจว่าเป็นไปตามหลักเกณฑ์ชุมชนของเรา",
     "selectBirdModal": "เลือกนก",
     "noResults": "ไม่พบนก",
     "videoSelected": "เลือกวิดีโอแล้ว",
@@ -116,7 +117,16 @@
       "errorTitle": "สร้างไม่สำเร็จ",
       "errorMessage": "ไม่สามารถสร้างเนื้อหาเรื่องราวได้ กรุณาลองอีกครั้ง",
       "rateLimitMessage": "คุณถึงขีดจำกัดการสร้าง AI แล้ว กรุณาลองอีกครั้งในภายหลัง",
-      "birdNotFoundMessage": "ไม่พบนก กรุณาเลือกนกที่ถูกต้อง"
+      "birdNotFoundMessage": "ไม่พบนก กรุณาเลือกนกที่ถูกต้อง",
+      "settings": {
+        "title": "การตั้งค่าเรื่องราว AI",
+        "storyLength": "ความยาวเรื่องราว",
+        "short": "สั้น",
+        "medium": "กลาง",
+        "shortRange": "50-150 คำ",
+        "mediumRange": "150-300 คำ",
+        "done": "เสร็จสิ้น"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "รูปโปรไฟล์",
     "coverImage": "รูปหน้าปก",
     "noBirds": "คุณยังไม่ได้เพิ่มนก",
+    "noBirdsSubtext": "เริ่มเพิ่มนกเพื่อสร้างคอลเลกชันของคุณ",
+    "addFirstBird": "เพิ่มนกตัวแรกของคุณ",
     "lovedBy": "ได้รับความรักจาก",
     "supportedBy": "ได้รับการสนับสนุนจาก",
+    "allBirds": "นกทั้งหมด",
+    "lovedBirds": "นกที่ชื่นชอบ",
+    "supportedBirds": "นกที่สนับสนุน",
+    "noSupportedBirds": "ยังไม่มีนกที่สนับสนุน",
+    "noSupportedBirdsSubtext": "สนับสนุนนกเพื่อช่วยเหลือพวกเขาและดูที่นี่",
+    "noLovedBirds": "ยังไม่มีนกที่ชื่นชอบ",
+    "noLovedBirdsSubtext": "เริ่มชื่นชอบนกเพื่อดูที่นี่",
     "sectionBasicInfo": "ข้อมูลพื้นฐาน",
     "sectionAdditionalDetails": "รายละเอียดเพิ่มเติม",
     "sectionImages": "รูปภาพ",
@@ -205,6 +224,11 @@
     "birdNotFound": "ไม่พบนก",
     "retry": "ลองใหม่",
     "editBird": "แก้ไขนก",
+    "support": "สนับสนุน",
+    "supportUnavailable": "ไม่สามารถสนับสนุนได้",
+    "loveThisBird": "รักนกตัวนี้",
+    "loved": "รักแล้ว",
+    "lovedWithHeart": "รักแล้ว \u2764\ufe0f",
     "supportTransparency": "ความโปร่งใสในการสนับสนุน",
     "raised": "ระดมทุนได้",
     "fundsUsedFor": "เงินทุนใช้สำหรับ: อาหาร ยา การพบสัตวแพทย์ และการบำรุงรักษาที่อยู่อาศัย",
@@ -216,7 +240,20 @@
     "showAllStories": "แสดงเรื่องราวทั้งหมด {{count}} เรื่อง",
     "noStoriesYet": "ยังไม่มีเรื่องราว",
     "shareStory": "แบ่งปันเรื่องราว",
-    "species": "สายพันธุ์"
+    "species": "สายพันธุ์",
+    "activityStatus": {
+      "recentlyActive": "ใช้งานเมื่อเร็วๆ นี้",
+      "activeThisWeek": "ใช้งานสัปดาห์นี้",
+      "activeRecently": "ใช้งานเมื่อเร็วๆ นี้",
+      "lastSeenWeeksAgo": "เห็นล่าสุด: {{weeks}} สัปดาห์ที่แล้ว",
+      "lastSeenMonthAgo": "เห็นล่าสุด: ประมาณหนึ่งเดือนที่แล้ว",
+      "lastSeenMonthsAgo": "เห็นล่าสุด: {{months}} เดือนที่แล้ว",
+      "lastSeenYearsAgo": "เห็นล่าสุด: {{years}} ปีที่แล้ว",
+      "noRecentActivity": "ไม่มีกิจกรรมล่าสุด",
+      "rememberedWithLove": "จดจำด้วยความรัก",
+      "supportUnavailable": "การสนับสนุนไม่พร้อมใช้งานสำหรับนกตัวนี้ในขณะนี้",
+      "supportClosed": "การสนับสนุนปิดสำหรับนกตัวนี้"
+    }
   },
   "story": {
     "myStories": "เรื่องราวของฉัน",

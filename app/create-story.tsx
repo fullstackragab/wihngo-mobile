@@ -103,12 +103,14 @@ export default function CreateStory() {
     duration: audioDuration,
     isRecording,
     isPaused,
+    isPlaying,
     startRecording,
     stopRecording,
     pauseRecording,
     resumeRecording,
     clearRecording: clearAudio,
     playRecording,
+    stopPlayback,
   } = useAudioRecorder(
     {
       maxDurationMs: 180000, // 3 minutes
@@ -456,22 +458,41 @@ export default function CreateStory() {
       console.error("❌ Error creating story:", error);
 
       // Handle specific error cases from backend
+      // Check both error.message and error.data (ApiError stores response in data)
+      const errorText = error?.message || "";
+      const errorData = error?.data || {};
+      const errorCode = errorData?.code || "";
+      const errorDataMessage = errorData?.message || "";
+
       let errorMessage = t("createStory.errorMessage");
-      if (error?.message?.includes("both")) {
+      if (errorCode === "CONTENT_MODERATION_BLOCKED" ||
+          errorText.includes("moderation") || errorText.includes("blocked") ||
+          errorDataMessage.includes("moderation") || errorDataMessage.includes("blocked")) {
+        errorMessage = t("createStory.errorContentModeration");
+      } else if (errorText.includes("both") || errorDataMessage.includes("both")) {
         errorMessage = t("createStory.errorBothMedia");
-      } else if (error?.message?.includes("bird")) {
+      } else if (errorText.includes("bird") || errorDataMessage.includes("bird")) {
         errorMessage = t("createStory.birdRequiredMessage");
-      } else if (error?.message?.includes("content")) {
+      } else if (errorText.includes("content") || errorDataMessage.includes("content")) {
         errorMessage = t("createStory.contentRequiredMessage");
-      } else if (error?.message?.includes("S3")) {
+      } else if (errorText.includes("S3") || errorDataMessage.includes("S3")) {
         errorMessage = t("createStory.errorMediaUpload");
       }
 
-      addNotification(
-        "recommendation",
-        t("createStory.errorCreatingStory"),
-        errorMessage
-      );
+      // Show alert for content moderation errors (more visible than notification)
+      if (errorCode === "CONTENT_MODERATION_BLOCKED" ||
+          errorDataMessage.includes("moderation") || errorDataMessage.includes("blocked")) {
+        Alert.alert(
+          t("createStory.errorCreatingStory"),
+          errorMessage
+        );
+      } else {
+        addNotification(
+          "recommendation",
+          t("createStory.errorCreatingStory"),
+          errorMessage
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -722,18 +743,31 @@ export default function CreateStory() {
               <TouchableOpacity
                 style={[
                   styles.micButtonSeparate,
-                  (audioUri && audioS3Key) && styles.micButtonActive
+                  (audioUri && audioS3Key) && styles.micButtonHasAudio,
+                  isPlaying && styles.micButtonPlaying
                 ]}
-                onPress={handleAddAudio}
+                onPress={() => {
+                  if (audioUri && audioS3Key) {
+                    // If audio exists, toggle play/stop
+                    if (isPlaying) {
+                      stopPlayback();
+                    } else {
+                      playRecording();
+                    }
+                  } else {
+                    // No audio recorded, open recording modal
+                    handleAddAudio();
+                  }
+                }}
                 disabled={generatingAI || loading || transcribing}
               >
                 {transcribing ? (
                   <ActivityIndicator size="small" color="#4ECDC4" />
                 ) : (
                   <FontAwesome6
-                    name="microphone"
+                    name={audioUri && audioS3Key ? (isPlaying ? "stop" : "play") : "microphone"}
                     size={16}
-                    color={audioUri && audioS3Key ? "#fff" : "#4ECDC4"}
+                    color={isPlaying ? "#fff" : "#4ECDC4"}
                   />
                 )}
               </TouchableOpacity>
@@ -1478,6 +1512,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
+  },
+  micButtonHasAudio: {
+    // Outline style when audio is recorded but not playing
+    backgroundColor: "#fff",
+    borderColor: "#4ECDC4",
+  },
+  micButtonPlaying: {
+    // Filled style when audio is playing
+    backgroundColor: "#4ECDC4",
+    borderColor: "#4ECDC4",
   },
   micButtonActive: {
     backgroundColor: "#4ECDC4",

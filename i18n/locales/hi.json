@@ -92,6 +92,7 @@
     "errorMessage": "कहानी बनाने में विफल। कृपया पुनः प्रयास करें।",
     "errorBothMedia": "कहानी में एक छवि या वीडियो हो सकता है, दोनों नहीं।",
     "errorMediaUpload": "मीडिया अपलोड विफल। कृपया पुनः प्रयास करें।",
+    "errorContentModeration": "आपकी सामग्री को हमारी मॉडरेशन प्रणाली द्वारा फ़्लैग किया गया था। कृपया अपने टेक्स्ट और छवियों की समीक्षा करें ताकि यह सुनिश्चित हो सके कि वे हमारे समुदाय दिशानिर्देशों का पालन करते हैं।",
     "selectBirdModal": "एक पक्षी चुनें",
     "noResults": "कोई पक्षी नहीं मिला",
     "videoSelected": "वीडियो चुना गया",
@@ -116,7 +117,16 @@
       "errorTitle": "निर्माण विफल",
       "errorMessage": "कहानी सामग्री नहीं बना सके। कृपया पुनः प्रयास करें।",
       "rateLimitMessage": "आप AI निर्माण सीमा तक पहुँच गए हैं। कृपया बाद में पुनः प्रयास करें।",
-      "birdNotFoundMessage": "पक्षी नहीं मिला। कृपया एक वैध पक्षी चुनें।"
+      "birdNotFoundMessage": "पक्षी नहीं मिला। कृपया एक वैध पक्षी चुनें।",
+      "settings": {
+        "title": "AI कहानी सेटिंग्स",
+        "storyLength": "कहानी की लंबाई",
+        "short": "छोटी",
+        "medium": "मध्यम",
+        "shortRange": "50-150 शब्द",
+        "mediumRange": "150-300 शब्द",
+        "done": "हो गया"
+      }
     }
   },
   "moods": {
@@ -180,8 +190,17 @@
     "profileImage": "प्रोफ़ाइल फ़ोटो",
     "coverImage": "कवर फ़ोटो",
     "noBirds": "आपने अभी तक कोई पक्षी नहीं जोड़ा है",
+    "noBirdsSubtext": "अपना संग्रह बनाने के लिए पक्षी जोड़ना शुरू करें",
+    "addFirstBird": "अपना पहला पक्षी जोड़ें",
     "lovedBy": "द्वारा प्यार किया गया",
     "supportedBy": "द्वारा समर्थित",
+    "allBirds": "सभी पक्षी",
+    "lovedBirds": "पसंदीदा पक्षी",
+    "supportedBirds": "समर्थित पक्षी",
+    "noSupportedBirds": "अभी तक कोई समर्थित पक्षी नहीं",
+    "noSupportedBirdsSubtext": "पक्षियों का समर्थन करें और उन्हें यहां देखें",
+    "noLovedBirds": "अभी तक कोई पसंदीदा पक्षी नहीं",
+    "noLovedBirdsSubtext": "पक्षियों को पसंद करना शुरू करें और उन्हें यहां देखें",
     "sectionBasicInfo": "बुनियादी जानकारी",
     "sectionAdditionalDetails": "अतिरिक्त विवरण",
     "sectionImages": "छवियां",
@@ -205,6 +224,11 @@
     "birdNotFound": "पक्षी नहीं मिला",
     "retry": "पुनः प्रयास करें",
     "editBird": "पक्षी संपादित करें",
+    "support": "सहायता करें",
+    "supportUnavailable": "सहायता उपलब्ध नहीं",
+    "loveThisBird": "इस पक्षी को प्यार करें",
+    "loved": "प्यार किया",
+    "lovedWithHeart": "प्यार किया \u2764\ufe0f",
     "supportTransparency": "समर्थन पारदर्शिता",
     "raised": "जुटाया गया",
     "fundsUsedFor": "निधि का उपयोग: भोजन, दवा, पशु चिकित्सक दौरे और आवास रखरखाव के लिए",
@@ -216,7 +240,20 @@
     "showAllStories": "सभी {{count}} कहानियाँ दिखाएं",
     "noStoriesYet": "अभी तक कोई कहानी नहीं",
     "shareStory": "एक कहानी साझा करें",
-    "species": "प्रजाति"
+    "species": "प्रजाति",
+    "activityStatus": {
+      "recentlyActive": "हाल ही में सक्रिय",
+      "activeThisWeek": "इस सप्ताह सक्रिय",
+      "activeRecently": "हाल ही में सक्रिय",
+      "lastSeenWeeksAgo": "अंतिम बार देखा गया: {{weeks}} सप्ताह पहले",
+      "lastSeenMonthAgo": "अंतिम बार देखा गया: लगभग एक महीने पहले",
+      "lastSeenMonthsAgo": "अंतिम बार देखा गया: {{months}} महीने पहले",
+      "lastSeenYearsAgo": "अंतिम बार देखा गया: {{years}} साल पहले",
+      "noRecentActivity": "कोई हालिया गतिविधि नहीं",
+      "rememberedWithLove": "प्यार से याद किया गया",
+      "supportUnavailable": "इस पक्षी के लिए समर्थन वर्तमान में उपलब्ध नहीं है।",
+      "supportClosed": "इस पक्षी के लिए समर्थन बंद है।"
+    }
   },
   "story": {
     "myStories": "मेरी कहानियां",

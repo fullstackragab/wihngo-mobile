@@ -4,6 +4,9 @@ export type PremiumStyle = {
   highlightColor?: string;
 };
 
+// Bird activity status based on last activity timestamp
+export type BirdActivityStatus = 'Active' | 'Quiet' | 'Inactive' | 'Memorial';
+
 export type Bird = {
   birdId: string;
   name: string;
@@ -30,6 +33,11 @@ export type Bird = {
   isMemorial?: boolean; // For deceased birds
   isPremium?: boolean;
   premiumStyle?: PremiumStyle;
+  // Activity status fields
+  activityStatus?: BirdActivityStatus;
+  lastSeenText?: string;
+  canSupport?: boolean;
+  supportUnavailableMessage?: string;
 };
 
 export type BirdSupport = {

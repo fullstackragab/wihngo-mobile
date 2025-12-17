@@ -19,7 +19,6 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
-  Image,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -30,6 +29,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 
 export default function CreateStory() {
   const { t, i18n } = useTranslation();
@@ -534,11 +534,11 @@ export default function CreateStory() {
           {selectedBird ? (
             <View style={styles.selectedBirdCard}>
               <Image
-                source={{
-                  uri:
-                    selectedBird.imageUrl || "https://via.placeholder.com/60",
-                }}
+                source={selectedBird.imageUrl || "https://via.placeholder.com/60"}
                 style={styles.selectedBirdImage}
+                contentFit="cover"
+                cachePolicy="memory-disk"
+                transition={200}
               />
               <View style={styles.selectedBirdInfo}>
                 <Text style={styles.selectedBirdName}>{selectedBird.name}</Text>
@@ -613,9 +613,9 @@ export default function CreateStory() {
           {imageUri ? (
             <View>
               <Image
-                source={{ uri: imageUri }}
+                source={imageUri}
                 style={styles.previewImage}
-                resizeMode="cover"
+                contentFit="cover"
               />
               <TouchableOpacity
                 style={styles.removeImageButton}
@@ -911,10 +911,11 @@ export default function CreateStory() {
                   onPress={() => handleSelectBird(item)}
                 >
                   <Image
-                    source={{
-                      uri: item.imageUrl || "https://via.placeholder.com/60",
-                    }}
+                    source={item.imageUrl || "https://via.placeholder.com/60"}
                     style={styles.birdOptionImage}
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                    transition={200}
                   />
                   <View style={styles.birdOptionInfo}>
                     <Text style={styles.birdOptionName}>{item.name}</Text>

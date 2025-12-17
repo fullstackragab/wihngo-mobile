@@ -80,10 +80,18 @@ export function useAudioRecorder(
   useEffect(() => {
     return () => {
       if (recording) {
-        recording.stopAndUnloadAsync().catch(console.error);
+        recording.getStatusAsync().then((status) => {
+          if (status.isRecording || status.canRecord) {
+            recording.stopAndUnloadAsync().catch(() => {});
+          }
+        }).catch(() => {});
       }
       if (sound) {
-        sound.unloadAsync().catch(console.error);
+        sound.getStatusAsync().then((status) => {
+          if (status.isLoaded) {
+            sound.unloadAsync().catch(() => {});
+          }
+        }).catch(() => {});
       }
     };
   }, [recording, sound]);
@@ -175,17 +183,20 @@ export function useAudioRecorder(
     setLoading(true);
 
     try {
-      await recording.stopAndUnloadAsync();
-
-      const recordingUri = recording.getURI();
+      // Get status and URI BEFORE unloading
       const status = await recording.getStatusAsync();
+      const recordingUri = recording.getURI();
+      const finalDuration = status.durationMillis;
+
+      // Now stop and unload
+      await recording.stopAndUnloadAsync();
 
       if (recordingUri) {
         setUri(recordingUri);
-        setDuration(status.durationMillis);
+        setDuration(finalDuration);
 
-        if (onRecordingComplete && status.durationMillis) {
-          onRecordingComplete(recordingUri, status.durationMillis);
+        if (onRecordingComplete && finalDuration) {
+          onRecordingComplete(recordingUri, finalDuration);
         }
       }
 
@@ -203,6 +214,10 @@ export function useAudioRecorder(
     } catch (err) {
       console.error("Failed to stop recording:", err);
       setError("Failed to stop recording");
+      // Still try to clean up state
+      setIsRecording(false);
+      setIsPaused(false);
+      setRecording(null);
     } finally {
       setLoading(false);
     }

@@ -13,12 +13,12 @@ import {
 import { calculateTotalAmount, MINIMUM_DONATION_AMOUNT } from "@/types/support";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
-  Image,
   Linking,
   Modal,
   Platform,
@@ -279,7 +279,8 @@ export default function SupportModal({
               <Image
                 source={getCurrencyIcon(currency.code)}
                 style={styles.currencyIcon}
-                resizeMode="contain"
+                contentFit="contain"
+                cachePolicy="memory-disk"
               />
               <View style={styles.currencyInfo}>
                 <View style={styles.currencyNameRow}>

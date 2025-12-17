@@ -1,9 +1,9 @@
 import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { Bird } from "@/types/bird";
 import { BirdPremiumSubscription, PremiumStyle } from "@/types/premium";
+import { Image } from "expo-image";
 import React from "react";
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -37,9 +37,10 @@ export function PremiumBirdProfile({
       {/* Premium Cover Image */}
       {premiumStyle?.coverImageUrl && (
         <Image
-          source={{ uri: premiumStyle.coverImageUrl }}
+          source={premiumStyle.coverImageUrl}
           style={styles.coverImage}
-          resizeMode="cover"
+          contentFit="cover"
+          cachePolicy="memory-disk"
         />
       )}
 
@@ -54,11 +55,13 @@ export function PremiumBirdProfile({
       >
         <View style={styles.profileSection}>
           <Image
-            source={{ uri: bird.imageUrl || "https://via.placeholder.com/120" }}
+            source={bird.imageUrl || "https://via.placeholder.com/120"}
             style={[
               styles.profileImage,
               premiumStyle?.frameId && styles.framedImage,
             ]}
+            contentFit="cover"
+            cachePolicy="memory-disk"
           />
           <View style={styles.nameSection}>
             <View style={styles.nameRow}>

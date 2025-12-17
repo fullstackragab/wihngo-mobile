@@ -6,9 +6,10 @@
 import { Bird } from "@/types/bird";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import MemorialBadge from "./memorial-badge";
 
 interface MemorialTributeProps {
@@ -30,14 +31,11 @@ export default function MemorialTribute({
           style={styles.banner}
         >
           <Image
-            source={{
-              uri:
-                bird.coverImageUrl ||
-                bird.imageUrl ||
-                "https://via.placeholder.com/200",
-            }}
+            source={bird.coverImageUrl || bird.imageUrl || "https://via.placeholder.com/200"}
             style={styles.bannerImage}
             blurRadius={2}
+            contentFit="cover"
+            cachePolicy="memory-disk"
           />
           <View style={styles.overlay}>
             <MemorialBadge size="large" />

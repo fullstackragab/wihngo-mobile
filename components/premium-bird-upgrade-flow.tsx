@@ -2,9 +2,9 @@ import { PREMIUM_PLANS } from "@/constants/premium-config";
 import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { Bird } from "@/types/bird";
 import { PremiumPlan } from "@/types/premium";
+import { Image } from "expo-image";
 import React, { useState } from "react";
 import {
-  Image,
   Modal,
   ScrollView,
   StyleSheet,
@@ -61,10 +61,10 @@ export function PremiumBirdUpgradeFlow({
           {/* Bird Preview */}
           <View style={styles.birdPreview}>
             <Image
-              source={{
-                uri: bird.imageUrl || "https://via.placeholder.com/80",
-              }}
+              source={bird.imageUrl || "https://via.placeholder.com/80"}
               style={styles.birdImage}
+              contentFit="cover"
+              cachePolicy="memory-disk"
             />
             <View style={styles.birdInfo}>
               <Text style={styles.birdName}>{bird.name}</Text>

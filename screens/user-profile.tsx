@@ -1,7 +1,8 @@
 import AnimatedCard from "@/components/ui/animated-card";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function UserProfile() {
   return (
@@ -21,8 +22,10 @@ export default function UserProfile() {
           }}
         >
           <Image
-            source={{ uri: "https://via.placeholder.com/100" }}
+            source="https://via.placeholder.com/100"
             style={{ width: 64, height: 64, borderRadius: 32 }}
+            contentFit="cover"
+            cachePolicy="memory-disk"
           />
         </View>
       </View>

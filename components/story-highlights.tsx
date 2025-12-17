@@ -3,10 +3,10 @@ import { useNotifications } from "@/contexts/notification-context";
 import { highlightStory, unhighlightStory } from "@/services/premium.service";
 import { Story } from "@/types/story";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -146,7 +146,7 @@ function HighlightedStoryCard({
   return (
     <View style={styles.card}>
       {story.imageUrl ? (
-        <Image source={{ uri: story.imageUrl }} style={styles.cardImage} />
+        <Image source={story.imageUrl} style={styles.cardImage} contentFit="cover" cachePolicy="memory-disk" />
       ) : (
         <View style={[styles.cardImage, styles.cardImagePlaceholder]}>
           <Ionicons

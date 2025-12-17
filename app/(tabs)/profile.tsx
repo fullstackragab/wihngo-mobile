@@ -8,11 +8,11 @@ import { userService } from "@/services/user.service";
 import { Bird } from "@/types/bird";
 import { User } from "@/types/user";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -164,8 +164,10 @@ export default function Profile() {
         <View style={styles.avatarContainer}>
           {user?.profileImageUrl || user?.avatarUrl ? (
             <Image
-              source={{ uri: user.profileImageUrl || user.avatarUrl }}
+              source={user.profileImageUrl || user.avatarUrl}
               style={styles.avatarImage}
+              contentFit="cover"
+              cachePolicy="memory-disk"
             />
           ) : (
             <View style={styles.avatarPlaceholder}>

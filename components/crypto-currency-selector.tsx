@@ -9,10 +9,10 @@ import {
 } from "@/hooks/useCryptoConfig";
 import { CryptoCurrency, CryptoNetwork } from "@/types/crypto";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import React from "react";
 import {
   ActivityIndicator,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -101,7 +101,8 @@ export default function CryptoCurrencySelector({
             <Image
               source={getCurrencyIcon(crypto.code)}
               style={styles.currencyIcon}
-              resizeMode="contain"
+              contentFit="contain"
+              cachePolicy="memory-disk"
             />
           </View>
           <View style={styles.currencyInfo}>

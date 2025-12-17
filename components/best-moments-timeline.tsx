@@ -1,8 +1,9 @@
 import { theme } from "@/constants/theme";
 import { BestMoment } from "@/types/premium";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import React from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type BestMomentCardProps = {
   moment: BestMoment;
@@ -20,7 +21,7 @@ function BestMomentCard({ moment, onPress, isFirst }: BestMomentCardProps) {
 
       <Pressable style={styles.momentCard} onPress={onPress}>
         {moment.imageUrl && (
-          <Image source={{ uri: moment.imageUrl }} style={styles.momentImage} />
+          <Image source={moment.imageUrl} style={styles.momentImage} contentFit="cover" cachePolicy="memory-disk" />
         )}
 
         <View style={styles.momentContent}>

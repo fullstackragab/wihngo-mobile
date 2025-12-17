@@ -8,13 +8,13 @@ import { userService } from "@/services/user.service";
 import { Bird } from "@/types/bird";
 import { CreateStoryDto } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
   FlatList,
-  Image,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -336,9 +336,10 @@ export default function EditStory() {
             {imageUri || initialImageUrl ? (
               <View>
                 <Image
-                  source={{ uri: imageUri || initialImageUrl || "" }}
+                  source={imageUri || initialImageUrl || ""}
                   style={styles.previewImage}
-                  resizeMode="cover"
+                  contentFit="cover"
+                  cachePolicy="memory-disk"
                 />
                 <TouchableOpacity
                   style={styles.removeImageButton}
@@ -404,11 +405,10 @@ export default function EditStory() {
             {selectedBird ? (
               <View style={styles.selectedBirdCard}>
                 <Image
-                  source={{
-                    uri:
-                      selectedBird.imageUrl || "https://via.placeholder.com/60",
-                  }}
+                  source={selectedBird.imageUrl || "https://via.placeholder.com/60"}
                   style={styles.selectedBirdImage}
+                  contentFit="cover"
+                  cachePolicy="memory-disk"
                 />
                 <View style={styles.selectedBirdInfo}>
                   <Text style={styles.selectedBirdName}>
@@ -473,11 +473,10 @@ export default function EditStory() {
                       onPress={() => handleSelectBird(item)}
                     >
                       <Image
-                        source={{
-                          uri:
-                            item.imageUrl || "https://via.placeholder.com/60",
-                        }}
+                        source={item.imageUrl || "https://via.placeholder.com/60"}
                         style={styles.birdOptionImage}
+                        contentFit="cover"
+                        cachePolicy="memory-disk"
                       />
                       <View style={styles.birdOptionInfo}>
                         <Text style={styles.birdOptionName}>{item.name}</Text>

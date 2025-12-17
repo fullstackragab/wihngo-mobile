@@ -5,13 +5,13 @@ import { mediaService } from "@/services/media.service";
 import { userService } from "@/services/user.service";
 import { User } from "@/types/user";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -151,10 +151,10 @@ export default function EditProfile() {
             </View>
           ) : profilePicture || user?.profileImageUrl || user?.avatarUrl ? (
             <Image
-              source={{
-                uri: profilePicture || user?.profileImageUrl || user?.avatarUrl,
-              }}
+              source={profilePicture || user?.profileImageUrl || user?.avatarUrl}
               style={styles.profilePicture}
+              contentFit="cover"
+              cachePolicy="memory-disk"
             />
           ) : (
             <View style={styles.profilePicturePlaceholder}>

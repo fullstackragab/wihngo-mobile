@@ -2,9 +2,10 @@ import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Image } from "expo-image";
 import { VideoView, useVideoPlayer } from "expo-video";
 import React, { useEffect, useRef, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface StoryCardWithVideoProps {
   story: Story;
@@ -96,9 +97,10 @@ export default function StoryCardWithVideo({
               style={styles.imageOverlay}
             >
               <Image
-                source={{ uri: story.imageUrl }}
+                source={story.imageUrl}
                 style={styles.storyMedia}
-                resizeMode="cover"
+                contentFit="cover"
+                cachePolicy="memory-disk"
               />
               <View style={styles.playIcon}>
                 <Ionicons name="play-circle" size={48} color="white" />
@@ -107,7 +109,7 @@ export default function StoryCardWithVideo({
           )}
         </View>
       ) : story.imageUrl ? (
-        <Image source={{ uri: story.imageUrl }} style={styles.storyImage} />
+        <Image source={story.imageUrl} style={styles.storyImage} contentFit="cover" cachePolicy="memory-disk" />
       ) : null}
 
       {/* Story Preview (truncated to 140 chars by backend) */}

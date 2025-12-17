@@ -1,9 +1,9 @@
 import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { Bird } from "@/types/bird";
+import { Image } from "expo-image";
 import React from "react";
 import {
   Dimensions,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -26,9 +26,10 @@ export default function BirdThumb({ bird, onPress }: BirdThumbProps) {
       activeOpacity={0.7}
     >
       <Image
-        source={{ uri: bird.imageUrl || "https://via.placeholder.com/150" }}
+        source={bird.imageUrl || "https://via.placeholder.com/150"}
         style={styles.image}
-        resizeMode="cover"
+        contentFit="cover"
+        cachePolicy="memory-disk"
       />
       <View style={styles.info}>
         <Text style={styles.name} numberOfLines={1}>

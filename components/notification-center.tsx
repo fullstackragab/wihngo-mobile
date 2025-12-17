@@ -7,13 +7,13 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { Notification } from "@/types/notification";
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Modal,
   RefreshControl,
   StyleSheet,
@@ -190,7 +190,7 @@ export default function NotificationCenter({
           )}
 
           {item.imageUrl && (
-            <Image source={{ uri: item.imageUrl }} style={styles.thumbnail} />
+            <Image source={item.imageUrl} style={styles.thumbnail} contentFit="cover" cachePolicy="memory-disk" />
           )}
         </View>
 

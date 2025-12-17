@@ -1,13 +1,13 @@
 import { Bird } from "@/types/bird";
 import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -52,8 +52,10 @@ export default function Search() {
       onPress={() => router.push(`/bird/${item.birdId}`)}
     >
       <Image
-        source={{ uri: item.imageUrl || "https://via.placeholder.com/60" }}
+        source={item.imageUrl || "https://via.placeholder.com/60"}
         style={styles.resultImage}
+        contentFit="cover"
+        cachePolicy="memory-disk"
       />
       <View style={styles.resultContent}>
         <Text style={styles.resultTitle}>{item.name}</Text>
@@ -79,7 +81,7 @@ export default function Search() {
       onPress={() => router.push(`./story/${item.storyId}`)}
     >
       {item.imageUrl && (
-        <Image source={{ uri: item.imageUrl }} style={styles.resultImage} />
+        <Image source={item.imageUrl} style={styles.resultImage} contentFit="cover" cachePolicy="memory-disk" />
       )}
       <View style={styles.resultContent}>
         <Text style={styles.resultTitle} numberOfLines={2}>

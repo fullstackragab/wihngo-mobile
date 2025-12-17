@@ -7,13 +7,13 @@ import { useAuth } from "@/contexts/auth-context";
 import { commentService } from "@/services/comment.service";
 import { Comment } from "@/types/like-comment";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
-  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -197,8 +197,10 @@ export default function CommentItem({
         <View style={styles.userInfo}>
           {comment.userProfileImage ? (
             <Image
-              source={{ uri: comment.userProfileImage }}
+              source={comment.userProfileImage}
               style={styles.avatar}
+              contentFit="cover"
+              cachePolicy="memory-disk"
             />
           ) : (
             <View style={[styles.avatar, styles.avatarPlaceholder]}>

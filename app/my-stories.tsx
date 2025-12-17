@@ -2,6 +2,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { storyService } from "@/services/story.service";
 import { Story } from "@/types/story";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import { Stack, useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,7 +10,6 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -127,7 +127,7 @@ export default function MyStories() {
   const renderStoryCard = ({ item }: { item: Story }) => (
     <View style={styles.storyCard}>
       {item.imageUrl && (
-        <Image source={{ uri: item.imageUrl }} style={styles.storyImage} />
+        <Image source={item.imageUrl} style={styles.storyImage} contentFit="cover" cachePolicy="memory-disk" />
       )}
       <View style={styles.storyContent}>
         {/* Story Preview */}

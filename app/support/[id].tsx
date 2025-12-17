@@ -1,10 +1,10 @@
 import { useNotifications } from "@/contexts/notification-context";
 import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -93,10 +93,10 @@ export default function SupportBird() {
         {/* Bird Info */}
         <View style={styles.birdCard}>
           <Image
-            source={{
-              uri: bird?.imageUrl || "https://via.placeholder.com/100",
-            }}
+            source={bird?.imageUrl || "https://via.placeholder.com/100"}
             style={styles.birdImage}
+            contentFit="cover"
+            cachePolicy="memory-disk"
           />
           <View style={styles.birdInfo}>
             <Text style={styles.birdName}>

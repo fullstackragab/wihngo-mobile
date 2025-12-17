@@ -1,9 +1,9 @@
 import { theme } from "@/constants/theme";
 import { MemoryCollage } from "@/types/premium";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import React from "react";
 import {
-  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -35,7 +35,7 @@ export function MemoryCollageCard({
               displayImages.length === 2 && styles.gridImageHalf,
             ]}
           >
-            <Image source={{ uri: url }} style={styles.image} />
+            <Image source={url} style={styles.image} contentFit="cover" cachePolicy="memory-disk" />
             {index === 3 && remainingCount > 0 && (
               <View style={styles.overlay}>
                 <Text style={styles.overlayText}>+{remainingCount}</Text>

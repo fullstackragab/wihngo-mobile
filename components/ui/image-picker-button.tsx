@@ -5,12 +5,12 @@
 
 import { useImagePicker } from "@/hooks/useImagePicker";
 import Feather from "@expo/vector-icons/Feather";
+import { Image } from "expo-image";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -97,7 +97,7 @@ export default function ImagePickerButton({
           <ActivityIndicator size="large" color="#007AFF" />
         ) : displayUri && showPreview ? (
           <View style={styles.previewContainer}>
-            <Image source={{ uri: displayUri }} style={styles.preview} />
+            <Image source={displayUri} style={styles.preview} contentFit="cover" cachePolicy="memory-disk" />
             <View style={styles.overlay}>
               <Feather name="edit-2" size={24} color="#fff" />
               <Text style={styles.overlayText}>{t("media.changeImage")}</Text>
@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
   preview: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

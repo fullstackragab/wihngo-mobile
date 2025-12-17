@@ -5,8 +5,10 @@ import { birdService } from "@/services/bird.service";
 import { storyService } from "@/services/story.service";
 import { Bird } from "@/types/bird";
 import { Story } from "@/types/story";
+import { Ionicons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
@@ -21,7 +23,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Image } from "expo-image";
 
 // Tips data - could be fetched from API in the future
 const TIPS = [
@@ -154,7 +155,7 @@ export default function Home() {
           </View>
         </View>
       </View>
-      {item.activityStatus && item.activityStatus !== 'Active' && (
+      {item.activityStatus && item.activityStatus !== "Active" && (
         <View
           style={[
             styles.activityBadge,
@@ -172,7 +173,13 @@ export default function Home() {
       activeOpacity={0.7}
     >
       {item.imageUrl ? (
-        <Image source={item.imageUrl} style={styles.storyImage} contentFit="cover" cachePolicy="memory-disk" transition={200} />
+        <Image
+          source={item.imageUrl}
+          style={styles.storyImage}
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          transition={200}
+        />
       ) : (
         <View style={[styles.storyImage, styles.storyImagePlaceholder]}>
           <FontAwesome6 name="feather" size={24} color="#CBD5E1" />
@@ -274,9 +281,7 @@ export default function Home() {
             style={styles.quickActionGradient}
           >
             <FontAwesome6 name="pen-to-square" size={18} color="#fff" />
-            <Text style={styles.quickActionText}>
-              {t("home.shareStory")}
-            </Text>
+            <Text style={styles.quickActionText}>{t("home.shareStory")}</Text>
           </LinearGradient>
         </TouchableOpacity>
         <TouchableOpacity
@@ -298,7 +303,11 @@ export default function Home() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <MaterialCommunityIcons name="star-circle" size={20} color="#F59E0B" />
+              <MaterialCommunityIcons
+                name="star-circle"
+                size={20}
+                color="#F59E0B"
+              />
               <Text style={styles.sectionTitle}>{t("home.birdOfTheWeek")}</Text>
             </View>
           </View>
@@ -310,7 +319,11 @@ export default function Home() {
             activeOpacity={0.8}
           >
             <Image
-              source={featuredBirdOfWeek.coverImageUrl || featuredBirdOfWeek.imageUrl || "https://via.placeholder.com/400x200"}
+              source={
+                featuredBirdOfWeek.coverImageUrl ||
+                featuredBirdOfWeek.imageUrl ||
+                "https://via.placeholder.com/400x200"
+              }
               style={styles.featuredBirdOfWeekImage}
               contentFit="cover"
               cachePolicy="memory-disk"
@@ -338,7 +351,7 @@ export default function Home() {
                     style={styles.featuredBirdOfWeekTagline}
                     numberOfLines={2}
                   >
-                    "{featuredBirdOfWeek.tagline}"
+                    &quot;{featuredBirdOfWeek.tagline}&quot;
                   </Text>
                 )}
               </View>
@@ -398,7 +411,7 @@ export default function Home() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>
-              <FontAwesome6 name="sparkles" size={16} color="#8B5CF6" />
+              <Ionicons name="sparkles" size={16} color="#8B5CF6" />
               <Text style={styles.sectionTitle}>{t("home.newToWihngo")}</Text>
             </View>
           </View>
@@ -429,9 +442,7 @@ export default function Home() {
               color="#64748B"
               style={styles.tipContentIcon}
             />
-            <Text style={styles.tipText}>
-              {t(`home.tips.${dailyTip.key}`)}
-            </Text>
+            <Text style={styles.tipText}>{t(`home.tips.${dailyTip.key}`)}</Text>
           </View>
         </View>
       </View>

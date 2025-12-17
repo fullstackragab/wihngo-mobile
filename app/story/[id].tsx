@@ -14,7 +14,6 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -24,6 +23,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -308,8 +308,11 @@ export default function StoryDetail() {
                 >
                   {bird.imageUrl ? (
                     <Image
-                      source={{ uri: bird.imageUrl }}
+                      source={bird.imageUrl}
                       style={styles.birdAvatar}
+                      contentFit="cover"
+                      cachePolicy="memory-disk"
+                      transition={200}
                     />
                   ) : (
                     <View style={styles.birdAvatar}>
@@ -363,9 +366,11 @@ export default function StoryDetail() {
                 style={styles.imageOverlay}
               >
                 <Image
-                  source={{ uri: story.imageUrl }}
+                  source={story.imageUrl}
                   style={styles.storyMedia}
-                  resizeMode="cover"
+                  contentFit="cover"
+                  cachePolicy="memory-disk"
+                  transition={200}
                 />
               </TouchableOpacity>
             )}
@@ -391,7 +396,7 @@ export default function StoryDetail() {
             )}
           </View>
         ) : story.imageUrl ? (
-          <Image source={{ uri: story.imageUrl }} style={styles.storyMedia} />
+          <Image source={story.imageUrl} style={styles.storyMedia} contentFit="cover" cachePolicy="memory-disk" transition={200} />
         ) : null}
 
         {/* Audio Player (Voice Note) */}
@@ -473,8 +478,11 @@ export default function StoryDetail() {
                 <View style={styles.commentAvatar}>
                   {comment.userAvatar ? (
                     <Image
-                      source={{ uri: comment.userAvatar }}
+                      source={comment.userAvatar}
                       style={styles.avatarImage}
+                      contentFit="cover"
+                      cachePolicy="memory-disk"
+                      transition={200}
                     />
                   ) : (
                     <FontAwesome6 name="user" size={16} color="#95A5A6" />
@@ -493,7 +501,7 @@ export default function StoryDetail() {
             ))
           ) : (
             <Text style={styles.noComments}>
-              No comments yet. Be the first to comment!
+              {t("comments.noComments")}
             </Text>
           )}
         </View>

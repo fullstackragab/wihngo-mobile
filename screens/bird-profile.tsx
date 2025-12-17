@@ -20,13 +20,13 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Alert,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 
 interface BirdProfileProps {
   bird?: Bird;
@@ -117,13 +117,11 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
         style={styles.hero}
       >
         <Image
-          source={{
-            uri:
-              bird?.coverImageUrl ||
-              bird?.imageUrl ||
-              "https://via.placeholder.com/200",
-          }}
+          source={bird?.coverImageUrl || bird?.imageUrl || "https://via.placeholder.com/200"}
           style={styles.heroImage}
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          transition={200}
         />
         {bird?.isMemorial && (
           <MemorialBadge size="medium" style={styles.memorialBadge} />
@@ -343,8 +341,11 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
                 >
                   {story.imageUrl && (
                     <Image
-                      source={{ uri: story.imageUrl }}
+                      source={story.imageUrl}
                       style={styles.storyThumb}
+                      contentFit="cover"
+                      cachePolicy="memory-disk"
+                      transition={200}
                     />
                   )}
                   <View style={styles.storyContent}>
@@ -443,7 +444,6 @@ const styles = StyleSheet.create({
   heroImage: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
   },
   memorialBadge: {
     position: "absolute",

@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -22,6 +21,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 
 // Tips data - could be fetched from API in the future
 const TIPS = [
@@ -126,8 +126,11 @@ export default function Home() {
       activeOpacity={0.7}
     >
       <Image
-        source={{ uri: item.imageUrl || "https://via.placeholder.com/150" }}
+        source={item.imageUrl || "https://via.placeholder.com/150"}
         style={styles.featuredImage}
+        contentFit="cover"
+        cachePolicy="memory-disk"
+        transition={200}
       />
       <LinearGradient
         colors={["transparent", "rgba(0,0,0,0.7)"]}
@@ -169,7 +172,7 @@ export default function Home() {
       activeOpacity={0.7}
     >
       {item.imageUrl ? (
-        <Image source={{ uri: item.imageUrl }} style={styles.storyImage} />
+        <Image source={item.imageUrl} style={styles.storyImage} contentFit="cover" cachePolicy="memory-disk" transition={200} />
       ) : (
         <View style={[styles.storyImage, styles.storyImagePlaceholder]}>
           <FontAwesome6 name="feather" size={24} color="#CBD5E1" />
@@ -203,8 +206,11 @@ export default function Home() {
       activeOpacity={0.7}
     >
       <Image
-        source={{ uri: item.imageUrl || "https://via.placeholder.com/80" }}
+        source={item.imageUrl || "https://via.placeholder.com/80"}
         style={styles.newBirdImage}
+        contentFit="cover"
+        cachePolicy="memory-disk"
+        transition={200}
       />
       <Text style={styles.newBirdName} numberOfLines={1}>
         {item.name}
@@ -304,13 +310,11 @@ export default function Home() {
             activeOpacity={0.8}
           >
             <Image
-              source={{
-                uri:
-                  featuredBirdOfWeek.coverImageUrl ||
-                  featuredBirdOfWeek.imageUrl ||
-                  "https://via.placeholder.com/400x200",
-              }}
+              source={featuredBirdOfWeek.coverImageUrl || featuredBirdOfWeek.imageUrl || "https://via.placeholder.com/400x200"}
               style={styles.featuredBirdOfWeekImage}
+              contentFit="cover"
+              cachePolicy="memory-disk"
+              transition={200}
             />
             <LinearGradient
               colors={["transparent", "rgba(0,0,0,0.8)"]}

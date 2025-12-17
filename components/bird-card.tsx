@@ -4,7 +4,8 @@ import { Bird } from "@/types/bird";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
 import MemorialBadge from "./memorial-badge";
 import { PremiumBadge } from "./premium-badge";
 
@@ -44,12 +45,15 @@ export default function BirdCard({
     >
       {isPremium && !isMemorial && <View style={styles.premiumGlow} />}
       <Image
-        source={{ uri: bird.imageUrl || "https://via.placeholder.com/100" }}
+        source={bird.imageUrl || "https://via.placeholder.com/100"}
         style={[
           styles.image,
           isPremium && styles.premiumImage,
           isMemorial && styles.memorialImage,
         ]}
+        contentFit="cover"
+        cachePolicy="memory-disk"
+        transition={200}
       />
       <View style={styles.info}>
         <View style={styles.nameRow}>

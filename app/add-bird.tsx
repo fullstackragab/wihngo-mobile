@@ -43,6 +43,10 @@ export default function AddBird() {
   const [initialLoading, setInitialLoading] = useState(isEditMode);
   const { addNotification } = useNotifications();
 
+  // Store original S3 keys for edit mode (to avoid re-uploading unchanged images)
+  const [originalImageS3Key, setOriginalImageS3Key] = useState<string | null>(null);
+  const [originalCoverImageS3Key, setOriginalCoverImageS3Key] = useState<string | null>(null);
+
   // Load existing bird data in edit mode
   useEffect(() => {
     if (isEditMode && birdId) {
@@ -66,6 +70,10 @@ export default function AddBird() {
       // The user can change them by selecting new ones
       if (bird.imageUrl) setImageUri(bird.imageUrl);
       if (bird.coverImageUrl) setCoverImageUri(bird.coverImageUrl);
+
+      // Store original S3 keys for later use (to avoid re-uploading unchanged images)
+      if (bird.imageS3Key) setOriginalImageS3Key(bird.imageS3Key);
+      if (bird.coverImageS3Key) setOriginalCoverImageS3Key(bird.coverImageS3Key);
     } catch (error) {
       console.error("Error loading bird data:", error);
       addNotification("recommendation", "Error", "Failed to load bird data");
@@ -130,23 +138,39 @@ export default function AddBird() {
 
     setLoading(true);
     try {
-      // Step 1: Upload profile image to S3 (required)
-      console.log("📤 Uploading profile image...");
-      const imageS3Key = await mediaService.uploadFile(
-        imageUri,
-        "bird-profile-image"
-      );
-      console.log("✅ Profile image uploaded:", imageS3Key);
+      // Helper to check if URI is a local file (not an https URL)
+      const isLocalFile = (uri: string) => !uri.startsWith("http");
 
-      // Step 2: Upload cover image to S3 (optional)
-      let coverImageS3Key: string | undefined;
-      if (coverImageUri.trim()) {
-        console.log("📤 Uploading cover image...");
-        coverImageS3Key = await mediaService.uploadFile(
-          coverImageUri,
+      // Step 1: Upload profile image to S3 (only if changed)
+      let imageS3Key: string;
+      if (isLocalFile(imageUri)) {
+        console.log("📤 Uploading new profile image...");
+        imageS3Key = await mediaService.uploadFile(
+          imageUri,
           "bird-profile-image"
         );
-        console.log("✅ Cover image uploaded:", coverImageS3Key);
+        console.log("✅ Profile image uploaded:", imageS3Key);
+      } else if (originalImageS3Key) {
+        console.log("📌 Using existing profile image S3 key");
+        imageS3Key = originalImageS3Key;
+      } else {
+        throw new Error("No profile image available");
+      }
+
+      // Step 2: Upload cover image to S3 (optional, only if changed)
+      let coverImageS3Key: string | undefined;
+      if (coverImageUri.trim()) {
+        if (isLocalFile(coverImageUri)) {
+          console.log("📤 Uploading new cover image...");
+          coverImageS3Key = await mediaService.uploadFile(
+            coverImageUri,
+            "bird-profile-image"
+          );
+          console.log("✅ Cover image uploaded:", coverImageS3Key);
+        } else if (originalCoverImageS3Key) {
+          console.log("📌 Using existing cover image S3 key");
+          coverImageS3Key = originalCoverImageS3Key;
+        }
       }
 
       // Step 3: Prepare bird data

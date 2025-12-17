@@ -132,6 +132,7 @@ export default function Home() {
         contentFit="cover"
         cachePolicy="memory-disk"
         transition={200}
+        placeholder={{ blurhash: "L6PZfSi_.AyE_3t7t7R**0o#DgR4" }}
       />
       <LinearGradient
         colors={["transparent", "rgba(0,0,0,0.7)"]}
@@ -179,6 +180,7 @@ export default function Home() {
           contentFit="cover"
           cachePolicy="memory-disk"
           transition={200}
+          placeholder={{ blurhash: "L6PZfSi_.AyE_3t7t7R**0o#DgR4" }}
         />
       ) : (
         <View style={[styles.storyImage, styles.storyImagePlaceholder]}>
@@ -218,6 +220,7 @@ export default function Home() {
         contentFit="cover"
         cachePolicy="memory-disk"
         transition={200}
+        placeholder={{ blurhash: "L6PZfSi_.AyE_3t7t7R**0o#DgR4" }}
       />
       <Text style={styles.newBirdName} numberOfLines={1}>
         {item.name}

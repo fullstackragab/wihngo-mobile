@@ -121,7 +121,9 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
           style={styles.heroImage}
           contentFit="cover"
           cachePolicy="memory-disk"
-          transition={200}
+          transition={300}
+          placeholder={{ blurhash: "L6PZfSi_.AyE_3t7t7R**0o#DgR4" }}
+          priority="high"
         />
         {bird?.isMemorial && (
           <MemorialBadge size="medium" style={styles.memorialBadge} />

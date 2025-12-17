@@ -54,6 +54,7 @@ export default function BirdCard({
         contentFit="cover"
         cachePolicy="memory-disk"
         transition={200}
+        placeholder={{ blurhash: "L6PZfSi_.AyE_3t7t7R**0o#DgR4" }}
       />
       <View style={styles.info}>
         <View style={styles.nameRow}>

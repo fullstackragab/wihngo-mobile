@@ -1,5 +1,6 @@
 # Wihngo Mobile App
-
+**Wihngo - Production-Grade Mobile Platform Demo**
+[https://www.loom.com/share/bfd1b8db0a8949d9b2ff541363cb997f](https://www.loom.com/share/bfd1b8db0a8949d9b2ff541363cb997f)
 Production-grade cross-platform mobile application built with Expo React Native as part of the Wihngo platform case study.
 
 ## Overview

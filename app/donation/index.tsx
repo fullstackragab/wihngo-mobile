@@ -8,6 +8,7 @@ import type { Bird } from "@/types/bird";
 import type { PaymentMethod } from "@/types/invoice";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -59,6 +60,7 @@ const PAYMENT_METHODS: {
 ];
 
 export default function DonationScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{ birdId?: string }>();
 
@@ -83,7 +85,7 @@ export default function DonationScreen() {
       setBird(birdData);
     } catch (error) {
       console.error("Error loading bird:", error);
-      Alert.alert("Error", "Failed to load bird details");
+      Alert.alert(t("alerts.error"), t("donations.failedToLoadBird"));
     } finally {
       setLoadingBird(false);
     }
@@ -93,12 +95,12 @@ export default function DonationScreen() {
     // Validate amount
     const amountNum = parseFloat(amount);
     if (isNaN(amountNum) || amountNum <= 0) {
-      Alert.alert("Invalid Amount", "Please enter a valid amount");
+      Alert.alert(t("alerts.invalidInput"), t("donations.invalidAmount"));
       return;
     }
 
     if (amountNum < 1) {
-      Alert.alert("Minimum Amount", "Minimum donation amount is $1");
+      Alert.alert(t("alerts.invalidInput"), t("donations.minAmount", { amount: 1 }));
       return;
     }
 
@@ -127,20 +129,14 @@ export default function DonationScreen() {
             onPress={() => router.back()}
             style={styles.backButton}
           >
-            <Text style={styles.backButtonText}>← Back</Text>
+            <Text style={styles.backButtonText}>{t("donations.back")}</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>Support Wihngo</Text>
+          <Text style={styles.title}>{t("donations.supportWihngo")}</Text>
         </View>
 
         {/* Legal Notice */}
         <View style={styles.legalNotice}>
-          <Text style={styles.legalText}>
-            ⚠️ Wihngo is a for-profit company. Payments are
-            contributions/support and are{" "}
-            <Text style={styles.legalBold}>not charitable donations</Text>.
-            Unless we explicitly state otherwise, payments are not tax
-            deductible.
-          </Text>
+          <Text style={styles.legalText}>⚠️ {t("donations.disclaimer")}</Text>
         </View>
 
         {/* Bird Selection */}
@@ -150,7 +146,7 @@ export default function DonationScreen() {
           </View>
         ) : bird ? (
           <View style={styles.birdCard}>
-            <Text style={styles.birdLabel}>Supporting:</Text>
+            <Text style={styles.birdLabel}>{t("donations.supporting")}</Text>
             <Text style={styles.birdName}>{bird.name}</Text>
             {bird.description && (
               <Text style={styles.birdDescription}>{bird.description}</Text>
@@ -158,16 +154,16 @@ export default function DonationScreen() {
           </View>
         ) : (
           <View style={styles.birdCard}>
-            <Text style={styles.birdLabel}>General Support</Text>
+            <Text style={styles.birdLabel}>{t("donations.generalSupport")}</Text>
             <Text style={styles.birdDescription}>
-              Your contribution helps us maintain and improve Wihngo
+              {t("donations.disclaimer")}
             </Text>
           </View>
         )}
 
         {/* Amount Input */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Amount</Text>
+          <Text style={styles.sectionTitle}>{t("donations.amount")}</Text>
           <View style={styles.currencySelector}>
             <TouchableOpacity
               style={[
@@ -182,7 +178,7 @@ export default function DonationScreen() {
                   currency === "USD" && styles.currencyButtonTextActive,
                 ]}
               >
-                USD $
+                {t("donations.usd")}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -198,7 +194,7 @@ export default function DonationScreen() {
                   currency === "EUR" && styles.currencyButtonTextActive,
                 ]}
               >
-                EUR €
+                {t("donations.eur")}
               </Text>
             </TouchableOpacity>
           </View>
@@ -233,7 +229,7 @@ export default function DonationScreen() {
 
         {/* Payment Method */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Payment Method</Text>
+          <Text style={styles.sectionTitle}>{t("donations.paymentMethod")}</Text>
           {PAYMENT_METHODS.map((method) => (
             <TouchableOpacity
               key={method.id}
@@ -279,7 +275,9 @@ export default function DonationScreen() {
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.continueButtonText}>Continue to Payment</Text>
+            <Text style={styles.continueButtonText}>
+              {t("donations.continueToPayment")}
+            </Text>
           )}
         </TouchableOpacity>
       </ScrollView>

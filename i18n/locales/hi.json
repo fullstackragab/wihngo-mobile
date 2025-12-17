@@ -448,7 +448,8 @@
     "justNow": "अभी अभी",
     "minutesAgo": "{{count}}मि पहले",
     "hoursAgo": "{{count}}घं पहले",
-    "daysAgo": "{{count}}दि पहले"
+    "daysAgo": "{{count}}दि पहले",
+    "tapToView": "देखने के लिए फिर से टैप करें"
   },
   "headers": {
     "search": "खोजें",
@@ -764,5 +765,11 @@
       "methodAdded": "{{currency}} भुगतान विधि सफलतापूर्वक जोड़ दी गई",
       "addFailed": "भुगतान विधि जोड़ने में विफल। कृपया पुनः प्रयास करें।"
     }
+  },
+  "network": {
+    "offline": "आप ऑफलाइन हैं",
+    "noConnection": "इंटरनेट कनेक्शन नहीं है",
+    "connectionRestored": "वापस ऑनलाइन",
+    "checkConnection": "कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें"
   }
 }

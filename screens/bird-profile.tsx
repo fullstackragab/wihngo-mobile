@@ -180,8 +180,8 @@ export default function BirdProfile({ bird }: BirdProfileProps) {
         />
       </View>
 
-      {/* Activity Status Indicator */}
-      {bird?.lastSeenText && !bird?.isMemorial && (
+      {/* Activity Status Indicator - Only show if NOT recently active */}
+      {bird?.lastSeenText && !bird?.isMemorial && bird?.activityStatus !== 'Active' && (
         <View style={styles.activityStatusContainer}>
           <View style={[
             styles.activityIndicator,
@@ -435,15 +435,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   hero: {
-    height: 240,
+    height: 300,
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
   },
   heroImage: {
-    width: 200,
-    height: 200,
-    resizeMode: "contain",
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
   memorialBadge: {
     position: "absolute",

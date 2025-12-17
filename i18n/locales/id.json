@@ -448,7 +448,8 @@
     "justNow": "Baru saja",
     "minutesAgo": "{{count}}m yang lalu",
     "hoursAgo": "{{count}}j yang lalu",
-    "daysAgo": "{{count}}h yang lalu"
+    "daysAgo": "{{count}}h yang lalu",
+    "tapToView": "Ketuk lagi untuk melihat"
   },
   "headers": {
     "search": "Cari",
@@ -764,5 +765,11 @@
       "methodAdded": "Metode pembayaran {{currency}} berhasil ditambahkan",
       "addFailed": "Gagal menambahkan metode pembayaran. Silakan coba lagi."
     }
+  },
+  "network": {
+    "offline": "Anda sedang offline",
+    "noConnection": "Tidak ada koneksi internet",
+    "connectionRestored": "Kembali online",
+    "checkConnection": "Silakan periksa koneksi internet Anda dan coba lagi"
   }
 }

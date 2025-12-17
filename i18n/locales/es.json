@@ -571,7 +571,8 @@
     "justNow": "Justo ahora",
     "minutesAgo": "{{count}}m atrás",
     "hoursAgo": "{{count}}h atrás",
-    "daysAgo": "{{count}}d atrás"
+    "daysAgo": "{{count}}d atrás",
+    "tapToView": "Toca de nuevo para ver"
   },
   "headers": {
     "search": "Buscar",
@@ -778,5 +779,92 @@
       "failedToDownloadReceipt": "Error al descargar el recibo",
       "failedToLoadStory": "Error al cargar los datos de la historia"
     }
+  },
+  "network": {
+    "offline": "Estás sin conexión",
+    "noConnection": "Sin conexión a internet",
+    "connectionRestored": "De vuelta en línea",
+    "checkConnection": "Por favor, verifica tu conexión a internet e inténtalo de nuevo"
+  },
+  "alerts": {
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información",
+    "confirm": "Confirmar",
+    "authRequired": "Se requiere autenticación",
+    "permissionRequired": "Se requiere permiso",
+    "invalidInput": "Entrada inválida",
+    "tryAgain": "Por favor, inténtalo de nuevo"
+  },
+  "comments": {
+    "title": "Comentarios",
+    "noComments": "Aún no hay comentarios. ¡Sé el primero en comentar!",
+    "writeComment": "Escribe un comentario...",
+    "signInToComment": "Por favor, inicia sesión para comentar",
+    "signInToLike": "Por favor, inicia sesión para dar me gusta",
+    "deleteTitle": "Eliminar comentario",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar este comentario?",
+    "emptyComment": "El comentario no puede estar vacío",
+    "tooLong": "El comentario debe tener menos de {{maxLength}} caracteres",
+    "failedToLoad": "Error al cargar los comentarios",
+    "failedToLoadReplies": "Error al cargar las respuestas",
+    "failedToPost": "Error al publicar el comentario",
+    "reply": "Responder",
+    "replyingTo": "Respondiendo a ",
+    "viewReplies": "Ver {{count}} respuestas",
+    "hideReplies": "Ocultar respuestas",
+    "edited": "(editado)"
+  },
+  "donations": {
+    "supportWihngo": "Apoyar a Wihngo",
+    "back": "← Volver",
+    "disclaimer": "Las donaciones apoyan la plataforma y la conservación de aves. Las donaciones no son reembolsables.",
+    "supporting": "Apoyando",
+    "generalSupport": "Apoyo general a la plataforma",
+    "amount": "Monto",
+    "usd": "USD ($)",
+    "eur": "EUR (€)",
+    "paymentMethod": "Método de pago",
+    "continueToPayment": "Continuar con el pago",
+    "invalidAmount": "Por favor, introduce un monto válido",
+    "minAmount": "El monto mínimo es {{amount}}",
+    "failedToLoadBird": "Error al cargar la información del ave"
+  },
+  "mediaPicker": {
+    "permissionRequired": "Se requiere permiso",
+    "allowMediaLibrary": "Por favor, permite el acceso a la biblioteca de medios para seleccionar imágenes",
+    "allowCamera": "Por favor, permite el acceso a la cámara para tomar fotos",
+    "fileTooLarge": "Archivo demasiado grande",
+    "imageTooLarge": "La imagen debe ser menor de {{maxSize}}MB",
+    "videoTooLarge": "El video debe ser menor de {{maxSize}}MB",
+    "failedToSelectImage": "Error al seleccionar la imagen",
+    "failedToTakePhoto": "Error al tomar la foto",
+    "failedToSelectVideo": "Error al seleccionar el video",
+    "failedToRecordVideo": "Error al grabar el video"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "invalidEmail": "Por favor, introduce un correo electrónico válido",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+    "passwordWeak": "La contraseña debe incluir mayúsculas, minúsculas, un número y un carácter especial",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "nameTooShort": "El nombre debe tener al menos 2 caracteres"
+  },
+  "registration": {
+    "success": "Registro exitoso",
+    "successMessage": "Por favor, revisa tu correo electrónico para confirmar tu cuenta. Te hemos enviado un enlace de confirmación.",
+    "failed": "Error en el registro",
+    "failedMessage": "Error al registrar. Por favor, inténtalo de nuevo.",
+    "weakPassword": "Contraseña débil",
+    "weakPasswordMessage": "La contraseña debe contener mayúsculas, minúsculas, un número y un carácter especial.",
+    "passwordTooShort": "Contraseña demasiado corta",
+    "passwordTooShortMessage": "La contraseña debe tener al menos 8 caracteres.",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordMismatchMessage": "Por favor, asegúrate de que ambas contraseñas coincidan.",
+    "welcomeMessage": "¡Bienvenido a Wihngo! Tu cuenta ha sido creada.",
+    "failedToRegister": "Error al registrar. Por favor, inténtalo de nuevo.",
+    "emailInUse": "Este correo electrónico ya está registrado",
+    "verifyEmail": "Por favor, verifica tu correo electrónico para completar el registro"
   }
 }

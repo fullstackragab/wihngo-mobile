@@ -49,7 +49,7 @@ export default function Search() {
   const renderBirdItem = ({ item }: { item: Bird }) => (
     <TouchableOpacity
       style={styles.resultCard}
-      onPress={() => router.push(`/(tabs)/birds/${item.birdId}`)}
+      onPress={() => router.push(`/bird/${item.birdId}`)}
     >
       <Image
         source={{ uri: item.imageUrl || "https://via.placeholder.com/60" }}

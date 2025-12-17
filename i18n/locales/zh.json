@@ -448,7 +448,8 @@
     "justNow": "刚刚",
     "minutesAgo": "{{count}}分钟前",
     "hoursAgo": "{{count}}小时前",
-    "daysAgo": "{{count}}天前"
+    "daysAgo": "{{count}}天前",
+    "tapToView": "再次点击查看"
   },
   "headers": {
     "search": "搜索",
@@ -764,5 +765,92 @@
       "methodAdded": "{{currency}} 支付方式添加成功",
       "addFailed": "添加支付方式失败。请重试。"
     }
+  },
+  "network": {
+    "offline": "您已离线",
+    "noConnection": "无网络连接",
+    "connectionRestored": "已恢复在线",
+    "checkConnection": "请检查您的网络连接并重试"
+  },
+  "alerts": {
+    "error": "错误",
+    "success": "成功",
+    "warning": "警告",
+    "info": "信息",
+    "confirm": "确认",
+    "authRequired": "需要身份验证",
+    "permissionRequired": "需要权限",
+    "invalidInput": "输入无效",
+    "tryAgain": "请重试"
+  },
+  "comments": {
+    "title": "评论",
+    "noComments": "暂无评论。成为第一个评论的人！",
+    "writeComment": "写评论...",
+    "signInToComment": "请登录后评论",
+    "signInToLike": "请登录后点赞",
+    "deleteTitle": "删除评论",
+    "deleteConfirm": "确定要删除此评论吗？",
+    "emptyComment": "评论不能为空",
+    "tooLong": "评论必须少于{{maxLength}}个字符",
+    "failedToLoad": "加载评论失败",
+    "failedToLoadReplies": "加载回复失败",
+    "failedToPost": "发布评论失败",
+    "reply": "回复",
+    "replyingTo": "回复 ",
+    "viewReplies": "查看{{count}}条回复",
+    "hideReplies": "隐藏回复",
+    "edited": "(已编辑)"
+  },
+  "donations": {
+    "supportWihngo": "支持Wihngo",
+    "back": "← 返回",
+    "disclaimer": "捐款支持平台和鸟类保护。捐款不可退还。",
+    "supporting": "支持",
+    "generalSupport": "一般平台支持",
+    "amount": "金额",
+    "usd": "美元 ($)",
+    "eur": "欧元 (€)",
+    "paymentMethod": "支付方式",
+    "continueToPayment": "继续支付",
+    "invalidAmount": "请输入有效金额",
+    "minAmount": "最低金额为{{amount}}",
+    "failedToLoadBird": "加载鸟类信息失败"
+  },
+  "mediaPicker": {
+    "permissionRequired": "需要权限",
+    "allowMediaLibrary": "请允许访问媒体库以选择图片",
+    "allowCamera": "请允许访问相机以拍照",
+    "fileTooLarge": "文件太大",
+    "imageTooLarge": "图片必须小于{{maxSize}}MB",
+    "videoTooLarge": "视频必须小于{{maxSize}}MB",
+    "failedToSelectImage": "选择图片失败",
+    "failedToTakePhoto": "拍照失败",
+    "failedToSelectVideo": "选择视频失败",
+    "failedToRecordVideo": "录制视频失败"
+  },
+  "validation": {
+    "required": "此字段为必填项",
+    "invalidEmail": "请输入有效的电子邮件地址",
+    "passwordTooShort": "密码必须至少8个字符",
+    "passwordWeak": "密码必须包含大小写字母、数字和特殊字符",
+    "passwordsDoNotMatch": "密码不匹配",
+    "nameTooShort": "名字必须至少2个字符"
+  },
+  "registration": {
+    "success": "注册成功",
+    "successMessage": "请查看您的电子邮件以确认您的账户。我们已向您发送了确认链接。",
+    "failed": "注册失败",
+    "failedMessage": "注册失败。请重试。",
+    "weakPassword": "密码强度弱",
+    "weakPasswordMessage": "密码必须包含大写字母、小写字母、数字和特殊字符。",
+    "passwordTooShort": "密码太短",
+    "passwordTooShortMessage": "密码必须至少8个字符。",
+    "passwordMismatch": "密码不匹配",
+    "passwordMismatchMessage": "请确保两个密码匹配。",
+    "welcomeMessage": "欢迎来到Wihngo！您的账户已创建。",
+    "failedToRegister": "注册失败。请重试。",
+    "emailInUse": "此电子邮件已被注册",
+    "verifyEmail": "请验证您的电子邮件以完成注册"
   }
 }

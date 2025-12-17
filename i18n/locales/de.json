@@ -530,7 +530,8 @@
     "justNow": "Gerade eben",
     "minutesAgo": "vor {{count}}m",
     "hoursAgo": "vor {{count}}h",
-    "daysAgo": "vor {{count}}T"
+    "daysAgo": "vor {{count}}T",
+    "tapToView": "Erneut tippen zum Anzeigen"
   },
   "headers": {
     "search": "Suchen",
@@ -778,5 +779,90 @@
       "whereIsWihngoRegistered": "Wo ist Wihngo registriert?",
       "whereIsWihngoRegisteredAnswer": "Wihngo befindet sich im Registrierungsprozess in Estland und operiert innerhalb der Europäischen Union."
     }
+  },
+  "network": {
+    "offline": "Sie sind offline",
+    "noConnection": "Keine Internetverbindung",
+    "connectionRestored": "Wieder online",
+    "checkConnection": "Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut"
+  },
+  "alerts": {
+    "error": "Fehler",
+    "success": "Erfolg",
+    "warning": "Warnung",
+    "info": "Info",
+    "confirm": "Bestätigen",
+    "authRequired": "Authentifizierung erforderlich",
+    "authRequiredMessage": "Bitte melden Sie sich an, um fortzufahren",
+    "permissionRequired": "Berechtigung erforderlich",
+    "comingSoon": "Demnächst verfügbar",
+    "notAvailable": "Nicht verfügbar",
+    "invalidInput": "Ungültige Eingabe",
+    "copied": "Kopiert!",
+    "copiedToClipboard": "In die Zwischenablage kopiert",
+    "failedToCopy": "Kopieren in die Zwischenablage fehlgeschlagen",
+    "tryAgain": "Bitte versuchen Sie es erneut"
+  },
+  "comments": {
+    "title": "Kommentare",
+    "noComments": "Noch keine Kommentare. Seien Sie der Erste!",
+    "failedToLoad": "Kommentare konnten nicht geladen werden",
+    "failedToLoadReplies": "Antworten konnten nicht geladen werden",
+    "signInToComment": "Bitte melden Sie sich an, um zu kommentieren",
+    "signInToLike": "Bitte melden Sie sich an, um Kommentare zu liken",
+    "deleteTitle": "Kommentar löschen",
+    "deleteConfirm": "Möchten Sie diesen Kommentar wirklich löschen? Alle Antworten werden ebenfalls gelöscht.",
+    "emptyComment": "Kommentar darf nicht leer sein",
+    "tooLong": "Kommentare dürfen {{maxLength}} Zeichen nicht überschreiten",
+    "edited": "(bearbeitet)",
+    "replyingTo": "Antwort an {{name}}",
+    "writeComment": "Kommentar schreiben...",
+    "reply": "Antworten",
+    "replies": "Antworten",
+    "viewReplies": "{{count}} Antworten anzeigen",
+    "hideReplies": "Antworten ausblenden"
+  },
+  "donations": {
+    "title": "Unterstützen",
+    "supportWihngo": "Wihngo unterstützen",
+    "supporting": "Unterstützung für:",
+    "generalSupport": "Allgemeine Unterstützung",
+    "amount": "Betrag",
+    "paymentMethod": "Zahlungsmethode",
+    "continueToPayment": "Weiter zur Zahlung",
+    "back": "← Zurück",
+    "disclaimer": "Wihngo ist ein gewinnorientiertes Unternehmen. Zahlungen sind Beiträge/Unterstützung und keine gemeinnützigen Spenden.",
+    "usd": "USD $",
+    "eur": "EUR €",
+    "minAmount": "Mindestbetrag ist ${{amount}}",
+    "invalidAmount": "Bitte geben Sie einen gültigen Betrag ein",
+    "failedToLoadBird": "Vogeldetails konnten nicht geladen werden"
+  },
+  "mediaPicker": {
+    "permissionRequired": "Berechtigung erforderlich",
+    "allowMediaLibrary": "Bitte erlauben Sie den Zugriff auf Ihre Medienbibliothek.",
+    "allowCamera": "Bitte erlauben Sie den Zugriff auf Ihre Kamera.",
+    "fileTooLarge": "Datei zu groß",
+    "imageTooLarge": "Bildgröße überschreitet {{maxSize}}MB. Bitte wählen Sie ein kleineres Bild.",
+    "failedToSelectImage": "Bild konnte nicht ausgewählt werden. Bitte versuchen Sie es erneut.",
+    "failedToTakePhoto": "Foto konnte nicht aufgenommen werden. Bitte versuchen Sie es erneut."
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+    "weakPassword": "Schwaches Passwort",
+    "passwordRequirements": "Das Passwort muss mindestens 8 Zeichen mit Groß-, Kleinbuchstaben, Zahl und Sonderzeichen enthalten"
+  },
+  "registration": {
+    "success": "Registrierung erfolgreich",
+    "successMessage": "Bitte überprüfen Sie Ihre E-Mail, um Ihr Konto zu bestätigen. Wir haben Ihnen einen Bestätigungslink gesendet.",
+    "failed": "Registrierung fehlgeschlagen",
+    "failedMessage": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "weakPassword": "Schwaches Passwort",
+    "weakPasswordMessage": "Das Passwort muss Groß-, Kleinbuchstaben, eine Zahl und ein Sonderzeichen enthalten.",
+    "passwordTooShort": "Passwort zu kurz",
+    "passwordTooShortMessage": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    "passwordMismatch": "Passwörter stimmen nicht überein",
+    "passwordMismatchMessage": "Bitte stellen Sie sicher, dass beide Passwörter übereinstimmen."
   }
 }

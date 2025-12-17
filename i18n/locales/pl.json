@@ -491,7 +491,8 @@
     "justNow": "Przed chwilą",
     "minutesAgo": "{{count}}m temu",
     "hoursAgo": "{{count}}h temu",
-    "daysAgo": "{{count}}d temu"
+    "daysAgo": "{{count}}d temu",
+    "tapToView": "Dotknij ponownie, aby zobaczyć"
   },
   "headers": {
     "search": "Szukaj",
@@ -778,5 +779,11 @@
       "failedToDownloadReceipt": "Nie udało się pobrać paragonu",
       "failedToLoadStory": "Nie udało się załadować danych historii"
     }
+  },
+  "network": {
+    "offline": "Jesteś offline",
+    "noConnection": "Brak połączenia z internetem",
+    "connectionRestored": "Ponownie online",
+    "checkConnection": "Sprawdź połączenie z internetem i spróbuj ponownie"
   }
 }

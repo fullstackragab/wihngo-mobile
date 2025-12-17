@@ -122,7 +122,7 @@ export default function Home() {
   const renderFeaturedBirdCard = ({ item }: { item: Bird }) => (
     <TouchableOpacity
       style={styles.featuredCard}
-      onPress={() => router.push(`/(tabs)/birds/${item.birdId}` as any)}
+      onPress={() => router.push(`/bird/${item.birdId}` as any)}
       activeOpacity={0.7}
     >
       <Image
@@ -151,7 +151,7 @@ export default function Home() {
           </View>
         </View>
       </View>
-      {item.activityStatus && (
+      {item.activityStatus && item.activityStatus !== 'Active' && (
         <View
           style={[
             styles.activityBadge,
@@ -199,7 +199,7 @@ export default function Home() {
   const renderNewBirdCard = ({ item }: { item: Bird }) => (
     <TouchableOpacity
       style={styles.newBirdCard}
-      onPress={() => router.push(`/(tabs)/birds/${item.birdId}` as any)}
+      onPress={() => router.push(`/bird/${item.birdId}` as any)}
       activeOpacity={0.7}
     >
       <Image
@@ -299,7 +299,7 @@ export default function Home() {
           <TouchableOpacity
             style={styles.featuredBirdOfWeek}
             onPress={() =>
-              router.push(`/(tabs)/birds/${featuredBirdOfWeek.birdId}` as any)
+              router.push(`/bird/${featuredBirdOfWeek.birdId}` as any)
             }
             activeOpacity={0.8}
           >

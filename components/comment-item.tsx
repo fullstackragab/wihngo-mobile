@@ -9,6 +9,7 @@ import { Comment } from "@/types/like-comment";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -43,6 +44,7 @@ export default function CommentItem({
   depth = 0,
   showReplies = true,
 }: CommentItemProps) {
+  const { t } = useTranslation();
   const [isLiked, setIsLiked] = useState(comment.isLikedByCurrentUser);
   const [likeCount, setLikeCount] = useState(comment.likeCount);
   const [isLiking, setIsLiking] = useState(false);
@@ -74,14 +76,10 @@ export default function CommentItem({
     if (isLiking) return;
 
     if (!user) {
-      Alert.alert(
-        "Authentication Required",
-        "Please sign in to like comments",
-        [
-          { text: "Cancel", style: "cancel" },
-          { text: "Sign In", onPress: () => router.push("/welcome") },
-        ]
-      );
+      Alert.alert(t("alerts.authRequired"), t("comments.signInToLike"), [
+        { text: t("common.cancel"), style: "cancel" },
+        { text: t("auth.signIn"), onPress: () => router.push("/welcome") },
+      ]);
       return;
     }
 
@@ -118,44 +116,38 @@ export default function CommentItem({
       }
 
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to update like";
-      Alert.alert("Error", errorMessage);
+        error instanceof Error ? error.message : t("alerts.tryAgain");
+      Alert.alert(t("alerts.error"), errorMessage);
     } finally {
       setIsLiking(false);
     }
   };
 
   const handleDelete = () => {
-    Alert.alert(
-      "Delete Comment",
-      "Are you sure you want to delete this comment? This will also delete all replies.",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await commentService.deleteComment(comment.commentId);
-              if (onDelete) {
-                onDelete(comment.commentId);
-              }
-            } catch (error) {
-              const errorMessage =
-                error instanceof Error
-                  ? error.message
-                  : "Failed to delete comment";
-              Alert.alert("Error", errorMessage);
+    Alert.alert(t("comments.deleteTitle"), t("comments.deleteConfirm"), [
+      { text: t("common.cancel"), style: "cancel" },
+      {
+        text: t("common.delete"),
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await commentService.deleteComment(comment.commentId);
+            if (onDelete) {
+              onDelete(comment.commentId);
             }
-          },
+          } catch (error) {
+            const errorMessage =
+              error instanceof Error ? error.message : t("alerts.tryAgain");
+            Alert.alert(t("alerts.error"), errorMessage);
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   const handleUpdate = async () => {
     if (!editContent.trim()) {
-      Alert.alert("Error", "Comment cannot be empty");
+      Alert.alert(t("alerts.error"), t("comments.emptyComment"));
       return;
     }
 
@@ -169,8 +161,8 @@ export default function CommentItem({
       setIsEditing(false);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to update comment";
-      Alert.alert("Error", errorMessage);
+        error instanceof Error ? error.message : t("alerts.tryAgain");
+      Alert.alert(t("alerts.error"), errorMessage);
     }
   };
 
@@ -189,7 +181,7 @@ export default function CommentItem({
       setShowRepliesState(true);
     } catch (error) {
       console.error("Error loading replies:", error);
-      Alert.alert("Error", "Failed to load replies");
+      Alert.alert(t("alerts.error"), t("comments.failedToLoadReplies"));
     } finally {
       setIsLoadingReplies(false);
     }
@@ -244,10 +236,10 @@ export default function CommentItem({
           />
           <View style={styles.editActions}>
             <TouchableOpacity onPress={() => setIsEditing(false)}>
-              <Text style={styles.cancelButton}>Cancel</Text>
+              <Text style={styles.cancelButton}>{t("common.cancel")}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleUpdate}>
-              <Text style={styles.saveButton}>Save</Text>
+              <Text style={styles.saveButton}>{t("common.save")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -256,7 +248,7 @@ export default function CommentItem({
       )}
 
       {comment.updatedAt && !isEditing && (
-        <Text style={styles.edited}>(edited)</Text>
+        <Text style={styles.edited}>{t("comments.edited")}</Text>
       )}
 
       <View style={styles.footer}>
@@ -291,7 +283,7 @@ export default function CommentItem({
             style={styles.replyButton}
           >
             <Ionicons name="arrow-undo-outline" size={16} color="#666" />
-            <Text style={styles.replyText}>Reply</Text>
+            <Text style={styles.replyText}>{t("comments.reply")}</Text>
           </TouchableOpacity>
         )}
 
@@ -301,8 +293,9 @@ export default function CommentItem({
             style={styles.viewRepliesButton}
           >
             <Text style={styles.viewRepliesText}>
-              {showRepliesState ? "Hide" : "View"} {comment.replyCount}{" "}
-              {comment.replyCount === 1 ? "reply" : "replies"}
+              {showRepliesState
+                ? t("comments.hideReplies")
+                : t("comments.viewReplies", { count: comment.replyCount })}
             </Text>
             {isLoadingReplies && (
               <ActivityIndicator size="small" color="#666" />

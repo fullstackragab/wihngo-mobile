@@ -42,7 +42,7 @@ export async function getBirdsService(): Promise<Bird[]> {
     const data = await response.json();
     console.log("Birds data received:", data?.length || 0, "items");
 
-    // Log first bird to check supportedBy field
+    // Log first bird to check fields
     if (data && data.length > 0) {
       console.log("First bird sample:", {
         birdId: data[0].birdId,
@@ -50,7 +50,11 @@ export async function getBirdsService(): Promise<Bird[]> {
         lovedBy: data[0].lovedBy,
         supportedBy: data[0].supportedBy,
         totalSupport: data[0].totalSupport,
+        imageUrl: data[0].imageUrl,
+        image: data[0].image,
+        profileImage: data[0].profileImage,
       });
+      console.log("First bird all keys:", Object.keys(data[0]));
 
       // NOTE: If supportedBy is 0 for all birds, this is a backend issue.
       // The backend needs to calculate and return the support count by:
@@ -62,9 +66,9 @@ export async function getBirdsService(): Promise<Bird[]> {
     // Remove duplicates by birdId
     const uniqueBirds = Array.from(
       new Map(data.map((b: Bird) => [b.birdId, b])).values()
-    );
+    ) as Bird[];
 
-    return uniqueBirds as Bird[];
+    return uniqueBirds;
   } catch (error) {
     console.error("Error fetching birds - Full error:", error);
     console.error("Error name:", (error as Error)?.name);

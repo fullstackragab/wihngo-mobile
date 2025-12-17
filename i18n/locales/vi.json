@@ -448,7 +448,8 @@
     "justNow": "Vừa xong",
     "minutesAgo": "{{count}} phút trước",
     "hoursAgo": "{{count}} giờ trước",
-    "daysAgo": "{{count}} ngày trước"
+    "daysAgo": "{{count}} ngày trước",
+    "tapToView": "Chạm lại để xem"
   },
   "headers": {
     "search": "Tìm kiếm",
@@ -764,5 +765,11 @@
       "methodAdded": "Đã thêm phương thức thanh toán {{currency}} thành công",
       "addFailed": "Không thể thêm phương thức thanh toán. Vui lòng thử lại."
     }
+  },
+  "network": {
+    "offline": "Bạn đang ngoại tuyến",
+    "noConnection": "Không có kết nối internet",
+    "connectionRestored": "Đã kết nối lại",
+    "checkConnection": "Vui lòng kiểm tra kết nối internet của bạn và thử lại"
   }
 }

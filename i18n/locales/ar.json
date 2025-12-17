@@ -710,7 +710,8 @@
     "justNow": "الآن",
     "minutesAgo": "منذ {{count}} د",
     "hoursAgo": "منذ {{count}} س",
-    "daysAgo": "منذ {{count}} ي"
+    "daysAgo": "منذ {{count}} ي",
+    "tapToView": "اضغط مرة أخرى للعرض"
   },
   "species": {
     "budgerigar": "ببغاء صغير",
@@ -1024,5 +1025,92 @@
     "instructionPaused": "التسجيل متوقف مؤقتاً. اضغط على تشغيل للمتابعة",
     "instructionRecorded": "اضغط على تشغيل للاستماع إلى التسجيل",
     "maxDuration": "الحد الأقصى لوقت التسجيل: {{duration}}"
+  },
+  "network": {
+    "offline": "أنت غير متصل",
+    "noConnection": "لا يوجد اتصال بالإنترنت",
+    "connectionRestored": "عدت متصلاً",
+    "checkConnection": "يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى"
+  },
+  "alerts": {
+    "error": "خطأ",
+    "success": "نجح",
+    "warning": "تحذير",
+    "info": "معلومات",
+    "confirm": "تأكيد",
+    "authRequired": "المصادقة مطلوبة",
+    "permissionRequired": "الإذن مطلوب",
+    "invalidInput": "إدخال غير صالح",
+    "tryAgain": "يرجى المحاولة مرة أخرى"
+  },
+  "comments": {
+    "title": "التعليقات",
+    "noComments": "لا توجد تعليقات بعد. كن أول من يعلق!",
+    "writeComment": "اكتب تعليقاً...",
+    "signInToComment": "يرجى تسجيل الدخول للتعليق",
+    "signInToLike": "يرجى تسجيل الدخول للإعجاب",
+    "deleteTitle": "حذف التعليق",
+    "deleteConfirm": "هل أنت متأكد من حذف هذا التعليق؟",
+    "emptyComment": "لا يمكن أن يكون التعليق فارغاً",
+    "tooLong": "يجب أن يكون التعليق أقل من {{maxLength}} حرف",
+    "failedToLoad": "فشل تحميل التعليقات",
+    "failedToLoadReplies": "فشل تحميل الردود",
+    "failedToPost": "فشل نشر التعليق",
+    "reply": "رد",
+    "replyingTo": "الرد على ",
+    "viewReplies": "عرض {{count}} ردود",
+    "hideReplies": "إخفاء الردود",
+    "edited": "(تم التعديل)"
+  },
+  "donations": {
+    "supportWihngo": "دعم Wihngo",
+    "back": "→ رجوع",
+    "disclaimer": "التبرعات تدعم المنصة والحفاظ على الطيور. التبرعات غير قابلة للاسترداد.",
+    "supporting": "دعم",
+    "generalSupport": "دعم عام للمنصة",
+    "amount": "المبلغ",
+    "usd": "دولار ($)",
+    "eur": "يورو (€)",
+    "paymentMethod": "طريقة الدفع",
+    "continueToPayment": "المتابعة للدفع",
+    "invalidAmount": "يرجى إدخال مبلغ صالح",
+    "minAmount": "الحد الأدنى للمبلغ هو {{amount}}",
+    "failedToLoadBird": "فشل تحميل معلومات الطائر"
+  },
+  "mediaPicker": {
+    "permissionRequired": "الإذن مطلوب",
+    "allowMediaLibrary": "يرجى السماح بالوصول إلى مكتبة الوسائط لتحديد الصور",
+    "allowCamera": "يرجى السماح بالوصول إلى الكاميرا لالتقاط الصور",
+    "fileTooLarge": "الملف كبير جداً",
+    "imageTooLarge": "يجب أن تكون الصورة أقل من {{maxSize}} ميجابايت",
+    "videoTooLarge": "يجب أن يكون الفيديو أقل من {{maxSize}} ميجابايت",
+    "failedToSelectImage": "فشل تحديد الصورة",
+    "failedToTakePhoto": "فشل التقاط الصورة",
+    "failedToSelectVideo": "فشل تحديد الفيديو",
+    "failedToRecordVideo": "فشل تسجيل الفيديو"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "يرجى إدخال بريد إلكتروني صالح",
+    "passwordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+    "passwordWeak": "يجب أن تتضمن كلمة المرور أحرفاً كبيرة وصغيرة ورقماً ورمزاً خاصاً",
+    "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+    "nameTooShort": "يجب أن يكون الاسم حرفين على الأقل"
+  },
+  "registration": {
+    "success": "التسجيل ناجح",
+    "successMessage": "يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك. لقد أرسلنا لك رابط تأكيد.",
+    "failed": "فشل التسجيل",
+    "failedMessage": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+    "weakPassword": "كلمة مرور ضعيفة",
+    "weakPasswordMessage": "يجب أن تحتوي كلمة المرور على أحرف كبيرة وصغيرة ورقم ورمز خاص.",
+    "passwordTooShort": "كلمة المرور قصيرة جداً",
+    "passwordTooShortMessage": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
+    "passwordMismatch": "كلمات المرور غير متطابقة",
+    "passwordMismatchMessage": "يرجى التأكد من تطابق كلمتي المرور.",
+    "welcomeMessage": "مرحباً بك في Wihngo! تم إنشاء حسابك.",
+    "failedToRegister": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+    "emailInUse": "هذا البريد الإلكتروني مسجل بالفعل",
+    "verifyEmail": "يرجى التحقق من بريدك الإلكتروني لإكمال التسجيل"
   }
 }

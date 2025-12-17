@@ -491,7 +491,8 @@
     "justNow": "ただ今",
     "minutesAgo": "{{count}}分前",
     "hoursAgo": "{{count}}時間前",
-    "daysAgo": "{{count}}日前"
+    "daysAgo": "{{count}}日前",
+    "tapToView": "もう一度タップして表示"
   },
   "headers": {
     "search": "検索",
@@ -764,5 +765,92 @@
       "methodAdded": "{{currency}}支払い方法が正常に追加されました",
       "addFailed": "支払い方法の追加に失敗しました。もう一度お試しください。"
     }
+  },
+  "network": {
+    "offline": "オフラインです",
+    "noConnection": "インターネット接続がありません",
+    "connectionRestored": "オンラインに戻りました",
+    "checkConnection": "インターネット接続を確認して、もう一度お試しください"
+  },
+  "alerts": {
+    "error": "エラー",
+    "success": "成功",
+    "warning": "警告",
+    "info": "情報",
+    "confirm": "確認",
+    "authRequired": "認証が必要です",
+    "permissionRequired": "許可が必要です",
+    "invalidInput": "入力が無効です",
+    "tryAgain": "もう一度お試しください"
+  },
+  "comments": {
+    "title": "コメント",
+    "noComments": "まだコメントがありません。最初のコメントを投稿しましょう！",
+    "writeComment": "コメントを書く...",
+    "signInToComment": "コメントするにはサインインしてください",
+    "signInToLike": "いいねするにはサインインしてください",
+    "deleteTitle": "コメントを削除",
+    "deleteConfirm": "このコメントを削除してもよろしいですか？",
+    "emptyComment": "コメントを空にすることはできません",
+    "tooLong": "コメントは{{maxLength}}文字未満にしてください",
+    "failedToLoad": "コメントの読み込みに失敗しました",
+    "failedToLoadReplies": "返信の読み込みに失敗しました",
+    "failedToPost": "コメントの投稿に失敗しました",
+    "reply": "返信",
+    "replyingTo": "返信先: ",
+    "viewReplies": "{{count}}件の返信を表示",
+    "hideReplies": "返信を非表示",
+    "edited": "(編集済み)"
+  },
+  "donations": {
+    "supportWihngo": "Wihngoをサポート",
+    "back": "← 戻る",
+    "disclaimer": "寄付はプラットフォームと鳥類保護をサポートします。寄付は返金不可です。",
+    "supporting": "サポート中",
+    "generalSupport": "一般的なプラットフォームサポート",
+    "amount": "金額",
+    "usd": "米ドル ($)",
+    "eur": "ユーロ (€)",
+    "paymentMethod": "支払い方法",
+    "continueToPayment": "支払いに進む",
+    "invalidAmount": "有効な金額を入力してください",
+    "minAmount": "最低金額は{{amount}}です",
+    "failedToLoadBird": "鳥の情報の読み込みに失敗しました"
+  },
+  "mediaPicker": {
+    "permissionRequired": "許可が必要です",
+    "allowMediaLibrary": "画像を選択するにはメディアライブラリへのアクセスを許可してください",
+    "allowCamera": "写真を撮るにはカメラへのアクセスを許可してください",
+    "fileTooLarge": "ファイルが大きすぎます",
+    "imageTooLarge": "画像は{{maxSize}}MB未満にしてください",
+    "videoTooLarge": "動画は{{maxSize}}MB未満にしてください",
+    "failedToSelectImage": "画像の選択に失敗しました",
+    "failedToTakePhoto": "写真の撮影に失敗しました",
+    "failedToSelectVideo": "動画の選択に失敗しました",
+    "failedToRecordVideo": "動画の録画に失敗しました"
+  },
+  "validation": {
+    "required": "このフィールドは必須です",
+    "invalidEmail": "有効なメールアドレスを入力してください",
+    "passwordTooShort": "パスワードは8文字以上にしてください",
+    "passwordWeak": "パスワードには大文字、小文字、数字、特殊文字を含めてください",
+    "passwordsDoNotMatch": "パスワードが一致しません",
+    "nameTooShort": "名前は2文字以上にしてください"
+  },
+  "registration": {
+    "success": "登録成功",
+    "successMessage": "アカウントを確認するためにメールをご確認ください。確認リンクをお送りしました。",
+    "failed": "登録失敗",
+    "failedMessage": "登録に失敗しました。もう一度お試しください。",
+    "weakPassword": "パスワードが弱いです",
+    "weakPasswordMessage": "パスワードには大文字、小文字、数字、特殊文字を含めてください。",
+    "passwordTooShort": "パスワードが短すぎます",
+    "passwordTooShortMessage": "パスワードは8文字以上にしてください。",
+    "passwordMismatch": "パスワードが一致しません",
+    "passwordMismatchMessage": "両方のパスワードが一致することを確認してください。",
+    "welcomeMessage": "Wihngoへようこそ！アカウントが作成されました。",
+    "failedToRegister": "登録に失敗しました。もう一度お試しください。",
+    "emailInUse": "このメールアドレスは既に登録されています",
+    "verifyEmail": "登録を完了するにはメールを確認してください"
   }
 }

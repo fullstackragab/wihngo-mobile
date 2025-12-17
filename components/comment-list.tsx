@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { commentService } from "@/services/comment.service";
 import { Comment } from "@/types/like-comment";
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -32,6 +33,7 @@ export default function CommentList({
   showInput = true,
   onCommentCountChange,
 }: CommentListProps) {
+  const { t } = useTranslation();
   const [comments, setComments] = useState<Comment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -79,7 +81,7 @@ export default function CommentList({
         }
       } catch (error) {
         console.error("Error loading comments:", error);
-        Alert.alert("Error", "Failed to load comments");
+        Alert.alert(t("alerts.error"), t("comments.failedToLoad"));
       } finally {
         setIsLoading(false);
         setIsRefreshing(false);
@@ -109,7 +111,7 @@ export default function CommentList({
   // Submit new comment
   const handleSubmitComment = async (content: string) => {
     if (!user) {
-      Alert.alert("Authentication Required", "Please sign in to comment");
+      Alert.alert(t("alerts.authRequired"), t("comments.signInToComment"));
       return;
     }
 
@@ -198,9 +200,7 @@ export default function CommentList({
 
     return (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>
-          No comments yet. Be the first to comment!
-        </Text>
+        <Text style={styles.emptyText}>{t("comments.noComments")}</Text>
       </View>
     );
   };
@@ -226,7 +226,7 @@ export default function CommentList({
         <>
           <View style={styles.header}>
             <Text style={styles.headerTitle}>
-              Comments {totalCount > 0 && `(${totalCount})`}
+              {t("comments.title")} {totalCount > 0 && `(${totalCount})`}
             </Text>
           </View>
 
@@ -263,8 +263,8 @@ export default function CommentList({
               onSubmit={handleSubmitComment}
               placeholder={
                 replyingTo
-                  ? `Reply to ${replyingTo.userName}...`
-                  : "Add a comment..."
+                  ? t("comments.replyingTo", { name: replyingTo.userName })
+                  : t("comments.writeComment")
               }
               replyingTo={replyingTo?.userName || null}
               onCancelReply={() => setReplyingTo(null)}

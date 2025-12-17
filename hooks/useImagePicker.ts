@@ -3,6 +3,7 @@
  * Reusable hook for image selection with validation and upload
  */
 
+import i18n from "@/i18n";
 import * as ImagePicker from "expo-image-picker";
 import { useCallback, useMemo, useState } from "react";
 import { Alert } from "react-native";
@@ -62,8 +63,8 @@ export function useImagePicker(
 
       if (!permissionResult.granted) {
         Alert.alert(
-          "Permission Required",
-          "Please allow access to your media library to select images."
+          i18n.t("mediaPicker.permissionRequired"),
+          i18n.t("mediaPicker.allowMediaLibrary")
         );
         setLoading(false);
         return;
@@ -85,15 +86,10 @@ export function useImagePicker(
           const maxSizeBytes = (finalOptions.maxSizeMB || 5) * 1024 * 1024;
           if (image.fileSize > maxSizeBytes) {
             Alert.alert(
-              "File Too Large",
-              `Image size exceeds ${
-                finalOptions.maxSizeMB
-              }MB limit.\n\nYour image: ${(
-                image.fileSize /
-                (1024 * 1024)
-              ).toFixed(
-                2
-              )}MB\n\nTip: The image will be automatically compressed.`
+              i18n.t("mediaPicker.fileTooLarge"),
+              i18n.t("mediaPicker.imageTooLarge", {
+                maxSize: finalOptions.maxSizeMB,
+              })
             );
             // Continue anyway - we'll compress it
           }
@@ -107,7 +103,7 @@ export function useImagePicker(
     } catch (err) {
       console.error("Error picking image:", err);
       setError("Failed to pick image");
-      Alert.alert("Error", "Failed to select image. Please try again.");
+      Alert.alert(i18n.t("alerts.error"), i18n.t("mediaPicker.failedToSelectImage"));
     } finally {
       setLoading(false);
     }
@@ -124,8 +120,8 @@ export function useImagePicker(
 
       if (!permissionResult.granted) {
         Alert.alert(
-          "Permission Required",
-          "Please allow access to your camera to take photos."
+          i18n.t("mediaPicker.permissionRequired"),
+          i18n.t("mediaPicker.allowCamera")
         );
         setLoading(false);
         return;
@@ -147,15 +143,10 @@ export function useImagePicker(
           const maxSizeBytes = (finalOptions.maxSizeMB || 5) * 1024 * 1024;
           if (image.fileSize > maxSizeBytes) {
             Alert.alert(
-              "File Too Large",
-              `Image size exceeds ${
-                finalOptions.maxSizeMB
-              }MB limit.\n\nYour image: ${(
-                image.fileSize /
-                (1024 * 1024)
-              ).toFixed(
-                2
-              )}MB\n\nTip: The image will be automatically compressed.`
+              i18n.t("mediaPicker.fileTooLarge"),
+              i18n.t("mediaPicker.imageTooLarge", {
+                maxSize: finalOptions.maxSizeMB,
+              })
             );
             // Continue anyway - we'll compress it
           }
@@ -169,7 +160,7 @@ export function useImagePicker(
     } catch (err) {
       console.error("Error taking photo:", err);
       setError("Failed to take photo");
-      Alert.alert("Error", "Failed to take photo. Please try again.");
+      Alert.alert(i18n.t("alerts.error"), i18n.t("mediaPicker.failedToTakePhoto"));
     } finally {
       setLoading(false);
     }

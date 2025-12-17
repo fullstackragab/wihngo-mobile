@@ -12,9 +12,11 @@ import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import "react-native-reanimated";
 
+import OfflineBanner from "@/components/ui/offline-banner";
 import { appKit } from "@/config/AppKitConfig";
 import { AuthProvider, useAuth } from "@/contexts/auth-context";
 import { LanguageProvider } from "@/contexts/language-context";
+import { NetworkProvider } from "@/contexts/network-context";
 import { NotificationProvider } from "@/contexts/notification-context";
 import { useAuthDeepLink } from "@/hooks/use-auth-deep-link";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -250,21 +252,25 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <AppKitProvider instance={appKit}>
         <LanguageProvider>
-          <AuthProvider>
-            <NotificationProvider>
-              <RootLayoutNav />
-              {/* AppKit modal - wrapped in View for Android compatibility */}
-              <View
-                style={{
-                  position: "absolute",
-                  height: "100%",
-                  width: "100%",
-                }}
-              >
-                <AppKit />
-              </View>
-            </NotificationProvider>
-          </AuthProvider>
+          <NetworkProvider>
+            <AuthProvider>
+              <NotificationProvider>
+                <RootLayoutNav />
+                {/* Offline banner - shown when device is offline */}
+                <OfflineBanner />
+                {/* AppKit modal - wrapped in View for Android compatibility */}
+                <View
+                  style={{
+                    position: "absolute",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  <AppKit />
+                </View>
+              </NotificationProvider>
+            </AuthProvider>
+          </NetworkProvider>
         </LanguageProvider>
       </AppKitProvider>
     </QueryClientProvider>

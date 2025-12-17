@@ -448,7 +448,8 @@
     "justNow": "Şimdi",
     "minutesAgo": "{{count}}dk önce",
     "hoursAgo": "{{count}}sa önce",
-    "daysAgo": "{{count}}g önce"
+    "daysAgo": "{{count}}g önce",
+    "tapToView": "Görmek için tekrar dokun"
   },
   "premium": {
     "celebrateYourBird": "Kuşunuzu Kutlayın",
@@ -820,5 +821,11 @@
       "methodAdded": "{{currency}} ödeme yöntemi başarıyla eklendi",
       "addFailed": "Ödeme yöntemi eklenemedi. Lütfen tekrar deneyin."
     }
+  },
+  "network": {
+    "offline": "Çevrimdışısınız",
+    "noConnection": "İnternet bağlantısı yok",
+    "connectionRestored": "Tekrar çevrimiçi",
+    "checkConnection": "Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin"
   }
 }

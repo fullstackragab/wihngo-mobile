@@ -60,8 +60,8 @@ export default function SignUp() {
     if (password.length < 8) {
       addNotification(
         "recommendation",
-        "Password Too Short",
-        "Password must be at least 8 characters long"
+        t("registration.passwordTooShort"),
+        t("registration.passwordTooShortMessage")
       );
       return;
     }
@@ -75,8 +75,8 @@ export default function SignUp() {
     if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasSpecialChar) {
       addNotification(
         "recommendation",
-        "Weak Password",
-        "Password must contain uppercase, lowercase, number, and special character"
+        t("registration.weakPassword"),
+        t("registration.weakPasswordMessage")
       );
       return;
     }
@@ -84,8 +84,8 @@ export default function SignUp() {
     if (password !== confirmPassword) {
       addNotification(
         "recommendation",
-        "Passwords Don't Match",
-        "Please make sure both passwords match"
+        t("registration.passwordMismatch"),
+        t("registration.passwordMismatchMessage")
       );
       return;
     }
@@ -102,8 +102,8 @@ export default function SignUp() {
       // Show success message about email confirmation
       addNotification(
         "recommendation",
-        "Registration Successful! 🎉",
-        "Please check your email to confirm your account. We've sent you a confirmation link."
+        `${t("registration.success")} 🎉`,
+        t("registration.successMessage")
       );
 
       // Redirect to login
@@ -115,8 +115,8 @@ export default function SignUp() {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Registration failed. Please try again.";
-      addNotification("recommendation", "Registration Failed", errorMessage);
+          : t("registration.failedMessage");
+      addNotification("recommendation", t("registration.failed"), errorMessage);
     } finally {
       setIsLoading(false);
     }

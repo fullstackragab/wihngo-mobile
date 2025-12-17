@@ -571,7 +571,8 @@
     "justNow": "À l'instant",
     "minutesAgo": "il y a {{count}}m",
     "hoursAgo": "il y a {{count}}h",
-    "daysAgo": "il y a {{count}}j"
+    "daysAgo": "il y a {{count}}j",
+    "tapToView": "Appuyez à nouveau pour voir"
   },
   "headers": {
     "search": "Rechercher",
@@ -778,5 +779,90 @@
       "failedToDownloadReceipt": "Échec du téléchargement du reçu",
       "failedToLoadStory": "Échec du chargement des données de l'histoire"
     }
+  },
+  "network": {
+    "offline": "Vous êtes hors ligne",
+    "noConnection": "Pas de connexion internet",
+    "connectionRestored": "De retour en ligne",
+    "checkConnection": "Veuillez vérifier votre connexion internet et réessayer"
+  },
+  "alerts": {
+    "error": "Erreur",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "info": "Info",
+    "confirm": "Confirmer",
+    "authRequired": "Authentification requise",
+    "authRequiredMessage": "Veuillez vous connecter pour continuer",
+    "permissionRequired": "Permission requise",
+    "comingSoon": "Bientôt disponible",
+    "notAvailable": "Non disponible",
+    "invalidInput": "Entrée invalide",
+    "copied": "Copié !",
+    "copiedToClipboard": "Copié dans le presse-papiers",
+    "failedToCopy": "Échec de la copie dans le presse-papiers",
+    "tryAgain": "Veuillez réessayer"
+  },
+  "comments": {
+    "title": "Commentaires",
+    "noComments": "Pas encore de commentaires. Soyez le premier !",
+    "failedToLoad": "Échec du chargement des commentaires",
+    "failedToLoadReplies": "Échec du chargement des réponses",
+    "signInToComment": "Veuillez vous connecter pour commenter",
+    "signInToLike": "Veuillez vous connecter pour aimer les commentaires",
+    "deleteTitle": "Supprimer le commentaire",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce commentaire ? Toutes les réponses seront également supprimées.",
+    "emptyComment": "Le commentaire ne peut pas être vide",
+    "tooLong": "Les commentaires ne peuvent pas dépasser {{maxLength}} caractères",
+    "edited": "(modifié)",
+    "replyingTo": "Réponse à {{name}}",
+    "writeComment": "Écrire un commentaire...",
+    "reply": "Répondre",
+    "replies": "réponses",
+    "viewReplies": "Voir {{count}} réponses",
+    "hideReplies": "Masquer les réponses"
+  },
+  "donations": {
+    "title": "Soutenir",
+    "supportWihngo": "Soutenir Wihngo",
+    "supporting": "Soutien à :",
+    "generalSupport": "Soutien général",
+    "amount": "Montant",
+    "paymentMethod": "Méthode de paiement",
+    "continueToPayment": "Continuer vers le paiement",
+    "back": "← Retour",
+    "disclaimer": "Wihngo est une entreprise à but lucratif. Les paiements sont des contributions/soutiens et non des dons caritatifs.",
+    "usd": "USD $",
+    "eur": "EUR €",
+    "minAmount": "Le montant minimum est de ${{amount}}",
+    "invalidAmount": "Veuillez entrer un montant valide",
+    "failedToLoadBird": "Échec du chargement des détails de l'oiseau"
+  },
+  "mediaPicker": {
+    "permissionRequired": "Permission requise",
+    "allowMediaLibrary": "Veuillez autoriser l'accès à votre bibliothèque multimédia.",
+    "allowCamera": "Veuillez autoriser l'accès à votre appareil photo.",
+    "fileTooLarge": "Fichier trop volumineux",
+    "imageTooLarge": "La taille de l'image dépasse {{maxSize}}Mo. Veuillez sélectionner une image plus petite.",
+    "failedToSelectImage": "Échec de la sélection de l'image. Veuillez réessayer.",
+    "failedToTakePhoto": "Échec de la prise de photo. Veuillez réessayer."
+  },
+  "validation": {
+    "required": "Ce champ est requis",
+    "invalidEmail": "Veuillez entrer une adresse e-mail valide",
+    "weakPassword": "Mot de passe faible",
+    "passwordRequirements": "Le mot de passe doit contenir au moins 8 caractères avec majuscules, minuscules, chiffre et caractère spécial"
+  },
+  "registration": {
+    "success": "Inscription réussie",
+    "successMessage": "Veuillez vérifier votre e-mail pour confirmer votre compte. Nous vous avons envoyé un lien de confirmation.",
+    "failed": "Échec de l'inscription",
+    "failedMessage": "L'inscription a échoué. Veuillez réessayer.",
+    "weakPassword": "Mot de passe faible",
+    "weakPasswordMessage": "Le mot de passe doit contenir des majuscules, minuscules, un chiffre et un caractère spécial.",
+    "passwordTooShort": "Mot de passe trop court",
+    "passwordTooShortMessage": "Le mot de passe doit contenir au moins 8 caractères.",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "passwordMismatchMessage": "Veuillez vous assurer que les deux mots de passe correspondent."
   }
 }

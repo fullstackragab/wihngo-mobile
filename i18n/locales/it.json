@@ -482,7 +482,8 @@
     "justNow": "Proprio ora",
     "minutesAgo": "{{count}}m fa",
     "hoursAgo": "{{count}}h fa",
-    "daysAgo": "{{count}}g fa"
+    "daysAgo": "{{count}}g fa",
+    "tapToView": "Tocca di nuovo per vedere"
   },
   "headers": {
     "search": "Cerca",
@@ -769,5 +770,11 @@
       "failedToDownloadReceipt": "Impossibile scaricare la ricevuta",
       "failedToLoadStory": "Impossibile caricare i dati della storia"
     }
+  },
+  "network": {
+    "offline": "Sei offline",
+    "noConnection": "Nessuna connessione internet",
+    "connectionRestored": "Di nuovo online",
+    "checkConnection": "Verifica la tua connessione internet e riprova"
   }
 }

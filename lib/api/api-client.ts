@@ -1,6 +1,8 @@
+import { NetworkError } from "@/contexts/network-context";
 import i18n from "@/i18n";
 import { getAuthToken } from "@/lib/auth/auth-manager";
 import { STORAGE_KEYS } from "@/lib/constants";
+import { ensureNetworkConnectivity } from "@/lib/network-check";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TOKEN_KEY = STORAGE_KEYS.AUTH_TOKEN;
@@ -39,6 +41,9 @@ export async function authenticatedFetch(
   options: RequestInit = {}
 ): Promise<Response> {
   try {
+    // Check network connectivity before making request
+    await ensureNetworkConnectivity();
+
     // Get token from storage with expiration check
     const token = await getAuthToken();
 
@@ -243,6 +248,9 @@ export async function uploadFile<T>(
   additionalData?: Record<string, any>
 ): Promise<T> {
   try {
+    // Check network connectivity before upload
+    await ensureNetworkConnectivity();
+
     const token = await AsyncStorage.getItem(TOKEN_KEY);
     const formData = new FormData();
 

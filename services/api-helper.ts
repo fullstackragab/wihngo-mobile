@@ -1,4 +1,6 @@
+import { NetworkError } from "@/contexts/network-context";
 import { getAuthToken as getValidToken } from "@/lib/auth/auth-manager";
+import { ensureNetworkConnectivity } from "@/lib/network-check";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
@@ -79,6 +81,9 @@ export async function authenticatedFetch(
   options: RequestInit = {}
 ): Promise<Response> {
   try {
+    // Check network connectivity before making request
+    await ensureNetworkConnectivity();
+
     // Convert to absolute URL
     const absoluteUrl = buildUrl(url);
     console.log("🌐 API Request:", absoluteUrl);
@@ -305,6 +310,9 @@ export async function uploadFile<T>(
   additionalData?: Record<string, any>
 ): Promise<T> {
   try {
+    // Check network connectivity before upload
+    await ensureNetworkConnectivity();
+
     // Convert to absolute URL
     const absoluteUrl = buildUrl(url);
     console.log("🌐 Upload Request:", absoluteUrl);

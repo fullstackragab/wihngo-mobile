@@ -6,6 +6,7 @@
 import { COMMENT_MAX_LENGTH } from "@/types/like-comment";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -30,12 +31,13 @@ interface CommentInputProps {
 
 export default function CommentInput({
   onSubmit,
-  placeholder = "Add a comment...",
+  placeholder,
   replyingTo = null,
   onCancelReply,
   style,
   autoFocus = false,
 }: CommentInputProps) {
+  const { t } = useTranslation();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -43,14 +45,14 @@ export default function CommentInput({
     const trimmedContent = content.trim();
 
     if (!trimmedContent) {
-      Alert.alert("Empty Comment", "Please enter some text");
+      Alert.alert(t("alerts.error"), t("comments.emptyComment"));
       return;
     }
 
     if (trimmedContent.length > COMMENT_MAX_LENGTH) {
       Alert.alert(
-        "Comment Too Long",
-        `Comments cannot exceed ${COMMENT_MAX_LENGTH} characters`
+        t("alerts.error"),
+        t("comments.tooLong", { maxLength: COMMENT_MAX_LENGTH })
       );
       return;
     }
@@ -62,10 +64,8 @@ export default function CommentInput({
     } catch (error) {
       console.error("Error submitting comment:", error);
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Failed to post comment. Please try again.";
-      Alert.alert("Error", errorMessage);
+        error instanceof Error ? error.message : t("alerts.tryAgain");
+      Alert.alert(t("alerts.error"), errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -84,7 +84,7 @@ export default function CommentInput({
         {replyingTo && (
           <View style={styles.replyingToContainer}>
             <Text style={styles.replyingToText}>
-              Replying to{" "}
+              {t("comments.replyingTo", { name: "" })}
               <Text style={styles.replyingToName}>{replyingTo}</Text>
             </Text>
             <TouchableOpacity
@@ -101,7 +101,7 @@ export default function CommentInput({
             style={[styles.input, isOverLimit && styles.inputError]}
             value={content}
             onChangeText={setContent}
-            placeholder={placeholder}
+            placeholder={placeholder || t("comments.writeComment")}
             placeholderTextColor="#999"
             multiline
             maxLength={COMMENT_MAX_LENGTH + 100} // Allow typing over limit to show error

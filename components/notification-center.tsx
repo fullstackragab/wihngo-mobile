@@ -8,7 +8,7 @@ import { Notification } from "@/types/notification";
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -33,6 +33,7 @@ export default function NotificationCenter({
 }: NotificationCenterProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const {
     notifications,
     unreadCount,
@@ -45,32 +46,49 @@ export default function NotificationCenter({
     loadMore,
   } = useNotifications();
 
+  const toggleExpanded = (notificationId: string) => {
+    setExpandedIds((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(notificationId)) {
+        newSet.delete(notificationId);
+      } else {
+        newSet.add(notificationId);
+      }
+      return newSet;
+    });
+  };
+
   const handleNotificationPress = async (notification: Notification) => {
     // Mark as read
     if (!notification.isRead) {
       await markAsRead(notification.notificationId);
     }
 
-    // Close modal
-    onClose();
+    const isExpanded = expandedIds.has(notification.notificationId);
 
-    // Navigate to related content
-    if (notification.relatedId) {
+    // If notification has related content and is already expanded (or has short message), navigate
+    if (notification.relatedId && isExpanded) {
+      // Close modal
+      onClose();
+
+      // Navigate to related content
       switch (notification.type) {
         case "love":
         case "support":
-          router.push(`/birds/${notification.relatedId}`);
+          router.push(`/bird/${notification.relatedId}`);
           break;
         case "story":
           router.push(`/story/${notification.relatedId}`);
           break;
         case "comment":
-          // TODO: Navigate to comment
-          router.push(`/birds/${notification.relatedId}`);
+          router.push(`/bird/${notification.relatedId}`);
           break;
         default:
           break;
       }
+    } else {
+      // Toggle expanded state to show full message
+      toggleExpanded(notification.notificationId);
     }
   };
 
@@ -126,53 +144,68 @@ export default function NotificationCenter({
     return date.toLocaleDateString();
   };
 
-  const renderNotificationItem = ({ item }: { item: Notification }) => (
-    <TouchableOpacity
-      style={[styles.notificationItem, !item.isRead && styles.unreadItem]}
-      onPress={() => handleNotificationPress(item)}
-      activeOpacity={0.7}
-    >
-      <View
-        style={[
-          styles.iconContainer,
-          { backgroundColor: getNotificationColor(item.type) + "20" },
-        ]}
-      >
-        <Feather
-          name={getNotificationIcon(item.type)}
-          size={20}
-          color={getNotificationColor(item.type)}
-        />
-      </View>
+  const renderNotificationItem = ({ item }: { item: Notification }) => {
+    const isExpanded = expandedIds.has(item.notificationId);
+    const hasRelatedContent = !!item.relatedId;
 
-      <View style={styles.contentContainer}>
-        <View style={styles.headerRow}>
-          <Text style={styles.title} numberOfLines={1}>
-            {t(item.title)}
-          </Text>
-          <Text style={styles.time}>{formatTime(item.createdAt)}</Text>
+    return (
+      <TouchableOpacity
+        style={[styles.notificationItem, !item.isRead && styles.unreadItem]}
+        onPress={() => handleNotificationPress(item)}
+        activeOpacity={0.7}
+      >
+        <View
+          style={[
+            styles.iconContainer,
+            { backgroundColor: getNotificationColor(item.type) + "20" },
+          ]}
+        >
+          <Feather
+            name={getNotificationIcon(item.type)}
+            size={20}
+            color={getNotificationColor(item.type)}
+          />
         </View>
 
-        <Text style={styles.message} numberOfLines={2}>
-          {t(item.message)}
-        </Text>
+        <View style={styles.contentContainer}>
+          <View style={styles.headerRow}>
+            <Text style={styles.title} numberOfLines={1}>
+              {t(item.title)}
+            </Text>
+            <Text style={styles.time}>{formatTime(item.createdAt)}</Text>
+          </View>
 
-        {item.imageUrl && (
-          <Image source={{ uri: item.imageUrl }} style={styles.thumbnail} />
-        )}
-      </View>
+          <Text
+            style={styles.message}
+            numberOfLines={isExpanded ? undefined : 2}
+          >
+            {t(item.message)}
+          </Text>
 
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => handleDelete(item.notificationId)}
-        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-      >
-        <Feather name="x" size={18} color="#9ca3af" />
+          {/* Show hint to tap again to navigate if expanded and has related content */}
+          {isExpanded && hasRelatedContent && (
+            <Text style={styles.tapToViewHint}>
+              {t("notifications.tapToView", "Tap again to view")}
+            </Text>
+          )}
+
+          {item.imageUrl && (
+            <Image source={{ uri: item.imageUrl }} style={styles.thumbnail} />
+          )}
+        </View>
+
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDelete(item.notificationId)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Feather name="x" size={18} color="#9ca3af" />
+        </TouchableOpacity>
+
+        {!item.isRead && <View style={styles.unreadDot} />}
       </TouchableOpacity>
-
-      {!item.isRead && <View style={styles.unreadDot} />}
-    </TouchableOpacity>
-  );
+    );
+  };
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
@@ -356,6 +389,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#6b7280",
     lineHeight: 20,
+  },
+  tapToViewHint: {
+    fontSize: 12,
+    color: "#4ECDC4",
+    marginTop: 6,
+    fontWeight: "500",
   },
   thumbnail: {
     width: 60,

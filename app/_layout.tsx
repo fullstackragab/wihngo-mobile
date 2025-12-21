@@ -1,4 +1,14 @@
+import "react-native-get-random-values";
+
 import "@walletconnect/react-native-compat";
+
+import {
+  AddressType,
+  darkTheme,
+  PhantomProvider,
+  useModal,
+  usePhantom,
+} from "@phantom/react-native-sdk";
 
 import {
   DarkTheme,
@@ -9,7 +19,6 @@ import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
 import "react-native-reanimated";
 
 import OfflineBanner from "@/components/ui/offline-banner";
@@ -26,6 +35,9 @@ import { queryClient } from "@/lib/query-client";
 import { pushNotificationService } from "@/services/push-notification.service";
 import { AppKit, AppKitProvider } from "@reown/appkit-react-native";
 import { QueryClientProvider } from "@tanstack/react-query";
+
+// WalletScreen.tsx
+import { Button, Text, View } from "react-native";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -249,30 +261,65 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AppKitProvider instance={appKit}>
-        <LanguageProvider>
-          <NetworkProvider>
-            <AuthProvider>
-              <NotificationProvider>
-                <RootLayoutNav />
-                {/* Offline banner - shown when device is offline */}
-                <OfflineBanner />
-                {/* AppKit modal - wrapped in View for Android compatibility */}
-                <View
-                  style={{
-                    position: "absolute",
-                    height: "100%",
-                    width: "100%",
-                  }}
-                >
-                  <AppKit />
-                </View>
-              </NotificationProvider>
-            </AuthProvider>
-          </NetworkProvider>
-        </LanguageProvider>
-      </AppKitProvider>
-    </QueryClientProvider>
+    <PhantomProvider
+      config={{
+        providers: ["google", "apple"], // Enabled auth providers for React Native
+        appId: "7d9683b1-be04-4a3b-a582-64ad800d8d04",
+        scheme: "wihngo",
+        addressTypes: [AddressType.solana],
+        authOptions: {
+          redirectUrl: "wihngo://phantom-auth-callback",
+        },
+      }}
+      theme={darkTheme} // Optional: Customize modal appearance
+      appIcon="https://wihngo.com/icon.png" // Optional: Your app icon
+      appName="Wihngo" // Optional: Your app name
+    >
+      <WalletScreen />
+      <QueryClientProvider client={queryClient}>
+        <AppKitProvider instance={appKit}>
+          <LanguageProvider>
+            <NetworkProvider>
+              <AuthProvider>
+                <NotificationProvider>
+                  <RootLayoutNav />
+                  {/* Offline banner - shown when device is offline */}
+                  <OfflineBanner />
+                  {/* AppKit modal - wrapped in View for Android compatibility */}
+                  <View
+                    style={{
+                      position: "absolute",
+                      height: "100%",
+                      width: "100%",
+                    }}
+                  >
+                    <AppKit />
+                  </View>
+                </NotificationProvider>
+              </AuthProvider>
+            </NetworkProvider>
+          </LanguageProvider>
+        </AppKitProvider>
+      </QueryClientProvider>
+    </PhantomProvider>
+  );
+}
+
+export function WalletScreen() {
+  const { open, close, isOpened } = useModal();
+  const { isConnected } = usePhantom();
+
+  if (isConnected) {
+    return (
+      <View style={{ padding: 20 }}>
+        <Text>Connected</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ padding: 20 }}>
+      <Button title="Connect Wallet" onPress={open} />
+    </View>
   );
 }

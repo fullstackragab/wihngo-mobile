@@ -185,6 +185,7 @@ export default function WaitingForPaymentScreen() {
         payer_address: "", // Optional
         network: invoice!.network || "solana",
         token_symbol: invoice!.token_symbol || "USDC",
+        payment_source: "manual",
       });
 
       setShowReportModal(false);

@@ -86,12 +86,23 @@ export interface InvoiceEvent {
   };
 }
 
+/**
+ * Payment source type indicating how the payment was made
+ * - manual: User sent funds manually via any wallet app
+ * - phantom: User approved payment directly through Phantom wallet
+ */
+export type PaymentSource = "manual" | "phantom";
+
 export interface SubmitPaymentRequest {
   invoice_id: string;
   transaction_hash: string;
   payer_address: string;
   network: "solana";
   token_symbol: string;
+  /** Optional: indicates how the payment was initiated */
+  payment_source?: PaymentSource;
+  /** Optional: memo attached to the transaction for reconciliation */
+  memo?: string;
 }
 
 export interface InvoiceListResponse {

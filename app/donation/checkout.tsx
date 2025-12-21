@@ -1,9 +1,15 @@
 /**
  * Checkout Screen
  * Shows invoice details and payment URIs
+ * Supports both manual transfer and Phantom wallet payment for Solana
  */
 
 import { getTimeRemaining, startDonation } from "@/services/donation.service";
+import { isPhantomInstalled } from "@/services/phantom-wallet.service";
+import {
+  PhantomPaymentSelector,
+  type PaymentMethodType,
+} from "@/components/phantom-payment-selector";
 import type { Invoice } from "@/types/invoice";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -39,9 +45,40 @@ export default function CheckoutScreen() {
     expired: boolean;
   }>({ minutes: 15, seconds: 0, expired: false });
 
+  // Phantom wallet payment state
+  const [walletPaymentMethod, setWalletPaymentMethod] =
+    useState<PaymentMethodType>("manual");
+  const [isPhantomAvailable, setIsPhantomAvailable] = useState(false);
+  const [checkingPhantom, setCheckingPhantom] = useState(false);
+  const isSolanaPayment = params.paymentMethod?.startsWith("solana_");
+
   useEffect(() => {
     createInvoice();
   }, []);
+
+  // Check if Phantom is installed for Solana payments
+  useEffect(() => {
+    if (isSolanaPayment) {
+      checkPhantomAvailability();
+    }
+  }, [isSolanaPayment]);
+
+  const checkPhantomAvailability = async () => {
+    setCheckingPhantom(true);
+    try {
+      const available = await isPhantomInstalled();
+      setIsPhantomAvailable(available);
+      // Default to Phantom if available
+      if (available) {
+        setWalletPaymentMethod("phantom");
+      }
+    } catch (error) {
+      console.error("Error checking Phantom availability:", error);
+      setIsPhantomAvailable(false);
+    } finally {
+      setCheckingPhantom(false);
+    }
+  };
 
   useEffect(() => {
     if (invoice?.expires_at) {
@@ -101,11 +138,20 @@ export default function CheckoutScreen() {
         Alert.alert(t("donation.error"), t("donation.paypalCheckoutNotAvailable"));
       }
     } else if (invoice.payment_method.startsWith("solana_")) {
-      // Navigate to Solana payment screen
-      router.push({
-        pathname: "/donation/waiting",
-        params: { invoiceId: invoice.id },
-      });
+      // Route based on selected wallet payment method
+      if (walletPaymentMethod === "phantom") {
+        // Navigate to Phantom payment screen
+        router.push({
+          pathname: "/donation/phantom-payment",
+          params: { invoiceId: invoice.id },
+        });
+      } else {
+        // Navigate to manual transfer (waiting) screen
+        router.push({
+          pathname: "/donation/waiting",
+          params: { invoiceId: invoice.id },
+        });
+      }
     } else if (invoice.payment_method.startsWith("base_")) {
       // Navigate to Base payment screen
       router.push({
@@ -220,6 +266,17 @@ export default function CheckoutScreen() {
           </View>
         </View>
 
+        {/* Payment Method Selector for Solana payments */}
+        {isSolanaPayment && (
+          <PhantomPaymentSelector
+            selectedMethod={walletPaymentMethod}
+            onSelectMethod={setWalletPaymentMethod}
+            isPhantomAvailable={isPhantomAvailable}
+            checkingPhantom={checkingPhantom}
+            disabled={timeRemaining.expired}
+          />
+        )}
+
         {/* Payment Instructions */}
         <View style={styles.instructionsCard}>
           <Text style={styles.instructionsTitle}>Next Steps:</Text>
@@ -237,20 +294,37 @@ export default function CheckoutScreen() {
               </Text>
             </>
           ) : invoice.payment_method.startsWith("solana_") ? (
-            <>
-              <Text style={styles.instructionStep}>
-                1. Click "Open Wallet" to launch your Solana wallet
-              </Text>
-              <Text style={styles.instructionStep}>
-                2. Approve the transaction
-              </Text>
-              <Text style={styles.instructionStep}>
-                3. We'll detect your payment automatically
-              </Text>
-              <Text style={styles.instructionStep}>
-                4. Your receipt will be available once confirmed
-              </Text>
-            </>
+            walletPaymentMethod === "phantom" ? (
+              <>
+                <Text style={styles.instructionStep}>
+                  1. Click "Pay with Phantom" below
+                </Text>
+                <Text style={styles.instructionStep}>
+                  2. Phantom will open and show the transaction
+                </Text>
+                <Text style={styles.instructionStep}>
+                  3. Approve the transaction in Phantom
+                </Text>
+                <Text style={styles.instructionStep}>
+                  4. Your receipt will be available once confirmed
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text style={styles.instructionStep}>
+                  1. Click "Open Wallet" to launch your Solana wallet
+                </Text>
+                <Text style={styles.instructionStep}>
+                  2. Send the exact amount shown above
+                </Text>
+                <Text style={styles.instructionStep}>
+                  3. We'll detect your payment automatically
+                </Text>
+                <Text style={styles.instructionStep}>
+                  4. Your receipt will be available once confirmed
+                </Text>
+              </>
+            )
           ) : (
             <>
               <Text style={styles.instructionStep}>
@@ -274,6 +348,9 @@ export default function CheckoutScreen() {
           style={[
             styles.payButton,
             timeRemaining.expired && styles.payButtonDisabled,
+            invoice.payment_method.startsWith("solana_") &&
+              walletPaymentMethod === "phantom" &&
+              styles.phantomPayButton,
           ]}
           onPress={handlePayNow}
           disabled={timeRemaining.expired}
@@ -282,7 +359,9 @@ export default function CheckoutScreen() {
             {invoice.payment_method === "paypal"
               ? "Pay with PayPal"
               : invoice.payment_method.startsWith("solana_")
-              ? "Open Wallet"
+              ? walletPaymentMethod === "phantom"
+                ? "Pay with Phantom"
+                : "Open Wallet"
               : "Connect Wallet"}
           </Text>
         </TouchableOpacity>
@@ -458,6 +537,9 @@ const styles = StyleSheet.create({
   },
   payButtonDisabled: {
     backgroundColor: "#93C5FD",
+  },
+  phantomPayButton: {
+    backgroundColor: "#AB9FF2",
   },
   payButtonText: {
     fontSize: 16,

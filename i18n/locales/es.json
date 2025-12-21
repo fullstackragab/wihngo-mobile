@@ -412,6 +412,7 @@
     "payoutSettings": "Configuración de Pagos",
     "appSettings": "Configuración de la aplicación",
     "theme": "Tema",
+    "contentPreferences": "Preferencias de Contenido",
     "support": "Soporte",
     "helpSupport": "Ayuda y Soporte",
     "termsOfService": "Términos de servicio",
@@ -866,5 +867,39 @@
     "failedToRegister": "Error al registrar. Por favor, inténtalo de nuevo.",
     "emailInUse": "Este correo electrónico ya está registrado",
     "verifyEmail": "Por favor, verifica tu correo electrónico para completar el registro"
+  },
+  "contentPreferences": {
+    "title": "Preferencias de Contenido",
+    "description": "Personaliza tu feed seleccionando tus idiomas y ubicación preferidos. Las historias que coincidan con tus preferencias aparecerán primero.",
+    "languages": "Idiomas de Contenido",
+    "languagesSubtitle": "Selecciona los idiomas en los que quieres ver contenido",
+    "country": "Tu País",
+    "countrySubtitle": "Ver historias de pájaros de tu zona",
+    "selectLanguages": "Seleccionar Idiomas",
+    "selectCountry": "Seleccionar País",
+    "notSet": "No establecido",
+    "noCountry": "Sin preferencia",
+    "showAllCountries": "Mostrar contenido de todos los países",
+    "error": "Error",
+    "atLeastOneLanguage": "Por favor, selecciona al menos un idioma",
+    "saveSuccess": "Tus preferencias de contenido han sido guardadas",
+    "saveError": "Error al guardar preferencias. Por favor, inténtalo de nuevo.",
+    "infoText": "Tus preferencias nos ayudan a mostrarte contenido más relevante. Siempre puedes ver todo el contenido independientemente de esta configuración."
+  },
+  "feed": {
+    "followedBirds": "Pájaros que Sigues",
+    "inYourLanguage": "En Tu Idioma",
+    "fromYourArea": "De Tu Zona",
+    "discoverWorldwide": "Descubre Mundialmente",
+    "trending": "Tendencias",
+    "seeAll": "Ver Todo",
+    "noStories": "Aún no hay historias",
+    "followBirdsToSee": "Sigue pájaros para ver sus historias aquí",
+    "setLanguagePreferences": "Configura preferencias de idioma para ver contenido en tu idioma",
+    "setCountryPreferences": "Configura tu país para ver historias locales",
+    "exploreMore": "Explora historias en tendencia de todo el mundo",
+    "follow": "Seguir",
+    "following": "Siguiendo",
+    "unfollow": "Dejar de seguir"
   }
 }

@@ -1,9 +1,11 @@
 import { NotificationBell } from "@/components/notification-bell";
 import { BorderRadius, Spacing, Typography } from "@/constants/theme";
 import { useAuth } from "@/contexts/auth-context";
+import { useFeedSections } from "@/hooks/useFeed";
 import { birdService } from "@/services/bird.service";
 import { storyService } from "@/services/story.service";
 import { Bird } from "@/types/bird";
+import { FeedSection, RankedStory } from "@/types/feed";
 import { Story } from "@/types/story";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -42,6 +44,13 @@ export default function Home() {
   const [newBirds, setNewBirds] = useState<Bird[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  // Fetch personalized feed sections for authenticated users
+  const {
+    data: feedSections,
+    isLoading: feedSectionsLoading,
+    refetch: refetchFeedSections,
+  } = useFeedSections(5);
 
   // Get time-based greeting
   const greeting = useMemo(() => {
@@ -103,6 +112,41 @@ export default function Home() {
   const onRefresh = () => {
     setRefreshing(true);
     loadHomeData();
+    if (isAuthenticated) {
+      refetchFeedSections();
+    }
+  };
+
+  // Get section icon based on type
+  const getSectionIcon = (sectionType: string) => {
+    switch (sectionType) {
+      case "followed_birds":
+        return { name: "heart", color: "#FF6B6B" };
+      case "in_your_language":
+        return { name: "language", color: "#6366F1" };
+      case "from_your_area":
+        return { name: "location-dot", color: "#10B981" };
+      case "discover_worldwide":
+        return { name: "earth-americas", color: "#F59E0B" };
+      default:
+        return { name: "sparkles", color: "#4ECDC4" };
+    }
+  };
+
+  // Get localized section title
+  const getSectionTitle = (section: FeedSection) => {
+    switch (section.sectionType) {
+      case "followed_birds":
+        return t("feed.followedBirds");
+      case "in_your_language":
+        return t("feed.inYourLanguage");
+      case "from_your_area":
+        return t("feed.fromYourArea");
+      case "discover_worldwide":
+        return t("feed.discoverWorldwide");
+      default:
+        return section.title;
+    }
   };
 
   const getActivityStatusColor = (status?: string) => {
@@ -230,6 +274,80 @@ export default function Home() {
       </Text>
     </TouchableOpacity>
   );
+
+  // Render a ranked story card from feed section
+  const renderFeedStoryCard = ({ item }: { item: RankedStory }) => (
+    <TouchableOpacity
+      style={styles.storyCard}
+      onPress={() => router.push(`/story/${item.storyId}` as any)}
+      activeOpacity={0.7}
+    >
+      {item.imageUrl ? (
+        <Image
+          source={item.imageUrl}
+          style={styles.storyImage}
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          transition={200}
+          placeholder={{ blurhash: "L6PZfSi_.AyE_3t7t7R**0o#DgR4" }}
+        />
+      ) : (
+        <View style={[styles.storyImage, styles.storyImagePlaceholder]}>
+          <FontAwesome6 name="feather" size={24} color="#CBD5E1" />
+        </View>
+      )}
+      <View style={styles.storyContent}>
+        <Text style={styles.storyTitle} numberOfLines={2}>
+          {item.preview}
+        </Text>
+        <Text style={styles.storyAuthor} numberOfLines={1}>
+          {item.birds.length > 0 ? item.birds.join(", ") : item.date}
+        </Text>
+        <View style={styles.storyStats}>
+          <View style={styles.stat}>
+            <FontAwesome6 name="heart" size={12} color="#FF6B6B" />
+            <Text style={styles.statTextDark}>{item.likeCount || 0}</Text>
+          </View>
+          <View style={styles.stat}>
+            <FontAwesome6 name="comment" size={12} color="#64748B" />
+            <Text style={styles.statTextDark}>{item.commentCount || 0}</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  // Render a complete feed section
+  const renderFeedSection = (section: FeedSection) => {
+    if (!section.stories || section.stories.length === 0) return null;
+
+    const icon = getSectionIcon(section.sectionType);
+    const title = getSectionTitle(section);
+
+    return (
+      <View style={styles.section} key={section.sectionType}>
+        <View style={styles.sectionHeader}>
+          <View style={styles.sectionTitleRow}>
+            <FontAwesome6 name={icon.name as any} size={16} color={icon.color} />
+            <Text style={styles.sectionTitle}>{title}</Text>
+          </View>
+          {section.hasMore && (
+            <TouchableOpacity onPress={() => router.push("/(tabs)/stories")}>
+              <Text style={styles.seeAll}>{t("feed.seeAll")}</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <FlatList
+          horizontal
+          data={section.stories}
+          renderItem={renderFeedStoryCard}
+          keyExtractor={(item) => item.storyId}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.horizontalList}
+        />
+      </View>
+    );
+  };
 
   if (loading) {
     return (
@@ -363,8 +481,15 @@ export default function Home() {
         </View>
       )}
 
-      {/* Recent Stories */}
-      {recentStories.length > 0 && (
+      {/* Personalized Feed Sections (for authenticated users) */}
+      {isAuthenticated && feedSections && feedSections.length > 0 && (
+        <>
+          {feedSections.map((section) => renderFeedSection(section))}
+        </>
+      )}
+
+      {/* Recent Stories (fallback for anonymous users or when no feed sections) */}
+      {(!isAuthenticated || !feedSections || feedSections.length === 0) && recentStories.length > 0 && (
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleRow}>

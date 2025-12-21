@@ -579,6 +579,7 @@
     "appSettings": "إعدادات التطبيق",
     "theme": "المظهر",
     "language": "اللغة",
+    "contentPreferences": "تفضيلات المحتوى",
     "support": "الدعم",
     "helpSupport": "المساعدة والدعم",
     "termsOfService": "شروط الخدمة",
@@ -1112,5 +1113,39 @@
     "failedToRegister": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
     "emailInUse": "هذا البريد الإلكتروني مسجل بالفعل",
     "verifyEmail": "يرجى التحقق من بريدك الإلكتروني لإكمال التسجيل"
+  },
+  "contentPreferences": {
+    "title": "تفضيلات المحتوى",
+    "description": "خصص صفحتك الرئيسية باختيار اللغات والموقع المفضل لديك. ستظهر القصص المطابقة لتفضيلاتك أولاً.",
+    "languages": "لغات المحتوى",
+    "languagesSubtitle": "اختر اللغات التي تريد رؤية المحتوى بها",
+    "country": "بلدك",
+    "countrySubtitle": "شاهد قصص الطيور من منطقتك",
+    "selectLanguages": "اختر اللغات",
+    "selectCountry": "اختر البلد",
+    "notSet": "غير محدد",
+    "noCountry": "بدون تفضيل",
+    "showAllCountries": "عرض المحتوى من جميع البلدان",
+    "error": "خطأ",
+    "atLeastOneLanguage": "يرجى اختيار لغة واحدة على الأقل",
+    "saveSuccess": "تم حفظ تفضيلات المحتوى الخاصة بك",
+    "saveError": "فشل حفظ التفضيلات. يرجى المحاولة مرة أخرى.",
+    "infoText": "تساعدنا تفضيلاتك في عرض محتوى أكثر صلة بك. يمكنك دائماً رؤية جميع المحتوى بغض النظر عن هذه الإعدادات."
+  },
+  "feed": {
+    "followedBirds": "الطيور التي تتابعها",
+    "inYourLanguage": "بلغتك",
+    "fromYourArea": "من منطقتك",
+    "discoverWorldwide": "اكتشف عالمياً",
+    "trending": "الأكثر رواجاً",
+    "seeAll": "عرض الكل",
+    "noStories": "لا توجد قصص بعد",
+    "followBirdsToSee": "تابع الطيور لرؤية قصصهم هنا",
+    "setLanguagePreferences": "حدد تفضيلات اللغة لرؤية المحتوى بلغتك",
+    "setCountryPreferences": "حدد بلدك لرؤية القصص المحلية",
+    "exploreMore": "استكشف القصص الرائجة من حول العالم",
+    "follow": "متابعة",
+    "following": "متابَع",
+    "unfollow": "إلغاء المتابعة"
   }
 }

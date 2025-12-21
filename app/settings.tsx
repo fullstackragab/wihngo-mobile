@@ -128,6 +128,11 @@ export default function Settings() {
           title={t("settings.language")}
           onPress={() => setShowLanguageModal(true)}
         />
+        <SettingsItem
+          icon="sliders"
+          title={t("settings.contentPreferences")}
+          onPress={() => router.push("/content-preferences")}
+        />
       </View>
 
       <View style={styles.section}>

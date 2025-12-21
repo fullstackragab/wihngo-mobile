@@ -8,6 +8,7 @@
 
 export * from "./bird";
 export * from "./crypto";
+export * from "./feed";
 export * from "./invoice";
 export * from "./like-comment";
 export * from "./notification";

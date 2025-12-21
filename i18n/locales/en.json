@@ -518,6 +518,7 @@
     "appSettings": "App Settings",
     "theme": "Theme",
     "language": "Language",
+    "contentPreferences": "Content Preferences",
     "support": "Support",
     "helpSupport": "Help & Support",
     "termsOfService": "Terms of Service",
@@ -1267,5 +1268,39 @@
     "passwordTooShortMessage": "Password must be at least 8 characters long.",
     "passwordMismatch": "Passwords Don't Match",
     "passwordMismatchMessage": "Please make sure both passwords match."
+  },
+  "contentPreferences": {
+    "title": "Content Preferences",
+    "description": "Personalize your feed by selecting your preferred content languages and location. Stories matching your preferences will appear first.",
+    "languages": "Content Languages",
+    "languagesSubtitle": "Select languages you want to see content in",
+    "country": "Your Country",
+    "countrySubtitle": "See stories from birds in your area",
+    "selectLanguages": "Select Languages",
+    "selectCountry": "Select Country",
+    "notSet": "Not set",
+    "noCountry": "No preference",
+    "showAllCountries": "Show content from all countries",
+    "error": "Error",
+    "atLeastOneLanguage": "Please select at least one language",
+    "saveSuccess": "Your content preferences have been saved",
+    "saveError": "Failed to save preferences. Please try again.",
+    "infoText": "Your preferences help us show you more relevant content. You can always see all content regardless of these settings."
+  },
+  "feed": {
+    "followedBirds": "Birds You Follow",
+    "inYourLanguage": "In Your Language",
+    "fromYourArea": "From Your Area",
+    "discoverWorldwide": "Discover Worldwide",
+    "trending": "Trending",
+    "seeAll": "See All",
+    "noStories": "No stories yet",
+    "followBirdsToSee": "Follow birds to see their stories here",
+    "setLanguagePreferences": "Set language preferences to see content in your language",
+    "setCountryPreferences": "Set your country to see local stories",
+    "exploreMore": "Explore trending stories from around the world",
+    "follow": "Follow",
+    "following": "Following",
+    "unfollow": "Unfollow"
   }
 }

@@ -87,6 +87,33 @@ export const queryKeys = {
     profile: (userId: string) =>
       [...queryKeys.user.all, "profile", userId] as const,
     current: () => [...queryKeys.user.all, "current"] as const,
+    preferences: () => [...queryKeys.user.all, "preferences"] as const,
+  },
+
+  // Feed
+  feed: {
+    all: ["feed"] as const,
+    ranked: () => [...queryKeys.feed.all, "ranked"] as const,
+    rankedPage: (page: number, pageSize: number) =>
+      [...queryKeys.feed.ranked(), { page, pageSize }] as const,
+    sections: () => [...queryKeys.feed.all, "sections"] as const,
+    allSections: (storiesPerSection: number) =>
+      [...queryKeys.feed.sections(), { storiesPerSection }] as const,
+    section: (sectionType: string) =>
+      [...queryKeys.feed.sections(), sectionType] as const,
+    sectionWithLimit: (sectionType: string, limit: number) =>
+      [...queryKeys.feed.section(sectionType), { limit }] as const,
+    trending: () => [...queryKeys.feed.all, "trending"] as const,
+    trendingWithLimit: (limit: number) =>
+      [...queryKeys.feed.trending(), { limit }] as const,
+  },
+
+  // Bird follows
+  birdFollows: {
+    all: ["birdFollows"] as const,
+    following: () => [...queryKeys.birdFollows.all, "following"] as const,
+    isFollowing: (birdId: string) =>
+      [...queryKeys.birdFollows.all, "isFollowing", birdId] as const,
   },
 };
 
@@ -144,6 +171,42 @@ export const cacheUtils = {
    */
   clearAll: () => {
     queryClient.clear();
+  },
+
+  /**
+   * Invalidate all feed cache
+   */
+  invalidateFeed: () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.feed.all,
+    });
+  },
+
+  /**
+   * Invalidate feed sections
+   */
+  invalidateFeedSections: () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.feed.sections(),
+    });
+  },
+
+  /**
+   * Invalidate user preferences
+   */
+  invalidatePreferences: () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.user.preferences(),
+    });
+  },
+
+  /**
+   * Invalidate bird follows
+   */
+  invalidateBirdFollows: () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.birdFollows.all,
+    });
   },
 };
 

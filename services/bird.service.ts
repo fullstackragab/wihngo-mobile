@@ -246,4 +246,74 @@ export const birdService = {
       throw error;
     }
   },
+
+  // ============================================================================
+  // Bird Follow Methods (Smart Feed)
+  // ============================================================================
+
+  /**
+   * Follow a bird to see their stories in your feed
+   * POST /api/birds/{id}/follow
+   */
+  async followBird(birdId: string): Promise<{ message: string; isFollowing: boolean }> {
+    try {
+      const response = await apiHelper.post<{ message: string; isFollowing: boolean }>(
+        `/api/birds/${birdId}/follow`,
+        {}
+      );
+      console.log(`✅ Followed bird: ${birdId}`);
+      return response;
+    } catch (error) {
+      console.error("Error following bird:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Unfollow a bird
+   * DELETE /api/birds/{id}/follow
+   */
+  async unfollowBird(birdId: string): Promise<{ message: string; isFollowing: boolean }> {
+    try {
+      const response = await apiHelper.delete<{ message: string; isFollowing: boolean }>(
+        `/api/birds/${birdId}/follow`
+      );
+      console.log(`✅ Unfollowed bird: ${birdId}`);
+      return response;
+    } catch (error) {
+      console.error("Error unfollowing bird:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Check if current user is following a bird
+   * GET /api/birds/{id}/follow
+   */
+  async isFollowingBird(birdId: string): Promise<boolean> {
+    try {
+      const response = await apiHelper.get<{ isFollowing: boolean }>(
+        `/api/birds/${birdId}/follow`
+      );
+      return response.isFollowing;
+    } catch (error) {
+      console.error("Error checking follow status:", error);
+      return false;
+    }
+  },
+
+  /**
+   * Get all birds the current user is following
+   * GET /api/birds/following
+   */
+  async getFollowingBirds(): Promise<Bird[]> {
+    try {
+      const response = await apiHelper.get<Bird[]>(`/api/birds/following`);
+      console.log(`✅ Fetched ${response.length} followed birds`);
+      return response;
+    } catch (error) {
+      console.error("Error fetching followed birds:", error);
+      return [];
+    }
+  },
 };

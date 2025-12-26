@@ -138,6 +138,16 @@ export default function Settings() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t("settings.support")}</Text>
         <SettingsItem
+          icon="heart"
+          title={t("principles.title")}
+          onPress={() => router.push("/our-principles")}
+        />
+        <SettingsItem
+          icon="coins"
+          title={t("fees.title")}
+          onPress={() => router.push("/how-fees-work")}
+        />
+        <SettingsItem
           icon="circle-question"
           title={t("faq.title")}
           onPress={() => router.push("/faq")}

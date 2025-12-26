@@ -9,7 +9,8 @@ export const MEDIA_CONFIG = {
   images: {
     // Profile/Bird Images
     profile: {
-      maxSizeBytes: 2 * 1024 * 1024, // 2MB
+      maxSizeBytes: 10 * 1024 * 1024, // 10MB upload, compressed to ~1.5MB
+      compressedSizeBytes: 1.5 * 1024 * 1024, // Target compressed size
       maxWidth: 1080,
       maxHeight: 1080,
       compressionQuality: 0.8,
@@ -18,7 +19,8 @@ export const MEDIA_CONFIG = {
     },
     // Cover Images
     cover: {
-      maxSizeBytes: 3 * 1024 * 1024, // 3MB
+      maxSizeBytes: 10 * 1024 * 1024, // 10MB upload
+      compressedSizeBytes: 1.5 * 1024 * 1024,
       maxWidth: 1920,
       maxHeight: 1080,
       compressionQuality: 0.85,
@@ -27,7 +29,8 @@ export const MEDIA_CONFIG = {
     },
     // Story/Post Images
     story: {
-      maxSizeBytes: 2 * 1024 * 1024, // 2MB
+      maxSizeBytes: 10 * 1024 * 1024, // 10MB upload, compressed to ~1.5MB
+      compressedSizeBytes: 1.5 * 1024 * 1024,
       maxWidth: 1080,
       maxHeight: 1350,
       compressionQuality: 0.8,
@@ -37,6 +40,7 @@ export const MEDIA_CONFIG = {
     // Thumbnail Images
     thumbnail: {
       maxSizeBytes: 500 * 1024, // 500KB
+      compressedSizeBytes: 100 * 1024,
       maxWidth: 400,
       maxHeight: 400,
       compressionQuality: 0.75,
@@ -49,9 +53,10 @@ export const MEDIA_CONFIG = {
   videos: {
     // Bird Main Video (Required for each bird)
     birdMain: {
-      maxSizeBytes: 200 * 1024 * 1024, // 200MB (before backend compression)
-      maxDurationSeconds: 60, // 1 minute maximum
-      minDurationSeconds: 5, // 5 seconds minimum
+      maxSizeBytes: 100 * 1024 * 1024, // 100MB upload
+      compressedSizeBytes: 20 * 1024 * 1024, // ~15-20MB after compression
+      maxDurationSeconds: 60, // 60 seconds maximum
+      minDurationSeconds: 3, // 3 seconds minimum
       targetWidth: 720, // 720p for cost optimization (backend compression)
       targetHeight: 1280, // Vertical format (9:16)
       targetBitrate: 2000000, // 2 Mbps - good quality, reasonable size
@@ -63,8 +68,9 @@ export const MEDIA_CONFIG = {
     },
     // Story Videos (Optional)
     story: {
-      maxSizeBytes: 30 * 1024 * 1024, // 30MB
-      maxDurationSeconds: 30, // 30 seconds
+      maxSizeBytes: 100 * 1024 * 1024, // 100MB upload
+      compressedSizeBytes: 15 * 1024 * 1024, // ~15MB after compression
+      maxDurationSeconds: 60, // 60 seconds - matches bird video for consistency
       minDurationSeconds: 3,
       targetWidth: 720,
       targetHeight: 1280,
@@ -75,6 +81,18 @@ export const MEDIA_CONFIG = {
       fps: 30,
       aspectRatio: [9, 16],
     },
+  },
+
+  // Daily Upload Limits (prevents spam/abuse)
+  dailyLimits: {
+    photos: 20, // 20 photos per day
+    videos: 5, // 5 videos per day
+  },
+
+  // Per-post limits
+  postLimits: {
+    photosPerPost: 5, // 5 photos OR
+    videosPerPost: 1, // 1 video per post
   },
 
   // General Media Limits
@@ -190,6 +208,22 @@ export const MEDIA_GUIDELINES = {
       "Supported formats: JPEG, PNG, WebP",
       "Images will be automatically resized and compressed",
       "Avoid blurry or pixelated images",
+    ],
+  },
+  dailyLimits: {
+    title: "Daily Upload Limits",
+    rules: [
+      `Photos: Up to ${MEDIA_CONFIG.dailyLimits.photos} per day`,
+      `Videos: Up to ${MEDIA_CONFIG.dailyLimits.videos} per day`,
+      "Helps us keep Wihngo running smoothly for everyone",
+    ],
+  },
+  postLimits: {
+    title: "Per-Post Limits",
+    rules: [
+      `Up to ${MEDIA_CONFIG.postLimits.photosPerPost} photos per post`,
+      `Or ${MEDIA_CONFIG.postLimits.videosPerPost} video per post`,
+      "Encourages focused storytelling",
     ],
   },
 };

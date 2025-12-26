@@ -104,9 +104,9 @@ export default function DonationScreen() {
       return;
     }
 
-    // Navigate to checkout
+    // Navigate to fee coverage screen
     router.push({
-      pathname: "/donation/checkout",
+      pathname: "/donation/fee-coverage" as any,
       params: {
         birdId: bird?.birdId,
         birdName: bird?.name,
@@ -131,7 +131,9 @@ export default function DonationScreen() {
           >
             <Text style={styles.backButtonText}>{t("donations.back")}</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>{t("donations.supportWihngo")}</Text>
+          <Text style={styles.title}>
+            {bird ? t("checkout.supportBird", { birdName: bird.name }) : t("donations.supportWihngo")}
+          </Text>
         </View>
 
         {/* Legal Notice */}
@@ -146,11 +148,11 @@ export default function DonationScreen() {
           </View>
         ) : bird ? (
           <View style={styles.birdCard}>
-            <Text style={styles.birdLabel}>{t("donations.supporting")}</Text>
+            <Text style={styles.birdEmoji}>🐦</Text>
             <Text style={styles.birdName}>{bird.name}</Text>
-            {bird.description && (
-              <Text style={styles.birdDescription}>{bird.description}</Text>
-            )}
+            <Text style={styles.birdDescription}>
+              {t("checkout.goesToOwner", { ownerName: bird.ownerName || t("checkout.theOwner"), birdName: bird.name })}
+            </Text>
           </View>
         ) : (
           <View style={styles.birdCard}>
@@ -212,7 +214,7 @@ export default function DonationScreen() {
             />
           </View>
           <View style={styles.quickAmounts}>
-            {[5, 10, 25, 50, 100].map((quickAmount) => (
+            {[1, 3, 5, 10, 25].map((quickAmount) => (
               <TouchableOpacity
                 key={quickAmount}
                 style={styles.quickAmountButton}
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
   },
   birdCard: {
     backgroundColor: "#fff",
-    padding: 16,
+    padding: 20,
     borderRadius: 12,
     marginBottom: 20,
     shadowColor: "#000",
@@ -341,6 +343,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    alignItems: "center",
+  },
+  birdEmoji: {
+    fontSize: 32,
+    marginBottom: 8,
   },
   birdLabel: {
     fontSize: 12,
@@ -349,14 +356,17 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   birdName: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#000",
-    marginBottom: 4,
+    marginBottom: 8,
+    textAlign: "center",
   },
   birdDescription: {
     fontSize: 14,
     color: "#6B7280",
+    textAlign: "center",
+    lineHeight: 20,
   },
   section: {
     marginBottom: 24,

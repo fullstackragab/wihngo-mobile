@@ -1412,5 +1412,82 @@
     "follow": "Follow",
     "following": "Following",
     "unfollow": "Unfollow"
+  },
+  "checkout": {
+    "supportBird": "Support {{birdName}}",
+    "goesToOwner": "This goes to {{ownerName}} to buy food or care for {{birdName}}.",
+    "theOwner": "the owner",
+    "sendingTo": "You're sending {{amount}} to {{birdName}}",
+    "thisBird": "this bird",
+    "helpSupportWihngo": "Help support Wihngo",
+    "addFee": "Add {{amount}}",
+    "coversCosts": "Covers storage, hosting, and maintenance",
+    "total": "Total:",
+    "continueToPay": "Continue to pay",
+    "howFeesWork": "How fees work",
+    "sent": "Sent!",
+    "paymentStatus": "Payment {{status}}",
+    "onItsWay": "{{amount}} is on its way to {{birdName}}.",
+    "theBird": "the bird",
+    "paymentFailed": "Your payment could not be processed. Please try again or contact support if you believe this is an error.",
+    "ownerNotified": "{{ownerName}} will be notified.",
+    "backToBird": "Back to {{birdName}}"
+  },
+  "principles": {
+    "title": "Our Principles",
+    "hereForBirds": {
+      "title": "We're here because we love birds.",
+      "content": "Wihngo exists so people who care for birds can share that care with others. Every feature we build asks: does this help birds and the people who love them?"
+    },
+    "honest": {
+      "title": "We're honest about how this works.",
+      "content": "Wihngo is not a charity. We're a small team running a real platform with real costs — servers, storage, development, security. We charge a small fee (5%) to cover these. Without it, Wihngo wouldn't exist."
+    },
+    "sustainability": {
+      "title": "Sustainability enables care.",
+      "content": "A platform that can't survive can't help anyone. We keep costs low, stay small, and make decisions that let us keep running for years — not just months."
+    },
+    "supportGoesWhere": {
+      "title": "Your support goes where it should.",
+      "content": "When you support a bird, the money goes to the owner to buy food, supplies, or whatever that bird needs. The fee covers the platform. That's it."
+    },
+    "transparency": {
+      "title": "We choose transparency over polish.",
+      "content": "We'd rather explain honestly than sound perfect. If something changes, we'll tell you. If we make a mistake, we'll own it."
+    }
+  },
+  "fees": {
+    "title": "How Fees Work",
+    "intro": "We believe in being upfront about costs. Here's exactly where your money goes.",
+    "breakdown": {
+      "title": "When you support a bird",
+      "birdOwner": "Goes to bird owner",
+      "platform": "Platform fee"
+    },
+    "whatItCovers": {
+      "title": "What the 5% covers",
+      "storage": "Photo & video storage (grows daily)",
+      "hosting": "Servers & hosting",
+      "security": "Security & data protection",
+      "maintenance": "Platform maintenance",
+      "development": "New features & improvements"
+    },
+    "why": {
+      "title": "Why we charge a fee",
+      "content": "Running a platform costs money. Storage, servers, security, development — these are real expenses that grow as more people join. The 5% fee keeps Wihngo sustainable so we can continue helping birds and their owners for years to come."
+    },
+    "optional": {
+      "title": "You can choose to cover the fee",
+      "content": "When you support a bird, you'll see an option to add a small amount to cover the platform fee. This is optional — your support reaches the bird either way."
+    }
+  },
+  "mediaLimits": {
+    "photoTooLarge": "This photo is a bit large. Try a smaller file (under 10MB) or take a new one directly in the app.",
+    "videoTooLong": "Videos can be up to 60 seconds — just enough to capture a special moment.",
+    "dailyLimitReached": "You've shared a lot today! You can upload more tomorrow. This helps us keep Wihngo running smoothly for everyone.",
+    "photoLimitReached": "You've reached the photo limit for today ({{limit}} photos). You can upload more tomorrow.",
+    "videoLimitReached": "You've reached the video limit for today ({{limit}} videos). You can upload more tomorrow.",
+    "postPhotoLimit": "You can add up to {{limit}} photos per post.",
+    "postVideoLimit": "You can add {{limit}} video per post."
   }
 }

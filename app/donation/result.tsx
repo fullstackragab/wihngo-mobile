@@ -13,6 +13,7 @@ import type { Invoice } from "@/types/invoice";
 import * as Linking from "expo-linking";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
   Alert,
@@ -26,7 +27,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PaymentResultScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ invoiceId: string }>();
+  const { t } = useTranslation();
+  const params = useLocalSearchParams<{ invoiceId: string; birdName?: string; birdId?: string }>();
 
   const [invoice, setInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
@@ -120,21 +122,22 @@ export default function PaymentResultScreen() {
       >
         {/* Result Icon */}
         <View style={styles.iconContainer}>
-          {isSuccess && <Text style={styles.successIcon}>✓</Text>}
+          {isSuccess && <Text style={styles.successIcon}>❤️</Text>}
           {isFailed && <Text style={styles.failureIcon}>✕</Text>}
         </View>
 
         {/* Status Title */}
         <Text style={styles.statusTitle}>
-          {isSuccess && "Payment Confirmed!"}
+          {isSuccess && t("checkout.sent")}
           {isFailed && "Payment " + statusDisplay.text}
         </Text>
 
         <Text style={styles.statusSubtitle}>
-          {isSuccess &&
-            "Thank you for your support! Your contribution helps us maintain and improve Wihngo."}
-          {isFailed &&
-            "Your payment could not be processed. Please try again or contact support if you believe this is an error."}
+          {isSuccess && t("checkout.onItsWay", {
+            amount: formatInvoiceAmount(invoice),
+            birdName: params.birdName || t("checkout.theBird")
+          })}
+          {isFailed && t("checkout.paymentFailed")}
         </Text>
 
         {/* Legal Notice */}
@@ -257,18 +260,37 @@ export default function PaymentResultScreen() {
         )}
 
         {/* Action Buttons */}
-        <View style={styles.actionsContainer}>
+        {isSuccess ? (
           <TouchableOpacity
-            style={styles.secondaryButton}
-            onPress={handleViewHistory}
+            style={styles.primaryButton}
+            onPress={() => {
+              if (params.birdId) {
+                router.replace(`/bird/${params.birdId}` as any);
+              } else {
+                handleDone();
+              }
+            }}
           >
-            <Text style={styles.secondaryButtonText}>View History</Text>
+            <Text style={styles.primaryButtonText}>
+              {params.birdName
+                ? t("checkout.backToBird", { birdName: params.birdName })
+                : t("common.done")}
+            </Text>
           </TouchableOpacity>
+        ) : (
+          <View style={styles.actionsContainer}>
+            <TouchableOpacity
+              style={styles.secondaryButton}
+              onPress={handleViewHistory}
+            >
+              <Text style={styles.secondaryButtonText}>{t("payout.viewHistory")}</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={styles.primaryButton} onPress={handleDone}>
-            <Text style={styles.primaryButtonText}>Done</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity style={styles.primaryButton} onPress={handleDone}>
+              <Text style={styles.primaryButtonText}>{t("common.done")}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Support Contact */}
         {isFailed && (
@@ -366,8 +388,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#6B7280",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 12,
     lineHeight: 22,
+  },
+  ownerNotice: {
+    fontSize: 14,
+    color: "#6B7280",
+    textAlign: "center",
+    marginBottom: 20,
   },
   legalNotice: {
     backgroundColor: "#FFF3CD",

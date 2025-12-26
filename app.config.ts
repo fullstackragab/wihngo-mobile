@@ -9,7 +9,7 @@ const getDynamicAppConfig = () => {
   const config = {
     // Shared values
     // Note: slug must match EAS projectId configuration
-    slug: "wihngo",
+    slug: "wihngo-mobile",
     name: isProduction ? "Wihngo" : "Wihngo Dev",
 
     // Pass dynamic variables to the app's JS code using the 'extra' field

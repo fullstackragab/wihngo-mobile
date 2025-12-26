@@ -8,7 +8,12 @@
       "Bash(ls:*)",
       "Bash(for file in de.json fr.json es.json it.json pt.json pl.json zh.json ja.json ko.json vi.json id.json th.json hi.json ar.json tr.json)",
       "Bash(npx tsc:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(npm install:*)",
+      "Bash(for file in *.md)",
+      "Bash(do if [ \"$file\" != \"README.md\" ])",
+      "Bash(then mv \"$file\" docs/)",
+      "Bash(fi)"
     ]
   }
 }

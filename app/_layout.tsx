@@ -253,6 +253,24 @@ function RootLayoutNav() {
             headerShown: true,
           }}
         />
+        <Stack.Screen
+          name="our-principles"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="how-fees-work"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="donation/fee-coverage"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
@@ -275,7 +293,7 @@ export default function RootLayout() {
       appIcon="https://wihngo.com/icon.png" // Optional: Your app icon
       appName="Wihngo" // Optional: Your app name
     >
-      <WalletScreen />
+      {/* <WalletScreen /> */}
       <QueryClientProvider client={queryClient}>
         <AppKitProvider instance={appKit}>
           <LanguageProvider>
